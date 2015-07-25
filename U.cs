@@ -3,6 +3,7 @@ using Rocket.API.Collections;
 using Rocket.API.Extensions;
 using Rocket.Core;
 using Rocket.Core.Assets;
+using Rocket.Core.Extensions;
 using Rocket.Core.Logging;
 using Rocket.Core.Plugins;
 using Rocket.Unturned.Effects;
@@ -101,6 +102,8 @@ namespace Rocket.Unturned
         public IRocketImplementationEvents ImplementationEvents { get { return Events; } }
         public static UnturnedEvents Events;
 
+        public event RocketImplementationInitialized OnRocketImplementationInitialized;
+
         public static string Translate(string translationKey, params object[] placeholder)
         {
             return Translations.Instance.Translate(translationKey, placeholder);
@@ -121,30 +124,25 @@ namespace Rocket.Unturned
             System.Console.ForegroundColor = ConsoleColor.Cyan;
             System.Console.WriteLine("Rocket Unturned v" + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " for Unturned v" + Steam.Version + "\n");
 
+            R.OnRockedInitialized += () =>
+            {
+                Instance.Initialize();
+            };
+
             Steam.OnServerHosted += () =>
             {
-#if DEBUG && !LINUX
-                rocketGameObject.TryAddComponent<Debugger>();
-
-#else
-                Initialize();
-#endif
+                rocketGameObject.TryAddComponent<U>();
+                rocketGameObject.TryAddComponent<Core.R>();
             };
         }
-
-        internal static void Initialize()
-        {
-            rocketGameObject.TryAddComponent<U>();
-            rocketGameObject.TryAddComponent<Core.R>();
-        }
-
+        
         private void Awake()
         {
             Instance = this;
             Environment.Initialize();
         }
 
-        public void Start()
+        internal void Initialize()
         {
             Settings = new XMLFileAsset<UnturnedSettings>(Environment.SettingsFile);
             Translations = new XMLFileAsset<TranslationList>(String.Format(Environment.TranslationFile, Core.R.Settings.Instance.LanguageCode), new Type[] { typeof(TranslationList), typeof(TranslationListEntry) },defaultTranslations);
@@ -180,6 +178,8 @@ namespace Rocket.Unturned
 
             SteamGameServer.SetKeyValue("rocket", Assembly.GetExecutingAssembly().GetName().Version.ToString());
             SteamGameServer.SetBotPlayerCount(1);
+
+            OnRocketImplementationInitialized.TryInvoke();
         }
         
         public void Reload()
