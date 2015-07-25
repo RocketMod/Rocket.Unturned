@@ -312,7 +312,7 @@ namespace Rocket.Unturned.Player
         public byte Health
         {
             get {
-                return player.PlayerLife.Health; 
+                return player.PlayerLife.health; 
             }
         }
 
