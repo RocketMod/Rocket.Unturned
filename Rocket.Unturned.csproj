@@ -117,6 +117,9 @@
     <Compile Include="Items\UnturnedItems.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="LICENSE">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Scripts\Linux\start.sh" />
     <None Include="Scripts\Linux\update.sh" />
     <None Include="Scripts\Windows\MyFirstRocketServer.bat" />
