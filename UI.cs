@@ -30,7 +30,6 @@ namespace Rocket.Unturned
 
         private void OnGUI()
         {
-
             GUILayout.BeginArea(new Rect(0, Screen.height-250, Screen.width, 250));
             GUILayout.BeginVertical();
             if (GUILayout.Button("Note: You can't play Unturned with Rocket installed. Rocket is a mod for Unturned 3 servers only. Please read the wiki in order to find out how to host Rocket servers.", GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true)))
