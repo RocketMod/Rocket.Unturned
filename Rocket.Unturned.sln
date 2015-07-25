@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rocket.Unturned", "Rocket.Unturned.csproj", "{BADB74F6-90C0-40AF-865D-27795B50C469}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{74BDC6CC-BAF0-4205-83F7-4244A41EA255}"
+	ProjectSection(SolutionItems) = preProject
+		lib\Assembly-CSharp-firstpass.dll = lib\Assembly-CSharp-firstpass.dll
+		lib\Assembly-CSharp.dll = lib\Assembly-CSharp.dll
+		lib\Rocket.API.dll = lib\Rocket.API.dll
+		lib\Rocket.Core.dll = lib\Rocket.Core.dll
+		lib\UnityEngine.dll = lib\UnityEngine.dll
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Local|Any CPU = Local|Any CPU
+		Local|x64 = Local|x64
+		Local|x86 = Local|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BADB74F6-90C0-40AF-865D-27795B50C469}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BADB74F6-90C0-40AF-865D-27795B50C469}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BADB74F6-90C0-40AF-865D-27795B50C469}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BADB74F6-90C0-40AF-865D-27795B50C469}.Debug|x64.Build.0 = Debug|Any CPU
+		{BADB74F6-90C0-40AF-865D-27795B50C469}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BADB74F6-90C0-40AF-865D-27795B50C469}.Debug|x86.Build.0 = Debug|Any CPU
+		{BADB74F6-90C0-40AF-865D-27795B50C469}.Local|Any CPU.ActiveCfg = Local|Any CPU
+		{BADB74F6-90C0-40AF-865D-27795B50C469}.Local|Any CPU.Build.0 = Local|Any CPU
+		{BADB74F6-90C0-40AF-865D-27795B50C469}.Local|x64.ActiveCfg = Local|Any CPU
+		{BADB74F6-90C0-40AF-865D-27795B50C469}.Local|x64.Build.0 = Local|Any CPU
+		{BADB74F6-90C0-40AF-865D-27795B50C469}.Local|x86.ActiveCfg = Local|Any CPU
+		{BADB74F6-90C0-40AF-865D-27795B50C469}.Local|x86.Build.0 = Local|Any CPU
+		{BADB74F6-90C0-40AF-865D-27795B50C469}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BADB74F6-90C0-40AF-865D-27795B50C469}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BADB74F6-90C0-40AF-865D-27795B50C469}.Release|x64.ActiveCfg = Release|Any CPU
+		{BADB74F6-90C0-40AF-865D-27795B50C469}.Release|x64.Build.0 = Release|Any CPU
+		{BADB74F6-90C0-40AF-865D-27795B50C469}.Release|x86.ActiveCfg = Release|Any CPU
+		{BADB74F6-90C0-40AF-865D-27795B50C469}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
