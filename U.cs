@@ -132,7 +132,7 @@ namespace Rocket.Unturned
             Steam.OnServerHosted += () =>
             {
                 rocketGameObject.TryAddComponent<U>();
-                rocketGameObject.TryAddComponent<Core.R>();
+                rocketGameObject.TryAddComponent<R>();
             };
         }
         
