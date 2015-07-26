@@ -1,4 +1,5 @@
 ﻿using Rocket.API;
+using Rocket.Core;
 using Rocket.Core.Plugins;
 using SDG.Unturned;
 using System;
@@ -58,7 +59,7 @@ namespace Rocket.Unturned.Commands
 
                 System.Console.WriteLine();
                 
-                foreach (IRocketPlugin plugin in RocketPluginManager.Plugins)
+                foreach (IRocketPlugin plugin in R.Plugins.GetPlugins())
                 {
                     System.Console.ForegroundColor = ConsoleColor.Cyan;
                     System.Console.WriteLine("[" + plugin.GetType().Assembly.GetName().Name + "]");

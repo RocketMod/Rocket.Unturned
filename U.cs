@@ -110,7 +110,7 @@ namespace Rocket.Unturned
         }
 
 #if LINUX
-        public Console Console;
+        public static UnturnedConsole Console;
 #endif
 
         internal static void Splash()
@@ -118,7 +118,7 @@ namespace Rocket.Unturned
             rocketGameObject = new GameObject("Rocket");
             DontDestroyOnLoad(rocketGameObject);
 #if LINUX
-            Console = new GameObject().AddComponent<RocketConsole>();
+            Console = rocketGameObject.AddComponent<UnturnedConsole>();
 #endif
             System.Console.Clear();
             System.Console.ForegroundColor = ConsoleColor.Cyan;
@@ -173,7 +173,7 @@ namespace Rocket.Unturned
 
             R.Plugins.OnPluginsLoaded += () =>
             {
-                SteamGameServer.SetKeyValue("rocketplugins", String.Join(",", RocketPluginManager.Plugins.Select(p => p.Name).ToArray()));
+                SteamGameServer.SetKeyValue("rocketplugins", String.Join(",", R.Plugins.GetPlugins().Select(p => p.Name).ToArray()));
             };
 
             SteamGameServer.SetKeyValue("rocket", Assembly.GetExecutingAssembly().GetName().Version.ToString());
