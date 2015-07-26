@@ -26,7 +26,7 @@ namespace Rocket.Unturned.Commands
 
         public string Syntax
         {
-            get { return "<message> [color]"; }
+            get { return "<color> <message>"; }
         }
 
         public List<string> Aliases
@@ -44,8 +44,11 @@ namespace Rocket.Unturned.Commands
 
         public void Execute(IRocketPlayer caller, string[] command)
         {
-            string message = command.GetStringParameter(0);
-            Color? color = command.GetColorParameter(1);
+            Color? color = command.GetColorParameter(0);
+
+            int i = 1;
+            if (color == null) i = 0;
+            string message = command.GetParameterString(i);
 
             if (message == null)
             {
