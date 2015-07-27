@@ -144,9 +144,9 @@ namespace Rocket.Unturned
             Environment.Initialize();
             if (DateTime.Now.Date == new DateTime(2015, 7, 27))
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Happy Birthday Nelson :)");
-                Console.ForegroundColor = ConsoleColor.Cyan;
+                System.Console.ForegroundColor = ConsoleColor.Red;
+                System.Console.WriteLine("Happy Birthday Nelson :)");
+                System.Console.ForegroundColor = ConsoleColor.Cyan;
             }
         }
 
