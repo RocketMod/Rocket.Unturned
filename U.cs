@@ -6,8 +6,10 @@ using Rocket.Core.Assets;
 using Rocket.Core.Extensions;
 using Rocket.Core.Logging;
 using Rocket.Core.Plugins;
+using Rocket.Unturned.Chat;
 using Rocket.Unturned.Effects;
 using Rocket.Unturned.Events;
+using Rocket.Unturned.Permissions;
 using Rocket.Unturned.Plugins;
 using Rocket.Unturned.Serialisation;
 using SDG.Unturned;
@@ -140,6 +142,12 @@ namespace Rocket.Unturned
         {
             Instance = this;
             Environment.Initialize();
+            if (DateTime.Now.Date == new DateTime(2015, 7, 27))
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Happy Birthday Nelson :)");
+                Console.ForegroundColor = ConsoleColor.Cyan;
+            }
         }
 
         internal void Initialize()
@@ -147,8 +155,11 @@ namespace Rocket.Unturned
             Settings = new XMLFileAsset<UnturnedSettings>(Environment.SettingsFile);
             Translations = new XMLFileAsset<TranslationList>(String.Format(Environment.TranslationFile, Core.R.Settings.Instance.LanguageCode), new Type[] { typeof(TranslationList), typeof(TranslationListEntry) },defaultTranslations);
             Events = gameObject.TryAddComponent<UnturnedEvents>();
-            gameObject.TryAddComponent<UnturnedEffectManager>();
 
+            gameObject.TryAddComponent<UnturnedEffectManager>();
+            gameObject.TryAddComponent<UnturnedPermissions>();
+            gameObject.TryAddComponent<UnturnedChat>();
+            
             RocketPlugin.OnPluginLoading += (IRocketPlugin plugin, ref bool cancelLoading) =>
             {
                 try
@@ -168,7 +179,7 @@ namespace Rocket.Unturned
                 plugin.TryRemoveComponent<PluginUnturnedPlayerComponentManager>();
                 plugin.TryRemoveComponent<PluginCommandManager>();
             };
-
+            
             PluginCommandManager.RegisterFromAssembly(Assembly.GetExecutingAssembly());
 
             R.Plugins.OnPluginsLoaded += () =>

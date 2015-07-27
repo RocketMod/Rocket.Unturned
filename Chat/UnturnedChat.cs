@@ -14,7 +14,7 @@ namespace Rocket.Unturned.Chat
 {
     public sealed class UnturnedChat : MonoBehaviour
     {
-        public void Awake()
+        private void Awake()
         {
             SDG.Unturned.ChatManager.OnChatted += handleChat;
         }
