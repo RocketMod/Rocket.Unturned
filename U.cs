@@ -12,6 +12,7 @@ using Rocket.Unturned.Events;
 using Rocket.Unturned.Permissions;
 using Rocket.Unturned.Plugins;
 using Rocket.Unturned.Serialisation;
+using Rocket.Unturned.Utils;
 using SDG.Unturned;
 using Steamworks;
 using System;
@@ -152,45 +153,55 @@ namespace Rocket.Unturned
 
         internal void Initialize()
         {
-            Settings = new XMLFileAsset<UnturnedSettings>(Environment.SettingsFile);
-            Translations = new XMLFileAsset<TranslationList>(String.Format(Environment.TranslationFile, Core.R.Settings.Instance.LanguageCode), new Type[] { typeof(TranslationList), typeof(TranslationListEntry) },defaultTranslations);
-            Events = gameObject.TryAddComponent<UnturnedEvents>();
-
-            gameObject.TryAddComponent<UnturnedEffectManager>();
-            gameObject.TryAddComponent<UnturnedPermissions>();
-            gameObject.TryAddComponent<UnturnedChat>();
-            
-            RocketPlugin.OnPluginLoading += (IRocketPlugin plugin, ref bool cancelLoading) =>
+            try
             {
-                try
+                Settings = new XMLFileAsset<UnturnedSettings>(Environment.SettingsFile);
+                Translations = new XMLFileAsset<TranslationList>(String.Format(Environment.TranslationFile, Core.R.Settings.Instance.LanguageCode), new Type[] { typeof(TranslationList), typeof(TranslationListEntry) }, defaultTranslations);
+                Events = gameObject.TryAddComponent<UnturnedEvents>();
+
+                gameObject.TryAddComponent<UnturnedEffectManager>();
+                gameObject.TryAddComponent<UnturnedPermissions>();
+                gameObject.TryAddComponent<UnturnedChat>();
+
+                gameObject.TryAddComponent<AutomaticSaveWatchdog>();
+
+                RocketPlugin.OnPluginLoading += (IRocketPlugin plugin, ref bool cancelLoading) =>
                 {
-                    plugin.TryAddComponent<PluginUnturnedPlayerComponentManager>();
-                    plugin.TryAddComponent<PluginCommandManager>();
-                }
-                catch (Exception ex)
+                    try
+                    {
+                        plugin.TryAddComponent<PluginUnturnedPlayerComponentManager>();
+                        plugin.TryAddComponent<PluginCommandManager>();
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.LogException(ex, "Failed to load plugin " + plugin.Name + ".");
+                        cancelLoading = true;
+                    }
+                };
+
+                RocketPlugin.OnPluginUnloading += (IRocketPlugin plugin) =>
                 {
-                    Logger.LogException(ex, "Failed to load plugin "+ plugin.Name + ".");
-                    cancelLoading = true;
-                }
-            };
+                    plugin.TryRemoveComponent<PluginUnturnedPlayerComponentManager>();
+                    plugin.TryRemoveComponent<PluginCommandManager>();
+                };
 
-            RocketPlugin.OnPluginUnloading += (IRocketPlugin plugin) =>
+                PluginCommandManager.RegisterFromAssembly(Assembly.GetExecutingAssembly());
+
+                R.Plugins.OnPluginsLoaded += () =>
+                {
+                    SteamGameServer.SetKeyValue("rocketplugins", String.Join(",", R.Plugins.GetPlugins().Select(p => p.Name).ToArray()));
+                };
+
+                SteamGameServer.SetKeyValue("rocket", Assembly.GetExecutingAssembly().GetName().Version.ToString());
+                SteamGameServer.SetBotPlayerCount(1);
+
+                OnRocketImplementationInitialized.TryInvoke();
+
+            }
+            catch (Exception ex)
             {
-                plugin.TryRemoveComponent<PluginUnturnedPlayerComponentManager>();
-                plugin.TryRemoveComponent<PluginCommandManager>();
-            };
-            
-            PluginCommandManager.RegisterFromAssembly(Assembly.GetExecutingAssembly());
-
-            R.Plugins.OnPluginsLoaded += () =>
-            {
-                SteamGameServer.SetKeyValue("rocketplugins", String.Join(",", R.Plugins.GetPlugins().Select(p => p.Name).ToArray()));
-            };
-
-            SteamGameServer.SetKeyValue("rocket", Assembly.GetExecutingAssembly().GetName().Version.ToString());
-            SteamGameServer.SetBotPlayerCount(1);
-
-            OnRocketImplementationInitialized.TryInvoke();
+                Logger.LogException(ex);
+            }
         }
         
         public void Reload()
