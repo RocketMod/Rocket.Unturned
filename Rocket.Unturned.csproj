@@ -73,6 +73,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\UnturnedCommandExtensions.cs" />
     <Compile Include="Utils\AutomaticSaveWatchdog.cs" />
     <Compile Include="Chat\UnturnedChat.cs" />
     <Compile Include="Commands\CommandAdmin.cs" />
@@ -94,7 +95,6 @@
     <Compile Include="Commands\CommandUnadmin.cs" />
     <Compile Include="Commands\CommandV.cs" />
     <Compile Include="Commands\CommandVanish.cs" />
-    <Compile Include="Commands\UnturnedAliasBase.cs" />
     <Compile Include="Commands\UnturnedCommandBase.cs" />
     <Compile Include="Effects\UnturnedEffectManager.cs" />
     <Compile Include="Enumerations\InventoryGroup.cs" />

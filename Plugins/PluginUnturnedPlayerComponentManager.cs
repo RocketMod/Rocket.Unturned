@@ -15,7 +15,7 @@ namespace Rocket.Unturned.Plugins
 {
     public sealed class PluginUnturnedPlayerComponentManager : MonoBehaviour
     {
-        private Assembly assembly = Assembly.GetExecutingAssembly();
+        private Assembly assembly;
         private List<Type> unturnedPlayerComponents = new List<Type>();
         
         private void OnDisable()
@@ -39,14 +39,16 @@ namespace Rocket.Unturned.Plugins
         private void OnEnable()
         {
             try
-            {
-                U.Events.OnPlayerConnected += addPlayerComponents;
-                System.Console.ForegroundColor = ConsoleColor.Cyan;
+            {  
+                IRocketPlugin plugin = GetComponent<IRocketPlugin>();
+                assembly = plugin.GetType().Assembly;
 
+                U.Events.OnPlayerConnected += addPlayerComponents;
                 unturnedPlayerComponents.AddRange(RocketHelper.GetTypesFromParentClass(assembly, typeof(UnturnedPlayerComponent)));
 
                 foreach (Type playerComponent in unturnedPlayerComponents)
                 {
+                    Logger.Log("Adding UnturnedPlayerComponent: "+playerComponent.Name);
                     Steam.Players.ForEach(p => p.Player.gameObject.TryAddComponent(playerComponent.GetType()));
                 }
             }
