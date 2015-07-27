@@ -25,7 +25,7 @@ namespace Rocket.Unturned.Permissions
         {
             OnPermissionRequested = HandlePermissionRequested;
         }
-
+        
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal static bool CheckPermissions(SteamPlayer player, string permission)
         {
