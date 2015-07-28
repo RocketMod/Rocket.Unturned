@@ -21,6 +21,11 @@ namespace Rocket.Unturned.Events
             Player.Player.Inventory.OnInventoryUpdated += onInventoryUpdated;
         }
 
+        private void Start()
+        {
+            UnturnedEvents.triggerOnPlayerConnected(Player);
+        }
+
         internal static void TriggerReceive(SteamChannel instance, CSteamID d, byte[] a, int b)
         {
 #if DEBUG

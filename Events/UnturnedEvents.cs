@@ -5,20 +5,22 @@ using UnityEngine;
 using Rocket.Core.Extensions;
 using Rocket.API;
 using Rocket.API.Extensions;
+using Rocket.Core.Logging;
 
 namespace Rocket.Unturned.Events
 {
     public sealed class UnturnedEvents : MonoBehaviour, IRocketImplementationEvents
     {
+        private static UnturnedEvents Instance;
         private void Awake()
         {
+            Instance = this;
             Steam.OnServerDisconnected += (CSteamID r) => { OnPlayerDisconnected.TryInvoke(UnturnedPlayer.FromCSteamID(r)); };
             Steam.OnServerShutdown += () => { onShutdown.TryInvoke(); };
             Steam.OnServerConnected += (CSteamID r) => {
                 UnturnedPlayer p = UnturnedPlayer.FromCSteamID(r);
                 p.Player.gameObject.TryAddComponent<UnturnedPlayerFeatures>();
                 p.Player.gameObject.TryAddComponent<UnturnedPlayerEvents>();
-                OnPlayerConnected.TryInvoke(p);
             };
         }
 
@@ -37,6 +39,11 @@ namespace Rocket.Unturned.Events
             {
                 onShutdown -= value;
             }
+        }
+
+        internal static void triggerOnPlayerConnected(UnturnedPlayer player)
+        {
+            Instance.OnPlayerConnected.TryInvoke(player);
         }
 
         public delegate void PlayerConnected(UnturnedPlayer player);
