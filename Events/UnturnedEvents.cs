@@ -21,6 +21,7 @@ namespace Rocket.Unturned.Events
                 UnturnedPlayer p = UnturnedPlayer.FromCSteamID(r);
                 p.Player.gameObject.TryAddComponent<UnturnedPlayerFeatures>();
                 p.Player.gameObject.TryAddComponent<UnturnedPlayerEvents>();
+                OnBeforePlayerConnected.TryInvoke(p);
             };
         }
 
@@ -48,5 +49,6 @@ namespace Rocket.Unturned.Events
 
         public delegate void PlayerConnected(UnturnedPlayer player);
         public event PlayerConnected OnPlayerConnected;
+        public event PlayerConnected OnBeforePlayerConnected;
     }
 }
