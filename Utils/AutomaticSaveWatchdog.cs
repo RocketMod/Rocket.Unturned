@@ -1,4 +1,5 @@
 ﻿using Rocket.Core.Logging;
+using SDG.Unturned;
 using System;
 using UnityEngine;
 
@@ -47,7 +48,7 @@ namespace Rocket.Unturned.Utils
                     if (nextSaveTime.Value < DateTime.Now)
                     {
                         restartTimer();
-                        SDG.Unturned.Level.save();
+                        SaveManager.save();
                     }
                 }
             }
