@@ -45,8 +45,8 @@ namespace Rocket.Unturned.Commands
 
         public static string GetParameterString(this string[] array, int startingIndex = 0)
         {
-            if(array.Length - startingIndex -1 < 0) return null;
-            return string.Join(" ", array.ToList().GetRange(startingIndex, array.Length - 1 - startingIndex).ToArray());
+            if(array.Length - startingIndex <= 0) return null;
+            return string.Join(" ", array.ToList().GetRange(startingIndex, array.Length - startingIndex).ToArray());
         }
 
         public static UnturnedPlayer GetUnturnedPlayerParameter(this string[] array, int index)
