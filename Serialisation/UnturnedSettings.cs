@@ -1,4 +1,6 @@
-﻿using System.Xml.Serialization;
+﻿using Rocket.Core.Assets;
+using System.Xml.Serialization;
+using System;
 
 namespace Rocket.Unturned.Serialisation
 {
@@ -11,9 +13,14 @@ namespace Rocket.Unturned.Serialisation
         public int Interval = 1800;
     }
 
-    public class UnturnedSettings
+    public class UnturnedSettings : IDefaultable
     {
         [XmlElement("AutomaticSave")]
-        public AutomaticSave AutomaticSave = new AutomaticSave();
+        public AutomaticSave AutomaticSave;
+
+        public void LoadDefaults()
+        {
+            AutomaticSave = new AutomaticSave();
+        }
     }
 }

@@ -47,6 +47,7 @@ namespace Rocket.Unturned.Utils
                 {
                     if (nextSaveTime.Value < DateTime.Now)
                     {
+                        Logger.Log("Saving server");
                         restartTimer();
                         SaveManager.save();
                     }
