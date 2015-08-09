@@ -24,7 +24,7 @@ namespace Rocket.Unturned.Commands
 
         public string Help
         {
-            get { return "About us :)";}
+            get { return "Reloading Rocket or individual plugins"; }
         }
 
         public string Syntax

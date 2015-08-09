@@ -21,7 +21,7 @@ namespace Rocket.Unturned.Commands
 
         public string Help
         {
-            get { return "Lists permissions";}
+            get { return "Sets a Rocket permission group of a specific player"; }
         }
 
         public string Syntax
