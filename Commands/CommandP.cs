@@ -11,7 +11,7 @@ namespace Rocket.Unturned.Commands
     {
         public bool AllowFromConsole
         {
-            get { return false; }
+            get { return true; }
         }
 
         public string Name
@@ -44,7 +44,7 @@ namespace Rocket.Unturned.Commands
             UnturnedPlayer player = command.GetUnturnedPlayerParameter(0);
             string groupName = command.GetStringParameter(1);
 
-            if (command.Length == 0)
+            if (command.Length == 0 && !(caller is ConsolePlayer))
             {
                 UnturnedChat.Say(caller, U.Translate("command_p_groups_private", "Your", string.Join(", ", Core.R.Permissions.GetDisplayGroups(caller))));
                 UnturnedChat.Say(caller, U.Translate("command_p_permissions_private", "Your", string.Join(", ", Core.R.Permissions.GetPermissions(caller).ToArray())));
@@ -53,7 +53,7 @@ namespace Rocket.Unturned.Commands
                 UnturnedChat.Say(caller, U.Translate("command_p_groups_private", player.CharacterName+"s", string.Join(", ", Core.R.Permissions.GetDisplayGroups(player))));
                 UnturnedChat.Say(caller, U.Translate("command_p_permissions_private", player.CharacterName+"s", string.Join(", ", Core.R.Permissions.GetPermissions(player).ToArray())));
             }
-            else if (command.Length == 2 && player != null && !String.IsNullOrEmpty(groupName) && player.HasPermission("p.set"))
+            else if (command.Length == 2 && player != null && !String.IsNullOrEmpty(groupName) && caller.HasPermission("p.set"))
             {
                 if (Core.R.Permissions.SetGroup(player, groupName))
                 {
