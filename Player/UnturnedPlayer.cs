@@ -29,6 +29,14 @@ namespace Rocket.Unturned.Player
             }
         }
 
+        public bool IsAdmin
+        {
+            get
+            {
+                return player.SteamChannel.SteamPlayer.IsAdmin;
+            }
+        }
+
         private SDG.Unturned.Player player;
         public SDG.Unturned.Player Player
         {
@@ -183,13 +191,6 @@ namespace Rocket.Unturned.Player
         public void Ban(string reason, uint duration)
         {
             Steam.ban(this.CSteamID, reason, duration);
-        }
-
-        public bool IsAdmin
-        {
-            get { 
-                return player.SteamChannel.SteamPlayer.IsAdmin; 
-            }
         }
 		
 		public void Admin(bool admin){
