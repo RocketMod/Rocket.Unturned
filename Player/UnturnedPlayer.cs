@@ -5,6 +5,8 @@ using UnityEngine;
 using System.Linq;
 using Rocket.Unturned.Events;
 using Rocket.API;
+using Rocket.Core;
+using Rocket.Unturned.Chat;
 
 namespace Rocket.Unturned.Player
 {
@@ -53,6 +55,30 @@ namespace Rocket.Unturned.Player
         {
             this.player = player.player;
         }
+
+        private Color? color = null;
+        public Color Color
+        {
+            get
+            {
+                if (color.HasValue)
+                {
+                    return color.Value;
+                }
+                if (IsAdmin)
+                {
+                    return Palette.Admin;
+                }
+                string colorPermission = R.Permissions.GetPermissions(this).Where(permission => permission.ToLower().StartsWith("color.")).FirstOrDefault();
+                if (colorPermission == null) colorPermission = "";
+                return UnturnedChat.GetColorFromName(colorPermission.ToLower().Replace("color.", ""), Palette.White);
+            }
+            set
+            {
+                color = value;
+            }
+        }
+
 
         private UnturnedPlayer(CSteamID cSteamID)
         {

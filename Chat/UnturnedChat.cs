@@ -25,20 +25,7 @@ namespace Rocket.Unturned.Chat
             try
             {
                 UnturnedPlayer player = UnturnedPlayer.FromSteamPlayer(steamPlayer);
-                if (player.IsAdmin)
-                {
-                    color = Palette.Admin;
-                }
-                else
-                {
-                    string colorPermission = R.Permissions.GetPermissions(player).Where(permission => permission.ToLower().StartsWith("color.")).FirstOrDefault();
-                    if (colorPermission != null)
-                    {
-                        color = GetColorFromName(colorPermission.ToLower().Replace("color.", ""), color);
-                    }
-                }
-
-                color = UnturnedPlayerEvents.firePlayerChatted(player, chatMode, color, message);
+                color = UnturnedPlayerEvents.firePlayerChatted(player, chatMode, player.Color, message);
             }
             catch (Exception ex)
             {
