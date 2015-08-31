@@ -6,16 +6,24 @@ namespace Rocket.Unturned.Player
 {
     public sealed class UnturnedPlayerFeatures : UnturnedPlayerComponent
     {
-        private bool godMode = false;
 
+        internal Color? color = null;
+        internal Color? Color
+        {
+            get { return color; }
+            set { color = value; }
+        }
+
+
+        private bool vanishMode = false;
         public bool VanishMode
         {
             get { return vanishMode; }
             set { vanishMode = value; }
         }
 
-        private bool vanishMode = false;
 
+        private bool godMode = false;
         public bool GodMode
         {
             set

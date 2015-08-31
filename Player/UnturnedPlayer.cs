@@ -56,14 +56,13 @@ namespace Rocket.Unturned.Player
             this.player = player.player;
         }
 
-        private Color? color = null;
         public Color Color
         {
             get
             {
-                if (color.HasValue)
+                if (Features.Color.HasValue)
                 {
-                    return color.Value;
+                    return Features.Color.Value;
                 }
                 if (IsAdmin)
                 {
@@ -75,7 +74,7 @@ namespace Rocket.Unturned.Player
             }
             set
             {
-                color = value;
+               Features.Color = value;
             }
         }
 
