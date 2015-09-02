@@ -3,13 +3,7 @@
 # Syntax: start.sh <instance name>
 # Author: fr34kyn01535
 
-# Before you start the Unturned 3 server on linux make sure the following packages are installed:
-#htop unzip # Utils                                                                           
-#screen Xorg xinit x11-common # Headless X server
-#libmono2.0-cil mono-runtime # Mono 2
-#libglu1-mesa libxcursor1 libxrandr2 libc6:i386 libgl1-mesa-glx:i386 libxcursor1:i386 libxrandr2:i386 # 32/64 bit prerequisites for unity3d
-
-#Unturned 3 requires a xserver to run
+#Unity 3D requires a xserver to run, open it with startx in another screen
 export DISPLAY=:0.0
 
 
