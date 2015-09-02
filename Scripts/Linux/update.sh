@@ -12,6 +12,9 @@
 #apt-get install libglu1-mesa libxcursor1 libxrandr2  			             # Native 64 bit Unity 3D Prerequisites	
 #apt-get install libc6:i386 libgl1-mesa-glx:i386 libxcursor1:i386 libxrandr2:i386    # Optional 32 bit prerequisites for Unity 3D
 
+#Unity 3D requires a xserver to run, start it with:
+#screen -S XServer startx
+
 STEAM_USERNAME=$1
 STEAM_PASSWORD=$2
 STEAMCMD_HOME="./steamcmd"
