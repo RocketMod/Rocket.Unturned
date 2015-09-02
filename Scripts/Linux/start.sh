@@ -9,7 +9,7 @@
 #libmono2.0-cil mono-runtime # Mono 2
 #libglu1-mesa libxcursor1 libxrandr2 libc6:i386 libgl1-mesa-glx:i386 libxcursor1:i386 libxrandr2:i386 # 32/64 bit prerequisites for unity3d
 
-#Untunred 3 requires a xserver to run
+#Unturned 3 requires a xserver to run
 export DISPLAY=:0.0
 
 
