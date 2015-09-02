@@ -9,8 +9,8 @@
 #apt-get install screen htop unzip                    				     # Utils
 #apt-get install libmono2.0-cil mono-runtime          				     # Mono                                           
 #apt-get install Xorg xinit x11-common                			             # Headless X server
-#apt-get install libglu1-mesa libxcursor1 libxrandr2  			             # Native 64 bit Unity 3D Prerequisites	
-#apt-get install libc6:i386 libgl1-mesa-glx:i386 libxcursor1:i386 libxrandr2:i386    # Optional 32 bit prerequisites for Unity 3D
+#apt-get install libglu1-mesa libxcursor1 libxrandr2  			             # Native 64 bit Unity 3D prerequisites	
+#apt-get install libc6:i386 libgl1-mesa-glx:i386 libxcursor1:i386 libxrandr2:i386    # 32 bit prerequisites for Unity 3D
 
 #Unity 3D requires a xserver to run, start it with:
 #screen -S XServer startx
@@ -30,5 +30,5 @@ if [ ! -f "steamcmd.sh" ]; then
 	rm steamcmd_linux.tar.gz
 fi
 
-./steamcmd.sh +login $STEAM_USERNAME $STEAM_PASSWORD +force_install_dir ../unturned +app_update 304930 validate +exit
-# If you want to force 32 bit add "+@sSteamCmdForcePlatformBitness 32"
+./steamcmd.sh +@sSteamCmdForcePlatformBitness 32 +login $STEAM_USERNAME $STEAM_PASSWORD +force_install_dir ../unturned +app_update 304930 validate +exit
+# The Unturned 64 bit build seems to not work for some reason...
