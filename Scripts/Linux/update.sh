@@ -30,5 +30,5 @@ if [ ! -f "steamcmd.sh" ]; then
 	rm steamcmd_linux.tar.gz
 fi
 
-./steamcmd.sh +@sSteamCmdForcePlatformBitness 32 +login $STEAM_USERNAME $STEAM_PASSWORD +force_install_dir ../unturned +app_update 304930 validate +exit
+./steamcmd.sh +@sSteamCmdForcePlatformBitness 32 +login "$STEAM_USERNAME" "$STEAM_PASSWORD" +force_install_dir ../unturned +app_update 304930 validate +exit
 # The Unturned 64 bit build seems to not work for some reason...
