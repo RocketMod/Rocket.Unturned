@@ -85,7 +85,7 @@ namespace Rocket.Unturned.Permissions
                         handler(r.m_SteamID, ref reason);
                         if (reason != null)
                         {
-                            Steam.Reject(r.m_SteamID, reason.Value);
+                            Provider.Reject(r.m_SteamID, reason.Value);
                             return false;
                         }
                     }

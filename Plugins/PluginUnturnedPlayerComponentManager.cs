@@ -27,7 +27,7 @@ namespace Rocket.Unturned.Plugins
                 List<Type> playerComponents = RocketHelper.GetTypesFromParentClass(assembly, typeof(UnturnedPlayerComponent));
                 foreach (Type playerComponent in playerComponents)
                 {
-                    Steam.Players.ForEach(p => p.Player.gameObject.TryRemoveComponent(playerComponent.GetType()));
+                    //Provider.Players.ForEach(p => p.Player.gameObject.TryRemoveComponent(playerComponent.GetType()));
                 }
             }
             catch (Exception ex)
@@ -49,7 +49,7 @@ namespace Rocket.Unturned.Plugins
                 foreach (Type playerComponent in unturnedPlayerComponents)
                 {
                     Logger.Log("Adding UnturnedPlayerComponent: "+playerComponent.Name);
-                    Steam.Players.ForEach(p => p.Player.gameObject.TryAddComponent(playerComponent.GetType()));
+                    //Provider.Players.ForEach(p => p.Player.gameObject.TryAddComponent(playerComponent.GetType()));
                 }
             }
             catch (Exception ex)

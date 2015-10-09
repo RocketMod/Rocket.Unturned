@@ -252,10 +252,10 @@ namespace Rocket.Unturned.Events
             OnInventoryAdded.TryInvoke((InventoryGroup)Enum.Parse(typeof(InventoryGroup), E.ToString()), u, J);
         }
 
-        public delegate void PlayerChatted(UnturnedPlayer player, ref Color color, string message, EChatMode chatMode);
+        public delegate void PlayerChatted(UnturnedPlayer player, ref Color color, string message, EChatMode chatMode, ref bool cancel);
         public static event PlayerChatted OnPlayerChatted;
 
-        internal static Color firePlayerChatted(UnturnedPlayer player, EChatMode chatMode, Color color, string msg)
+        internal static Color firePlayerChatted(UnturnedPlayer player, EChatMode chatMode, Color color, string msg, ref bool cancel)
         {
             if (OnPlayerChatted != null)
             {
@@ -263,7 +263,7 @@ namespace Rocket.Unturned.Events
                 {
                     try
                     {
-                        handler(player, ref color, msg, chatMode);
+                        handler(player, ref color, msg, chatMode, ref cancel);
                     }
                     catch (Exception ex)
                     {

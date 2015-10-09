@@ -210,12 +210,12 @@ namespace Rocket.Unturned.Player
 
         public void Kick(string reason)
         {
-            Steam.kick(this.CSteamID, reason);
+            Provider.kick(this.CSteamID, reason);
         }
 
         public void Ban(string reason, uint duration)
         {
-            Steam.ban(this.CSteamID, reason, duration);
+            Provider.ban(this.CSteamID, reason, duration);
         }
 		
 		public void Admin(bool admin){

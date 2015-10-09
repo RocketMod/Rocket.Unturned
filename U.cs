@@ -125,14 +125,14 @@ namespace Rocket.Unturned
 #endif
             System.Console.Clear();
             System.Console.ForegroundColor = ConsoleColor.Cyan;
-            System.Console.WriteLine("Rocket Unturned v" + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " for Unturned v" + Steam.Version + "\n");
+            System.Console.WriteLine("Rocket Unturned v" + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " for Unturned v" + Provider.Version + "\n");
 
             R.OnRockedInitialized += () =>
             {
                 Instance.Initialize();
             };
 
-            Steam.OnServerHosted += () =>
+            Provider.onServerHosted += () =>
             {
                 rocketGameObject.TryAddComponent<U>();
                 rocketGameObject.TryAddComponent<R>();
@@ -206,7 +206,7 @@ namespace Rocket.Unturned
 
         public void Shutdown()
         {
-            Steam.shutdown();
+            Provider.shutdown();
         }
 
         public void Execute(IRocketPlayer player, string command)
@@ -218,7 +218,10 @@ namespace Rocket.Unturned
 
         public string InstanceId
         {
-            get { return Steam.InstanceName; }
+            get
+            {
+                return Provider.InstanceName;
+            } 
         }
     }
 }

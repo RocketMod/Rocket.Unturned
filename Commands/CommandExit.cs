@@ -44,7 +44,7 @@ namespace Rocket.Unturned.Commands
         public void Execute(IRocketPlayer caller, string[] command)
         {
             UnturnedPlayer player = (UnturnedPlayer)caller;
-            Steam.kick(player.CSteamID, "you exited");
+            Provider.kick(player.CSteamID, "you exited");
         }
     }
 }
