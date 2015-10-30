@@ -220,7 +220,7 @@ namespace Rocket.Unturned
         {
             get
             {
-                return Provider.InstanceName;
+                return Dedicator.InstanceName;
             } 
         }
     }

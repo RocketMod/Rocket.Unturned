@@ -1,2 +1,2 @@
-﻿@ECHO OFF 
+@ECHO OFF 
 start.bat MyFirstRocketServer
