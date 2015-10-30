@@ -15,7 +15,7 @@ namespace Rocket.Unturned
             try
             {
                 Logger.Log("A");
-                fileStream = new FileStream(String.Format(Environment.ConsoleFile, Provider.InstanceName), FileMode.Create,FileAccess.Write,FileShare.ReadWrite);
+                fileStream = new FileStream(String.Format(Environment.ConsoleFile, U.Instance.InstanceId), FileMode.Create,FileAccess.Write,FileShare.ReadWrite);
 
                 Logger.Log("B");
                 StreamWriter streamWriter = new StreamWriter(fileStream, System.Text.Encoding.ASCII)
