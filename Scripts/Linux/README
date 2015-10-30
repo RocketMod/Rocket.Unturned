@@ -47,7 +47,7 @@ chmod 755 update.sh && ./update.sh <steam username> <steam password>
 5. **Install Rocket**
 
 Download the latest Rocket for Linux and place all assemblies (*.dll) into  ~/unturned/Unturned_Data/Managed/ and the RocketLauncher.exe into ~/unturned/ so that the new hierarchy looks like this:
-    ~
+    ~/
       unturned/
                 ...
                 RocketLauncher.exe
