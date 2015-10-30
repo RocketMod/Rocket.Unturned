@@ -8,8 +8,9 @@ export DISPLAY=:0.0
 INSTANCE_NAME=$1
 UNTURNED_HOME="./unturned"
 
-if [ -f $UNTURNED_HOME"/RocketLauncher.exe" ]; then
-	cd $UNTURNED_HOME
+cd $UNTURNED_HOME
+
+if [ -f "./RocketLauncher.exe" ]; then
 	ulimit -n 2048
 	mono RocketLauncher.exe $INSTANCE_NAME
 else
