@@ -14,20 +14,16 @@ namespace Rocket.Unturned
         {
             try
             {
-                Logger.Log("A");
-                fileStream = new FileStream(String.Format(Environment.ConsoleFile, U.Instance.InstanceId), FileMode.Create,FileAccess.Write,FileShare.ReadWrite);
+                fileStream = new FileStream(String.Format(Environment.ConsoleFile, Dedicator.InstanceName), FileMode.Create,FileAccess.Write,FileShare.ReadWrite);
 
-                Logger.Log("B");
                 StreamWriter streamWriter = new StreamWriter(fileStream, System.Text.Encoding.ASCII)
                 {
                     AutoFlush = true
                 };
 
-                Logger.Log("C");
 
                 System.Console.SetOut(streamWriter);
 
-                Logger.Log("D");
                 readingThread = new Thread(new ThreadStart(DoRead));
                 readingThread.Start();
             }

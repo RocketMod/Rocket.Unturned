@@ -120,6 +120,9 @@ namespace Rocket.Unturned
         {
             rocketGameObject = new GameObject("Rocket");
             DontDestroyOnLoad(rocketGameObject);
+#if LINUX
+            Console = rocketGameObject.AddComponent<UnturnedConsole>();
+#endif
             System.Console.Clear();
             System.Console.ForegroundColor = ConsoleColor.Cyan;
             System.Console.WriteLine("Rocket Unturned v" + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " for Unturned v" + Provider.Version + "\n");
@@ -140,9 +143,6 @@ namespace Rocket.Unturned
         {
             Instance = this;
             Environment.Initialize();
-#if LINUX
-            Console = rocketGameObject.AddComponent<UnturnedConsole>();
-#endif
         }
 
         internal void Initialize()
