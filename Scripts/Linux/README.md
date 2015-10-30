@@ -6,21 +6,55 @@ If you figure how to install Rocket on another distro or UNIX/Mac then feel free
 to extend this file at https://github.com/RocketMod/Rocket.Unturned/new/master/Scripts/Linux/README
 
 
-# Recipe for Ubuntu 12.04 LTS / Ubuntu 14.04 LTS
+## Recipe for Ubuntu 12.04 LTS / Ubuntu 14.04 LTS
 
-apt-get install screen htop unzip                    				                        # Utils
-apt-get install libmono2.0-cil mono-runtime          				                        # Mono   
+*Utils*
+apt-get install screen htop unzip                    				                        
 
-apt-get install Xorg xinit x11-common                			                          # Headless X server
+*Mono*
+apt-get install libmono2.0-cil mono-runtime          				                        
 
+*Unity 3D requires a headless X server to run*
+apt-get install Xorg xinit x11-common  
+
+*Those libraries are required for Unity 3D to work, since i didn't figure how to host x64 servers the 32bit ones should be enought*
 apt-get install libglu1-mesa libxcursor1 libxrandr2  			                          # Native 64 bit Unity 3D prerequisites	
 apt-get install libc6:i386 libgl1-mesa-glx:i386 libxcursor1:i386 libxrandr2:i386    # 32 bit prerequisites for Unity 3D
 
+## Steps to install and run a Unturned 3 server with Rocket
+1. **Install the prerequisites**
 
-#Unity 3D requires a xserver to run, start it with:
-#screen -S XServer startx
+2. **Start the X-Server**
 
+screen -S XServer startx
 
-# Note: To make sure Steam Guard is not bugging you better create a new Steam account and disable Steam Guard
+3. **Copy the scripts "start.sh" and "update.sh" in the root of the folder you want your Unturned 3 environment in**
+The scripts will by default create a new hierarchy that looks like this:
+    ~/
+      unturned/
+      steamcmd/
 
-#Unity 3D requires a xserver to run, open it with startx in another screen
+4. **Run the update script to install Unturned 3**
+chmod 755 update.sh && ./update.sh <steam username> <steam password>
+*Note: To make sure Steam Guard is not bugging you better create a new Steam account and disable Steam Guard*
+
+5. **Install Rocket**
+Download the latest Rocket for Linux and place all assemblies (*.dll) into  ~/unturned/Unturned_Data/Managed/ and the RocketLauncher.exe into ~/unturned/ so that the new hierarchy looks like this:
+    ~
+      unturned/
+                ...
+                RocketLauncher.exe
+                Unturned_Data/
+                              ...
+                              Managed/
+                                      ...
+                                      Assembly-CSharp.dll
+                                      Rocket.API.dll
+                                      Rocket.Core.dll
+                                      Rocket.Unturned.dll
+      steamcmd/
+
+6. **Create a screen and start the server, pick any single word as unique instance name**
+screen -S <instance name>
+chmod 755 start.sh && ./start.sh <instance name>
+
