@@ -181,13 +181,17 @@ namespace Rocket.Unturned
 
                 PluginCommandManager.RegisterFromAssembly(Assembly.GetExecutingAssembly());
 
-                R.Plugins.OnPluginsLoaded += () =>
-                {
-                    SteamGameServer.SetKeyValue("rocketplugins", String.Join(",", R.Plugins.GetPlugins().Select(p => p.Name).ToArray()));
-                };
 
-                SteamGameServer.SetKeyValue("rocket", Assembly.GetExecutingAssembly().GetName().Version.ToString());
-                SteamGameServer.SetBotPlayerCount(1);
+                if (SteamAPI.IsSteamRunning())
+                {
+                    R.Plugins.OnPluginsLoaded += () =>
+                    {
+                        SteamGameServer.SetKeyValue("rocketplugins", String.Join(",", R.Plugins.GetPlugins().Select(p => p.Name).ToArray()));
+                    };
+
+                    SteamGameServer.SetKeyValue("rocket", Assembly.GetExecutingAssembly().GetName().Version.ToString());
+                    SteamGameServer.SetBotPlayerCount(1);
+                }
 
                 OnRocketImplementationInitialized.TryInvoke();
 
