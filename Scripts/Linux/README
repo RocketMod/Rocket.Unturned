@@ -26,20 +26,18 @@ apt-get install steam
 steam
 
 
-## Steps to install and run a Unturned 3 server with Rocket
+## Steps to install
 
 1. Install the prerequisites (Shown in the recipe above)
-2. Start the X-Server
-    screen -S XServer startx
-3. Copy the scripts "start.sh" and "update.sh" in the root of the folder you want your Unturned 3 environment in
+2. Copy the scripts "start.sh" and "update.sh" in the root of the folder you want your Unturned 3 environment in
     The scripts will by default create a new hierarchy that looks like this:
          ~/
             unturned/
             steamcmd/
-4. Run the update script to install Unturned 3
+3. Run the update script to install Unturned 3
     chmod 755 update.sh && ./update.sh <steam username> <steam password>
     #Note: To make sure Steam Guard is not bugging you better create a new Steam account and disable Steam Guard
-5. Install Rocket
+4. Install Rocket
     Download the latest Rocket for Linux and place all assemblies (*.dll) into  ~/unturned/Unturned_Data/Managed/ and the RocketLauncher.exe into ~/unturned/ so that the new hierarchy looks like this:
         ~/
             unturned/
@@ -55,7 +53,11 @@ steam
                                         Rocket.Unturned.dll
             steamcmd/
 
-6. Create a screen and start the server, pick any single word as unique instance name
+## Steps to start
+1. Start the X-Server
+    screen -S XServer startx
+2. Start steam
+    screen -S steam steam
+3. Start the server, pick any single word as unique instance name
     screen -S <instance name>
     chmod 755 start.sh && ./start.sh <instance name>
-
