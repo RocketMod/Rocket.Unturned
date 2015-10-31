@@ -18,8 +18,8 @@ apt-get install libmono2.0-cil mono-runtime
 apt-get install Xorg xinit x11-common  
 
 #Those libraries are required for Unity 3D to work, since i didn't figure how to host x64 servers the 32bit ones should be enought*
-apt-get install libglu1-mesa libxcursor1 libxrandr2  			                    # Native 64 bit Unity 3D prerequisites	
-apt-get install libc6:i386 libgl1-mesa-glx:i386 libxcursor1:i386 libxrandr2:i386    # 32 bit prerequisites for Unity 3D
+apt-get install libglu1-mesa libxcursor1 libxrandr2 # Native 64 bit Unity 3D prerequisites	
+apt-get install libc6:i386 libgl1-mesa-glx:i386 libxcursor1:i386 libxrandr2:i386 # 32 bit prerequisites for Unity 3D
 
 #Since Nelson ships the wrong libraries for steam you need to install full steam and update it
 apt-get install steam
