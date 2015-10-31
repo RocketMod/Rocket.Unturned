@@ -56,10 +56,10 @@ steam
             steamcmd/
 
 ## Steps to start
-1. Start the XServer if not already running
+1. Start the XServer and Steam if not already running 
+    #Note: start.sh starts them if they are not running, make sure to use the screen names Xserver and Steam
     screen -S XServer startx
-2. Start Steam if not already running
     screen -S Steam steam
-3. Start the server, pick any single word as unique instance name
+2. Start the server, pick any single word as unique instance name
     screen -S <instance name>
     ./start.sh <instance name>
