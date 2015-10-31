@@ -6,8 +6,8 @@
 export DISPLAY=:0.0
 
 INSTANCE_NAME=$1
-UNTURNED_HOME="./unturned/"
-
+STEAMCMD_HOME="./steamcmd"
+UNTURNED_HOME="./unturned"
 
 YELLLOW='\033[0;33m'
 GREEN='\033[0;32m'
@@ -22,13 +22,18 @@ else
 	printf "${GREEN}RUNNING${NC}\n"
 fi
 
+
+STEAMCMD_API=$STEAMCMD_HOME/linux32/steamclient.so
+UNTURNED_API=$UNTURNED_HOME/Unturned_Data/Plugins/x86/steamclient.so
+
 printf "Steam: "
-if ! screen -list | grep -q "Steam"; then
-	screen -dmS Steam bash -c "export DISPLAY=:0.0 ; steam"
-	printf "${YELLLOW}STARTING${NC}\n"
-    sleep 10
-else
-	printf "${GREEN}RUNNING${NC}\n"
+if [ -f $STEAMCMD_API ]; then
+	if diff $STEAMCMD_API $UNTURNED_API >/dev/null ; then
+		printf "${GREEN}UP TO DATE${NC}\n"
+	else
+		cp $STEAMCMD_API $UNTURNED_API
+		printf "${YELLLOW}UPDATING${NC}\n"
+	fi
 fi
 
 echo ""
