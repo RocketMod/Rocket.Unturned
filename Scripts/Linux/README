@@ -34,8 +34,10 @@ steam
          ~/
             unturned/
             steamcmd/
-3. Run the update script to install Unturned 3
-    chmod 755 update.sh && ./update.sh <steam username> <steam password>
+3. Fix permissions and run the update script to install Unturned 3
+    chmod 755 update.sh
+    chmod 755 start.sh
+    ./update.sh <steam username> <steam password>
     #Note: To make sure Steam Guard is not bugging you better create a new Steam account and disable Steam Guard
 4. Install Rocket
     Download the latest Rocket for Linux and place all assemblies (*.dll) into  ~/unturned/Unturned_Data/Managed/ and the RocketLauncher.exe into ~/unturned/ so that the new hierarchy looks like this:
@@ -54,10 +56,10 @@ steam
             steamcmd/
 
 ## Steps to start
-1. Start the X-Server
+1. Start the XServer if not already running
     screen -S XServer startx
-2. Start steam
-    screen -S steam steam
+2. Start Steam if not already running
+    screen -S Steam steam
 3. Start the server, pick any single word as unique instance name
     screen -S <instance name>
-    chmod 755 start.sh && ./start.sh <instance name>
+    ./start.sh <instance name>
