@@ -18,9 +18,18 @@ namespace Rocket.Unturned.Serialisation
         [XmlElement("AutomaticSave")]
         public AutomaticSave AutomaticSave;
 
+        [XmlElement("CharacterNameValidation")]
+        public bool CharacterNameValidation;
+
+        [XmlElement("CharacterNameValidationRule")]
+        public string CharacterNameValidationRule;
+
+
         public void LoadDefaults()
         {
             AutomaticSave = new AutomaticSave();
+            CharacterNameValidation = false;
+            CharacterNameValidationRule = @"([^\x00-\x7F]|[\w_\ \.\+\-])+";
         }
     }
 }

@@ -29,7 +29,7 @@ namespace Rocket.Unturned
 
         private static readonly TranslationList defaultTranslations = new TranslationList(){
             { "command_generic_failed_find_player","Failed to find player"},
-                { "command_generic_invalid_parameter","Invalid Parameter"},
+                { "command_generic_invalid_parameter","Invalid parameter"},
                 { "command_generic_target_player_not_found","Target player not found"},
                 { "command_generic_teleport_while_driving_error","You cannot teleport while driving or riding in a vehicle."},
                 { "command_god_enable_console","{0} enabled Godmode"},
@@ -96,8 +96,9 @@ namespace Rocket.Unturned
                 { "command_p_group_not_found","Group not found"},
                 { "command_p_group_assigned","{0} was assigned to the group {1}"},
                 { "command_rocket_plugin_not_found","Plugin {0} not found"},
-                { "command_clear_success","You successfully cleared {0} items"}
-        };
+                { "command_clear_success","You successfully cleared {0} items"},
+                { "invalid_character_name","invalid character name"}
+        }; 
 
         public static XMLFileAsset<UnturnedSettings> Settings;
         public static XMLFileAsset<TranslationList> Translations;
@@ -191,6 +192,10 @@ namespace Rocket.Unturned
 
                     SteamGameServer.SetKeyValue("rocket", Assembly.GetExecutingAssembly().GetName().Version.ToString());
                     SteamGameServer.SetBotPlayerCount(1);
+                }
+                else
+                {
+                    Logger.LogError("Steam can not be initialized");
                 }
 
                 OnRocketImplementationInitialized.TryInvoke();

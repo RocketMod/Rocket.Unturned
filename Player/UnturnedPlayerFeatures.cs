@@ -15,12 +15,12 @@ namespace Rocket.Unturned.Player
         }
 
 
-        private bool vanishMode = false;
-        public bool VanishMode
-        {
-            get { return vanishMode; }
-            set { vanishMode = value; }
-        }
+        //private bool vanishMode = false;
+        //public bool VanishMode
+        //{
+        //    get { return vanishMode; }
+        //    set { vanishMode = value; }
+        //}
 
 
         private bool godMode = false;
@@ -51,16 +51,29 @@ namespace Rocket.Unturned.Player
         }
 
 
-        private void FixedUpdate()
-        {
-            if (this.vanishMode)
-            {
-                Player.Player.SteamChannel.send("tellPosition", ESteamCall.NOT_OWNER, ESteamPacket.UPDATE_UDP_BUFFER, new object[] { new Vector3(Player.Position.x, -3, Player.Position.z) });
-            }
-        }
+        //private void FixedUpdate()
+        //{
+        //    if (this.vanishMode)
+        //    {
+        //        Player.Player.SteamChannel.send("tellPosition", ESteamCall.NOT_OWNER, ESteamPacket.UPDATE_UDP_BUFFER, new object[] { new Vector3(Player.Position.x, -3, Player.Position.z) });
+        //    }
+        //}
 
         protected override void Load()
         {
+            if (U.Settings.Instance.CharacterNameValidation)
+            {
+                string username = Player.CharacterName;
+                System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"([^\x00-\x7F]|[\w_\ \.\+\-])+");
+                System.Text.RegularExpressions.Match match = regex.Match(username);
+                if(match.Groups[0].Length != username.Length)
+                {
+                    Provider.kick(Player.CSteamID, U.Translate("invalid_character_name"));
+                }
+            }
+               
+        
+
             if (godMode)
             {
                 Player.Events.OnUpdateHealth += e_OnPlayerUpdateHealth;
