@@ -22,14 +22,14 @@ namespace Rocket.Unturned.Serialisation
         public bool CharacterNameValidation = false;
 
         [XmlElement("CharacterNameValidationRule")]
-        public string CharacterNameValidationRule = @"([^\x00-\x7F]|[\w_\ \.\+\-])+";
+        public string CharacterNameValidationRule = @"([\x00-\xAA]|[\w_\ \.\+\-])+";
 
 
         public void LoadDefaults()
         {
             AutomaticSave = new AutomaticSave();
             CharacterNameValidation = true;
-            CharacterNameValidationRule = @"([^\x00-\x7F]|[\w_\ \.\+\-])+";
+            CharacterNameValidationRule = @"([\x00-\xAA]|[\w_\ \.\+\-])+";
         }
     }
 }

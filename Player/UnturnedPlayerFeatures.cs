@@ -1,11 +1,14 @@
 ﻿using Rocket.Unturned.Events;
 using SDG.Unturned;
+using System;
 using UnityEngine;
 
 namespace Rocket.Unturned.Player
 {
     public sealed class UnturnedPlayerFeatures : UnturnedPlayerComponent
     {
+
+        public DateTime Joined = DateTime.Now;
 
         internal Color? color = null;
         internal Color? Color
@@ -50,29 +53,43 @@ namespace Rocket.Unturned.Player
             }
         }
 
+        private bool initialCheck;
 
-        //private void FixedUpdate()
-        //{
+        private void FixedUpdate()
+        {
+            if(!initialCheck && (DateTime.Now - Joined).TotalSeconds > 3)
+            {
+                Check();
+            }
         //    if (this.vanishMode)
         //    {
         //        Player.Player.SteamChannel.send("tellPosition", ESteamCall.NOT_OWNER, ESteamPacket.UPDATE_UDP_BUFFER, new object[] { new Vector3(Player.Position.x, -3, Player.Position.z) });
         //    }
-        //}
+        }
+
+        private void Check()
+        {
+            initialCheck = true;
+            Core.Logging.Logger.Log("test");
+            if (U.Settings.Instance.CharacterNameValidation)
+            {
+                Core.Logging.Logger.Log("testa");
+                string username = Player.CharacterName;
+                Core.Logging.Logger.Log(username);
+                System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(U.Settings.Instance.CharacterNameValidationRule);
+                System.Text.RegularExpressions.Match match = regex.Match(username);
+                Core.Logging.Logger.Log(match.Groups[0].Length.ToString());
+                Core.Logging.Logger.Log(username.Length.ToString());
+                if (match.Groups[0].Length != username.Length)
+                {
+                    Provider.kick(Player.CSteamID, U.Translate("invalid_character_name"));
+
+                }
+            }
+        }
 
         protected override void Load()
         {
-            if (U.Settings.Instance.CharacterNameValidation)
-            {
-                string username = Player.CharacterName;
-                System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"([^\x00-\x7F]|[\w_\ \.\+\-])+");
-                System.Text.RegularExpressions.Match match = regex.Match(username);
-                if(match.Groups[0].Length != username.Length)
-                {
-                    Provider.kick(Player.CSteamID, U.Translate("invalid_character_name"));
-                }
-            }
-               
-        
 
             if (godMode)
             {
