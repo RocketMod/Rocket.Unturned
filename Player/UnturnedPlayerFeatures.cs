@@ -70,7 +70,7 @@ namespace Rocket.Unturned.Player
         private void Check()
         {
             initialCheck = true;
-            Core.Logging.Logger.Log("test");
+           
             if (U.Settings.Instance.CharacterNameValidation)
             {
                 Core.Logging.Logger.Log("testa");
