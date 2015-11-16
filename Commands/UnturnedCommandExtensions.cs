@@ -57,7 +57,7 @@ namespace Rocket.Unturned.Commands
 
         public static RocketPlayer GetRocketPlayerParameter(this string[] array, int index)
         {
-            if(array.Length <= index)
+            if(array.Length > index)
             {
                 ulong id = 0;
                 if (ulong.TryParse(array[index], out id) && id > 76561197960265728)
