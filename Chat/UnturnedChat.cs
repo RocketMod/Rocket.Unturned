@@ -101,7 +101,7 @@ namespace Rocket.Unturned.Chat
             Logger.Log("Broadcast: " + message,false);
             foreach (string m in wrapMessage(message))
             {
-                ChatManager.Instance.SteamChannel.send("tellChat", ESteamCall.OTHERS, ESteamPacket.UPDATE_UDP_BUFFER, new object[] { CSteamID.Nil, (byte)EChatMode.GLOBAL,color, m });
+                ChatManager.Instance.SteamChannel.send("tellChat", ESteamCall.OTHERS, ESteamPacket.UPDATE_UNRELIABLE_BUFFER, new object[] { CSteamID.Nil, (byte)EChatMode.GLOBAL,color, m });
             }
         }
        
@@ -142,7 +142,7 @@ namespace Rocket.Unturned.Chat
             {   
                 foreach (string m in wrapMessage(message))
                 {
-                    ChatManager.Instance.SteamChannel.send("tellChat", CSteamID, ESteamPacket.UPDATE_UDP_BUFFER, new object[] { CSteamID.Nil, (byte)EChatMode.SAY,color, m });
+                    ChatManager.Instance.SteamChannel.send("tellChat", CSteamID, ESteamPacket.UPDATE_UNRELIABLE_BUFFER, new object[] { CSteamID.Nil, (byte)EChatMode.SAY,color, m });
                 }
             }
         }

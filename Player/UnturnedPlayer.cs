@@ -172,7 +172,7 @@ namespace Rocket.Unturned.Player
         }
         
         public void TriggerEffect(ushort effectID){
-            SDG.Unturned.EffectManager.Instance.SteamChannel.send("tellEffectPoint", CSteamID, ESteamPacket.UPDATE_UDP_BUFFER, new object[] { effectID, player.transform.position });
+            SDG.Unturned.EffectManager.Instance.SteamChannel.send("tellEffectPoint", CSteamID, ESteamPacket.UPDATE_UNRELIABLE_BUFFER, new object[] { effectID, player.transform.position });
         }
 
         public PlayerInventory Inventory
@@ -331,7 +331,7 @@ namespace Rocket.Unturned.Player
             set
             {
                 player.Skills.Experience = value;
-                player.SteamChannel.send("tellExperience", ESteamCall.OWNER, ESteamPacket.UPDATE_TCP_BUFFER, new object[] { value });
+                player.SteamChannel.send("tellExperience", ESteamCall.OWNER, ESteamPacket.UPDATE_RELIABLE_BUFFER, new object[] { value });
             }
         }
 
@@ -373,7 +373,7 @@ namespace Rocket.Unturned.Player
             }
             set
             {
-                player.PlayerLife.SteamChannel.send("tellBroken", ESteamCall.OWNER, ESteamPacket.UPDATE_TCP_BUFFER, new object[] { value });
+                player.PlayerLife.SteamChannel.send("tellBroken", ESteamCall.OWNER, ESteamPacket.UPDATE_RELIABLE_BUFFER, new object[] { value });
             }
         }
         public bool Bleeding
@@ -384,7 +384,7 @@ namespace Rocket.Unturned.Player
             set
             {
                 player.PlayerLife.Bleeding = value;
-                player.PlayerLife.SteamChannel.send("tellBleeding", ESteamCall.OWNER, ESteamPacket.UPDATE_TCP_BUFFER, new object[] { value });
+                player.PlayerLife.SteamChannel.send("tellBleeding", ESteamCall.OWNER, ESteamPacket.UPDATE_RELIABLE_BUFFER, new object[] { value });
             }
         }
 
