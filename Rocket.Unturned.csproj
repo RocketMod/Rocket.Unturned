@@ -124,6 +124,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="README" />
+    <None Include="Rocket.Unturned.nuspec">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Scripts\Linux\start.sh" />
     <None Include="Scripts\Linux\update.sh" />
     <None Include="Scripts\Windows\MyFirstRocketServer.bat" />
