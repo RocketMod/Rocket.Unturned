@@ -42,7 +42,8 @@ namespace Rocket.Unturned.Commands
 
         public void Execute(IRocketPlayer caller, string[] command)
         {
-            UnturnedPlayer player = command.GetUnturnedPlayerParameter(0);
+            IRocketPlayer player = command.GetUnturnedPlayerParameter(0);
+            if (player == null) player = command.GetRocketPlayerParameter(0);
             string groupName = command.GetStringParameter(1);
 
             if (command.Length == 0 && !(caller is ConsolePlayer))
@@ -51,14 +52,14 @@ namespace Rocket.Unturned.Commands
                 UnturnedChat.Say(caller, U.Translate("command_p_permissions_private", "Your", string.Join(", ", Core.R.Permissions.GetPermissions(caller).ToArray())));
             }
             else if(command.Length == 1 && player != null) {
-                UnturnedChat.Say(caller, U.Translate("command_p_groups_private", player.CharacterName+"s", string.Join(", ", R.Permissions.GetGroups(caller, true).Select(g => g.DisplayName).ToArray())));
-                UnturnedChat.Say(caller, U.Translate("command_p_permissions_private", player.CharacterName+"s", string.Join(", ", Core.R.Permissions.GetPermissions(player).ToArray())));
+                UnturnedChat.Say(caller, U.Translate("command_p_groups_private", player.DisplayName+"s", string.Join(", ", R.Permissions.GetGroups(caller, true).Select(g => g.DisplayName).ToArray())));
+                UnturnedChat.Say(caller, U.Translate("command_p_permissions_private", player.DisplayName + "s", string.Join(", ", Core.R.Permissions.GetPermissions(player).ToArray())));
             }
             else if (command.Length == 2 && player != null && !String.IsNullOrEmpty(groupName) && caller.HasPermission("p.set"))
             {
                 if (Core.R.Permissions.SetGroup(player, groupName))
                 {
-                    UnturnedChat.Say(caller, U.Translate("command_p_group_assigned", player.CharacterName, groupName));
+                    UnturnedChat.Say(caller, U.Translate("command_p_group_assigned", player.DisplayName, groupName));
                 }
                 else {
                     UnturnedChat.Say(caller, U.Translate("command_p_group_not_found"));

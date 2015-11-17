@@ -183,7 +183,7 @@ namespace Rocket.Unturned
                 PluginCommandManager.RegisterFromAssembly(Assembly.GetExecutingAssembly());
 
 
-                if (SteamAPI.IsSteamRunning())
+                try
                 {
                     R.Plugins.OnPluginsLoaded += () =>
                     {
@@ -193,9 +193,9 @@ namespace Rocket.Unturned
                     SteamGameServer.SetKeyValue("rocket", Assembly.GetExecutingAssembly().GetName().Version.ToString());
                     SteamGameServer.SetBotPlayerCount(1);
                 }
-                else
+                catch (Exception ex)
                 {
-                    Logger.LogError("Steam can not be initialized");
+                    Logger.LogError("Steam can not be initialized: " + ex.Message);
                 }
 
                 OnRocketImplementationInitialized.TryInvoke();

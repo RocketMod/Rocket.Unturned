@@ -70,16 +70,12 @@ namespace Rocket.Unturned.Player
         private void Check()
         {
             initialCheck = true;
-            Core.Logging.Logger.Log("test");
+           
             if (U.Settings.Instance.CharacterNameValidation)
             {
-                Core.Logging.Logger.Log("testa");
                 string username = Player.CharacterName;
-                Core.Logging.Logger.Log(username);
                 System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(U.Settings.Instance.CharacterNameValidationRule);
                 System.Text.RegularExpressions.Match match = regex.Match(username);
-                Core.Logging.Logger.Log(match.Groups[0].Length.ToString());
-                Core.Logging.Logger.Log(username.Length.ToString());
                 if (match.Groups[0].Length != username.Length)
                 {
                     Provider.kick(Player.CSteamID, U.Translate("invalid_character_name"));
