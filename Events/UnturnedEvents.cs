@@ -20,6 +20,7 @@ namespace Rocket.Unturned.Events
             Provider.onServerConnected += (CSteamID r) => {
                 UnturnedPlayer p = UnturnedPlayer.FromCSteamID(r);
                 p.Player.gameObject.TryAddComponent<UnturnedPlayerFeatures>();
+                p.Player.gameObject.TryAddComponent<UnturnedPlayerMovement>();
                 p.Player.gameObject.TryAddComponent<UnturnedPlayerEvents>();
                 OnBeforePlayerConnected.TryInvoke(p);
             };

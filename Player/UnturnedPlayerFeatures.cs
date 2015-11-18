@@ -1,4 +1,5 @@
-﻿using Rocket.Unturned.Events;
+﻿using Rocket.API.Extensions;
+using Rocket.Unturned.Events;
 using SDG.Unturned;
 using System;
 using UnityEngine;
@@ -18,12 +19,16 @@ namespace Rocket.Unturned.Player
         }
 
 
-        //private bool vanishMode = false;
-        //public bool VanishMode
-        //{
-        //    get { return vanishMode; }
-        //    set { vanishMode = value; }
-        //}
+        private bool vanishMode = false;
+        public bool VanishMode
+        {
+            get { return vanishMode; }
+            set { vanishMode = value;
+                Player.GetComponent<UnturnedPlayerMovement>().VanishMode = vanishMode;
+            }
+        }
+
+
 
 
         private bool godMode = false;
@@ -61,10 +66,6 @@ namespace Rocket.Unturned.Player
             {
                 Check();
             }
-        //    if (this.vanishMode)
-        //    {
-        //        Player.Player.SteamChannel.send("tellPosition", ESteamCall.NOT_OWNER, ESteamPacket.UPDATE_UDP_BUFFER, new object[] { new Vector3(Player.Position.x, -3, Player.Position.z) });
-        //    }
         }
 
         private void Check()

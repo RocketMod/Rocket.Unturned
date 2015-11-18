@@ -24,12 +24,14 @@ namespace Rocket.Unturned.Serialisation
         [XmlElement("CharacterNameValidationRule")]
         public string CharacterNameValidationRule = @"([\x00-\xAA]|[\w_\ \.\+\-])+";
 
+        public bool LogSuspiciousPlayerMovement = true;
 
         public void LoadDefaults()
         {
             AutomaticSave = new AutomaticSave();
             CharacterNameValidation = true;
             CharacterNameValidationRule = @"([\x00-\xAA]|[\w_\ \.\+\-])+";
+            LogSuspiciousPlayerMovement = true;
         }
     }
 }

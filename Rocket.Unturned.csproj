@@ -77,6 +77,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\UnturnedCommandExtensions.cs" />
+    <Compile Include="Player\UnturnedPlayerMovement.cs" />
     <Compile Include="Utils\AutomaticSaveWatchdog.cs" />
     <Compile Include="Chat\UnturnedChat.cs" />
     <Compile Include="Commands\CommandAdmin.cs" />
@@ -126,6 +127,7 @@
     <None Include="README" />
     <None Include="Rocket.Unturned.nuspec">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
     <None Include="Scripts\Linux\start.sh" />
     <None Include="Scripts\Linux\update.sh" />

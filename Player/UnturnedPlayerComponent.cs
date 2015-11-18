@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using SDG.Unturned;
+using UnityEngine;
 
 namespace Rocket.Unturned.Player
 {
@@ -9,7 +10,6 @@ namespace Rocket.Unturned.Player
         {
             get { return player; }
         }
-
         private void Awake()
         {
             player = UnturnedPlayer.FromPlayer(gameObject.transform.GetComponent<SDG.Unturned.Player>());
