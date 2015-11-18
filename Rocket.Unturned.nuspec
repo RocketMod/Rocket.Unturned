@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <package >
   <metadata>
     <id>Rocket.Unturned</id>
@@ -11,13 +11,13 @@
     <description>Unity3D Game Server Mod</description>
     <copyright>fr34kyn01535 © 2015</copyright>
     <tags>Unturned3 Rocket Mod Unity3D</tags>
+	  <dependencies>
+		<dependency id="Rocket.Core" version="2.0.1.0" />
+	  </dependencies>
   </metadata>
   <files>
     <file src="Assembly-CSharp.dll" target="lib" />
     <file src="Rocket.Unturned.dll" target="lib" />
-    <file src="LICENSE" target="" />
+    <file src="LICENSE" target="." />
   </files>
-  <dependencies>
-    <dependency id="Rocket.Core" version="2.0.1.0" />
-  </dependencies>
 </package>

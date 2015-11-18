@@ -44,10 +44,10 @@ else
 	printf "${RED}NOT FOUND${NC}\n\n"
 fi
 
+cd $UNTURNED_HOME
 
 if [ -f RocketLauncher.exe ]; then
 	ulimit -n 2048
-	cd $UNTURNED_HOME
 	mono RocketLauncher.exe $INSTANCE_NAME
 else
 	echo "RocketLauncher not found."
