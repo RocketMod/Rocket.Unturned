@@ -33,7 +33,7 @@ namespace Rocket.Unturned
                     float x = Math.Abs(lastVector.x - movement.real.x);
                     float y = movement.real.y - lastVector.y;
                     float z = Math.Abs(lastVector.z - movement.real.z);
-                    if (x > 35 || y > 15 || z > 35)
+                    if (y > 15)
                     {
                         Logger.Log(Player.DisplayName + " moved x:" + x + " y:" + y + " z:" + z + " in the last second. Could be teleporting or hacking.");
                     }
