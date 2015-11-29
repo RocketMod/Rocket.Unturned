@@ -55,11 +55,11 @@ namespace Rocket.Unturned.Events
                 UnturnedPlayerEvents instance = s.Player.transform.GetComponent<UnturnedPlayerEvents>();
                 UnturnedPlayer rp = UnturnedPlayer.FromSteamPlayer(s);
 #if DEBUG
-                 string o = "";
-                 foreach (object r in R)
-                 {
-                     o += r.ToString();
-                 }
+                 //string o = "";
+                 //foreach (object r in R)
+                 //{
+                 //    o += r.ToString();
+                 //}
                  //Logger.Log("Send+" + s.SteamPlayerID.CSteamID.ToString() + ": " + W + " - " + o);
 #endif
                 if (W.StartsWith("tellWear")) {

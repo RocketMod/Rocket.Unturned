@@ -250,7 +250,40 @@ namespace Rocket.Unturned.Player
 
         public void Teleport(Vector3 position ,float rotation)
         {
-            player.sendTeleport(position, MeasurementTool.angleToByte(rotation));
+            if (VanishMode)
+            {
+                player.SteamChannel.send("askTeleport", ESteamCall.OWNER, ESteamPacket.UPDATE_RELIABLE_BUFFER, position, MeasurementTool.angleToByte(rotation));
+            }
+            else
+            {
+                player.SteamChannel.send("askTeleport", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER, position, MeasurementTool.angleToByte(rotation));
+            }
+        }
+
+        public bool VanishMode
+        {
+            get
+            {
+                UnturnedPlayerFeatures features = player.GetComponent<UnturnedPlayerFeatures>();
+                return features.VanishMode;
+            }
+            set
+            {
+                UnturnedPlayerFeatures features = player.GetComponent<UnturnedPlayerFeatures>();
+                features.VanishMode = value;
+            }
+        }
+
+        public bool GodMode { get
+            {
+                UnturnedPlayerFeatures features = player.GetComponent<UnturnedPlayerFeatures>();
+                return features.GodMode;
+            }
+            set
+            {
+                UnturnedPlayerFeatures features = player.GetComponent<UnturnedPlayerFeatures>();
+                features.GodMode = value;
+            }
         }
 
         public Vector3 Position
