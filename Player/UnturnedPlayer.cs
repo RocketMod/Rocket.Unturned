@@ -244,8 +244,9 @@ namespace Rocket.Unturned.Player
         public void Teleport(UnturnedPlayer target)
         {
             Vector3 d1 = target.player.transform.position;
+            if (target.VanishMode) d1.y -= 1337;
             Vector3 vector31 = target.player.transform.rotation.eulerAngles;
-            player.sendTeleport(d1, MeasurementTool.angleToByte(vector31.y));
+            Teleport(d1, MeasurementTool.angleToByte(vector31.y));
         }
 
         public void Teleport(Vector3 position ,float rotation)
@@ -253,6 +254,8 @@ namespace Rocket.Unturned.Player
             if (VanishMode)
             {
                 player.SteamChannel.send("askTeleport", ESteamCall.OWNER, ESteamPacket.UPDATE_RELIABLE_BUFFER, position, MeasurementTool.angleToByte(rotation));
+                player.SteamChannel.send("askTeleport", ESteamCall.NOT_OWNER, ESteamPacket.UPDATE_RELIABLE_BUFFER, new Vector3(position.y, position.y + 1337, position.z), MeasurementTool.angleToByte(rotation));
+                player.SteamChannel.send("askTeleport", ESteamCall.SERVER, ESteamPacket.UPDATE_RELIABLE_BUFFER, position, MeasurementTool.angleToByte(rotation));
             }
             else
             {
