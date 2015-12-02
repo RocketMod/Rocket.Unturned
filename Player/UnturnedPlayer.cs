@@ -244,7 +244,6 @@ namespace Rocket.Unturned.Player
         public void Teleport(UnturnedPlayer target)
         {
             Vector3 d1 = target.player.transform.position;
-            if (target.VanishMode) d1.y -= 1337;
             Vector3 vector31 = target.player.transform.rotation.eulerAngles;
             Teleport(d1, MeasurementTool.angleToByte(vector31.y));
         }
