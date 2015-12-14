@@ -67,13 +67,14 @@ namespace Rocket.Unturned.Commands
             }
 
             Asset a = SDG.Unturned.Assets.find(EAssetType.ITEM,id);
-            string assetName = ((ItemAsset)a).Name;
 
-            if (command.Length == 2 && !byte.TryParse(command[1].ToString(), out amount))
+            if (command.Length == 2 && !byte.TryParse(command[1].ToString(), out amount) || a == null)
             {
                 UnturnedChat.Say(player, U.Translate("command_generic_invalid_parameter"));
                 return;
             }
+
+            string assetName = ((ItemAsset)a).Name;
 
             if (player.GiveItem(id, amount))
             {
