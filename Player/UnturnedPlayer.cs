@@ -7,6 +7,7 @@ using Rocket.Unturned.Events;
 using Rocket.API;
 using Rocket.Core;
 using Rocket.Unturned.Chat;
+using Rocket.Unturned.Skills;
 
 namespace Rocket.Unturned.Player
 {
@@ -276,7 +277,9 @@ namespace Rocket.Unturned.Player
             }
         }
 
-        public bool GodMode { get
+        public bool GodMode
+        {
+            get
             {
                 UnturnedPlayerFeatures features = player.GetComponent<UnturnedPlayerFeatures>();
                 return features.GodMode;
@@ -304,7 +307,8 @@ namespace Rocket.Unturned.Player
             }
         }
 
-        public float Rotation { 
+        public float Rotation
+        { 
             get { 
                 return player.transform.rotation.eulerAngles.y; 
             } 
@@ -348,10 +352,12 @@ namespace Rocket.Unturned.Player
 
         public byte Infection
         {
-            get { 
+            get
+            { 
                 return player.PlayerLife.Infection; 
             }
-            set{
+            set
+            {
                 player.PlayerLife.askDisinfect(100);
                 player.PlayerLife.askInfect(value);
             }
@@ -372,14 +378,16 @@ namespace Rocket.Unturned.Player
 
         public byte Health
         {
-            get {
+            get
+            {
                 return player.PlayerLife.health; 
             }
         }
 
         public byte Hunger
         {
-            get{
+            get
+            {
                 return player.PlayerLife.Hunger;
             }
             set
@@ -391,7 +399,8 @@ namespace Rocket.Unturned.Player
 
         public byte Thirst
         {
-            get { 
+            get
+            { 
                 return player.PlayerLife.Thirst; 
             }
             set
@@ -403,7 +412,8 @@ namespace Rocket.Unturned.Player
 
         public bool Broken
         {
-            get { 
+            get
+            { 
                 return player.PlayerLife.Broken; 
             }
             set
@@ -413,7 +423,8 @@ namespace Rocket.Unturned.Player
         }
         public bool Bleeding
         {
-            get{
+            get
+            {
                 return player.PlayerLife.Bleeding; 
             }
             set
@@ -425,14 +436,16 @@ namespace Rocket.Unturned.Player
 
         public bool Dead
         {
-            get { 
+            get
+            { 
                 return player.PlayerLife.Dead; 
             }
         }
 
         public bool Freezing
         {
-            get { 
+            get
+            { 
                 return player.PlayerLife.Freezing; 
             }
         }
@@ -465,7 +478,39 @@ namespace Rocket.Unturned.Player
             {
                 return player.SteamChannel.SteamPlayer.IsPro;
             }
+        }
+        
+        public InteractableVehicle CurrentVehicle
+        {
+            get
+            {
+                return player.movement.getVehicle();
+            }
+        }
 
+        public bool IsInVehicle
+        {
+            get
+            {
+                return CurrentVehicle != null;
+            }
+        }
+
+        public void SetSkillLevel(SkillType skillType, byte value)
+        {
+            GetSkill( skillType ).level = value;
+            player.skills.askSkills(CSteamID);
+        }
+
+        public byte GetSkillLevel(SkillType skillType)
+        {
+            return GetSkill(skillType).level;
+        }
+
+        public Skill GetSkill(SkillType skillType)
+        {
+            var skills = player.skills;
+            return skills.skills[skillType.SpecialityIndex][skillType.SkillIndex];
         }
     }
 }
