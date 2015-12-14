@@ -7,6 +7,7 @@ using Rocket.Unturned.Events;
 using Rocket.API;
 using Rocket.Core;
 using Rocket.Unturned.Chat;
+using Rocket.Unturned.Skills;
 
 namespace Rocket.Unturned.Player
 {
@@ -45,8 +46,9 @@ namespace Rocket.Unturned.Player
             get { return player; }
         }
 
-        public CSteamID CSteamID {
-            get { return player.SteamChannel.SteamPlayer.SteamPlayerID.CSteamID;  }
+        public CSteamID CSteamID
+        {
+            get { return player.SteamChannel.SteamPlayer.SteamPlayerID.CSteamID; }
         }
 
         public Exception PlayerIsConsoleException;
@@ -74,7 +76,7 @@ namespace Rocket.Unturned.Player
             }
             set
             {
-               Features.Color = value;
+                Features.Color = value;
             }
         }
 
@@ -109,7 +111,8 @@ namespace Rocket.Unturned.Player
             return (this.CSteamID.ToString() == p.CSteamID.ToString());
         }
 
-        public T GetComponent<T>() {
+        public T GetComponent<T>()
+        {
             return (T)(object)Player.GetComponent(typeof(T));
         }
 
@@ -170,8 +173,9 @@ namespace Rocket.Unturned.Player
         {
             return CSteamID.ToString();
         }
-        
-        public void TriggerEffect(ushort effectID){
+
+        public void TriggerEffect(ushort effectID)
+        {
             SDG.Unturned.EffectManager.Instance.SteamChannel.send("tellEffectPoint", CSteamID, ESteamPacket.UPDATE_UNRELIABLE_BUFFER, new object[] { effectID, player.transform.position });
         }
 
@@ -182,7 +186,7 @@ namespace Rocket.Unturned.Player
 
         public bool GiveItem(ushort itemId, byte amount)
         {
-            return ItemTool.tryForceGiveItem(player,itemId,amount);
+            return ItemTool.tryForceGiveItem(player, itemId, amount);
         }
 
         public bool GiveItem(Item item)
@@ -194,11 +198,6 @@ namespace Rocket.Unturned.Player
         {
             return VehicleTool.giveVehicle(player, vehicleId);
         }
-
-        //public void GiveZombie(byte amount)
-        //{
-        //    ZombieTool.giveZombie(player,amount);
-        //}
 
         public CSteamID SteamGroupID
         {
@@ -217,10 +216,11 @@ namespace Rocket.Unturned.Player
         {
             Provider.ban(this.CSteamID, reason, duration);
         }
-		
-		public void Admin(bool admin){
-			Admin (admin, null);
-		}
+
+        public void Admin(bool admin)
+        {
+            Admin(admin, null);
+        }
 
         public void Admin(bool admin, UnturnedPlayer issuer)
         {
@@ -248,7 +248,7 @@ namespace Rocket.Unturned.Player
             Teleport(d1, MeasurementTool.angleToByte(vector31.y));
         }
 
-        public void Teleport(Vector3 position ,float rotation)
+        public void Teleport(Vector3 position, float rotation)
         {
             if (VanishMode)
             {
@@ -276,7 +276,9 @@ namespace Rocket.Unturned.Player
             }
         }
 
-        public bool GodMode { get
+        public bool GodMode
+        {
+            get
             {
                 UnturnedPlayerFeatures features = player.GetComponent<UnturnedPlayerFeatures>();
                 return features.GodMode;
@@ -304,10 +306,12 @@ namespace Rocket.Unturned.Player
             }
         }
 
-        public float Rotation { 
-            get { 
-                return player.transform.rotation.eulerAngles.y; 
-            } 
+        public float Rotation
+        {
+            get
+            {
+                return player.transform.rotation.eulerAngles.y;
+            }
         }
 
         public bool Teleport(string nodeName)
@@ -348,10 +352,12 @@ namespace Rocket.Unturned.Player
 
         public byte Infection
         {
-            get { 
-                return player.PlayerLife.Infection; 
+            get
+            {
+                return player.PlayerLife.Infection;
             }
-            set{
+            set
+            {
                 player.PlayerLife.askDisinfect(100);
                 player.PlayerLife.askInfect(value);
             }
@@ -372,14 +378,16 @@ namespace Rocket.Unturned.Player
 
         public byte Health
         {
-            get {
-                return player.PlayerLife.health; 
+            get
+            {
+                return player.PlayerLife.health;
             }
         }
 
         public byte Hunger
         {
-            get{
+            get
+            {
                 return player.PlayerLife.Hunger;
             }
             set
@@ -391,8 +399,9 @@ namespace Rocket.Unturned.Player
 
         public byte Thirst
         {
-            get { 
-                return player.PlayerLife.Thirst; 
+            get
+            {
+                return player.PlayerLife.Thirst;
             }
             set
             {
@@ -403,8 +412,9 @@ namespace Rocket.Unturned.Player
 
         public bool Broken
         {
-            get { 
-                return player.PlayerLife.Broken; 
+            get
+            {
+                return player.PlayerLife.Broken;
             }
             set
             {
@@ -413,8 +423,9 @@ namespace Rocket.Unturned.Player
         }
         public bool Bleeding
         {
-            get{
-                return player.PlayerLife.Bleeding; 
+            get
+            {
+                return player.PlayerLife.Bleeding;
             }
             set
             {
@@ -425,24 +436,26 @@ namespace Rocket.Unturned.Player
 
         public bool Dead
         {
-            get { 
-                return player.PlayerLife.Dead; 
+            get
+            {
+                return player.PlayerLife.Dead;
             }
         }
 
         public bool Freezing
         {
-            get { 
-                return player.PlayerLife.Freezing; 
+            get
+            {
+                return player.PlayerLife.Freezing;
             }
         }
 
-		public void Heal(byte amount)
-		{
-			Heal (amount, null, null);
-		}
+        public void Heal(byte amount)
+        {
+            Heal(amount, null, null);
+        }
 
-        public void Heal(byte amount, bool? bleeding , bool? broken)
+        public void Heal(byte amount, bool? bleeding, bool? broken)
         {
             player.PlayerLife.askHeal(amount, bleeding != null ? bleeding.Value : player.PlayerLife.Bleeding, broken != null ? broken.Value : player.PlayerLife.Broken);
         }
@@ -465,7 +478,39 @@ namespace Rocket.Unturned.Player
             {
                 return player.SteamChannel.SteamPlayer.IsPro;
             }
+        }
 
+        public InteractableVehicle CurrentVehicle
+        {
+            get
+            {
+                return player.movement.getVehicle();
+            }
+        }
+
+        public bool IsInVehicle
+        {
+            get
+            {
+                return CurrentVehicle != null;
+            }
+        }
+
+        public void SetSkillLevel(UnturnedSkill skill, byte level)
+        {
+            GetSkill(skill).level = level;
+            player.skills.askSkills(CSteamID);
+        }
+
+        public byte GetSkillLevel(UnturnedSkill skill)
+        {
+            return GetSkill(skill).level;
+        }
+
+        public Skill GetSkill(UnturnedSkill skill)
+        {
+            var skills = player.skills;
+            return skills.skills[skill.Speciality][skill.Skill];
         }
     }
 }
