@@ -7,6 +7,7 @@ using Rocket.Unturned.Events;
 using Rocket.API;
 using Rocket.Core;
 using Rocket.Unturned.Chat;
+using Rocket.Unturned.Skills;
 
 namespace Rocket.Unturned.Player
 {
@@ -493,6 +494,23 @@ namespace Rocket.Unturned.Player
             {
                 return CurrentVehicle != null;
             }
+        }
+
+        public void SetSkillLevel(SkillType skillType, byte value)
+        {
+            GetSkill( skillType ).level = value;
+            player.skills.askSkills(CSteamID);
+        }
+
+        public byte GetSkillLevel(SkillType skillType)
+        {
+            return GetSkill(skillType).level;
+        }
+
+        public Skill GetSkill(SkillType skillType)
+        {
+            var skills = player.skills;
+            return skills.skills[skillType.SpecialityIndex][skillType.SkillIndex];
         }
     }
 }
