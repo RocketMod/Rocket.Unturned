@@ -8,6 +8,7 @@ using Rocket.API;
 using Rocket.Core;
 using Rocket.Unturned.Chat;
 using Rocket.Unturned.Skills;
+using Rocket.Core.Steam;
 
 namespace Rocket.Unturned.Player
 {
@@ -38,6 +39,11 @@ namespace Rocket.Unturned.Player
             {
                 return player.SteamChannel.SteamPlayer.IsAdmin;
             }
+        }
+
+        public Profile SteamProfile
+        {
+            get { return new Profile(ulong.Parse(CSteamID.ToString())); }
         }
 
         private SDG.Unturned.Player player;
