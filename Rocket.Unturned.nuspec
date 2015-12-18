@@ -16,8 +16,8 @@
 	  </dependencies>
   </metadata>
   <files>
-    <file src="Assembly-CSharp.dll" target="lib" />
-    <file src="Rocket.Unturned.dll" target="lib" />
+    <file src="../../lib/Assembly-CSharp.dll" target="lib/net35" />
+    <file src="Rocket.Unturned.dll" target="lib/net35" />
     <file src="LICENSE" target="." />
   </files>
 </package>

@@ -158,7 +158,7 @@ $(SolutionDir)dev\pdb2mdb.exe $(TargetPath)
     <GetAssemblyIdentity AssemblyFiles="$(TargetPath)">
       <Output TaskParameter="Assemblies" ItemName="AssemblyVersion" />
     </GetAssemblyIdentity>
-    <Exec WorkingDirectory="$(TargetDir)" Command="nuget\nuget.exe pack Rocket.Unturned.nuspec -Version %(AssemblyVersion.Version)" />
-    <Message Text="nuget\nuget.exe pack Rocket.Unturned.nuspec -Version %(AssemblyVersion.Version)" Importance="high" />
+    <Exec WorkingDirectory="$(TargetDir)" Command="..\..\nuget\nuget.exe pack Rocket.Unturned.nuspec -Version %(AssemblyVersion.Version)" />
+    <Message Text="..\..\nuget\nuget.exe pack Rocket.Unturned.nuspec -Version %(AssemblyVersion.Version)" Importance="high" />
   </Target>
 </Project>
