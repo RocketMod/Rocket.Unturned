@@ -154,4 +154,11 @@ $(SolutionDir)dev\pdb2mdb.exe $(TargetPath)
 @echo listen 803286173 1 1 &gt; $(TargetDir)..\PlayerConnectionConfigFile
 )</PostBuildEvent>
   </PropertyGroup>
+  <Target Name="AfterBuild" Condition="'$(Configuration)' == 'Release'">
+    <GetAssemblyIdentity AssemblyFiles="$(TargetPath)">
+      <Output TaskParameter="Assemblies" ItemName="AssemblyVersion" />
+    </GetAssemblyIdentity>
+    <Exec WorkingDirectory="$(TargetDir)" Command="..\..\nuget\nuget.exe pack Rocket.Core.nuspec -Version %(AssemblyVersion.Version)" />
+    <Message Text="..\..\nuget\nuget.exe pack Rocket.Core.nuspec -Version %(AssemblyVersion.Version)" Importance="high" />
+  </Target>
 </Project>
