@@ -18,6 +18,6 @@
   <files>
     <file src="../../lib/Assembly-CSharp.dll" target="lib/net35" />
     <file src="Rocket.Unturned.dll" target="lib/net35" />
-    <file src="LICENSE" target="." />
+    <file src="LICENSE"/>
   </files>
 </package>
