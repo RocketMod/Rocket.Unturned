@@ -27,7 +27,7 @@ namespace Rocket.Unturned.Commands
 
         public string Syntax
         {
-            get { return "<player> [group]"; }
+            get { return "<player> [group] | reload"; }
         }
 
         public List<string> Aliases
@@ -42,6 +42,11 @@ namespace Rocket.Unturned.Commands
 
         public void Execute(IRocketPlayer caller, string[] command)
         {
+            if(command.Length == 1 && command[0].ToLower() == "reload" && caller.HasPermission("p.reload"))
+            {
+                R.Permissions.Reload();
+            }
+
             IRocketPlayer player = command.GetUnturnedPlayerParameter(0);
             if (player == null) player = command.GetRocketPlayerParameter(0);
             string groupName = command.GetStringParameter(1);
