@@ -46,6 +46,7 @@ namespace Rocket.Unturned.Commands
             {
                 R.Permissions.Reload();
             }
+            
 
             IRocketPlayer player = command.GetUnturnedPlayerParameter(0);
             if (player == null) player = command.GetRocketPlayerParameter(0);

@@ -248,8 +248,8 @@ namespace Rocket.Unturned.Events
 
         private void onInventoryAdded(byte E, byte u, ItemJar J)
         {
-            OnPlayerInventoryAdded.TryInvoke((InventoryGroup)Enum.Parse(typeof(InventoryGroup), E.ToString()), u, J);
-            OnInventoryAdded.TryInvoke((InventoryGroup)Enum.Parse(typeof(InventoryGroup), E.ToString()), u, J);
+            OnPlayerInventoryAdded.TryInvoke(Player,(InventoryGroup)Enum.Parse(typeof(InventoryGroup), E.ToString()), u, J);
+            OnInventoryAdded.TryInvoke(Player, (InventoryGroup)Enum.Parse(typeof(InventoryGroup), E.ToString()), u, J);
         }
 
         public delegate void PlayerChatted(UnturnedPlayer player, ref Color color, string message, EChatMode chatMode, ref bool cancel);
