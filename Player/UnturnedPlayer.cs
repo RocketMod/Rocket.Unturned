@@ -143,11 +143,11 @@ namespace Rocket.Unturned.Player
             return new UnturnedPlayer(p);
         }
 
-        public static IRocketPlayer FromCSteamID(CSteamID cSteamID)
+        public static UnturnedPlayer FromCSteamID(CSteamID cSteamID)
         {
             if (string.IsNullOrEmpty(cSteamID.ToString()) || cSteamID.ToString() == "0")
             {
-                return new ConsolePlayer();
+                return null;
             }
             else
             {
