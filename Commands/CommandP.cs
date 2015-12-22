@@ -45,6 +45,8 @@ namespace Rocket.Unturned.Commands
             if(command.Length == 1 && command[0].ToLower() == "reload" && caller.HasPermission("p.reload"))
             {
                 R.Permissions.Reload();
+                UnturnedChat.Say(caller, U.Translate("command_p_permissions_reload"));
+                return;
             }
             
 
