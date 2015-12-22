@@ -1,6 +1,10 @@
-﻿using Rocket.Unturned.Effects;
+﻿using Rocket.API;
+using Rocket.Core;
+using Rocket.Core.Logging;
+using Rocket.Unturned.Effects;
 using Rocket.Unturned.Events;
 using Rocket.Unturned.Permissions;
+using Rocket.Unturned.Player;
 using SDG.Unturned;
 using Steamworks;
 using System;
@@ -38,6 +42,15 @@ namespace Rocket.Unturned
         public static bool CheckPermissions(SteamPlayer player, string permission)
         {
             return UnturnedPermissions.CheckPermissions(player, permission);
+        }
+
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static bool Execute(CSteamID player, string command)
+        {
+            if(R.Commands != null)
+                return R.Commands.Execute(UnturnedPlayer.FromCSteamID(player), command);
+            return false;
         }
 
         [Browsable(false)]

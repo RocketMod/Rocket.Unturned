@@ -48,14 +48,14 @@ namespace Rocket.Unturned.Commands
                 System.Console.ForegroundColor = ConsoleColor.Cyan;
                 System.Console.WriteLine("[Vanilla]");
                 System.Console.ForegroundColor = ConsoleColor.White;
-                Commander.Commands.Where(c => c.GetType().Assembly == typeof(Commander).Assembly).OrderBy(c => c.commandName).All(c => { System.Console.WriteLine(c.commandName.ToLower().PadRight(20, ' ') + " " + c.commandInfo.Replace(c.commandName, "").TrimStart().ToLower()); return true; });
+                Commander.Commands.OrderBy(c => c.command).All(c => { System.Console.WriteLine(c.command.ToLower().PadRight(20, ' ') + " " + c.info.Replace(c.command, "").TrimStart().ToLower()); return true; });
 
                 System.Console.WriteLine();
 
                 System.Console.ForegroundColor = ConsoleColor.Cyan;
                 System.Console.WriteLine("[Rocket]");
                 System.Console.ForegroundColor = ConsoleColor.White;
-                Commander.Commands.Where(c => c is UnturnedCommandBase && ((UnturnedCommandBase)c).Command.GetType().Assembly == Assembly.GetExecutingAssembly()).OrderBy(c => c.commandName).All(c => { System.Console.WriteLine(c.commandName.ToLower().PadRight(20, ' ') + " " + c.commandInfo.ToLower()); return true; });
+                R.Commands.Commands.Where(c => c.GetType().Assembly == Assembly.GetExecutingAssembly()).OrderBy(c => c.Name).All(c => { System.Console.WriteLine(c.Name.ToLower().PadRight(20, ' ') + " " + c.Syntax.ToLower()); return true; });
 
                 System.Console.WriteLine();
                 
@@ -64,25 +64,22 @@ namespace Rocket.Unturned.Commands
                     System.Console.ForegroundColor = ConsoleColor.Cyan;
                     System.Console.WriteLine("[" + plugin.GetType().Assembly.GetName().Name + "]");
                     System.Console.ForegroundColor = ConsoleColor.White;
-                    Commander.Commands.Where(c => c is UnturnedCommandBase && ((UnturnedCommandBase)c).Command.GetType().Assembly == plugin.GetType().Assembly).OrderBy(c => c.commandName).All(c => { System.Console.WriteLine(c.commandName.ToLower().PadRight(20, ' ') + " " + c.commandInfo.ToLower()); return true; });
+                    R.Commands.Commands.Where(c => c.GetType().Assembly == plugin.GetType().Assembly).OrderBy(c => c.Name).All(c => { System.Console.WriteLine(c.Name.ToLower().PadRight(20, ' ') + " " + c.Syntax.ToLower()); return true; });
                     System.Console.WriteLine();
                 }
             }
             else
             {
-                Command cmd = Commander.Commands.Where(c => (String.Compare(c.commandName, command[0], true) == 0)).FirstOrDefault();
+                IRocketCommand cmd = R.Commands.Commands.Where(c => (String.Compare(c.Name, command[0], true) == 0)).FirstOrDefault();
                 if (cmd != null)
                 {
-                    string commandName = cmd.commandName;
-                    if (cmd is UnturnedCommandBase)
-                    {
-                        commandName = ((UnturnedCommandBase)cmd).Command.GetType().Assembly.GetName().Name + " / " + cmd.commandName;
-                    }
+                    string commandName = cmd.GetType().Assembly.GetName().Name + " / " + cmd.Name;
+                   
                     System.Console.ForegroundColor = ConsoleColor.Cyan;
                     System.Console.WriteLine("[" + commandName + "]");
                     System.Console.ForegroundColor = ConsoleColor.White;
-                    System.Console.WriteLine(cmd.commandName + "\t\t" + cmd.commandInfo);
-                    System.Console.WriteLine(cmd.commandHelp);
+                    System.Console.WriteLine(cmd.Name + "\t\t" + cmd.Syntax);
+                    System.Console.WriteLine(cmd.Help);
                 }
             }
         }

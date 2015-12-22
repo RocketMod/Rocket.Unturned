@@ -166,7 +166,6 @@ namespace Rocket.Unturned
                     try
                     {
                         plugin.TryAddComponent<PluginUnturnedPlayerComponentManager>();
-                        plugin.TryAddComponent<PluginCommandManager>();
                     }
                     catch (Exception ex)
                     {
@@ -178,10 +177,9 @@ namespace Rocket.Unturned
                 RocketPlugin.OnPluginUnloading += (IRocketPlugin plugin) =>
                 {
                     plugin.TryRemoveComponent<PluginUnturnedPlayerComponentManager>();
-                    plugin.TryRemoveComponent<PluginCommandManager>();
                 };
 
-                PluginCommandManager.RegisterFromAssembly(Assembly.GetExecutingAssembly());
+                R.Commands.RegisterFromAssembly(Assembly.GetExecutingAssembly());
 
 
                 try
@@ -217,13 +215,6 @@ namespace Rocket.Unturned
         public void Shutdown()
         {
             Provider.shutdown();
-        }
-
-        public void Execute(IRocketPlayer player, string command)
-        {
-            ulong i = 0;
-            UInt64.TryParse(player.Id, out i);
-            Commander.execute(new CSteamID(i), command);
         }
 
         public string InstanceId

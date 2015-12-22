@@ -108,7 +108,6 @@
     <Compile Include="Extensions\SteamPlayerExtension.cs" />
     <Compile Include="Environment.cs" />
     <Compile Include="Permissions\UnturnedPermissions.cs" />
-    <Compile Include="Plugins\PluginCommandManager.cs" />
     <Compile Include="UnturnedConsole.cs" />
     <Compile Include="Interface.cs" />
     <Compile Include="UI.cs" />
@@ -140,7 +139,7 @@
     <Content Include="dev\Mono.Cecil.dll" />
     <Content Include="dev\Mono.CompilerServices.SymbolWriter.dll" />
     <Content Include="dev\pdb2mdb.exe" />
-    <Content Include="dev\Unturned.exe" />
+    <Content Include="dev\Game.exe" />
     <Content Include="lib\Assembly-CSharp-firstpass.dll" />
     <Content Include="lib\Assembly-CSharp.dll" />
     <Content Include="lib\Rocket.API.dll" />

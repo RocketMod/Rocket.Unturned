@@ -61,16 +61,6 @@ namespace Rocket.Unturned.Permissions
                 permissionGranted = true;
                 return;
             }
-
-            UnturnedAliasBase alias = Commander.Commands.Where(c => c.commandName.ToLower() == requestedPermission && c is UnturnedAliasBase).Cast<UnturnedAliasBase>().ToList().FirstOrDefault();
-            if (alias != null)
-            {
-                if (permissions.Where(p => (String.Compare(p, alias.Command.Name, true) == 0) || p.StartsWith(alias.Command.Name.ToLower() + ".")).Count() != 0)
-                {
-                    permissionGranted = true;
-                    return;
-                }
-            }
         }
         
         internal static bool CheckValid(ValidateAuthTicketResponse_t r)
