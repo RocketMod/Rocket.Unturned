@@ -145,8 +145,9 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if $(ConfigurationName) == Local (
-$(SolutionDir)dev\pdb2mdb.exe $(TargetPath)
+$(SolutionDir)Rocket.Unturned\dev\pdb2mdb.exe $(TargetPath)
 @echo listen 803286173 1 1 &gt; $(TargetDir)..\PlayerConnectionConfigFile
+copy $(SolutionDir)Rocket.Unturned\dev\Game.exe $(TargetDir)..\..\Unturned.exe
 )</PostBuildEvent>
   </PropertyGroup>
   <Target Name="AfterBuild" Condition="'$(Configuration)' == 'Release'">
