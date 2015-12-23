@@ -100,7 +100,6 @@
     <Compile Include="Commands\CommandUnadmin.cs" />
     <Compile Include="Commands\CommandV.cs" />
     <Compile Include="Commands\CommandVanish.cs" />
-    <Compile Include="Commands\UnturnedCommandBase.cs" />
     <Compile Include="Effects\UnturnedEffectManager.cs" />
     <Compile Include="Enumerations\InventoryGroup.cs" />
     <Compile Include="Events\UnturnedPlayerEvents.cs" />

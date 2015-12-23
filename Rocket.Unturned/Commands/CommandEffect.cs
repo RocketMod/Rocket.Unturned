@@ -8,9 +8,12 @@ namespace Rocket.Unturned.Commands
 {
     public class CommandEffect : IRocketCommand
     {
-        public bool AllowFromConsole
+        public AllowedCaller AllowedCaller
         {
-            get { return false; }
+            get
+            {
+                return AllowedCaller.Player;
+            }
         }
 
         public string Name

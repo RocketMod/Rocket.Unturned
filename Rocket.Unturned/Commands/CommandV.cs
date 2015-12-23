@@ -9,9 +9,12 @@ namespace Rocket.Unturned.Commands
 {
     public class CommandV : IRocketCommand
     {
-        public bool AllowFromConsole
+        public AllowedCaller AllowedCaller
         {
-            get { return false; }
+            get
+            {
+                return AllowedCaller.Player;
+            }
         }
 
         public string Name

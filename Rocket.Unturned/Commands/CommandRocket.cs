@@ -7,14 +7,18 @@ using Rocket.API;
 using Rocket.Core.Plugins;
 using Rocket.Core;
 using Rocket.Unturned.Chat;
+using Rocket.Core.Logging;
 
 namespace Rocket.Unturned.Commands
 {
     public class CommandRocket : IRocketCommand
     {
-        public bool AllowFromConsole
+        public AllowedCaller AllowedCaller
         {
-            get { return true; }
+            get
+            {
+                return AllowedCaller.Both;
+            }
         }
 
         public string Name

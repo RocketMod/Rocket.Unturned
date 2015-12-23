@@ -7,11 +7,14 @@ namespace Rocket.Unturned.Commands
 {
     public class CommandCompass : IRocketCommand
     {
-        public bool AllowFromConsole
+        public AllowedCaller AllowedCaller
         {
-            get { return false; }
+            get
+            {
+                return AllowedCaller.Player;
+            }
         }
-        
+
         public string Name
         {
             get { return "compass"; }

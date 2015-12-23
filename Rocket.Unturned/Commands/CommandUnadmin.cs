@@ -8,9 +8,12 @@ namespace Rocket.Unturned.Commands
 {
     public class CommandUnadmin : IRocketCommand
     {
-        public bool AllowFromConsole
+        public AllowedCaller AllowedCaller
         {
-            get { return true; }
+            get
+            {
+                return AllowedCaller.Both;
+            }
         }
 
         public string Name
