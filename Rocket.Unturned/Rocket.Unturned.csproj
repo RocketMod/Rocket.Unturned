@@ -131,7 +131,6 @@
     <None Include="Scripts\Windows\start.bat" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include=".gitignore" />
     <Content Include="dev\Mono.Cecil.dll" />
     <Content Include="dev\Mono.CompilerServices.SymbolWriter.dll" />
     <Content Include="dev\pdb2mdb.exe" />
