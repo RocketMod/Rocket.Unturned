@@ -76,6 +76,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\CommandExec.cs" />
     <Compile Include="Commands\UnturnedCommandExtensions.cs" />
     <Compile Include="Player\UnturnedPlayerMovement.cs" />
     <Compile Include="Skills\UnturnedSkill.cs" />
