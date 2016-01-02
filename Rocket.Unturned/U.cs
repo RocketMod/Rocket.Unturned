@@ -132,6 +132,8 @@ namespace Rocket.Unturned
             R.OnRockedInitialized += () =>
             {
                 Instance.Initialize();
+                ChatManager.voterate = Settings.Instance.VoteRate;
+                ChatManager.voteduration = Settings.Instance.VoteDuration;
             };
 
             Provider.onServerHosted += () =>
