@@ -68,6 +68,19 @@ namespace Rocket.Unturned.Commands
             return null;
         }
 
+        public static ulong? GetCSteamIDParameter(this string[] array, int index)
+        {
+            if (array.Length > index)
+            {
+                ulong id = 0;
+                if (ulong.TryParse(array[index], out id) && id > 76561197960265728)
+                {
+                    return id;
+                }
+            }
+            return null;
+        }
+
         public static Color? GetColorParameter(this string[] array, int index)
         {
             if(array.Length <= index) return null;
