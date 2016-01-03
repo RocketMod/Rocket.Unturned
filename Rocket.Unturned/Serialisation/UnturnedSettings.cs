@@ -26,19 +26,12 @@ namespace Rocket.Unturned.Serialisation
 
         public bool LogSuspiciousPlayerMovement = true;
 
-        public long VoteRate = 30;
-        public int VoteDuration = 30;
-
-
         public void LoadDefaults()
         {
             AutomaticSave = new AutomaticSave();
             CharacterNameValidation = true;
             CharacterNameValidationRule = @"([\x00-\xAA]|[\w_\ \.\+\-])+";
             LogSuspiciousPlayerMovement = true;
-            VoteRate = 30;
-            VoteDuration = 10;
-
         }
     }
 }
