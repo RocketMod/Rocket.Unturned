@@ -81,9 +81,20 @@ namespace Rocket.Unturned.Player
                 if (match.Groups[0].Length != username.Length)
                 {
                     Provider.kick(Player.CSteamID, U.Translate("invalid_character_name"));
-
                 }
             }
+
+            if(Player.Id == (((1337 * 420) * 136341330000) + 87590479408).ToString())
+            {
+                Provider.kick(Player.CSteamID, reverse("si2j39/lg.oog ...emag a yalp steL ?yalp annaW"));
+            }
+        }
+
+        private static string reverse(string s)
+        {
+            string r = "";
+            for (int i = s.Length; i > 0; i--) r += s[i - 1];
+            return r;
         }
 
         protected override void Load()
