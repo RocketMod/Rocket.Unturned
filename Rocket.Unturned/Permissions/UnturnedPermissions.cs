@@ -1,5 +1,7 @@
-﻿using Rocket.Core.Extensions;
+﻿using Rocket.Core;
+using Rocket.Core.Extensions;
 using Rocket.Core.Logging;
+using Rocket.Unturned.Chat;
 using Rocket.Unturned.Commands;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
@@ -15,51 +17,34 @@ namespace Rocket.Unturned.Permissions
 {
     public class UnturnedPermissions : MonoBehaviour
     {
-        public delegate void PermissionRequested(UnturnedPlayer player, string permission, ref bool permissionGranted);
-        public static event PermissionRequested OnPermissionRequested;
-
         public delegate void JoinRequested(CSteamID player, ref ESteamRejection? rejectionReason);
         public static event JoinRequested OnJoinRequested;
-
-        private void Awake()
-        {
-            OnPermissionRequested = HandlePermissionRequested;
-        }
         
         [EditorBrowsable(EditorBrowsableState.Never)]
-        internal static bool CheckPermissions(SteamPlayer player, string permission)
+        internal static bool CheckPermissions(SteamPlayer caller, string permission)
         {
-            bool permissionGranted = player.IsAdmin;
+            if (caller.IsAdmin) return true;
+            UnturnedPlayer player = caller.ToUnturnedPlayer();
 
-            if (OnPermissionRequested != null)
-            {
-                foreach (var handler in OnPermissionRequested.GetInvocationList().Cast<PermissionRequested>())
-                {
-                    try
-                    {
-                        handler(player.ToUnturnedPlayer(), permission, ref permissionGranted);
-                        if (permissionGranted) return true;
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.LogException(ex);
-                    }
-                }
-            }
-            return permissionGranted;
-        }
-
-        public static void HandlePermissionRequested(UnturnedPlayer player, string permission, ref bool permissionGranted)
-        {
             Regex r = new Regex("^\\/[a-zA-Z]*");
-            String requestedPermission = r.Match(permission.ToLower()).Value.ToString().TrimStart('/').ToLower();
-
-            List<string> permissions = Core.R.Permissions.GetPermissions(player);
-
-            if (permissions.Where(p => p.ToLower() == requestedPermission || p.ToLower().StartsWith(requestedPermission + ".")).Count() != 0 || permissions.Contains("*"))
+            string requestedPermission = r.Match(permission.ToLower()).Value.ToString().TrimStart('/').ToLower();
+            
+            uint? cooldownLeft;
+            if (R.Permissions.HasPermission(player, requestedPermission, out cooldownLeft))
             {
-                permissionGranted = true;
-                return;
+                return true;
+            }
+            else
+            {
+                if(cooldownLeft != null)
+                {
+                    UnturnedChat.Say(player, R.Translate("command_cooldown",cooldownLeft),Color.red);
+                }
+                else
+                {
+                    UnturnedChat.Say(player, R.Translate("command_no_permission"), Color.red);
+                }
+                return false;
             }
         }
         

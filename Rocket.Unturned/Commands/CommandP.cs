@@ -60,11 +60,11 @@ namespace Rocket.Unturned.Commands
             if (command.Length == 0 && !(caller is ConsolePlayer))
             {
                 UnturnedChat.Say(caller, U.Translate("command_p_groups_private", "Your", string.Join(", ", R.Permissions.GetGroups(caller, true).Select(g => g.DisplayName).ToArray())));
-                UnturnedChat.Say(caller, U.Translate("command_p_permissions_private", "Your", string.Join(", ", Core.R.Permissions.GetPermissions(caller).ToArray())));
+                UnturnedChat.Say(caller, U.Translate("command_p_permissions_private", "Your", string.Join(", ", Core.R.Permissions.GetPermissions(caller).Select(p => p.Name + (p.Cooldown != null ? "(" + p.Cooldown + ")" : "")).ToArray())));
             }
             else if(command.Length == 1 && player != null) {
                 UnturnedChat.Say(caller, U.Translate("command_p_groups_private", player.DisplayName+"s", string.Join(", ", R.Permissions.GetGroups(player, true).Select(g => g.DisplayName).ToArray())));
-                UnturnedChat.Say(caller, U.Translate("command_p_permissions_private", player.DisplayName + "s", string.Join(", ", Core.R.Permissions.GetPermissions(player).ToArray())));
+                UnturnedChat.Say(caller, U.Translate("command_p_permissions_private", player.DisplayName + "s", string.Join(", ", Core.R.Permissions.GetPermissions(player).Select(p => p.Name +(p.Cooldown != null? "(" + p.Cooldown + ")" : "")).ToArray())));
             }
             else if (command.Length == 2 && player != null && !String.IsNullOrEmpty(groupName) && caller.HasPermission("p.set"))
             {

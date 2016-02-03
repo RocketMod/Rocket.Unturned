@@ -131,10 +131,10 @@
     <None Include="Scripts\Windows\start.bat" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="dev\Game.exe" />
     <Content Include="dev\Mono.Cecil.dll" />
     <Content Include="dev\Mono.CompilerServices.SymbolWriter.dll" />
     <Content Include="dev\pdb2mdb.exe" />
-    <Content Include="dev\Game.exe" />
     <Content Include="lib\Assembly-CSharp-firstpass.dll" />
     <Content Include="lib\Assembly-CSharp.dll" />
     <Content Include="lib\Rocket.API.dll" />

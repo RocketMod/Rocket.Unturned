@@ -9,6 +9,7 @@ using Rocket.Core;
 using Rocket.Unturned.Chat;
 using Rocket.Unturned.Skills;
 using Rocket.Core.Steam;
+using Rocket.API.Serialisation;
 
 namespace Rocket.Unturned.Player
 {
@@ -76,9 +77,9 @@ namespace Rocket.Unturned.Player
                 {
                     return Palette.Admin;
                 }
-                string colorPermission = R.Permissions.GetPermissions(this).Where(permission => permission.ToLower().StartsWith("color.")).FirstOrDefault();
-                if (colorPermission == null) colorPermission = "";
-                return UnturnedChat.GetColorFromName(colorPermission.ToLower().Replace("color.", ""), Palette.White);
+
+                RocketPermissionsGroup group = R.Permissions.GetGroups(this,true).First();
+                return UnturnedChat.GetColorFromName(group.Color, Palette.White);
             }
             set
             {
@@ -517,6 +518,11 @@ namespace Rocket.Unturned.Player
         {
             var skills = player.skills;
             return skills.skills[skill.Speciality][skill.Skill];
+        }
+
+        public int CompareTo(object obj)
+        {
+            return Id.CompareTo(obj);
         }
     }
 }

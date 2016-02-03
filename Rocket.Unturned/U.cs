@@ -102,7 +102,7 @@ namespace Rocket.Unturned
         }; 
 
         public static XMLFileAsset<UnturnedSettings> Settings;
-        public static XMLFileAsset<TranslationList> Translations;
+        public static XMLFileAsset<TranslationList> Translation;
 
         public IRocketImplementationEvents ImplementationEvents { get { return Events; } }
         public static UnturnedEvents Events;
@@ -111,7 +111,7 @@ namespace Rocket.Unturned
 
         public static string Translate(string translationKey, params object[] placeholder)
         {
-            return Translations.Instance.Translate(translationKey, placeholder);
+            return Translation.Instance.Translate(translationKey, placeholder);
         }
 
 #if LINUX
@@ -152,7 +152,7 @@ namespace Rocket.Unturned
             try
             {
                 Settings = new XMLFileAsset<UnturnedSettings>(Environment.SettingsFile);
-                Translations = new XMLFileAsset<TranslationList>(String.Format(Environment.TranslationFile, Core.R.Settings.Instance.LanguageCode), new Type[] { typeof(TranslationList), typeof(TranslationListEntry) }, defaultTranslations);
+                Translation = new XMLFileAsset<TranslationList>(String.Format(Environment.TranslationFile, Core.R.Settings.Instance.LanguageCode), new Type[] { typeof(TranslationList), typeof(TranslationListEntry) }, defaultTranslations);
                 Events = gameObject.TryAddComponent<UnturnedEvents>();
 
                 gameObject.TryAddComponent<UnturnedEffectManager>();
@@ -208,7 +208,7 @@ namespace Rocket.Unturned
         
         public void Reload()
         {
-            Translations.Reload();
+            Translation.Reload();
             Settings.Reload();
         }
 
