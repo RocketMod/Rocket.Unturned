@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Rocket.Unturned</id>
-    <version>4.6.4.0</version>
+    <version>4.9.1.0</version>
     <authors>fr34kyn01535, SDGNelson</authors>
     <owners>fr34kyn01535</owners>
     <licenseUrl>https://github.com/RocketMod/Rocket.Unturned/blob/master/LICENSE</licenseUrl>
@@ -12,12 +12,12 @@
     <copyright>fr34kyn01535 © 2015</copyright>
     <tags>Unturned3 Rocket Mod Unity3D</tags>
 	  <dependencies>
-		<dependency id="Rocket.Core" version="2.0.1.0" />
+		<dependency id="Rocket.Core" version="2.4.1.0" />
 	  </dependencies>
   </metadata>
   <files>
-    <file src="../../lib/Assembly-CSharp.dll" target="lib/net35" />
+    <file src="Assembly-CSharp.dll" target="lib/net35" />
     <file src="Rocket.Unturned.dll" target="lib/net35" />
-    <file src="../../../LICENSE"/>
+    <file src="LICENSE"/>
   </files>
 </package>
