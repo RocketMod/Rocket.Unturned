@@ -4,7 +4,7 @@ REM Syntax: update.bat (home)
 REM Author: fr34kyn01535
 
 SET HOME=%1
-IF [%1]==[] SET HOME=%~dp0..\
+IF [%1]==[] SET HOME=..\
 SET UNTURNEDHOME=%HOME%Unturned
 SET STEAMHOME=%HOME%Steam\
 
