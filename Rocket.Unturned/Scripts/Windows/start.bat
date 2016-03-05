@@ -14,7 +14,7 @@ IF "%~1"=="-FIXED_CTRL_C" (
 
 SET INSTANCENAME=%1
 
-SET HOME=%~dp0..\
+SET HOME=..\
 SET UNTURNEDHOME=%HOME%Unturned
 
 ECHO Unturned directory: %UNTURNEDHOME%
