@@ -20,7 +20,8 @@ namespace Rocket.Unturned
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static void ExternalLog(string message, ConsoleColor color)
         {
-            Core.Logging.Logger.ExternalLog(message, color);
+            if(message != "NullReferenceException: Object reference not set to an instance of an object - ")
+            Core.Logging.Logger.ExternalLog(message,color);
         }
 
         [Browsable(false)]
