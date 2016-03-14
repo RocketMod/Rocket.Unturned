@@ -12,7 +12,7 @@ ECHO Steam directory: %STEAMHOME%
 IF NOT EXIST "%STEAMHOME%"\steamcmd.zip (
 ECHO Installing SteamCMD into Steam directory
 MKDIR "%STEAMHOME%"
-Powershell -c "Invoke-WebRequest -OutFile 'steamcmd.zip' 'https://steamcdn-a.akamaihd.net/client/installer/steamcmd.zip'"
+bitsadmin.exe /transfer "Downloading SteamCMD" https://steamcdn-a.akamaihd.net/client/installer/steamcmd.zip "%~dp0steamcmd.zip"
 CALL :unzip "%~dp0" "%~dp0steamcmd.zip"
 DEL steamcmd.zip
 MOVE steamcmd.exe %STEAMHOME%
