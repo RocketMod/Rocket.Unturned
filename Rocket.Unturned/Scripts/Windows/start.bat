@@ -14,7 +14,6 @@ IF "%~1"=="-FIXED_CTRL_C" (
 )
 
 SET INSTANCENAME=%1
-SET UNTURNEDHOME=.\
 
 IF NOT EXIST Unturned.exe (
 	SET HOME=..\
@@ -25,6 +24,8 @@ IF NOT EXIST Unturned.exe (
 	IF NOT EXIST %UNTURNEDHOME% (
 		update.bat %HOME%
 	)
+) ELSE (
+	SET UNTURNEDHOME=.\
 )
 
 CD "%UNTURNEDHOME%"
