@@ -1,13 +1,13 @@
 @ECHO OFF 
 REM This script updates a Unturned 3 server on Windows machines
-REM Syntax: update.bat (home)
+REM Syntax: update.bat <unturned directory> <steam directory>
 REM Author: fr34kyn01535
 
-SET HOME=%1
-IF [%1]==[] SET HOME=..\
-SET UNTURNEDHOME=%HOME%Unturned
-SET STEAMHOME=%HOME%Steam\
-ECHO Steam directory: %STEAMHOME%
+SET UNTURNEDHOME=%1
+SET STEAMHOME=%2
+IF [%1]==[] SET UNTURNEDHOME=%HOME%Unturned
+IF [%2]==[] SET STEAMHOME=%HOME%Steam\
+
 
 IF NOT EXIST "%STEAMHOME%"\steamcmd.zip (
 ECHO Installing SteamCMD into Steam directory
@@ -27,6 +27,8 @@ IF EXIST "%HOME%\Assembly-CSharp.dll" COPY "%HOME%\Assembly-CSharp.dll" "%UNTURN
 IF EXIST "%HOME%\Rocket.API.dll" COPY "%HOME%\Rocket.API.dll" "%UNTURNEDHOME%\Unturned_Data\Managed"
 IF EXIST "%HOME%\Rocket.Core.dll" COPY "%HOME%\Rocket.Core.dll" "%UNTURNEDHOME%\Unturned_Data\Managed"
 IF EXIST "%HOME%\Rocket.Unturned.dll" COPY "%HOME%\Rocket.Unturned.dll" "%UNTURNEDHOME%\Unturned_Data\Managed"
+
+CD "%UNTURNEDHOME%"
 
 exit /b
 
