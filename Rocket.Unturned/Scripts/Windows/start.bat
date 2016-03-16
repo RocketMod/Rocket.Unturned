@@ -15,20 +15,20 @@ IF "%~1"=="-FIXED_CTRL_C" (
 
 SET INSTANCENAME=%1
 
-IF NOT EXIST Unturned.exe (
-	SET HOME=..\
-	SET UNTURNEDHOME=%HOME%Unturned
+SET HOME=..\
+SET UNTURNEDHOME=%HOME%Unturned
+SET STEAMHOME=%HOME%Steam\
 
-	ECHO Unturned directory: "%UNTURNEDHOME%"
-
-	IF NOT EXIST %UNTURNEDHOME% (
-		update.bat %HOME%
+IF NOT EXIST "Unturned.exe" (
+	ECHO Steam directory: %STEAMHOME%
+	ECHO Unturned directory: %UNTURNEDHOME%
+	IF NOT EXIST %STEAMHOME% (
+		update.bat "%HOME%Unturned\" "%HOME%Steam\"
 	)
-) ELSE (
-	SET UNTURNEDHOME=.\
+	CD %UNTURNEDHOME%
 )
 
-CD "%UNTURNEDHOME%"
+
 :unturned
 ECHO [%time%] Unturned started.
 Unturned.exe -logFile "Servers\%INSTANCENAME%\Rocket\Unturned.log" -nographics -batchmode -silent-crashes +secureserver/%INSTANCENAME%
