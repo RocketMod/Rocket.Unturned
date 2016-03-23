@@ -14,21 +14,6 @@ GREEN='\033[0;32m'
 YELLLOW='\033[0;33m'
 NC='\033[0m'
 
-#XServer checks
-export DISPLAY=:0.0
-printf "XServer: "
-if ! screen -list | grep -q "XServer"; then
-    	screen -dmS XServer startx
-	sleep 5
-	if ! screen -list | grep -q "XServer"; then
-		printf "${YELLLOW}STARTED${NC}\n"
-	else
-		printf "${RED}FAILED TO START${NC}\n"
-	fi
-else
-	printf "${GREEN}RUNNING${NC}\n"
-fi
-
 #Steam checks
 STEAMCMD_API=$STEAMCMD_HOME/linux32/steamclient.so
 UNTURNED_API=$UNTURNED_HOME/Unturned_Data/Plugins/x86/steamclient.so
