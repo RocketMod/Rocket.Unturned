@@ -14,9 +14,6 @@ apt-get install screen htop unzip
 #Mono
 apt-get install libmono2.0-cil mono-runtime          				                        
 
-#Unity 3D requires a headless X server to run
-apt-get install Xorg xinit x11-common  
-
 #Those libraries are required for Unity 3D to work, since i didn't figure how to host x64 servers the 32bit ones should be enought
 apt-get install libglu1-mesa libxcursor1 libxrandr2 # Native 64 bit Unity 3D prerequisites	
 apt-get install libc6:i386 libgl1-mesa-glx:i386 libxcursor1:i386 libxrandr2:i386 # 32 bit prerequisites for Unity 3D
@@ -51,9 +48,7 @@ apt-get install libc6:i386 libgl1-mesa-glx:i386 libxcursor1:i386 libxrandr2:i386
             steamcmd/
 
 ## Steps to start
-1. Start the XServer and Steam if not already running 
-    #Note: start.sh starts them if they are not running, make sure to use the screen names Xserver and Steam
-    screen -S XServer startx
+1. Start Steam if not already running 
     screen -S Steam steam
 2. Start the server, pick any single word as unique instance name
     screen -S <instance name>
