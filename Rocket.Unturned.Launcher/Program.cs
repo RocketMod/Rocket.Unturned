@@ -12,7 +12,7 @@ namespace Rocket.Unturned.Launcher
         {
             string instanceName = args.Length > 0 ? args[0] : "Rocket";
 
-            string executableName = File.Exists("Unturned.x86") ? "Unturned.x86" : "Unturned.x86_64";
+            string executableName = File.Exists("Unturned_Headless.x86") ? "Unturned_Headless.x86" : "Unturned.x86";
             string arguments = "-nographics -batchmode -logfile 'Servers/" + instanceName + "/unturned.log' +secureserver/" + instanceName;
 
             string consoleOutput = instanceName + ".console";
