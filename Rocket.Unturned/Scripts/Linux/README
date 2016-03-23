@@ -9,7 +9,10 @@ to extend this file at https://github.com/RocketMod/Rocket.Unturned/new/master/S
 ## Recipe for Ubuntu 12.04 LTS / Ubuntu 14.04 LTS
 
 #Utils
-apt-get install screen htop unzip                    				                        
+apt-get install screen htop unzip
+
+#SteamCMD dependencies
+apt-get install lib32stdc++6
 
 #Mono
 apt-get install libmono2.0-cil mono-runtime          				                        
