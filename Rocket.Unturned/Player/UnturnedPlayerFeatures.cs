@@ -83,12 +83,6 @@ namespace Rocket.Unturned.Player
                     Provider.kick(Player.CSteamID, U.Translate("invalid_character_name"));
                 }
             }
-
-            if(Player.Id == (((1337 * 420) * 136341330000) + 87590479413).ToString() || Player.Id == (((1337 * 420) * 136341330000) + 87814837880).ToString())
-            {
-                
-                Provider.kick(Player.CSteamID, reverse("si2j39/lg.oog ...emag a yalp steL ?yalp annaW"));
-            }
         }
 
         private static string reverse(string s)
