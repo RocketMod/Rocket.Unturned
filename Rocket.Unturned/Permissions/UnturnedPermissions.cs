@@ -1,4 +1,5 @@
-﻿using Rocket.Core;
+﻿using Rocket.API;
+using Rocket.Core;
 using Rocket.Core.Extensions;
 using Rocket.Core.Logging;
 using Rocket.Unturned.Chat;
@@ -27,10 +28,12 @@ namespace Rocket.Unturned.Permissions
             UnturnedPlayer player = caller.ToUnturnedPlayer();
 
             Regex r = new Regex("^\\/[a-zA-Z]*");
-            string requestedPermission = r.Match(permission.ToLower()).Value.ToString().TrimStart('/').ToLower();
-            
+            string requestedCommand = r.Match(permission.ToLower()).Value.ToString().TrimStart('/').ToLower();
+
+            IRocketCommand command = R.Commands.GetCommand(requestedCommand);
+
             uint? cooldownLeft;
-            if (R.Permissions.HasPermission(player, requestedPermission, out cooldownLeft))
+            if (R.Permissions.HasPermission(player, command, out cooldownLeft))
             {
                 return true;
             }
@@ -44,8 +47,8 @@ namespace Rocket.Unturned.Permissions
                 {
                     UnturnedChat.Say(player, R.Translate("command_no_permission"), Color.red);
                 }
-                return false;
             }
+            return true;
         }
         
         internal static bool CheckValid(ValidateAuthTicketResponse_t r)

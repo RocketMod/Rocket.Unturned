@@ -6,6 +6,7 @@ using Rocket.Unturned.Player;
 using System.Collections.Generic;
 using Rocket.API;
 using Rocket.Unturned.Chat;
+using Rocket.API.Extensions;
 
 namespace Rocket.Unturned.Commands
 {

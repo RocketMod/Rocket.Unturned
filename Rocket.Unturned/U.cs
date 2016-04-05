@@ -7,6 +7,7 @@ using Rocket.Core.Extensions;
 using Rocket.Core.Logging;
 using Rocket.Core.Plugins;
 using Rocket.Unturned.Chat;
+using Rocket.Unturned.Commands;
 using Rocket.Unturned.Effects;
 using Rocket.Unturned.Events;
 using Rocket.Unturned.Permissions;
@@ -158,6 +159,7 @@ namespace Rocket.Unturned
                 gameObject.TryAddComponent<UnturnedEffectManager>();
                 gameObject.TryAddComponent<UnturnedPermissions>();
                 gameObject.TryAddComponent<UnturnedChat>();
+                gameObject.TryAddComponent<UnturnedCommands>();
 
                 gameObject.TryAddComponent<AutomaticSaveWatchdog>();
 
