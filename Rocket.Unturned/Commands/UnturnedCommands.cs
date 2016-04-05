@@ -82,14 +82,12 @@ namespace Rocket.Unturned.Commands
 
             public void Execute(IRocketPlayer caller, string[] command)
             {
-                string c = String.Join(" ", command);
-                Logger.Log("Excecutin vanilla command: " + c);
                 CSteamID id = CSteamID.Nil;
                 if(caller is UnturnedPlayer)
                 {
                     id = ((UnturnedPlayer)caller).CSteamID;
                 }
-                Commander.execute(id, c);
+                Commander.commands.Where(c => c.command == Name).FirstOrDefault()?.check(id,Name, String.Join("/", command));
             }
         }
 
