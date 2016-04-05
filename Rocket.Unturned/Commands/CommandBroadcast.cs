@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Rocket.Unturned.Chat;
+using Rocket.API.Extensions;
 
 namespace Rocket.Unturned.Commands
 {

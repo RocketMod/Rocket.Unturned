@@ -31,7 +31,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Local|AnyCPU'">
-    <OutputPath>C:\Users\fr34kyn01535\Desktop\Unturned\Unturned_Data\Managed\</OutputPath>
+    <OutputPath>..\..\..\..\Desktop\Unturned\Unturned_Data\Managed\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <Optimize>True</Optimize>
     <DebugType>full</DebugType>
@@ -76,7 +76,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\CommandExec.cs" />
+    <Compile Include="Commands\UnturnedCommands.cs" />
     <Compile Include="Commands\UnturnedCommandExtensions.cs" />
     <Compile Include="Player\UnturnedPlayerMovement.cs" />
     <Compile Include="Skills\UnturnedSkill.cs" />
