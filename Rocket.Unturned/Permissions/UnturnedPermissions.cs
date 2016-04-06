@@ -31,23 +31,26 @@ namespace Rocket.Unturned.Permissions
             string requestedCommand = r.Match(permission.ToLower()).Value.ToString().TrimStart('/').ToLower();
 
             IRocketCommand command = R.Commands.GetCommand(requestedCommand);
-
-            uint? cooldownLeft;
-            if (R.Permissions.HasPermission(player, command, out cooldownLeft))
+            if (command != null)
             {
-                return true;
-            }
-            else
-            {
-                if(cooldownLeft != null)
+                uint? cooldownLeft;
+                if (R.Permissions.HasPermission(player, command, out cooldownLeft))
                 {
-                    UnturnedChat.Say(player, R.Translate("command_cooldown",cooldownLeft),Color.red);
+                    return true;
                 }
                 else
                 {
-                    UnturnedChat.Say(player, R.Translate("command_no_permission"), Color.red);
+                    if (cooldownLeft != null)
+                    {
+                        UnturnedChat.Say(player, R.Translate("command_cooldown", cooldownLeft), Color.red);
+                    }
+                    else
+                    {
+                        UnturnedChat.Say(player, R.Translate("command_no_permission"), Color.red);
+                    }
                 }
             }
+            UnturnedChat.Say(player, R.Translate("command_not_found"), Color.red);
             return false;
         }
         

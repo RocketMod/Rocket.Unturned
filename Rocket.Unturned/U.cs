@@ -99,7 +99,8 @@ namespace Rocket.Unturned
                 { "command_p_permissions_reload","Permissions reloaded"},
                 { "command_rocket_plugin_not_found","Plugin {0} not found"},
                 { "command_clear_success","You successfully cleared {0} items"},
-                { "invalid_character_name","invalid character name"}
+                { "invalid_character_name","invalid character name"},
+                { "command_not_found","Command not found."}
         }; 
 
         public static XMLFileAsset<UnturnedSettings> Settings;
