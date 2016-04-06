@@ -40,10 +40,13 @@ namespace Rocket.Unturned
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static bool CheckPermissions(SteamPlayer player, string permission)
+        public static bool CheckPermissions(SteamPlayer player, string command)
         {
-            UnturnedPermissions.CheckPermissions(player, permission);
-            return true;
+            if (R.Commands != null && UnturnedPermissions.CheckPermissions(player, command))
+            {
+                R.Commands.Execute(UnturnedPlayer.FromSteamPlayer(player), command);
+            }
+            return false;
         }
 
         [Browsable(false)]

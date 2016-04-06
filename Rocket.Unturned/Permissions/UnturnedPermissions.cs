@@ -48,7 +48,7 @@ namespace Rocket.Unturned.Permissions
                     UnturnedChat.Say(player, R.Translate("command_no_permission"), Color.red);
                 }
             }
-            return true;
+            return false;
         }
         
         internal static bool CheckValid(ValidateAuthTicketResponse_t r)
