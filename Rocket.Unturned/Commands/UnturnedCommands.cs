@@ -76,7 +76,7 @@ namespace Rocket.Unturned.Commands
             {
                 get
                 {
-                    return command.info;
+                    return command.info.Replace("/"," ");
                 }
             }
 
