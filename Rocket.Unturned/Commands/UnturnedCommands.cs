@@ -19,7 +19,7 @@ namespace Rocket.Unturned.Commands
         {
             foreach(Command vanillaCommand in Commander.Commands)
             {
-                R.Commands.Register(new UnturnedVanillaCommand(vanillaCommand));
+                R.Commands.Register(new UnturnedVanillaCommand(vanillaCommand),vanillaCommand.command.ToLower(),Core.Serialization.CommandPriority.Low);
             }
         }
 

@@ -86,8 +86,7 @@ namespace Rocket.Unturned.Commands
                             if (p.State == PluginState.Loaded)
                             {
                                 UnturnedChat.Say(caller, U.Translate("command_rocket_reload_plugin", p.GetType().Assembly.GetName().Name));
-                                p.ForceUnload();
-                                p.ForceLoad();
+                                p.ReloadPlugin();
                             }
                             else
                             {
@@ -99,7 +98,7 @@ namespace Rocket.Unturned.Commands
                             if (p.State == PluginState.Loaded)
                             {
                                 UnturnedChat.Say(caller, U.Translate("command_rocket_unload_plugin", p.GetType().Assembly.GetName().Name));
-                                p.ForceUnload();
+                                p.UnloadPlugin();
                             }
                             else
                             {
@@ -111,7 +110,7 @@ namespace Rocket.Unturned.Commands
                             if (p.State != PluginState.Loaded)
                             {
                                 UnturnedChat.Say(caller, U.Translate("command_rocket_load_plugin", p.GetType().Assembly.GetName().Name));
-                                p.ForceLoad();
+                                p.LoadPlugin();
                             }
                             else
                             {
