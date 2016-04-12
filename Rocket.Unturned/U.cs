@@ -211,8 +211,8 @@ namespace Rocket.Unturned
         
         public void Reload()
         {
-            Translation.Reload();
-            Settings.Reload();
+            Translation.Load();
+            Settings.Load();
         }
 
         public void Shutdown()
