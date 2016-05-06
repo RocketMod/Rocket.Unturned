@@ -76,8 +76,8 @@ namespace Rocket.Unturned.Events
                         instance.OnUpdateBroken.TryInvoke(rp, (bool)R[0]);
                         break;
                     case "tellPosition":
-                        OnPlayerUpdatePosition.TryInvoke(rp, (Vector3)R[0]);
-                        instance.OnUpdatePosition.TryInvoke(rp, (Vector3)R[0]);
+                        OnPlayerUpdatePosition.TryInvoke(rp,(uint)R[0], (Vector3)R[1],(byte)R[2],(byte)R[3]);
+                        instance.OnUpdatePosition.TryInvoke(rp, (uint)R[0], (Vector3)R[1],(byte)R[2],(byte)R[3]);
                         break;
                     case "tellLife":
                         OnPlayerUpdateLife.TryInvoke(rp, (byte)R[0]);
@@ -149,7 +149,7 @@ namespace Rocket.Unturned.Events
         public static event PlayerUpdateBroken OnPlayerUpdateBroken;
         public event PlayerUpdateBroken OnUpdateBroken;
 
-        public delegate void PlayerUpdatePosition(UnturnedPlayer player, Vector3 position);
+        public delegate void PlayerUpdatePosition(UnturnedPlayer player, uint newSeq, Vector3 newPosition, byte newPitch, byte newYaw);
         public static event PlayerUpdatePosition OnPlayerUpdatePosition;
         public event PlayerUpdatePosition OnUpdatePosition;
 
