@@ -137,7 +137,7 @@ namespace Rocket.Unturned.Events
             }
             catch (Exception ex)
             {
-                Logger.Log(ex);
+                Logger.Log(ex,"Failed to receive packet \""+W+"\"");
             }
         }
 
