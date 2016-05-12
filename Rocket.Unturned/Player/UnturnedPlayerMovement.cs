@@ -1,4 +1,4 @@
-﻿using Rocket.Core;
+using Rocket.Core;
 using Rocket.Core.Logging;
 using Rocket.Unturned.Player;
 using SDG.Provider;
@@ -23,7 +23,7 @@ namespace Rocket.Unturned
 
             if (VanishMode)
             {
-                Player.Player.SteamChannel.send("tellPosition", ESteamCall.NOT_OWNER, ESteamPacket.UPDATE_UNRELIABLE_BUFFER, new Vector3(movement.real.x, movement.real.y+1337, movement.real.z));
+                Player.Player.SteamChannel.send("tellPosition", ESteamCall.NOT_OWNER, ESteamPacket.UPDATE_UNRELIABLE_BUFFER,0, new Vector3(movement.real.x, movement.real.y+1337, movement.real.z),0,0);
             }
             else
             {
