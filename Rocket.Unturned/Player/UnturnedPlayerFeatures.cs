@@ -23,9 +23,18 @@ namespace Rocket.Unturned.Player
         public bool VanishMode
         {
             get { return vanishMode; }
-            set { vanishMode = value;
-                Player.GetComponent<UnturnedPlayerMovement>().VanishMode = vanishMode;
-                Player.GetComponent<PlayerMovement>().canAddSimulationResultsToUpdates = !vanishMode;
+            set
+            {
+                Player.GetComponent<UnturnedPlayerMovement>().VanishMode = value;
+                PlayerMovement pMovement = Player.GetComponent<PlayerMovement>();
+                pMovement.canAddSimulationResultsToUpdates = !value;
+                if (vanishMode && !value)
+                {
+                    pMovement.updates.Add(new PlayerStateUpdate(pMovement.real, Player.Player.look.angle, Player.Player.look.rot));
+                    pMovement.isUpdated = true;
+                    PlayerManager.updates++;
+                }
+                vanishMode = value;
             }
         }
 
