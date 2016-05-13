@@ -23,7 +23,7 @@ namespace Rocket.Unturned
 
             if (VanishMode)
             {
-                Player.Player.SteamChannel.send("tellPosition", ESteamCall.NOT_OWNER, ESteamPacket.UPDATE_UNRELIABLE_BUFFER,0, new Vector3(movement.real.x, movement.real.y+1337, movement.real.z),0,0);
+                Player.Player.SteamChannel.send("tellPosition", ESteamCall.NOT_OWNER, ESteamPacket.UPDATE_UNRELIABLE_BUFFER, (uint)0, new Vector3(movement.real.x, movement.real.y+1337, movement.real.z), (byte)0, (byte)0);
             }
             else
             {
