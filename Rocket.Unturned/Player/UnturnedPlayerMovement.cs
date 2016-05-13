@@ -21,11 +21,7 @@ namespace Rocket.Unturned
         {
             PlayerMovement movement = (PlayerMovement)Player.GetComponent<PlayerMovement>();
 
-            if (VanishMode)
-            {
-                Player.Player.SteamChannel.send("tellPosition", ESteamCall.NOT_OWNER, ESteamPacket.UPDATE_UNRELIABLE_BUFFER, (uint)0, new Vector3(movement.real.x, movement.real.y+1337, movement.real.z), (byte)0, (byte)0);
-            }
-            else
+            if (!VanishMode)
             {
                 if (U.Settings.Instance.LogSuspiciousPlayerMovement && lastUpdate.AddSeconds(1) < DateTime.Now)
                 {
