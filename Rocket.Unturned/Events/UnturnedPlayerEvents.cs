@@ -75,10 +75,6 @@ namespace Rocket.Unturned.Events
                         OnPlayerUpdateBroken.TryInvoke(rp, (bool)R[0]);
                         instance.OnUpdateBroken.TryInvoke(rp, (bool)R[0]);
                         break;
-                    case "tellPosition":
-                        OnPlayerUpdatePosition.TryInvoke(rp,(uint)R[0], (Vector3)R[1],(byte)R[2],(byte)R[3]);
-                        instance.OnUpdatePosition.TryInvoke(rp, (uint)R[0], (Vector3)R[1],(byte)R[2],(byte)R[3]);
-                        break;
                     case "tellLife":
                         OnPlayerUpdateLife.TryInvoke(rp, (byte)R[0]);
                         instance.OnUpdateLife.TryInvoke(rp, (byte)R[0]);
@@ -148,10 +144,6 @@ namespace Rocket.Unturned.Events
         public delegate void PlayerUpdateBroken(UnturnedPlayer player, bool broken);
         public static event PlayerUpdateBroken OnPlayerUpdateBroken;
         public event PlayerUpdateBroken OnUpdateBroken;
-
-        public delegate void PlayerUpdatePosition(UnturnedPlayer player, uint newSeq, Vector3 newPosition, byte newPitch, byte newYaw);
-        public static event PlayerUpdatePosition OnPlayerUpdatePosition;
-        public event PlayerUpdatePosition OnUpdatePosition;
 
         public delegate void PlayerDeath(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer);
         public static event PlayerDeath OnPlayerDeath;
