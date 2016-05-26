@@ -95,13 +95,15 @@ namespace Rocket.Unturned
                 { "command_rocket_already_loaded","The plugin {0} is already loaded"},
                 { "command_rocket_reload","Reloading Rocket"},
                 { "command_p_group_not_found","Group not found"},
-                { "command_p_group_assigned","{0} was assigned to the group {1}"},
+                { "command_p_group_player_added","{0} was added to the group {1}"},
+                { "command_p_group_player_removed","{0} was removed from from the group {1}"},
                 { "command_p_permissions_reload","Permissions reloaded"},
                 { "command_rocket_plugin_not_found","Plugin {0} not found"},
                 { "command_clear_success","You successfully cleared {0} items"},
                 { "invalid_character_name","invalid character name"},
                 { "command_not_found","Command not found."}
-        }; 
+        };
+         
 
         public static XMLFileAsset<UnturnedSettings> Settings;
         public static XMLFileAsset<TranslationList> Translation;

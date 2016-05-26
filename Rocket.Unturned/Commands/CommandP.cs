@@ -52,30 +52,72 @@ namespace Rocket.Unturned.Commands
                 UnturnedChat.Say(caller, U.Translate("command_p_permissions_reload"));
                 return;
             }
-            
 
-            IRocketPlayer player = command.GetUnturnedPlayerParameter(0);
-            if (player == null) player = command.GetRocketPlayerParameter(0);
-            string groupName = command.GetStringParameter(1);
+
+
 
             if (command.Length == 0 && !(caller is ConsolePlayer))
             {
                 UnturnedChat.Say(caller, U.Translate("command_p_groups_private", "Your", string.Join(", ", R.Permissions.GetGroups(caller, true).Select(g => g.DisplayName).ToArray())));
-                UnturnedChat.Say(caller, U.Translate("command_p_permissions_private", "Your", string.Join(", ", Core.R.Permissions.GetPermissions(caller).Select(p => p.Name + (p.Cooldown != null ? "(" + p.Cooldown + ")" : "")).ToArray())));
+                UnturnedChat.Say(caller, U.Translate("command_p_permissions_private", "Your", string.Join(", ", Core.R.Permissions.GetPermissions(caller).Select(p => p.Name + (p.Cooldown != 0 ? "(" + p.Cooldown + ")" : "")).ToArray())));
             }
-            else if(command.Length == 1 && player != null) {
+            else if(command.Length == 1) {
+
+                IRocketPlayer player = command.GetUnturnedPlayerParameter(0);
+                if (player == null) player = command.GetRocketPlayerParameter(0);
+                if (player != null) {
                 UnturnedChat.Say(caller, U.Translate("command_p_groups_private", player.DisplayName+"s", string.Join(", ", R.Permissions.GetGroups(player, true).Select(g => g.DisplayName).ToArray())));
-                UnturnedChat.Say(caller, U.Translate("command_p_permissions_private", player.DisplayName + "s", string.Join(", ", Core.R.Permissions.GetPermissions(player).Select(p => p.Name +(p.Cooldown != null? "(" + p.Cooldown + ")" : "")).ToArray())));
-            }
-            else if (command.Length == 2 && player != null && !String.IsNullOrEmpty(groupName) && caller.HasPermission("p.set"))
-            {
-                if (Core.R.Permissions.SetGroup(player, groupName))
+                UnturnedChat.Say(caller, U.Translate("command_p_permissions_private", player.DisplayName + "s", string.Join(", ", Core.R.Permissions.GetPermissions(player).Select(p => p.Name +(p.Cooldown != 0? "(" + p.Cooldown + ")" : "")).ToArray())));
+                }
+                else
                 {
-                    UnturnedChat.Say(caller, U.Translate("command_p_group_assigned", player.DisplayName, groupName));
+                    UnturnedChat.Say(caller, U.Translate("command_generic_invalid_parameter"));
+                    return;
                 }
-                else {
-                    UnturnedChat.Say(caller, U.Translate("command_p_group_not_found"));
+            }
+            else if (command.Length == 3)
+            {
+                string c = command.GetStringParameter(0).ToLower();
+
+                IRocketPlayer player = command.GetUnturnedPlayerParameter(1);
+                if (player == null) player = command.GetRocketPlayerParameter(1);
+
+                string groupName = command.GetStringParameter(2);
+                
+                switch (c)
+                {
+                    case "add":
+                        if (caller.HasPermission("p.add")&& player != null && groupName != null) {
+                            if (Core.R.Permissions.AddPlayerToGroup(groupName, player) == RocketPermissionsProviderResult.Success)
+                            {
+                                UnturnedChat.Say(caller, U.Translate("command_p_group_player_added", player.DisplayName, groupName));
+                            }
+                            else
+                            {
+                                UnturnedChat.Say(caller, U.Translate("command_p_group_not_found"));
+                            }
+                        }
+                        UnturnedChat.Say(caller, U.Translate("command_generic_invalid_parameter"));
+                        return;
+                    case "remove":
+                        if (caller.HasPermission("p.remove") && player != null && groupName != null) {
+                            if (Core.R.Permissions.RemovePlayerFromGroup(groupName, player) == RocketPermissionsProviderResult.Success)
+                            {
+                                UnturnedChat.Say(caller, U.Translate("command_p_group_player_removed", player.DisplayName, groupName));
+                            }
+                            else
+                            {
+                                UnturnedChat.Say(caller, U.Translate("command_p_group_not_found"));
+                            }
+                        }
+                        UnturnedChat.Say(caller, U.Translate("command_generic_invalid_parameter"));
+                        return;
+                    default:
+                        UnturnedChat.Say(caller, U.Translate("command_generic_invalid_parameter"));
+                        return;
                 }
+
+
             }
             else
             {
