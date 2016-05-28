@@ -97,7 +97,6 @@ namespace Rocket.Unturned.Commands
                                 UnturnedChat.Say(caller, U.Translate("command_p_group_not_found"));
                             }
                         }
-                        UnturnedChat.Say(caller, U.Translate("command_generic_invalid_parameter"));
                         return;
                     case "remove":
                         if (caller.HasPermission("p.remove") && player != null && groupName != null) {
@@ -110,7 +109,6 @@ namespace Rocket.Unturned.Commands
                                 UnturnedChat.Say(caller, U.Translate("command_p_group_not_found"));
                             }
                         }
-                        UnturnedChat.Say(caller, U.Translate("command_generic_invalid_parameter"));
                         return;
                     default:
                         UnturnedChat.Say(caller, U.Translate("command_generic_invalid_parameter"));
