@@ -70,9 +70,16 @@ namespace Rocket.Unturned.Player
 
         private bool initialCheck;
 
+        Vector3 oldPosition = new Vector3();
+
         private void FixedUpdate()
         {
-            if(!initialCheck && (DateTime.Now - Joined).TotalSeconds > 3)
+            if (oldPosition != Player.Position)
+            {
+                UnturnedPlayerEvents.fireOnPlayerUpdatePosition(Player);
+                oldPosition = Player.Position;
+            }
+            if (!initialCheck && (DateTime.Now - Joined).TotalSeconds > 3)
             {
                 Check();
             }

@@ -137,6 +137,14 @@ namespace Rocket.Unturned.Events
             }
         }
 
+
+        public delegate void PlayerUpdatePosition(UnturnedPlayer player, Vector3 position);
+        public static event PlayerUpdatePosition OnPlayerUpdatePosition;
+        internal static void fireOnPlayerUpdatePosition(UnturnedPlayer player)
+        {
+            OnPlayerUpdatePosition.TryInvoke(player,player.Position);
+        }
+
         public delegate void PlayerUpdateBleeding(UnturnedPlayer player, bool bleeding);
         public static event PlayerUpdateBleeding OnPlayerUpdateBleeding;
         public event PlayerUpdateBleeding OnUpdateBleeding;

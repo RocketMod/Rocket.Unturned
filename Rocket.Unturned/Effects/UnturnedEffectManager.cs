@@ -1,4 +1,5 @@
-﻿using Rocket.Unturned.Events;
+﻿using Rocket.Core.Logging;
+using Rocket.Unturned.Events;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 using Steamworks;
@@ -79,6 +80,8 @@ namespace Rocket.Unturned.Effects
             string s = q.readString("RocketEffect");
             bool global = q.readBoolean("Global");
             effects.Add(new UnturnedEffect(s, k, global));
+
+            Logger.Log("Registering effect: " + s + " (" + k + ")");
         }
     
 
