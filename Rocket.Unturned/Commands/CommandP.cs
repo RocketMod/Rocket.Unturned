@@ -88,25 +88,45 @@ namespace Rocket.Unturned.Commands
                 {
                     case "add":
                         if (caller.HasPermission("p.add")&& player != null && groupName != null) {
-                            if (Core.R.Permissions.AddPlayerToGroup(groupName, player) == RocketPermissionsProviderResult.Success)
+                            switch (Core.R.Permissions.AddPlayerToGroup(groupName, player))
                             {
-                                UnturnedChat.Say(caller, U.Translate("command_p_group_player_added", player.DisplayName, groupName));
-                            }
-                            else
-                            {
-                                UnturnedChat.Say(caller, U.Translate("command_p_group_not_found"));
+                                case RocketPermissionsProviderResult.Success:
+                                    UnturnedChat.Say(caller, U.Translate("command_p_group_player_added", player.DisplayName, groupName));
+                                    return;
+                                case RocketPermissionsProviderResult.DuplicateEntry:
+                                    UnturnedChat.Say(caller, U.Translate("command_p_duplicate_entry", player.DisplayName, groupName));
+                                    return;
+                                case RocketPermissionsProviderResult.GroupNotFound:
+                                    UnturnedChat.Say(caller, U.Translate("command_p_group_not_found", player.DisplayName, groupName));
+                                    return;
+                                case RocketPermissionsProviderResult.PlayerNotFound:
+                                    UnturnedChat.Say(caller, U.Translate("command_p_player_not_found", player.DisplayName, groupName));
+                                    return;
+                                default:
+                                    UnturnedChat.Say(caller, U.Translate("command_p_unknown_error", player.DisplayName, groupName));
+                                    return;
                             }
                         }
                         return;
                     case "remove":
                         if (caller.HasPermission("p.remove") && player != null && groupName != null) {
-                            if (Core.R.Permissions.RemovePlayerFromGroup(groupName, player) == RocketPermissionsProviderResult.Success)
+                            switch (Core.R.Permissions.RemovePlayerFromGroup(groupName, player))
                             {
-                                UnturnedChat.Say(caller, U.Translate("command_p_group_player_removed", player.DisplayName, groupName));
-                            }
-                            else
-                            {
-                                UnturnedChat.Say(caller, U.Translate("command_p_group_not_found"));
+                                case RocketPermissionsProviderResult.Success:
+                                    UnturnedChat.Say(caller, U.Translate("command_p_group_player_removed", player.DisplayName, groupName));
+                                    return;
+                                case RocketPermissionsProviderResult.DuplicateEntry:
+                                    UnturnedChat.Say(caller, U.Translate("command_p_duplicate_entry", player.DisplayName, groupName));
+                                    return;
+                                case RocketPermissionsProviderResult.GroupNotFound:
+                                    UnturnedChat.Say(caller, U.Translate("command_p_group_not_found", player.DisplayName, groupName));
+                                    return;
+                                case RocketPermissionsProviderResult.PlayerNotFound:
+                                    UnturnedChat.Say(caller, U.Translate("command_p_player_not_found", player.DisplayName, groupName));
+                                    return;
+                                default:
+                                    UnturnedChat.Say(caller, U.Translate("command_p_unknown_error", player.DisplayName, groupName));
+                                    return;
                             }
                         }
                         return;
