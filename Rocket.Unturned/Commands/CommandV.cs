@@ -72,7 +72,12 @@ namespace Rocket.Unturned.Commands
                         id = ia.Id;
                         break;
                     }
-                } 
+                }
+                if (!id.HasValue)
+                {
+                    UnturnedChat.Say(caller, U.Translate("command_generic_invalid_parameter"));
+                    throw new WrongUsageOfCommandException(caller, this);
+                }
             }
 
             Asset a = SDG.Unturned.Assets.find(EAssetType.VEHICLE, id.Value);
