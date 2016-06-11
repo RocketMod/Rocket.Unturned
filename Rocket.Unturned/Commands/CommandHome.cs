@@ -50,12 +50,14 @@ namespace Rocket.Unturned.Commands
             if (!BarricadeManager.tryGetBed(player.CSteamID, out pos, out rot))
             {
                 UnturnedChat.Say(caller, U.Translate("command_bed_no_bed_found_private"));
+                throw new WrongUsageOfCommandException(caller, this);
             }
             else
             {
                 if (player.Stance == EPlayerStance.DRIVING || player.Stance == EPlayerStance.SITTING)
                 {
                     UnturnedChat.Say(caller, U.Translate("command_generic_teleport_while_driving_error"));
+                    throw new WrongUsageOfCommandException(caller, this);
                 }
                 else
                 {

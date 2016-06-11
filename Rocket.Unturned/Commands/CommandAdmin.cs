@@ -52,7 +52,7 @@ namespace Rocket.Unturned.Commands
                 if (player == null)
                 {
                     UnturnedChat.Say(caller, U.Translate("command_generic_invalid_parameter"));
-                    return;
+                    throw new WrongUsageOfCommandException(caller,this);
                 }
 
                 if (!player.IsAdmin)

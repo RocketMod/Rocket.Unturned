@@ -50,7 +50,7 @@ namespace Rocket.Unturned.Commands
             if (command.Length == 0 || command.Length > 2)
             {
                 UnturnedChat.Say(player, U.Translate("command_generic_invalid_parameter"));
-                return;
+                throw new WrongUsageOfCommandException(caller, this);
             }
 
             ushort id = 0;
@@ -65,7 +65,7 @@ namespace Rocket.Unturned.Commands
                 if (String.IsNullOrEmpty(itemString.Trim()) || id == 0)
                 {
                     UnturnedChat.Say(player, U.Translate("command_generic_invalid_parameter"));
-                    return;
+                    throw new WrongUsageOfCommandException(caller, this);
                 }
             }
 
@@ -74,7 +74,7 @@ namespace Rocket.Unturned.Commands
             if (command.Length == 2 && !byte.TryParse(command[1].ToString(), out amount) || a == null)
             {
                 UnturnedChat.Say(player, U.Translate("command_generic_invalid_parameter"));
-                return;
+                throw new WrongUsageOfCommandException(caller, this);
             }
 
             string assetName = ((ItemAsset)a).Name;

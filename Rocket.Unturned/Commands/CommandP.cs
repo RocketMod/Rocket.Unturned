@@ -132,7 +132,7 @@ namespace Rocket.Unturned.Commands
                         return;
                     default:
                         UnturnedChat.Say(caller, U.Translate("command_generic_invalid_parameter"));
-                        return;
+                        throw new WrongUsageOfCommandException(caller, this);
                 }
 
 
@@ -140,7 +140,7 @@ namespace Rocket.Unturned.Commands
             else
             {
                 UnturnedChat.Say(caller, U.Translate("command_generic_invalid_parameter"));
-                return;
+                throw new WrongUsageOfCommandException(caller, this);
             }
 
             

@@ -76,6 +76,7 @@ namespace Rocket.Unturned.Commands
                 else
                 {
                     UnturnedChat.Say(caller, U.Translate("command_generic_target_player_not_found"));
+                    throw new WrongUsageOfCommandException(caller, this);
                 }
             }
         }

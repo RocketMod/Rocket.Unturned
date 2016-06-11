@@ -49,7 +49,7 @@ namespace Rocket.Unturned.Commands
             if (command.Length != 1)
             {
                 UnturnedChat.Say(caller, U.Translate("command_generic_invalid_parameter"));
-                return;
+                throw new WrongUsageOfCommandException(caller, this);
             }
 
             ushort? id = command.GetUInt16Parameter(0);
@@ -61,7 +61,7 @@ namespace Rocket.Unturned.Commands
                 if (itemString == null)
                 {
                     UnturnedChat.Say(caller, U.Translate("command_generic_invalid_parameter"));
-                    return;
+                    throw new WrongUsageOfCommandException(caller, this);
                 }
 
                 Asset[] assets = SDG.Unturned.Assets.find(EAssetType.VEHICLE);

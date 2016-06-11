@@ -66,7 +66,7 @@ namespace Rocket.Unturned.Commands
                         break;
                     default:
                         UnturnedChat.Say(caller, U.Translate("command_generic_invalid_parameter"));
-                        return;
+                        throw new WrongUsageOfCommandException(caller, this);
                 }
                 player.Teleport(player.Position, currentDirection);
             }

@@ -51,13 +51,13 @@ namespace Rocket.Unturned.Commands
             if (command.Length != 1 && command.Length != 3)
             {
                 UnturnedChat.Say(player, U.Translate("command_generic_invalid_parameter"));
-                return;
+                throw new WrongUsageOfCommandException(caller, this);
             }
 
             if (player.Stance == EPlayerStance.DRIVING || player.Stance == EPlayerStance.SITTING)
             {
                 UnturnedChat.Say(player, U.Translate("command_generic_teleport_while_driving_error"));
-                return;
+                throw new WrongUsageOfCommandException(caller, this);
             }
 
             float? x = null;

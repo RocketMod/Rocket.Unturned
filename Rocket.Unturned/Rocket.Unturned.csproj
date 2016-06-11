@@ -91,7 +91,6 @@
     <Compile Include="Chat\UnturnedChat.cs" />
     <Compile Include="Commands\CommandAdmin.cs" />
     <Compile Include="Commands\CommandBroadcast.cs" />
-    <Compile Include="Commands\CommandClear.cs" />
     <Compile Include="Commands\CommandCompass.cs" />
     <Compile Include="Commands\CommandEffect.cs" />
     <Compile Include="Commands\CommandExit.cs" />

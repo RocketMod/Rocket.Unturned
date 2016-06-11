@@ -57,7 +57,7 @@ namespace Rocket.Unturned.Commands
             if (message == null)
             {
                 UnturnedChat.Say(caller, U.Translate("command_generic_invalid_parameter"));
-                return;
+                throw new WrongUsageOfCommandException(caller, this);
             }
 
             UnturnedChat.Say(message, (color.HasValue) ? (Color)color : Color.green);
