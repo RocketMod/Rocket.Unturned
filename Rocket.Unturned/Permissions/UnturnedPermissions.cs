@@ -31,23 +31,22 @@ namespace Rocket.Unturned.Permissions
             string requestedCommand = r.Match(permission.ToLower()).Value.ToString().TrimStart('/').ToLower();
 
             IRocketCommand command = R.Commands.GetCommand(requestedCommand);
+            double cooldown = R.Commands.GetCooldown(player, command);
+
             if (command != null)
             {
-                uint? cooldownLeft;
-                if (R.Permissions.HasPermission(player, command, out cooldownLeft))
+
+                if (R.Permissions.HasPermission(player, command))
                 {
-                    return true;
+                    if (cooldown < 0)
+                    {
+                        return true;
+                    }
+                    UnturnedChat.Say(player, R.Translate("command_cooldown", cooldown), Color.red);
                 }
                 else
                 {
-                    if (cooldownLeft != null)
-                    {
-                        UnturnedChat.Say(player, R.Translate("command_cooldown", cooldownLeft), Color.red);
-                    }
-                    else
-                    {
-                        UnturnedChat.Say(player, R.Translate("command_no_permission"), Color.red);
-                    }
+                    UnturnedChat.Say(player, R.Translate("command_no_permission"), Color.red);
                 }
             }
             else
@@ -56,7 +55,7 @@ namespace Rocket.Unturned.Permissions
             }
             return false;
         }
-        
+
         internal static bool CheckValid(ValidateAuthTicketResponse_t r)
         {
             ESteamRejection? reason = null;
