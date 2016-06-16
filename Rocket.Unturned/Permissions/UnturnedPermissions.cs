@@ -24,7 +24,6 @@ namespace Rocket.Unturned.Permissions
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal static bool CheckPermissions(SteamPlayer caller, string permission)
         {
-            if (caller.IsAdmin) return true;
             UnturnedPlayer player = caller.ToUnturnedPlayer();
 
             Regex r = new Regex("^\\/[a-zA-Z]*");
@@ -35,25 +34,26 @@ namespace Rocket.Unturned.Permissions
 
             if (command != null)
             {
-
                 if (R.Permissions.HasPermission(player, command))
                 {
-                    if (cooldown < 0)
+                    if (cooldown > 0)
                     {
-                        return true;
+                        UnturnedChat.Say(player, R.Translate("command_cooldown", cooldown), Color.red);
+                        return false;
                     }
-                    UnturnedChat.Say(player, R.Translate("command_cooldown", cooldown), Color.red);
+                    return true;
                 }
                 else
                 {
                     UnturnedChat.Say(player, R.Translate("command_no_permission"), Color.red);
+                    return false;
                 }
             }
             else
             {
                 UnturnedChat.Say(player, R.Translate("command_not_found"), Color.red);
+                return false;
             }
-            return false;
         }
 
         internal static bool CheckValid(ValidateAuthTicketResponse_t r)
