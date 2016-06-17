@@ -1,6 +1,6 @@
 ﻿using Rocket.Unturned.Player;
 
-namespace Rocket.Core.Extensions
+namespace Rocket.Unturned.Extensions
 {
     public static class SteamPlayerExtension
     {
