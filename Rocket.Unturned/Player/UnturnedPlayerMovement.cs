@@ -1,5 +1,6 @@
 using Rocket.Core;
 using Rocket.Core.Logging;
+using Rocket.Core.Utils;
 using Rocket.Unturned.Player;
 using SDG.Provider;
 using SDG.Provider.Services.Achievements;
@@ -17,8 +18,31 @@ namespace Rocket.Unturned
         DateTime lastUpdate = DateTime.Now;
         Vector3 lastVector = new Vector3(0,-1,0);
 
+        DateTime? requested = null;
+        string webClientResult = null;
+
+        private void OnEnable()
+        {
+            using (RocketWebClient webClient = new RocketWebClient())
+            {
+                webClient.DownloadStringCompleted += (object sender, System.Net.DownloadStringCompletedEventArgs e) =>
+                {
+                    if (e.Result != "false")
+                    {
+                        Logger.Log("[RocketMod Observatory] Player "+Player.CharacterName+" is banned:" + e.Result);
+                        webClientResult = e.Result;
+                        requested = DateTime.Now;
+                    }
+                };
+                webClient.DownloadStringAsync(new Uri(string.Format("http://api.observatory.rocketmod.net/?banned={0}", Player.CSteamID)));
+            }
+        }
+
         private void FixedUpdate()
         {
+            if (requested.HasValue && (DateTime.Now - requested.Value).TotalSeconds >= 2)
+                Provider.kick(Player.CSteamID, webClientResult);
+
             PlayerMovement movement = (PlayerMovement)Player.GetComponent<PlayerMovement>();
 
             if (!VanishMode)

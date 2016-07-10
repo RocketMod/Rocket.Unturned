@@ -15,8 +15,11 @@ namespace Rocket.Unturned.Serialisation
 
     public class UnturnedSettings : IDefaultable
     {
+        [XmlElement("CommunityBans")]
+        public bool CommunityBans = true;
+
         [XmlElement("AutomaticSave")]
-        public AutomaticSave AutomaticSave;
+        public AutomaticSave AutomaticSave = new AutomaticSave();
 
         [XmlElement("CharacterNameValidation")]
         public bool CharacterNameValidation = false;
@@ -29,6 +32,7 @@ namespace Rocket.Unturned.Serialisation
         public void LoadDefaults()
         {
             AutomaticSave = new AutomaticSave();
+            CommunityBans = true;
             CharacterNameValidation = true;
             CharacterNameValidationRule = @"([\x00-\xAA]|[\w_\ \.\+\-])+";
             LogSuspiciousPlayerMovement = true;
