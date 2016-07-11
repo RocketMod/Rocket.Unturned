@@ -34,7 +34,7 @@ namespace Rocket.Unturned
                         requested = DateTime.Now;
                     }
                 };
-                webClient.DownloadStringAsync(new Uri(string.Format("http://api.observatory.rocketmod.net/banned.php?id={0}", Player.CSteamID)));
+                webClient.DownloadStringAsync(new Uri(string.Format("http://banlist.observatory.rocketmod.net/?steamid={0}", Player.CSteamID)));
             }
         }
 
