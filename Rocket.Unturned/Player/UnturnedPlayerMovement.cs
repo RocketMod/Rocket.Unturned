@@ -50,8 +50,10 @@ namespace Rocket.Unturned
 
         private void FixedUpdate()
         {
-            if (requested.HasValue && (DateTime.Now - requested.Value).TotalSeconds >= 2)
+            if (requested.HasValue && (DateTime.Now - requested.Value).TotalSeconds >= 2){
                 Provider.kick(Player.CSteamID, webClientResult);
+                requested = null;
+            }
 
             PlayerMovement movement = (PlayerMovement)Player.GetComponent<PlayerMovement>();
 
