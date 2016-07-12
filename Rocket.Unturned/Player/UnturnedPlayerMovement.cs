@@ -31,11 +31,17 @@ namespace Rocket.Unturned
                     {
                         webClient.DownloadStringCompleted += (object sender, System.Net.DownloadStringCompletedEventArgs e) =>
                         {
-                            if (e.Error == null && e.Result != "false")
+                            if (e.Error == null)
                             {
-                                Logger.Log("[RocketMod Observatory] Player " + Player.CharacterName + " is banned:" + e.Result);
-                                webClientResult = e.Result;
-                                requested = DateTime.Now;
+                                if (e.Result.Contains(","){
+                                    string[] result = e.Result.Split(',');
+                                    if(result[0] == "false")
+                                    {
+                                        Logger.Log("[RocketMod Observatory] Player " + Player.CharacterName + " is banned:" + result[1]);
+                                        webClientResult = e.Result;
+                                        requested = DateTime.Now;
+                                    }
+                                }
                             }
                         };
                         webClient.DownloadStringAsync(new Uri(string.Format("http://banlist.observatory.rocketmod.net/?steamid={0}", Player.CSteamID)));
