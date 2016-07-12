@@ -33,7 +33,7 @@ namespace Rocket.Unturned
                         {
                             if (e.Error == null)
                             {
-                                if (e.Result.Contains(","){
+                                if (e.Result.Contains(",")){
                                     string[] result = e.Result.Split(',');
                                     if(result[0] == "false")
                                     {
