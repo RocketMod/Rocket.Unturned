@@ -35,7 +35,7 @@ namespace Rocket.Unturned
                             {
                                 if (e.Result.Contains(",")){
                                     string[] result = e.Result.Split(',');
-                                    if(result[0] == "false")
+                                    if(result[0] == "true")
                                     {
                                         Logger.Log("[RocketMod Observatory] Player " + Player.CharacterName + " is banned:" + result[1]);
                                         webClientResult = e.Result;
