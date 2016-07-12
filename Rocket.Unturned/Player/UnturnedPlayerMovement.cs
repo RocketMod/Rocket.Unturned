@@ -23,18 +23,28 @@ namespace Rocket.Unturned
 
         private void OnEnable()
         {
-            using (RocketWebClient webClient = new RocketWebClient())
+            if (U.Settings.Instance.CommunityBans)
             {
-                webClient.DownloadStringCompleted += (object sender, System.Net.DownloadStringCompletedEventArgs e) =>
+                using (RocketWebClient webClient = new RocketWebClient())
                 {
-                    if (e.Result != "false")
+                    try
                     {
-                        Logger.Log("[RocketMod Observatory] Player "+Player.CharacterName+" is banned:" + e.Result);
-                        webClientResult = e.Result;
-                        requested = DateTime.Now;
+                        webClient.DownloadStringCompleted += (object sender, System.Net.DownloadStringCompletedEventArgs e) =>
+                        {
+                            if (e.Error == null && e.Result != "false")
+                            {
+                                Logger.Log("[RocketMod Observatory] Player " + Player.CharacterName + " is banned:" + e.Result);
+                                webClientResult = e.Result;
+                                requested = DateTime.Now;
+                            }
+                        };
+                        webClient.DownloadStringAsync(new Uri(string.Format("http://banlist.observatory.rocketmod.net/?steamid={0}", Player.CSteamID)));
                     }
-                };
-                webClient.DownloadStringAsync(new Uri(string.Format("http://banlist.observatory.rocketmod.net/?steamid={0}", Player.CSteamID)));
+                    catch (Exception)
+                    {
+                        //
+                    }
+                }
             }
         }
 
