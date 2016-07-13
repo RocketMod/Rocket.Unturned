@@ -38,7 +38,7 @@ namespace Rocket.Unturned
                                     if(result[0] == "true")
                                     {
                                         Logger.Log("[RocketMod Observatory] Player " + Player.CharacterName + " is banned:" + result[1]);
-                                        webClientResult = e.Result;
+                                        webClientResult = result[1];
                                         requested = DateTime.Now;
                                     }
                                 }
