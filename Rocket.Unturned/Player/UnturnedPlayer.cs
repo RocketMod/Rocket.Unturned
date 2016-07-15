@@ -132,6 +132,7 @@ namespace Rocket.Unturned.Player
 
         public static UnturnedPlayer FromName(string name)
         {
+            if (String.IsNullOrEmpty(name)) return null;
             SDG.Unturned.Player p = null;
             ulong id = 0;
             if (ulong.TryParse(name, out id) && id > 76561197960265728)
