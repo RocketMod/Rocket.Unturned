@@ -5,6 +5,8 @@ using UnityEngine;
 using System;
 using Rocket.Unturned.Chat;
 using Rocket.API.Extensions;
+using Rocket.API.Commands;
+using Rocket.API.Exceptions;
 
 namespace Rocket.Unturned.Commands
 {

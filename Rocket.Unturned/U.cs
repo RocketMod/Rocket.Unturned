@@ -1,25 +1,24 @@
 ﻿using Rocket.API;
+using Rocket.API.Assets;
 using Rocket.API.Collections;
 using Rocket.API.Extensions;
+using Rocket.API.Plugins;
 using Rocket.Core;
-using Rocket.Core.Assets;
 using Rocket.Core.Extensions;
-using Rocket.Core.Logging;
-using Rocket.Core.Plugins;
+using Rocket.Logging;
 using Rocket.Unturned.Chat;
 using Rocket.Unturned.Commands;
-using Rocket.Unturned.Effects;
 using Rocket.Unturned.Events;
 using Rocket.Unturned.Permissions;
 using Rocket.Unturned.Plugins;
 using Rocket.Unturned.Serialisation;
-using Rocket.Unturned.Utils;
 using SDG.Unturned;
 using Steamworks;
 using System;
-using System.Linq;
 using System.Reflection;
 using UnityEngine;
+using Rocket.API.Chat;
+using System.Collections.ObjectModel;
 
 namespace Rocket.Unturned
 {
@@ -116,6 +115,9 @@ namespace Rocket.Unturned
         public static UnturnedEvents Events;
 
         public event RocketImplementationInitialized OnRocketImplementationInitialized;
+        public event ImplementationInitialized OnInitialized;
+        public event ImplementationShutdown OnShutdown;
+        public event ImplementationReload OnReload;
 
         public static string Translate(string translationKey, params object[] placeholder)
         {
@@ -160,16 +162,13 @@ namespace Rocket.Unturned
             try
             {
                 Settings = new XMLFileAsset<UnturnedSettings>(Environment.SettingsFile);
-                Translation = new XMLFileAsset<TranslationList>(String.Format(Environment.TranslationFile, Core.R.Settings.Instance.LanguageCode), new Type[] { typeof(TranslationList), typeof(TranslationListEntry) }, defaultTranslations);
+                Translation = new XMLFileAsset<TranslationList>(String.Format(Environment.TranslationFile, R.Instance.Settings.Instance.LanguageCode), new Type[] { typeof(TranslationList), typeof(TranslationListEntry) }, defaultTranslations);
                 defaultTranslations.AddUnknownEntries(Translation);
                 Events = gameObject.TryAddComponent<UnturnedEvents>();
-
-                gameObject.TryAddComponent<UnturnedEffectManager>();
-                gameObject.TryAddComponent<UnturnedPermissions>();
+                
                 gameObject.TryAddComponent<UnturnedChat>();
                 gameObject.TryAddComponent<UnturnedCommands>();
-
-                gameObject.TryAddComponent<AutomaticSaveWatchdog>();
+                
 
                 RocketPlugin.OnPluginLoading += (IRocketPlugin plugin, ref bool cancelLoading) =>
                 {
@@ -194,17 +193,14 @@ namespace Rocket.Unturned
 
                 try
                 {
-                    R.Plugins.OnPluginsLoaded += () =>
-                    {
-                        SteamGameServer.SetKeyValue("rocketplugins", String.Join(",", R.Plugins.GetPlugins().Select(p => p.Name).ToArray()));
-                    };
+                    //TODO: Readd rocketplugins
 
                     SteamGameServer.SetKeyValue("rocket", Assembly.GetExecutingAssembly().GetName().Version.ToString());
                     SteamGameServer.SetBotPlayerCount(1);
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogError("Steam can not be initialized: " + ex.Message);
+                    Logger.Error("Steam can not be initialized: " + ex.Message);
                 }
 
                 OnRocketImplementationInitialized.TryInvoke();
@@ -212,7 +208,7 @@ namespace Rocket.Unturned
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                Logger.Error(ex);
             }
         }
         
@@ -227,12 +223,33 @@ namespace Rocket.Unturned
             Provider.shutdown();
         }
 
+        public ReadOnlyCollection<IRocketPlayer> GetPlayers()
+        {
+            throw new NotImplementedException();
+        }
+
         public string InstanceId
         {
             get
             {
                 return Dedicator.InstanceName;
             } 
+        }
+
+        public IChat Chat
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public string Name
+        {
+            get
+            {
+                return "Unturned v" + Provider.Version;
+            }
         }
     }
 }

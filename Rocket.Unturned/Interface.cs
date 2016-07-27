@@ -1,7 +1,6 @@
 ﻿using Rocket.API;
 using Rocket.Core;
-using Rocket.Core.Logging;
-using Rocket.Unturned.Effects;
+using Rocket.Logging;
 using Rocket.Unturned.Events;
 using Rocket.Unturned.Permissions;
 using Rocket.Unturned.Player;
@@ -21,7 +20,7 @@ namespace Rocket.Unturned
         public static void ExternalLog(string message, ConsoleColor color)
         {
             if(message != "NullReferenceException: Object reference not set to an instance of an object - ")
-            Core.Logging.Logger.ExternalLog(message,color);
+            Logger.Warn(message);
         }
 
         [Browsable(false)]
@@ -42,9 +41,9 @@ namespace Rocket.Unturned
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static bool CheckPermissions(SteamPlayer player, string command)
         {
-            if (R.Commands != null && UnturnedPermissions.CheckPermissions(player, command))
+            if (UnturnedPermissions.CheckPermissions(player, command))
             {
-                R.Commands.Execute(UnturnedPlayer.FromSteamPlayer(player), command);
+                R.Instance.Execute(UnturnedPlayer.FromSteamPlayer(player), command);
             }
             return false;
         }
@@ -53,9 +52,7 @@ namespace Rocket.Unturned
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static bool Execute(CSteamID player, string command)
         {
-            if(R.Commands != null)
-                return R.Commands.Execute(UnturnedPlayer.FromCSteamID(player), command);
-            return false;
+            return R.Instance.Execute(UnturnedPlayer.FromCSteamID(player), command);
         }
 
         [Browsable(false)]
@@ -76,7 +73,7 @@ namespace Rocket.Unturned
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static void RegisterRocketEffect(Bundle b, Data q, ushort k)
         {
-            UnturnedEffectManager.RegisterRocketEffect(b, q, k);
+            //
         }
 
         [Browsable(false)]

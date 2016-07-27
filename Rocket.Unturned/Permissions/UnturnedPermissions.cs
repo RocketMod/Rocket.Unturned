@@ -1,6 +1,7 @@
 ﻿using Rocket.API;
+using Rocket.API.Commands;
 using Rocket.Core;
-using Rocket.Core.Logging;
+using Rocket.Logging;
 using Rocket.Unturned.Chat;
 using Rocket.Unturned.Extensions;
 using Rocket.Unturned.Player;
@@ -14,7 +15,7 @@ using UnityEngine;
 
 namespace Rocket.Unturned.Permissions
 {
-    public class UnturnedPermissions : MonoBehaviour
+    public class UnturnedPermissions
     {
         public delegate void JoinRequested(CSteamID player, ref ESteamRejection? rejectionReason);
         public static event JoinRequested OnJoinRequested;
@@ -27,23 +28,17 @@ namespace Rocket.Unturned.Permissions
             Regex r = new Regex("^\\/[a-zA-Z]*");
             string requestedCommand = r.Match(permission.ToLower()).Value.ToString().TrimStart('/').ToLower();
 
-            IRocketCommand command = R.Commands.GetCommand(requestedCommand);
-            double cooldown = R.Commands.GetCooldown(player, command);
+            IRocketCommand command = R.Instance.GetCommand(requestedCommand);
 
             if (command != null)
             {
-                if (R.Permissions.HasPermission(player, command))
+                if (R.Instance.Permissions.HasPermission(player, command))
                 {
-                    if (cooldown > 0)
-                    {
-                        UnturnedChat.Say(player, R.Translate("command_cooldown", cooldown), Color.red);
-                        return false;
-                    }
                     return true;
                 }
                 else
                 {
-                    UnturnedChat.Say(player, R.Translate("command_no_permission"), Color.red);
+                    UnturnedChat.Say(player, R.Instance.Translation.Instance.Translate("command_no_permission"), Color.red);
                     return false;
                 }
             }
@@ -72,7 +67,7 @@ namespace Rocket.Unturned.Permissions
                     }
                     catch (Exception ex)
                     {
-                        Logger.LogException(ex);
+                        Logger.Error(ex);
                     }
                 }
             }

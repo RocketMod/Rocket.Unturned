@@ -5,7 +5,6 @@ using UnityEngine;
 using Rocket.Core.Extensions;
 using Rocket.API;
 using Rocket.API.Extensions;
-using Rocket.Core.Logging;
 
 namespace Rocket.Unturned.Events
 {

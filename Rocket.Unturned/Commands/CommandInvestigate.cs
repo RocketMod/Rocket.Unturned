@@ -3,6 +3,8 @@ using System;
 using Rocket.API;
 using System.Collections.Generic;
 using Rocket.Unturned.Chat;
+using Rocket.API.Exceptions;
+using Rocket.API.Commands;
 
 namespace Rocket.Unturned.Commands
 {

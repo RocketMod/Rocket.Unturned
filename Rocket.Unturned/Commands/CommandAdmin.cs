@@ -1,4 +1,6 @@
 ﻿using Rocket.API;
+using Rocket.API.Commands;
+using Rocket.API.Exceptions;
 using Rocket.Core;
 using Rocket.Unturned.Chat;
 using Rocket.Unturned.Player;
@@ -46,7 +48,7 @@ namespace Rocket.Unturned.Commands
 
         public void Execute(IRocketPlayer caller, string[] command)
         {
-            if (!R.Settings.Instance.WebPermissions.Enabled)
+            if (!R.Instance.Settings.Instance.WebPermissions.Enabled)
             {
                 UnturnedPlayer player = command.GetUnturnedPlayerParameter(0);
                 if (player == null)

@@ -1,5 +1,4 @@
-﻿using Rocket.Core.Logging;
-using Rocket.Unturned.Enumerations;
+﻿using Rocket.Unturned.Enumerations;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 using Steamworks;
@@ -7,6 +6,7 @@ using System;
 using UnityEngine;
 using System.Linq;
 using Rocket.Core.Extensions;
+using Rocket.Logging;
 
 namespace Rocket.Unturned.Events
 {
@@ -133,7 +133,7 @@ namespace Rocket.Unturned.Events
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex,"Failed to receive packet \""+W+"\"");
+                Logger.Error("Failed to receive packet \""+W+"\"",ex);
             }
         }
 
@@ -267,7 +267,7 @@ namespace Rocket.Unturned.Events
                     }
                     catch (Exception ex)
                     {
-                        Logger.LogException(ex);
+                        Logger.Error(ex);
                     }
                 }
             }

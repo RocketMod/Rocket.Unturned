@@ -1,5 +1,4 @@
 ﻿using Rocket.Core;
-using Rocket.Core.Logging;
 using Rocket.Unturned.Events;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
@@ -9,7 +8,7 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using Rocket.API;
-using Rocket.Core.Utils;
+using Rocket.API.Commands;
 
 namespace Rocket.Unturned.Commands
 {
@@ -19,7 +18,7 @@ namespace Rocket.Unturned.Commands
         {
             foreach(Command vanillaCommand in Commander.Commands)
             {
-                R.Commands.Register(new UnturnedVanillaCommand(vanillaCommand),vanillaCommand.command.ToLower(),Core.Serialization.CommandPriority.Low);
+                R.Instance.AddNativeCommand(new UnturnedVanillaCommand(vanillaCommand));
             }
         }
 

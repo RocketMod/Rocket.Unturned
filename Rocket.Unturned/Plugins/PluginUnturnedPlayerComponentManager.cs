@@ -1,7 +1,8 @@
 ﻿using Rocket.API;
 using Rocket.API.Extensions;
-using Rocket.Core.Logging;
-using Rocket.Core.Utils;
+using Rocket.API.Plugins;
+using Rocket.Core.Extensions;
+using Rocket.Logging;
 using Rocket.Unturned.Events;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
@@ -24,7 +25,7 @@ namespace Rocket.Unturned.Plugins
             {
                 U.Events.OnPlayerConnected -= addPlayerComponents;
                 unturnedPlayerComponents = unturnedPlayerComponents.Where(p => p.Assembly != assembly).ToList();
-                List<Type> playerComponents = RocketHelper.GetTypesFromParentClass(assembly, typeof(UnturnedPlayerComponent));
+                List<Type> playerComponents = assembly.GetTypesFromParentClass(typeof(UnturnedPlayerComponent));
                 foreach (Type playerComponent in playerComponents)
                 {
                     //Provider.Players.ForEach(p => p.Player.gameObject.TryRemoveComponent(playerComponent.GetType()));
@@ -32,7 +33,7 @@ namespace Rocket.Unturned.Plugins
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                Logger.Error(ex);
             }
         }
 
@@ -44,17 +45,17 @@ namespace Rocket.Unturned.Plugins
                 assembly = plugin.GetType().Assembly;
 
                 U.Events.OnBeforePlayerConnected += addPlayerComponents;
-                unturnedPlayerComponents.AddRange(RocketHelper.GetTypesFromParentClass(assembly, typeof(UnturnedPlayerComponent)));
+                unturnedPlayerComponents.AddRange(assembly.GetTypesFromParentClass(typeof(UnturnedPlayerComponent)));
 
                 foreach (Type playerComponent in unturnedPlayerComponents)
                 {
-                    Logger.Log("Adding UnturnedPlayerComponent: "+playerComponent.Name);
+                    Logger.Info("Adding UnturnedPlayerComponent: "+playerComponent.Name);
                     //Provider.Players.ForEach(p => p.Player.gameObject.TryAddComponent(playerComponent.GetType()));
                 }
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                Logger.Error(ex);
             }
         }
 

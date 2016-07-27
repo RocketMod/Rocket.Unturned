@@ -1,6 +1,8 @@
 ﻿using Rocket.API;
+using Rocket.API.Commands;
+using Rocket.API.Exceptions;
 using Rocket.API.Extensions;
-using Rocket.Core.Logging;
+using Rocket.Logging;
 using Rocket.Unturned.Chat;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
@@ -85,7 +87,7 @@ namespace Rocket.Unturned.Commands
 
             if (VehicleTool.giveVehicle(player.Player, id.Value))
             {
-                Logger.Log(U.Translate("command_v_giving_console", player.CharacterName, id));
+                Logger.Warn(U.Translate("command_v_giving_console", player.CharacterName, id));
                 UnturnedChat.Say(caller, U.Translate("command_v_giving_private", assetName, id));
             }
             else

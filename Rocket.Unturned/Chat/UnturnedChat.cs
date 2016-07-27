@@ -1,5 +1,4 @@
 ﻿using Rocket.Core;
-using Rocket.Core.Logging;
 using Rocket.Unturned.Events;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
@@ -9,6 +8,7 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using Rocket.API;
+using Rocket.Logging;
 
 namespace Rocket.Unturned.Chat
 {
@@ -30,7 +30,7 @@ namespace Rocket.Unturned.Chat
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                Logger.Error(ex);
             }
             cancel = !cancel;
             incomingColor = color;
@@ -95,7 +95,7 @@ namespace Rocket.Unturned.Chat
 
         public static void Say(string message,Color color)
         {
-            Logger.Log("Broadcast: " + message, ConsoleColor.Gray);
+            Logger.Info("Broadcast: " + message);
             foreach (string m in wrapMessage(message))
             {
                 ChatManager.Instance.SteamChannel.send("tellChat", ESteamCall.OTHERS, ESteamPacket.UPDATE_UNRELIABLE_BUFFER, new object[] { CSteamID.Nil, (byte)EChatMode.GLOBAL,color, m });
@@ -111,7 +111,7 @@ namespace Rocket.Unturned.Chat
         {
             if (player is ConsolePlayer)
             {
-                Logger.Log(message, ConsoleColor.Gray);
+                Logger.Info(message);
             }
             else
             {
@@ -128,7 +128,7 @@ namespace Rocket.Unturned.Chat
         {
             if (CSteamID == null || CSteamID.ToString() == "0")
             {
-                Logger.Log(message, ConsoleColor.Gray);
+                Logger.Info(message);
             }
             else
             {   

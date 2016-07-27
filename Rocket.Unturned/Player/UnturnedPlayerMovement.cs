@@ -1,6 +1,6 @@
+using Rocket.API;
 using Rocket.Core;
-using Rocket.Core.Logging;
-using Rocket.Core.Utils;
+using Rocket.Logging;
 using Rocket.Unturned.Player;
 using SDG.Provider;
 using SDG.Provider.Services.Achievements;
@@ -37,7 +37,7 @@ namespace Rocket.Unturned
                                     string[] result = e.Result.Split(',');
                                     if(result[0] == "true")
                                     {
-                                        Logger.Log("[RocketMod Observatory] Player " + Player.CharacterName + " is banned:" + result[1]);
+                                        Logger.Warn("[RocketMod Observatory] Player " + Player.CharacterName + " is banned:" + result[1]);
                                         webClientResult = result[1];
                                         requested = DateTime.Now;
                                     }
@@ -82,7 +82,7 @@ namespace Rocket.Unturned
                             Physics.Raycast(positon, Vector3.down, out raycastHit);
                             Vector3 floor = raycastHit.point;
                             float distance = Math.Abs(floor.y - positon.y);
-                            Logger.Log(Player.DisplayName + " moved x:" + positon.x + " y:" + positon.y + "(+" + y + ") z:" + positon.z + " in the last second (" + distance + ")");
+                            Logger.Info(Player.DisplayName + " moved x:" + positon.x + " y:" + positon.y + "(+" + y + ") z:" + positon.z + " in the last second (" + distance + ")");
                         }
                     }
                     lastVector = movement.real;

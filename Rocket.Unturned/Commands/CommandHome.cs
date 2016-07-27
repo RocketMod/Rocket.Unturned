@@ -1,4 +1,6 @@
 ﻿using Rocket.API;
+using Rocket.API.Commands;
+using Rocket.API.Exceptions;
 using Rocket.Unturned.Chat;
 using Rocket.Unturned.Player;
 using SDG.Unturned;

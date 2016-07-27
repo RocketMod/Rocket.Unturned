@@ -1,5 +1,6 @@
 ﻿using Rocket.API;
-using Rocket.Core.Logging;
+using Rocket.API.Commands;
+using Rocket.Logging;
 using Rocket.Unturned.Chat;
 using Rocket.Unturned.Player;
 using System.Collections.Generic;
@@ -46,13 +47,13 @@ namespace Rocket.Unturned.Commands
             UnturnedPlayer player = (UnturnedPlayer)caller;
             if (player.Features.VanishMode)
             {
-                Logger.Log(U.Translate("command_vanish_disable_console", player.CharacterName));
+                Logger.Info(U.Translate("command_vanish_disable_console", player.CharacterName));
                 UnturnedChat.Say(caller, U.Translate("command_vanish_disable_private"));
                 player.Features.VanishMode = false;
             }
             else
             {
-                Logger.Log(U.Translate("command_vanish_enable_console", player.CharacterName));
+                Logger.Info(U.Translate("command_vanish_enable_console", player.CharacterName));
                 UnturnedChat.Say(caller, U.Translate("command_vanish_enable_private"));
                 player.Features.VanishMode = true;
             }

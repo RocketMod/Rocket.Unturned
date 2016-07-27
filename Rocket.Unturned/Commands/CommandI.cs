@@ -1,11 +1,13 @@
-﻿using Rocket.Core.Logging;
-using Rocket.Unturned.Player;
+﻿using Rocket.Unturned.Player;
 using SDG.Unturned;
 using System;
 using System.Collections.Generic;
 using Rocket.API;
 using Rocket.Unturned.Chat;
 using Rocket.Unturned.Items;
+using Rocket.API.Exceptions;
+using Rocket.API.Commands;
+using Rocket.Logging;
 
 namespace Rocket.Unturned.Commands
 {
@@ -81,7 +83,7 @@ namespace Rocket.Unturned.Commands
 
             if (player.GiveItem(id, amount))
             {
-                Logger.Log(U.Translate("command_i_giving_console", player.DisplayName, id, amount));
+                Logger.Info(U.Translate("command_i_giving_console", player.DisplayName, id, amount));
                 UnturnedChat.Say(player, U.Translate("command_i_giving_private", amount, assetName, id));
             }
             else

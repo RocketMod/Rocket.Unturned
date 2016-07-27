@@ -1,5 +1,7 @@
 ﻿using Rocket.API;
-using Rocket.Core.Logging;
+using Rocket.API.Commands;
+using Rocket.API.Exceptions;
+using Rocket.Logging;
 using Rocket.Unturned.Chat;
 using Rocket.Unturned.Player;
 using System.Collections.Generic;
@@ -54,7 +56,7 @@ namespace Rocket.Unturned.Commands
             if (otherPlayer!=null && otherPlayer != caller)
             {
                 otherPlayer.Teleport(player);
-                Logger.Log(U.Translate("command_tphere_teleport_console", otherPlayer.CharacterName, player.CharacterName));
+                Logger.Info(U.Translate("command_tphere_teleport_console", otherPlayer.CharacterName, player.CharacterName));
                 UnturnedChat.Say(caller, U.Translate("command_tphere_teleport_from_private", otherPlayer.CharacterName));
                 UnturnedChat.Say(otherPlayer, U.Translate("command_tphere_teleport_to_private", player.CharacterName));
             }

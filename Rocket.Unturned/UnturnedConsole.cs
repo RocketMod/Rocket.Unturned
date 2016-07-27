@@ -2,8 +2,8 @@
 using System.IO;
 using System.Threading;
 using UnityEngine;
-using Rocket.Core.Logging;
 using SDG.Unturned;
+using Rocket.Logging;
 
 namespace Rocket.Unturned
 {
@@ -29,7 +29,7 @@ namespace Rocket.Unturned
             }
             catch (Exception ex)
             {
-                Logger.Log("Error: " + ex.ToString());
+                Logger.Error(ex);
             }
         }
 
@@ -57,7 +57,7 @@ namespace Rocket.Unturned
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogException(ex);
+                    Logger.Error(ex);
                 }
                 }
             while (true);
