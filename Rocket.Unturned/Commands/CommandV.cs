@@ -91,7 +91,21 @@ namespace Rocket.Unturned.Commands
             else
             {
                 UnturnedChat.Say(caller, U.Translate("command_v_giving_failed_private", assetName, id));
+            
+            }
+            {
+            VehicleAsset Spawn = null;
+                        if (id != null)
+                        {
+                            Spawn = Assets.find(EAssetType.VEHICLE, id.Value) as VehicleAsset;
+                        }
+
+                        if (Spawn == null)
+                        {
+                        Logger.Log(U.Translate("command_v_not_found", command.GetStringParameter(0)));
+                        UnturnedChat.Say(caller, U.Translate("command_v_not_found", command.GetStringParameter(0)));
+                        }
+                }
             }
         }
     }
-}
