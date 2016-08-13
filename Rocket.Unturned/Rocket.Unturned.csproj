@@ -86,7 +86,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\UnturnedCommands.cs" />
+    <Compile Include="Commands\UnturnedVanillaCommand.cs" />
     <Compile Include="Commands\UnturnedCommandExtensions.cs" />
     <Compile Include="Player\UnturnedPlayerMovement.cs" />
     <Compile Include="Skills\UnturnedSkill.cs" />
@@ -96,7 +96,6 @@
     <Compile Include="Commands\CommandCompass.cs" />
     <Compile Include="Commands\CommandEffect.cs" />
     <Compile Include="Commands\CommandGod.cs" />
-    <Compile Include="Commands\CommandHeal.cs" />
     <Compile Include="Commands\CommandHome.cs" />
     <Compile Include="Commands\CommandI.cs" />
     <Compile Include="Commands\CommandInvestigate.cs" />
@@ -104,7 +103,6 @@
     <Compile Include="Commands\CommandTphere.cs" />
     <Compile Include="Commands\CommandUnadmin.cs" />
     <Compile Include="Commands\CommandV.cs" />
-    <Compile Include="Commands\CommandVanish.cs" />
     <Compile Include="Enumerations\InventoryGroup.cs" />
     <Compile Include="Events\UnturnedPlayerEvents.cs" />
     <Compile Include="Events\UnturnedEvents.cs" />

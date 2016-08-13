@@ -222,7 +222,7 @@ namespace Rocket.Unturned.Player
             Provider.kick(this.CSteamID, reason);
         }
 
-        public void Ban(string reason, uint duration)
+        public void Ban(string reason, uint duration = 0)
         {
             Provider.ban(this.CSteamID, reason, duration);
         }
@@ -260,30 +260,7 @@ namespace Rocket.Unturned.Player
 
         public void Teleport(Vector3 position, float rotation)
         {
-            if (VanishMode)
-            {
-                player.SteamChannel.send("askTeleport", ESteamCall.OWNER, ESteamPacket.UPDATE_RELIABLE_BUFFER, position, MeasurementTool.angleToByte(rotation));
-                player.SteamChannel.send("askTeleport", ESteamCall.NOT_OWNER, ESteamPacket.UPDATE_RELIABLE_BUFFER, new Vector3(position.y, position.y + 1337, position.z), MeasurementTool.angleToByte(rotation));
-                player.SteamChannel.send("askTeleport", ESteamCall.SERVER, ESteamPacket.UPDATE_RELIABLE_BUFFER, position, MeasurementTool.angleToByte(rotation));
-            }
-            else
-            {
-                player.SteamChannel.send("askTeleport", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER, position, MeasurementTool.angleToByte(rotation));
-            }
-        }
-
-        public bool VanishMode
-        {
-            get
-            {
-                UnturnedPlayerFeatures features = player.GetComponent<UnturnedPlayerFeatures>();
-                return features.VanishMode;
-            }
-            set
-            {
-                UnturnedPlayerFeatures features = player.GetComponent<UnturnedPlayerFeatures>();
-                features.VanishMode = value;
-            }
+            player.SteamChannel.send("askTeleport", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER, position, MeasurementTool.angleToByte(rotation));
         }
 
         public bool GodMode

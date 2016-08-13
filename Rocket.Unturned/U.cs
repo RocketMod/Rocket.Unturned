@@ -19,6 +19,8 @@ using System.Reflection;
 using UnityEngine;
 using Rocket.API.Chat;
 using System.Collections.ObjectModel;
+using Rocket.API.Commands;
+using System.Collections.Generic;
 
 namespace Rocket.Unturned
 {
@@ -111,10 +113,8 @@ namespace Rocket.Unturned
         public static XMLFileAsset<UnturnedSettings> Settings;
         public static XMLFileAsset<TranslationList> Translation;
 
-        public IRocketImplementationEvents ImplementationEvents { get { return Events; } }
         public static UnturnedEvents Events;
 
-        public event RocketImplementationInitialized OnRocketImplementationInitialized;
         public event ImplementationInitialized OnInitialized;
         public event ImplementationShutdown OnShutdown;
         public event ImplementationReload OnReload;
@@ -122,6 +122,32 @@ namespace Rocket.Unturned
         public static string Translate(string translationKey, params object[] placeholder)
         {
             return Translation.Instance.Translate(translationKey, placeholder);
+        }
+
+        public ReadOnlyCollection<IRocketCommand> GetCommands()
+        {
+            List<IRocketCommand> commands = new List<IRocketCommand>()
+            {
+                new Commands.CommandAdmin(),
+                new Commands.CommandBroadcast(),
+                new Commands.CommandCompass(),
+                new Commands.CommandEffect(),
+                new Commands.CommandGod(),
+                new Commands.CommandHome(),
+                new Commands.CommandI(),
+                new Commands.CommandInvestigate(),
+                new Commands.CommandTp(),
+                new Commands.CommandTphere(),
+                new Commands.CommandUnadmin(),
+                new Commands.CommandV()
+            };
+
+            foreach (Command vanillaCommand in Commander.Commands)
+            {
+                commands.Add(new UnturnedVanillaCommand(vanillaCommand));
+            }
+
+            return commands.AsReadOnly();
         }
 
 #if LINUX
@@ -139,7 +165,7 @@ namespace Rocket.Unturned
             System.Console.ForegroundColor = ConsoleColor.Cyan;
             System.Console.WriteLine("Rocket Unturned v" + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " for Unturned v" + Provider.Version + "\n");
 
-            R.OnRockedInitialized += () =>
+            R.Instance.OnInitialized += () =>
             {
                 Instance.Initialize();
             };
@@ -167,29 +193,25 @@ namespace Rocket.Unturned
                 Events = gameObject.TryAddComponent<UnturnedEvents>();
                 
                 gameObject.TryAddComponent<UnturnedChat>();
-                gameObject.TryAddComponent<UnturnedCommands>();
-                
 
-                RocketPlugin.OnPluginLoading += (IRocketPlugin plugin, ref bool cancelLoading) =>
+
+                RocketPluginBase.OnPluginsLoading += (RocketPluginBase plugin, ref bool cancelLoading) =>
                 {
                     try
                     {
-                        plugin.TryAddComponent<PluginUnturnedPlayerComponentManager>();
+                        plugin.gameObject.TryAddComponent<PluginUnturnedPlayerComponentManager>();
                     }
                     catch (Exception ex)
                     {
-                        Logger.LogException(ex, "Failed to load plugin " + plugin.Name + ".");
+                        Logger.Fatal("Failed to load plugin " + plugin.Name + ".",ex);
                         cancelLoading = true;
                     }
                 };
 
-                RocketPlugin.OnPluginUnloading += (IRocketPlugin plugin) =>
+                RocketPluginBase.OnPluginsUnloading += (RocketPluginBase plugin) =>
                 {
-                    plugin.TryRemoveComponent<PluginUnturnedPlayerComponentManager>();
+                    plugin.gameObject.TryRemoveComponent<PluginUnturnedPlayerComponentManager>();
                 };
-
-                R.Commands.RegisterFromAssembly(Assembly.GetExecutingAssembly());
-
 
                 try
                 {
@@ -203,7 +225,7 @@ namespace Rocket.Unturned
                     Logger.Error("Steam can not be initialized: " + ex.Message);
                 }
 
-                OnRocketImplementationInitialized.TryInvoke();
+                OnInitialized.TryInvoke();
 
             }
             catch (Exception ex)

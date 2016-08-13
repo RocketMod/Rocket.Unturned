@@ -8,7 +8,7 @@ using Rocket.API.Extensions;
 
 namespace Rocket.Unturned.Events
 {
-    public sealed class UnturnedEvents : MonoBehaviour, IRocketImplementationEvents
+    public sealed class UnturnedEvents : MonoBehaviour
     {
         private static UnturnedEvents Instance;
         private void Awake()
