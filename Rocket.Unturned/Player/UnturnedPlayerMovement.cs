@@ -41,10 +41,12 @@ namespace Rocket.Unturned
                                         Logger.Log("[RocketMod Observatory] Kicking Player " + Player.CharacterName + "because he is banned:" + result[1]);
                                         webClientResult = result[1];
                                         requested = DateTime.Now;
+                                        Player.Kick("you are banned from observatory: " + result[1]);
                                     }
                                     else if (U.Settings.Instance.RocketModObservatory.KickLimitedAccounts && result.Length >= 2 && result[1] == "true")
                                     {
                                         Logger.Log("[RocketMod Observatory] Kicking Player " + Player.CharacterName + " because his account is limited");
+                                        Player.Kick("your Steam account is limited");
                                     }
                                     else if (U.Settings.Instance.RocketModObservatory.KickTooYoungAccounts && result.Length == 3 && long.TryParse(result[2].ToString(),out age))
                                     {
@@ -54,9 +56,8 @@ namespace Rocket.Unturned
                                         if (d < U.Settings.Instance.RocketModObservatory.MinimumAge)
                                         {
                                             Logger.Log("[RocketMod Observatory] Kicking Player " + Player.CharacterName + " because his account is younger then "+ U.Settings.Instance.RocketModObservatory.MinimumAge+" seconds ("+d+" seconds)");
+                                            Player.Kick("your Steam account is not old enough");
                                         } 
-
-                                        Logger.Log("[RocketMod Observatory] Kicking Player " + Player.CharacterName + " because his account is limited");
                                     }
                                 }
                             }
