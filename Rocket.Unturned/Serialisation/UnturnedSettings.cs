@@ -4,7 +4,7 @@ using System;
 
 namespace Rocket.Unturned.Serialisation
 {
-    public sealed class AutomaticSave
+    public sealed class AutomaticSaveSettings
     {
         [XmlAttribute]
         public bool Enabled = true;
@@ -13,13 +13,28 @@ namespace Rocket.Unturned.Serialisation
         public int Interval = 1800;
     }
 
-    public class UnturnedSettings : IDefaultable
+    public sealed class RocketModObservatorySettings
     {
-        [XmlElement("CommunityBans")]
+        [XmlAttribute]
         public bool CommunityBans = true;
 
+        [XmlAttribute]
+        public bool KickLimitedAccounts = true;
+
+        [XmlAttribute]
+        public bool KickTooYoungAccounts = true;
+
+        [XmlAttribute]
+        public ulong MinimumAge = 604800;
+    }
+
+    public class UnturnedSettings : IDefaultable
+    {
+        [XmlElement("RocketModObservatory")]
+        public RocketModObservatorySettings RocketModObservatory = new RocketModObservatorySettings();
+
         [XmlElement("AutomaticSave")]
-        public AutomaticSave AutomaticSave = new AutomaticSave();
+        public AutomaticSaveSettings AutomaticSave = new AutomaticSaveSettings();
 
         [XmlElement("CharacterNameValidation")]
         public bool CharacterNameValidation = false;
@@ -31,8 +46,8 @@ namespace Rocket.Unturned.Serialisation
 
         public void LoadDefaults()
         {
-            AutomaticSave = new AutomaticSave();
-            CommunityBans = true;
+            AutomaticSave = new AutomaticSaveSettings();
+            RocketModObservatory = new RocketModObservatorySettings();
             CharacterNameValidation = true;
             CharacterNameValidationRule = @"([\x00-\xAA]|[\w_\ \.\+\-])+";
             LogSuspiciousPlayerMovement = true;

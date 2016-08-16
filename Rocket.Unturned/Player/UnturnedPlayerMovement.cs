@@ -23,7 +23,7 @@ namespace Rocket.Unturned
 
         private void OnEnable()
         {
-            if (U.Settings.Instance.CommunityBans)
+            if (U.Settings.Instance.RocketModObservatory.CommunityBans)
             {
                 using (RocketWebClient webClient = new RocketWebClient())
                 {
@@ -35,11 +35,28 @@ namespace Rocket.Unturned
                             {
                                 if (e.Result.Contains(",")){
                                     string[] result = e.Result.Split(',');
-                                    if(result[0] == "true")
+                                    long age;
+                                    if (result[0] == "true")
                                     {
-                                        Logger.Log("[RocketMod Observatory] Player " + Player.CharacterName + " is banned:" + result[1]);
+                                        Logger.Log("[RocketMod Observatory] Kicking Player " + Player.CharacterName + "because he is banned:" + result[1]);
                                         webClientResult = result[1];
                                         requested = DateTime.Now;
+                                    }
+                                    else if (U.Settings.Instance.RocketModObservatory.KickLimitedAccounts && result.Length >= 2 && result[1] == "true")
+                                    {
+                                        Logger.Log("[RocketMod Observatory] Kicking Player " + Player.CharacterName + " because his account is limited");
+                                    }
+                                    else if (U.Settings.Instance.RocketModObservatory.KickTooYoungAccounts && result.Length == 3 && long.TryParse(result[2].ToString(),out age))
+                                    {
+                                        long epochTicks = new DateTime(1970, 1, 1).Ticks;
+                                        long unixTime = ((DateTime.UtcNow.Ticks - epochTicks) / TimeSpan.TicksPerSecond);
+                                        ulong d = (unixTime - age);
+                                        if (d < U.Settings.Instance.RocketModObservatory.MinimumAge)
+                                        {
+                                            Logger.Log("[RocketMod Observatory] Kicking Player " + Player.CharacterName + " because his account is younger then "+ U.Settings.Instance.RocketModObservatory.MinimumAge+" seconds ("+d+" seconds)");
+                                        } 
+
+                                        Logger.Log("[RocketMod Observatory] Kicking Player " + Player.CharacterName + " because his account is limited");
                                     }
                                 }
                             }
