@@ -80,8 +80,4 @@ namespace Rocket.Unturned.Commands
             Commander.commands.Where(c => c.command == Name).FirstOrDefault()?.check(id, Name, String.Join("/", command));
         }
     }
-
-
-
-
 }
