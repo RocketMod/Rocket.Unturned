@@ -25,7 +25,7 @@ namespace Rocket.Unturned.Serialisation
         public bool KickTooYoungAccounts = true;
 
         [XmlAttribute]
-        public ulong MinimumAge = 604800;
+        public long MinimumAge = 604800;
     }
 
     public class UnturnedSettings : IDefaultable

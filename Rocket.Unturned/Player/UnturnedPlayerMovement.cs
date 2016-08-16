@@ -50,7 +50,7 @@ namespace Rocket.Unturned
                                     {
                                         long epochTicks = new DateTime(1970, 1, 1).Ticks;
                                         long unixTime = ((DateTime.UtcNow.Ticks - epochTicks) / TimeSpan.TicksPerSecond);
-                                        ulong d = (unixTime - age);
+                                        long d = (unixTime - age);
                                         if (d < U.Settings.Instance.RocketModObservatory.MinimumAge)
                                         {
                                             Logger.Log("[RocketMod Observatory] Kicking Player " + Player.CharacterName + " because his account is younger then "+ U.Settings.Instance.RocketModObservatory.MinimumAge+" seconds ("+d+" seconds)");
