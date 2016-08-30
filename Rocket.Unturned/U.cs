@@ -135,7 +135,7 @@ namespace Rocket.Unturned
 #endif
             System.Console.Clear();
             System.Console.ForegroundColor = ConsoleColor.Cyan;
-            System.Console.WriteLine("Rocket Unturned v" + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " for Unturned v" + Provider.Version + "\n");
+            System.Console.WriteLine("Rocket Unturned v" + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " for Unturned v" + Provider.APP_VERSION + "\n");
 
             R.OnRockedInitialized += () =>
             {
