@@ -50,7 +50,7 @@ namespace Rocket.Unturned.Commands
         {
             if (command.Length == 0)
             {
-                UnturnedChat.Say(caller, "Rocket v" + Assembly.GetExecutingAssembly().GetName().Version + " for Unturned v" + Provider.Version);
+                UnturnedChat.Say(caller, "Rocket v" + Assembly.GetExecutingAssembly().GetName().Version + " for Unturned v" + Provider.APP_VERSION);
                 UnturnedChat.Say(caller, "https://rocket.foundation - 2015");
                 return;
             }
