@@ -65,6 +65,7 @@
     </Reference>
     <Reference Include="Rocket.Logging">
       <HintPath>lib\Rocket.Logging.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -91,7 +92,6 @@
     <Compile Include="Player\UnturnedPlayerMovement.cs" />
     <Compile Include="Skills\UnturnedSkill.cs" />
     <Compile Include="Chat\UnturnedChat.cs" />
-    <Compile Include="Commands\CommandAdmin.cs" />
     <Compile Include="Commands\CommandBroadcast.cs" />
     <Compile Include="Commands\CommandCompass.cs" />
     <Compile Include="Commands\CommandEffect.cs" />
@@ -101,7 +101,6 @@
     <Compile Include="Commands\CommandInvestigate.cs" />
     <Compile Include="Commands\CommandTp.cs" />
     <Compile Include="Commands\CommandTphere.cs" />
-    <Compile Include="Commands\CommandUnadmin.cs" />
     <Compile Include="Commands\CommandV.cs" />
     <Compile Include="Enumerations\InventoryGroup.cs" />
     <Compile Include="Events\UnturnedPlayerEvents.cs" />
@@ -109,7 +108,6 @@
     <Compile Include="Extensions\SteamPlayerExtension.cs" />
     <Compile Include="Environment.cs" />
     <Compile Include="Permissions\UnturnedPermissions.cs" />
-    <Compile Include="UnturnedConsole.cs" />
     <Compile Include="Interface.cs" />
     <Compile Include="UI.cs" />
     <Compile Include="U.cs" />
@@ -132,10 +130,6 @@
     <None Include="Scripts\Windows\start.bat" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="dev\Game.exe" />
-    <Content Include="dev\Mono.Cecil.dll" />
-    <Content Include="dev\Mono.CompilerServices.SymbolWriter.dll" />
-    <Content Include="dev\pdb2mdb.exe" />
     <Content Include="lib\Assembly-CSharp-firstpass.dll" />
     <Content Include="lib\Assembly-CSharp.dll" />
     <Content Include="lib\Rocket.API.dll" />
@@ -147,11 +141,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if $(ConfigurationName) == Local (
-$(SolutionDir)Rocket.Unturned\dev\pdb2mdb.exe $(TargetPath)
-@echo listen 803286173 1 1 &gt; $(TargetDir)..\PlayerConnectionConfigFile
-copy $(SolutionDir)Rocket.Unturned\dev\Game.exe $(TargetDir)..\..\Unturned.exe
-)</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <Target Name="AfterBuild" Condition="'$(Configuration)' == 'Release'">
     <GetAssemblyIdentity AssemblyFiles="$(TargetPath)">

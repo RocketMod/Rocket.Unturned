@@ -128,7 +128,6 @@ namespace Rocket.Unturned
         {
             List<IRocketCommand> commands = new List<IRocketCommand>()
             {
-                new Commands.CommandAdmin(),
                 new Commands.CommandBroadcast(),
                 new Commands.CommandCompass(),
                 new Commands.CommandEffect(),
@@ -138,7 +137,6 @@ namespace Rocket.Unturned
                 new Commands.CommandInvestigate(),
                 new Commands.CommandTp(),
                 new Commands.CommandTphere(),
-                new Commands.CommandUnadmin(),
                 new Commands.CommandV()
             };
 
