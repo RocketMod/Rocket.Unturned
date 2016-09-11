@@ -29,7 +29,7 @@ namespace Rocket.Unturned
             }
             catch (Exception ex)
             {
-                Logger.Log("Error: " + ex.ToString());
+                Core.Logging.Logger.Log("Error: " + ex.ToString());
             }
         }
 
@@ -57,7 +57,7 @@ namespace Rocket.Unturned
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogException(ex);
+                    Core.Logging.Logger.LogException(ex);
                 }
                 }
             while (true);

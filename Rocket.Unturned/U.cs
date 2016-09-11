@@ -179,7 +179,7 @@ namespace Rocket.Unturned
                     }
                     catch (Exception ex)
                     {
-                        Logger.LogException(ex, "Failed to load plugin " + plugin.Name + ".");
+                        Core.Logging.Logger.LogException(ex, "Failed to load plugin " + plugin.Name + ".");
                         cancelLoading = true;
                     }
                 };
@@ -204,7 +204,7 @@ namespace Rocket.Unturned
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogError("Steam can not be initialized: " + ex.Message);
+                    Core.Logging.Logger.LogError("Steam can not be initialized: " + ex.Message);
                 }
 
                 OnRocketImplementationInitialized.TryInvoke();
@@ -212,7 +212,7 @@ namespace Rocket.Unturned
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                Core.Logging.Logger.LogException(ex);
             }
         }
         

@@ -72,7 +72,7 @@ namespace Rocket.Unturned.Permissions
                     }
                     catch (Exception ex)
                     {
-                        Logger.LogException(ex);
+                        Core.Logging.Logger.LogException(ex);
                     }
                 }
             }

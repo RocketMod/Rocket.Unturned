@@ -23,13 +23,13 @@ namespace Rocket.Unturned.Utils
             {
                 if(U.Settings.Instance.AutomaticSave.Interval < interval)
                 {
-                    Logger.LogError("AutomaticSave interval must be atleast 30 seconds, changed to 30 seconds");
+                    Core.Logging.Logger.LogError("AutomaticSave interval must be atleast 30 seconds, changed to 30 seconds");
                 }
                 else
                 {
                     interval = U.Settings.Instance.AutomaticSave.Interval;
                 }
-                Logger.Log(String.Format("This server will automatically save every {0} seconds", interval));
+                Core.Logging.Logger.Log(String.Format("This server will automatically save every {0} seconds", interval));
                 restartTimer();
             }
         }
@@ -47,7 +47,7 @@ namespace Rocket.Unturned.Utils
                 {
                     if (nextSaveTime.Value < DateTime.Now)
                     {
-                        Logger.Log("Saving server");
+                        Core.Logging.Logger.Log("Saving server");
                         restartTimer();
                         SaveManager.save();
                     }
@@ -55,7 +55,7 @@ namespace Rocket.Unturned.Utils
             }
             catch (Exception er)
             {
-                Logger.LogException(er);
+                Core.Logging.Logger.LogException(er);
             }
         }
     }

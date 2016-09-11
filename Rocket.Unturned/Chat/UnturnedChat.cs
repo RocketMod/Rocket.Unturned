@@ -30,7 +30,7 @@ namespace Rocket.Unturned.Chat
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                Core.Logging.Logger.LogException(ex);
             }
             cancel = !cancel;
             incomingColor = color;
@@ -95,7 +95,7 @@ namespace Rocket.Unturned.Chat
 
         public static void Say(string message,Color color)
         {
-            Logger.Log("Broadcast: " + message, ConsoleColor.Gray);
+            Core.Logging.Logger.Log("Broadcast: " + message, ConsoleColor.Gray);
             foreach (string m in wrapMessage(message))
             {
                 ChatManager.Instance.SteamChannel.send("tellChat", ESteamCall.OTHERS, ESteamPacket.UPDATE_UNRELIABLE_BUFFER, new object[] { CSteamID.Nil, (byte)EChatMode.GLOBAL,color, m });
@@ -111,7 +111,7 @@ namespace Rocket.Unturned.Chat
         {
             if (player is ConsolePlayer)
             {
-                Logger.Log(message, ConsoleColor.Gray);
+                Core.Logging.Logger.Log(message, ConsoleColor.Gray);
             }
             else
             {
@@ -128,7 +128,7 @@ namespace Rocket.Unturned.Chat
         {
             if (CSteamID == null || CSteamID.ToString() == "0")
             {
-                Logger.Log(message, ConsoleColor.Gray);
+                Core.Logging.Logger.Log(message, ConsoleColor.Gray);
             }
             else
             {   

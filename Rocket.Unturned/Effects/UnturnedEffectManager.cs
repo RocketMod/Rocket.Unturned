@@ -81,7 +81,7 @@ namespace Rocket.Unturned.Effects
             bool global = q.readBoolean("Global");
             effects.Add(new UnturnedEffect(s, k, global));
 
-            Logger.Log("Registering effect: " + s + " (" + k + ")");
+            Core.Logging.Logger.Log("Registering effect: " + s + " (" + k + ")");
         }
     
 

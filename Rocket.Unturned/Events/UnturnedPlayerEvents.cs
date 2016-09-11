@@ -133,7 +133,7 @@ namespace Rocket.Unturned.Events
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex,"Failed to receive packet \""+W+"\"");
+                Core.Logging.Logger.LogException(ex,"Failed to receive packet \""+W+"\"");
             }
         }
 
@@ -267,7 +267,7 @@ namespace Rocket.Unturned.Events
                     }
                     catch (Exception ex)
                     {
-                        Logger.LogException(ex);
+                        Core.Logging.Logger.LogException(ex);
                     }
                 }
             }

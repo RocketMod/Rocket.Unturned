@@ -32,7 +32,7 @@ namespace Rocket.Unturned.Plugins
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                Core.Logging.Logger.LogException(ex);
             }
         }
 
@@ -48,13 +48,13 @@ namespace Rocket.Unturned.Plugins
 
                 foreach (Type playerComponent in unturnedPlayerComponents)
                 {
-                    Logger.Log("Adding UnturnedPlayerComponent: "+playerComponent.Name);
+                    Core.Logging.Logger.Log("Adding UnturnedPlayerComponent: "+playerComponent.Name);
                     //Provider.Players.ForEach(p => p.Player.gameObject.TryAddComponent(playerComponent.GetType()));
                 }
             }
             catch (Exception ex)
             {
-                Logger.LogException(ex);
+                Core.Logging.Logger.LogException(ex);
             }
         }
 
