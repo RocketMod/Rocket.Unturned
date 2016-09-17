@@ -34,9 +34,10 @@ ASSEMBLIES=( "Rocket.API.dll" "Rocket.Core.dll" "Rocket.Unturned.dll" "Assembly.
 for i in "${ASSEMBLIES[@]}"
 do
 	if [ -f ../$i ]; then
-		if diff ../$i $UNTURNED_HOME/Unturned_Data/Managed/$i >/dev/null ; then
+		if diff ../$i $UNTURNED_HOME/Unturned_Headless_Data/Managed/$i >/dev/null ; then
 			printf "Updating "$i": ${GREEN}UP TO DATE${NC}\n\n"
 		else
+			cp ../$i $UNTURNED_HOME/Unturned_Headless_Data/Managed/$i
 			mv ../$i $UNTURNED_HOME/Unturned_Data/Managed/$i
 			printf "Updating "$i": ${YELLLOW}UPDATING${NC}\n\n"
 		fi
