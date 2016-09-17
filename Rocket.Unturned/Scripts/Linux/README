@@ -24,32 +24,19 @@ apt-get install libc6:i386 libgl1-mesa-glx:i386 libxcursor1:i386 libxrandr2:i386
 ## Steps to install
 
 1. Install the prerequisites (Shown in the recipe above)
-2. Copy the scripts "start.sh" and "update.sh" in the root of the folder you want your Unturned 3 environment in
-    The scripts will by default create a new hierarchy that looks like this:
+2. Copy the contents of the linux download in the root of the folder you want your Unturned 3 environment in
+    The scripts will create a hierarhy like this:
          ~/
+            Scripts/
+            Steam/
             unturned/
             steamcmd/
 3. Fix permissions and run the update script to install Unturned 3
+    cd ~/Scripts
     chmod 755 update.sh
     chmod 755 start.sh
     ./update.sh <steam username> <steam password>
     #Note: To make sure Steam Guard is not bugging you better create a new Steam account and disable Steam Guard
-4. Install Rocket
-    Download the latest Rocket for Linux and place all assemblies (*.dll) into  ~/unturned/Unturned_Headless_Data/Managed/ and the RocketLauncher.exe into ~/unturned/ so that the new hierarchy looks like this:
-        ~/
-            unturned/
-                    ...
-                    RocketLauncher.exe
-                    Unturned_Headless_Data/
-                                ...
-                                 Managed/
-                                        ...
-                                        Assembly-CSharp.dll
-                                        Rocket.API.dll
-                                        Rocket.Core.dll
-                                        Rocket.Unturned.dll
-            steamcmd/
-
 ## Steps to start
 1. Start Steam if not already running 
     screen -S Steam steam
