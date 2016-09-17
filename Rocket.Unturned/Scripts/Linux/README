@@ -6,7 +6,7 @@ If you figure how to install Rocket on another distro or UNIX/Mac then feel free
 to extend this file at https://github.com/RocketMod/Rocket.Unturned/new/master/Scripts/Linux/README
 
 
-## Recipe for Ubuntu 12.04 LTS / Ubuntu 14.04 LTS
+## Recipe for Ubuntu 12.04 LTS / Ubuntu 14.04 LTS / Ubuntu 16.04 LTS
 
 #Utils
 apt-get install screen htop unzip
@@ -15,7 +15,7 @@ apt-get install screen htop unzip
 apt-get install lib32stdc++6
 
 #Mono
-apt-get install libmono2.0-cil mono-runtime          				                        
+apt-get install libmono2.0-cil mono-runtime# On Ubuntu 16.04 LTS the package libmono2.0-cil has been renamed to mono-reference-assemblies-2.0		                        
 
 #Those libraries are required for Unity 3D to work, since i didn't figure how to host x64 servers the 32bit ones should be enought
 apt-get install libglu1-mesa libxcursor1 libxrandr2 # Native 64 bit Unity 3D prerequisites	
