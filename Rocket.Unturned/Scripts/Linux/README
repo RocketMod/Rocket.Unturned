@@ -5,20 +5,10 @@ Right now there is only a recipe available tested on Ubuntu 12.04 LTS / Ubuntu 1
 If you figure how to install Rocket on another distro or UNIX/Mac then feel free
 to extend this file at https://github.com/RocketMod/Rocket.Unturned/new/master/Scripts/Linux/README
 
-
 ## Recipe for Ubuntu 12.04 LTS / Ubuntu 14.04 LTS / Ubuntu 16.04 LTS
-
-#Utils
-apt-get install screen htop unzip
-
-#SteamCMD dependencies
-apt-get install lib32stdc++6
-
-#Mono
+apt-get install screen htop unzip #Utils
+apt-get install lib32stdc++6#SteamCMD dependencies
 apt-get install libmono2.0-cil mono-runtime# On Ubuntu 16.04 LTS the package libmono2.0-cil has been renamed to mono-reference-assemblies-2.0		                        
-
-#Those libraries are required for Unity 3D to work, since i didn't figure how to host x64 servers the 32bit ones should be enought
-apt-get install libglu1-mesa libxcursor1 libxrandr2 # Native 64 bit Unity 3D prerequisites	
 apt-get install libc6:i386 libgl1-mesa-glx:i386 libxcursor1:i386 libxrandr2:i386 # 32 bit prerequisites for Unity 3D
 
 ## Steps to install
@@ -26,7 +16,9 @@ apt-get install libc6:i386 libgl1-mesa-glx:i386 libxcursor1:i386 libxrandr2:i386
 1. Install the prerequisites (Shown in the recipe above)
 2. Copy the contents of the linux download in the root of the folder you want your Unturned 3 environment in
     cd ~
-    wget http://api.rocketmod.net/download/unturned-linux/latest/YOURFANCYAPIKEY/rocket.zip -O rocket.zip && unzip -o rocket.zip && rm rocket.zip
+    wget http://api.rocketmod.net/download/unturned-linux/latest/YOURAPIKEY/rocket.zip -O rocket.zip
+    unzip -o rocket.zip
+    rm rocket.zip
 3. Fix permissions and run the update script to install Unturned 3
     cd ~/Scripts
     chmod 755 update.sh
@@ -41,8 +33,10 @@ apt-get install libc6:i386 libgl1-mesa-glx:i386 libxcursor1:i386 libxrandr2:i386
             steamcmd/
             
     #Note: To make sure Steam Guard is not bugging you better create a new Steam account and disable Steam Guard
-## Steps to start
-Start the server, pick any single word as unique instance name
+    
+4. Start the server, pick any single word as unique instance name
     screen -S <instance name>
     cd ~/Scripts
     ./start.sh <instance name>
+
+5. To update Unturned & Rocket simply exit the server and the screen and start from step 2
