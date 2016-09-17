@@ -26,8 +26,7 @@ apt-get install libc6:i386 libgl1-mesa-glx:i386 libxcursor1:i386 libxrandr2:i386
 1. Install the prerequisites (Shown in the recipe above)
 2. Copy the contents of the linux download in the root of the folder you want your Unturned 3 environment in
     cd ~
-    wget http://api.rocketmod.net/download/unturned-linux/latest/YOURFANCYAPIKEY/rocket.zip
-    unzip rocket.zip
+    wget http://api.rocketmod.net/download/unturned-linux/latest/YOURFANCYAPIKEY/rocket.zip -O rocket.zip && unzip -o rocket.zip && rm rocket.zip
 3. Fix permissions and run the update script to install Unturned 3
     cd ~/Scripts
     chmod 755 update.sh
