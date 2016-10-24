@@ -38,13 +38,13 @@ namespace Rocket.Unturned.Permissions
                 }
                 else
                 {
-                    UnturnedChat.Say(player, R.Instance.Translation.Instance.Translate("command_no_permission"), Color.red);
+                    U.Instance.Chat.Say(player, R.Instance.Translation.Instance.Translate("command_no_permission"), Color.red);
                     return false;
                 }
             }
             else
             {
-                UnturnedChat.Say(player, U.Translate("command_not_found"), Color.red);
+                U.Instance.Chat.Say(player, U.Translate("command_not_found"), Color.red);
                 return false;
             }
         }

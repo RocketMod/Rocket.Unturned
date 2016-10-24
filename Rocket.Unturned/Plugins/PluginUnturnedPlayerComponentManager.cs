@@ -44,7 +44,7 @@ namespace Rocket.Unturned.Plugins
                 IRocketPlugin plugin = GetComponent<IRocketPlugin>();
                 assembly = plugin.GetType().Assembly;
 
-                U.Events.OnBeforePlayerConnected += addPlayerComponents;
+                U.Instance.OnBeforePlayerConnected += addPlayerComponents;
                 unturnedPlayerComponents.AddRange(assembly.GetTypesFromParentClass(typeof(UnturnedPlayerComponent)));
 
                 foreach (Type playerComponent in unturnedPlayerComponents)

@@ -23,7 +23,7 @@ namespace Rocket.Unturned.Events
 
         private void Start()
         {
-            UnturnedEvents.triggerOnPlayerConnected(Player);
+            U.Instance.triggerOnPlayerConnected(Player);
         }
 
         internal static void TriggerReceive(SteamChannel instance, CSteamID d, byte[] a, int b)

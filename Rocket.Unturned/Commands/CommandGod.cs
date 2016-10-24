@@ -52,13 +52,13 @@ namespace Rocket.Unturned.Commands
             if (player.Features.GodMode)
             {
                 Logger.Info(U.Translate("command_god_disable_console", player.CharacterName));
-                UnturnedChat.Say(caller, U.Translate("command_god_disable_private"));
+                U.Instance.Chat.Say(caller, U.Translate("command_god_disable_private"));
                 player.Features.GodMode = false;
             }
             else
             {
                 Logger.Info(U.Translate("command_god_enable_console", player.CharacterName));
-                UnturnedChat.Say(caller, U.Translate("command_god_enable_private"));
+                U.Instance.Chat.Say(caller, U.Translate("command_god_enable_private"));
                 player.Features.GodMode = true;
             }
         }

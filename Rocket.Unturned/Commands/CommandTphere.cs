@@ -49,7 +49,7 @@ namespace Rocket.Unturned.Commands
 
             if (command.Length != 1)
             {
-                UnturnedChat.Say(caller, U.Translate("command_generic_invalid_parameter"));
+                U.Instance.Chat.Say(caller, U.Translate("command_generic_invalid_parameter"));
                 throw new WrongUsageOfCommandException(caller, this);
             }
             UnturnedPlayer otherPlayer = UnturnedPlayer.FromName(command[0]);
@@ -57,12 +57,12 @@ namespace Rocket.Unturned.Commands
             {
                 otherPlayer.Teleport(player);
                 Logger.Info(U.Translate("command_tphere_teleport_console", otherPlayer.CharacterName, player.CharacterName));
-                UnturnedChat.Say(caller, U.Translate("command_tphere_teleport_from_private", otherPlayer.CharacterName));
-                UnturnedChat.Say(otherPlayer, U.Translate("command_tphere_teleport_to_private", player.CharacterName));
+                U.Instance.Chat.Say(caller, U.Translate("command_tphere_teleport_from_private", otherPlayer.CharacterName));
+                U.Instance.Chat.Say(otherPlayer, U.Translate("command_tphere_teleport_to_private", player.CharacterName));
             }
             else
             {
-                UnturnedChat.Say(caller, U.Translate("command_generic_failed_find_player"));
+                U.Instance.Chat.Say(caller, U.Translate("command_generic_failed_find_player"));
                 throw new WrongUsageOfCommandException(caller, this);
             }
         }

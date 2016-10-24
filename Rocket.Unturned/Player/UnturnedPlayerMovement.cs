@@ -23,7 +23,7 @@ namespace Rocket.Unturned
 
         private void OnEnable()
         {
-            if (U.Settings.Instance.CommunityBans)
+            if (U.Instance.Settings.Instance.CommunityBans)
             {
                 using (RocketWebClient webClient = new RocketWebClient())
                 {
@@ -65,7 +65,7 @@ namespace Rocket.Unturned
 
             if (!VanishMode)
             {
-                if (U.Settings.Instance.LogSuspiciousPlayerMovement && lastUpdate.AddSeconds(1) < DateTime.Now)
+                if (U.Instance.Settings.Instance.LogSuspiciousPlayerMovement && lastUpdate.AddSeconds(1) < DateTime.Now)
                 {
                     lastUpdate = DateTime.Now;
 

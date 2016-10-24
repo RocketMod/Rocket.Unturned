@@ -51,7 +51,7 @@ namespace Rocket.Unturned.Commands
             UnturnedPlayer player = (UnturnedPlayer)caller;
             if (command.Length == 0 || command.Length > 2)
             {
-                UnturnedChat.Say(player, U.Translate("command_generic_invalid_parameter"));
+                U.Instance.Chat.Say(player, U.Translate("command_generic_invalid_parameter"));
                 throw new WrongUsageOfCommandException(caller, this);
             }
 
@@ -66,7 +66,7 @@ namespace Rocket.Unturned.Commands
                 if (asset != null) id = asset.Id;
                 if (String.IsNullOrEmpty(itemString.Trim()) || id == 0)
                 {
-                    UnturnedChat.Say(player, U.Translate("command_generic_invalid_parameter"));
+                    U.Instance.Chat.Say(player, U.Translate("command_generic_invalid_parameter"));
                     throw new WrongUsageOfCommandException(caller, this);
                 }
             }
@@ -75,7 +75,7 @@ namespace Rocket.Unturned.Commands
 
             if (command.Length == 2 && !byte.TryParse(command[1].ToString(), out amount) || a == null)
             {
-                UnturnedChat.Say(player, U.Translate("command_generic_invalid_parameter"));
+                U.Instance.Chat.Say(player, U.Translate("command_generic_invalid_parameter"));
                 throw new WrongUsageOfCommandException(caller, this);
             }
 
@@ -84,11 +84,11 @@ namespace Rocket.Unturned.Commands
             if (player.GiveItem(id, amount))
             {
                 Logger.Info(U.Translate("command_i_giving_console", player.DisplayName, id, amount));
-                UnturnedChat.Say(player, U.Translate("command_i_giving_private", amount, assetName, id));
+                U.Instance.Chat.Say(player, U.Translate("command_i_giving_private", amount, assetName, id));
             }
             else
             {
-                UnturnedChat.Say(player, U.Translate("command_i_giving_failed_private", amount, assetName, id));
+                U.Instance.Chat.Say(player, U.Translate("command_i_giving_failed_private", amount, assetName, id));
             }
         }
     }

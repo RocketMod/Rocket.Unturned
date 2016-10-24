@@ -37,7 +37,7 @@ namespace Rocket.Unturned.Chat
             incomingColor = color;
         }
 
-        public Color GetColorFromName(string colorName, Color fallback)
+        public static Color GetColorFromName(string colorName, Color fallback)
         {
             switch (colorName.Trim().ToLower())
             {
@@ -61,7 +61,7 @@ namespace Rocket.Unturned.Chat
             return fallback;
         }
 
-        public Color? GetColorFromHex(string hexString)
+        public static Color? GetColorFromHex(string hexString)
         {
             hexString = hexString.Replace("#", "");
             if(hexString.Length == 3)
@@ -80,11 +80,11 @@ namespace Rocket.Unturned.Chat
             byte b = (byte)(argb & 0xff);
             return GetColorFromRGB(r, g, b);
         }
-		public Color GetColorFromRGB(byte R,byte G,byte B)
+		public static Color GetColorFromRGB(byte R,byte G,byte B)
 		{
 			return GetColorFromRGB (R, G, B, 100);
 		}
-        public Color GetColorFromRGB(byte R,byte G,byte B,short A)
+        public static Color GetColorFromRGB(byte R,byte G,byte B,short A)
         {
             return new Color((1f / 255f) * R, (1f / 255f) * G, (1f / 255f) * B,(1f/100f) * A);
         }
@@ -140,7 +140,7 @@ namespace Rocket.Unturned.Chat
             }
         }
 
-         public List<string> wrapMessage(string text)
+         public static List<string> wrapMessage(string text)
          {
              if (text.Length == 0) return new List<string>();
              string[] words = text.Split(' ');

@@ -50,7 +50,7 @@ namespace Rocket.Unturned.Commands
             UnturnedPlayer player = (UnturnedPlayer)caller;
             if (command.Length != 1)
             {
-                UnturnedChat.Say(caller, U.Translate("command_generic_invalid_parameter"));
+                U.Instance.Chat.Say(caller, U.Translate("command_generic_invalid_parameter"));
                 throw new WrongUsageOfCommandException(caller, this);
             }
 
@@ -62,7 +62,7 @@ namespace Rocket.Unturned.Commands
 
                 if (itemString == null)
                 {
-                    UnturnedChat.Say(caller, U.Translate("command_generic_invalid_parameter"));
+                    U.Instance.Chat.Say(caller, U.Translate("command_generic_invalid_parameter"));
                     throw new WrongUsageOfCommandException(caller, this);
                 }
 
@@ -77,7 +77,7 @@ namespace Rocket.Unturned.Commands
                 }
                 if (!id.HasValue)
                 {
-                    UnturnedChat.Say(caller, U.Translate("command_generic_invalid_parameter"));
+                    U.Instance.Chat.Say(caller, U.Translate("command_generic_invalid_parameter"));
                     throw new WrongUsageOfCommandException(caller, this);
                 }
             }
@@ -88,11 +88,11 @@ namespace Rocket.Unturned.Commands
             if (VehicleTool.giveVehicle(player.Player, id.Value))
             {
                 Logger.Warn(U.Translate("command_v_giving_console", player.CharacterName, id));
-                UnturnedChat.Say(caller, U.Translate("command_v_giving_private", assetName, id));
+                U.Instance.Chat.Say(caller, U.Translate("command_v_giving_private", assetName, id));
             }
             else
             {
-                UnturnedChat.Say(caller, U.Translate("command_v_giving_failed_private", assetName, id));
+                U.Instance.Chat.Say(caller, U.Translate("command_v_giving_failed_private", assetName, id));
             }
         }
     }

@@ -47,18 +47,18 @@ namespace Rocket.Unturned.Commands
         {
             if (command.Length!=1)
             {
-                UnturnedChat.Say(caller, U.Translate("command_generic_invalid_parameter"));
+                U.Instance.Chat.Say(caller, U.Translate("command_generic_invalid_parameter"));
                 throw new WrongUsageOfCommandException(caller, this);
             }
 
             SteamPlayer otherPlayer = PlayerTool.getSteamPlayer(command[0]);
             if (otherPlayer != null && (caller == null || otherPlayer.SteamPlayerID.CSteamID.ToString() != caller.ToString()))
             {
-                UnturnedChat.Say(caller, U.Translate("command_investigate_private", otherPlayer.SteamPlayerID.CharacterName, otherPlayer.SteamPlayerID.CSteamID.ToString()));
+                U.Instance.Chat.Say(caller, U.Translate("command_investigate_private", otherPlayer.SteamPlayerID.CharacterName, otherPlayer.SteamPlayerID.CSteamID.ToString()));
             }
             else
             {
-                UnturnedChat.Say(caller, U.Translate("command_generic_failed_find_player"));
+                U.Instance.Chat.Say(caller, U.Translate("command_generic_failed_find_player"));
                 throw new WrongUsageOfCommandException(caller, this);
             }
         }

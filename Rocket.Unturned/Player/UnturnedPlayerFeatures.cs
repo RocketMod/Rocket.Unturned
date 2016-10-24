@@ -66,10 +66,10 @@ namespace Rocket.Unturned.Player
         {
             initialCheck = true;
            
-            if (U.Settings.Instance.CharacterNameValidation)
+            if (U.Instance.Settings.Instance.CharacterNameValidation)
             {
                 string username = Player.CharacterName;
-                System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(U.Settings.Instance.CharacterNameValidationRule);
+                System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(U.Instance.Settings.Instance.CharacterNameValidationRule);
                 System.Text.RegularExpressions.Match match = regex.Match(username);
                 if (match.Groups[0].Length != username.Length)
                 {

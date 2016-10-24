@@ -13,14 +13,15 @@ using Rocket.Unturned.Serialisation;
 using SDG.Unturned;
 using Steamworks;
 using System;
+using System.Linq;
 using System.Reflection;
 using UnityEngine;
 using Rocket.API.Chat;
 using System.Collections.ObjectModel;
 using Rocket.API.Commands;
 using System.Collections.Generic;
-using Logger = Rocket.API.Logging.Logger;
 using Rocket.Unturned.Player;
+using Logger = Rocket.API.Logging.Logger;
 
 namespace Rocket.Unturned
 {
@@ -28,9 +29,16 @@ namespace Rocket.Unturned
     {
         #region Events
         public event ImplementationInitialized OnInitialized;
+
+        internal void triggerOnPlayerConnected(UnturnedPlayer player)
+        {
+            OnPlayerConnected.TryInvoke(player);
+        }
+
         public event ImplementationShutdown OnShutdown;
         public event ImplementationReload OnReload;
 
+        public event PlayerConnected OnBeforePlayerConnected;
         public event PlayerConnected OnPlayerConnected;
         public event PlayerDisconnected OnPlayerDisconnected;
         #endregion
@@ -60,6 +68,11 @@ namespace Rocket.Unturned
             };
         }
 
+        public static string Translate(string translationKey, params object[] placeholder)
+        {
+            return Instance.Translation.Instance.Translate(translationKey, placeholder);
+        }
+
         #endregion
 
         #region Properties
@@ -71,6 +84,7 @@ namespace Rocket.Unturned
         #endregion
 
         private static GameObject rocketGameObject;
+
 
         private void Awake()
         {
@@ -91,14 +105,16 @@ namespace Rocket.Unturned
                 Chat = (IChat)gameObject.TryAddComponent<UnturnedChat>();
 
                 Provider.onServerShutdown += () => { OnShutdown.TryInvoke(); };
-                Provider.onServerDisconnected += (CSteamID r) => { OnPlayerDisconnected?.TryInvoke(UnturnedPlayer.FromCSteamID(r)); };
+                Provider.onServerDisconnected += (CSteamID r) => {
+                    OnPlayerDisconnected?.TryInvoke(UnturnedPlayer.FromCSteamID(r));
+                };
                 Provider.onServerConnected += (CSteamID r) =>
                 {
                     UnturnedPlayer p = UnturnedPlayer.FromCSteamID(r);
-                    OnPlayerDisconnected?.Invoke(p);
                     p.Player.gameObject.TryAddComponent<UnturnedPlayerFeatures>();
                     p.Player.gameObject.TryAddComponent<UnturnedPlayerMovement>();
                     p.Player.gameObject.TryAddComponent<UnturnedPlayerEvents>();
+                    OnBeforePlayerConnected.TryInvoke(p);
                 };
 
                 RocketPluginBase.OnPluginsLoading += (RocketPluginBase plugin, ref bool cancelLoading) =>
@@ -160,6 +176,11 @@ namespace Rocket.Unturned
             }
 
             return commands.AsReadOnly();
+        }
+
+        public ReadOnlyCollection<IRocketPlayer> GetAllPlayers()
+        {
+            return Provider.Players.Select(p => (IRocketPlayer)UnturnedPlayer.FromSteamPlayer(p)).ToList().AsReadOnly();
         }
 
         public void Reload()

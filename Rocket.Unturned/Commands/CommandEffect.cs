@@ -53,7 +53,7 @@ namespace Rocket.Unturned.Commands
             ushort? id = command.GetUInt16Parameter(0);
             if (id == null)
             {
-                UnturnedChat.Say(caller, U.Translate("command_generic_invalid_parameter"));
+                U.Instance.Chat.Say(caller, U.Translate("command_generic_invalid_parameter"));
                 throw new WrongUsageOfCommandException(caller, this);
             }
             player.TriggerEffect(id.Value);

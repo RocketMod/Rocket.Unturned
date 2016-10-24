@@ -8,7 +8,7 @@ namespace Rocket.Unturned
         public static string RocketDirectory;
         public static void Initialize()
         {
-            RocketDirectory = String.Format("Servers/{0}/Rocket/", U.Instance.InstanceId);
+            RocketDirectory = String.Format("Servers/{0}/Rocket/", U.Instance.InstanceName);
             if (!Directory.Exists(RocketDirectory)) Directory.CreateDirectory(RocketDirectory);
 
             Directory.SetCurrentDirectory(RocketDirectory);

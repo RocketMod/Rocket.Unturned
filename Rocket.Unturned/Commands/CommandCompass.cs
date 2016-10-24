@@ -67,7 +67,7 @@ namespace Rocket.Unturned.Commands
                         currentDirection = 270;
                         break;
                     default:
-                        UnturnedChat.Say(caller, U.Translate("command_generic_invalid_parameter"));
+                        U.Instance.Chat.Say(caller, U.Translate("command_generic_invalid_parameter"));
                         throw new WrongUsageOfCommandException(caller, this);
                 }
                 player.Teleport(player.Position, currentDirection);
@@ -108,7 +108,7 @@ namespace Rocket.Unturned.Commands
                 directionName = U.Translate("command_compass_north");
             }
 
-            UnturnedChat.Say(caller, U.Translate("command_compass_facing_private", directionName));
+            U.Instance.Chat.Say(caller, U.Translate("command_compass_facing_private", directionName));
         }
     }
 }
