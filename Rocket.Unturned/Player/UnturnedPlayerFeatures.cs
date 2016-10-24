@@ -38,9 +38,6 @@ namespace Rocket.Unturned.Player
             }
         }
 
-
-
-
         private bool godMode = false;
         public bool GodMode
         {

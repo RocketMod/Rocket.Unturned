@@ -1,4 +1,5 @@
 ﻿using Rocket.API;
+using Rocket.API.Serialisation;
 using Rocket.Core;
 using Rocket.Core.Logging;
 using Rocket.Unturned.Chat;
@@ -57,6 +58,26 @@ namespace Rocket.Unturned.Permissions
         internal static bool CheckValid(ValidateAuthTicketResponse_t r)
         {
             ESteamRejection? reason = null;
+
+            try
+            {
+                RocketPermissionsGroup g = R.Permissions.GetGroup(r.m_SteamID.ToString());
+                if (g != null)
+                {
+                    SteamPending steamPending = Provider.pending.FirstOrDefault(x => x.playerID.CSteamID == r.m_SteamID);
+                    if (steamPending != null)
+                    {
+                        if (!steamPending.playerID.CharacterName.Contains(g.Prefix) && !steamPending.playerID.CharacterName.Contains(g.Suffix))
+                            steamPending.playerID.CharacterName = g.Prefix + steamPending.playerID.CharacterName + g.Suffix;
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Core.Logging.Logger.Log("Failed adding prefix/suffix to player "+r.m_SteamID+": "+ex.ToString());
+            }
+
             if (OnJoinRequested != null)
             {
                 foreach (var handler in OnJoinRequested.GetInvocationList().Cast<JoinRequested>())
