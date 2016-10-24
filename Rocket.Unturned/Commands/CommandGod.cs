@@ -4,7 +4,7 @@ using System;
 using Rocket.Unturned.Player;
 using Rocket.Unturned.Chat;
 using Rocket.API.Commands;
-using Rocket.Logging;
+using Logger = Rocket.API.Logging.Logger;
 
 namespace Rocket.Unturned.Commands
 {

@@ -7,7 +7,7 @@ using Rocket.Unturned.Chat;
 using Rocket.Unturned.Items;
 using Rocket.API.Exceptions;
 using Rocket.API.Commands;
-using Rocket.Logging;
+using Logger = Rocket.API.Logging.Logger;
 
 namespace Rocket.Unturned.Commands
 {

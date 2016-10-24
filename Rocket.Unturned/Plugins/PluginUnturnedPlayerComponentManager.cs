@@ -2,7 +2,7 @@
 using Rocket.API.Extensions;
 using Rocket.API.Plugins;
 using Rocket.Core.Extensions;
-using Rocket.Logging;
+using Logger = Rocket.API.Logging.Logger;
 using Rocket.Unturned.Events;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
@@ -23,7 +23,7 @@ namespace Rocket.Unturned.Plugins
         {
             try
             {
-                U.Events.OnPlayerConnected -= addPlayerComponents;
+                U.Instance.OnPlayerConnected -= addPlayerComponents;
                 unturnedPlayerComponents = unturnedPlayerComponents.Where(p => p.Assembly != assembly).ToList();
                 List<Type> playerComponents = assembly.GetTypesFromParentClass(typeof(UnturnedPlayerComponent));
                 foreach (Type playerComponent in playerComponents)

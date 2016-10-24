@@ -6,7 +6,7 @@ using System;
 using UnityEngine;
 using System.Linq;
 using Rocket.Core.Extensions;
-using Rocket.Logging;
+using Logger = Rocket.API.Logging.Logger;
 
 namespace Rocket.Unturned.Events
 {

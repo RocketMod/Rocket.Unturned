@@ -1,6 +1,6 @@
 ﻿using Rocket.API;
 using Rocket.Core;
-using Rocket.Logging;
+using Logger = Rocket.API.Logging.Logger;
 using Rocket.Unturned.Events;
 using Rocket.Unturned.Permissions;
 using Rocket.Unturned.Player;
@@ -20,7 +20,7 @@ namespace Rocket.Unturned
         public static void ExternalLog(string message, ConsoleColor color)
         {
             if(message != "NullReferenceException: Object reference not set to an instance of an object - ")
-            Logger.Warn(message);
+            Logger.Info(message);
         }
 
         [Browsable(false)]
@@ -67,13 +67,6 @@ namespace Rocket.Unturned
         public static void Splash()
         {
             U.Splash();
-        }
-
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public static void RegisterRocketEffect(Bundle b, Data q, ushort k)
-        {
-            //
         }
 
         [Browsable(false)]

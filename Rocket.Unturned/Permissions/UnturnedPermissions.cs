@@ -1,7 +1,7 @@
 ﻿using Rocket.API;
 using Rocket.API.Commands;
 using Rocket.Core;
-using Rocket.Logging;
+using Logger = Rocket.API.Logging.Logger;
 using Rocket.Unturned.Chat;
 using Rocket.Unturned.Extensions;
 using Rocket.Unturned.Player;

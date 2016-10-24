@@ -38,7 +38,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Local|AnyCPU'">
-    <OutputPath>..\..\..\..\Desktop\Unturned\Unturned_Data\Managed\</OutputPath>
+    <OutputPath>..\..\..\..\..\Desktop\Unturned\Unturned_Data\Managed\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <Optimize>True</Optimize>
     <DebugType>full</DebugType>
@@ -61,10 +61,6 @@
     <Reference Include="Rocket.Core">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\Rocket.Core.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Rocket.Logging">
-      <HintPath>lib\Rocket.Logging.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -90,6 +86,7 @@
     <Compile Include="Commands\UnturnedVanillaCommand.cs" />
     <Compile Include="Commands\UnturnedCommandExtensions.cs" />
     <Compile Include="Player\UnturnedPlayerMovement.cs" />
+    <Compile Include="UnturnedTranslations.cs" />
     <Compile Include="Skills\UnturnedSkill.cs" />
     <Compile Include="Chat\UnturnedChat.cs" />
     <Compile Include="Commands\CommandBroadcast.cs" />
@@ -104,7 +101,6 @@
     <Compile Include="Commands\CommandV.cs" />
     <Compile Include="Enumerations\InventoryGroup.cs" />
     <Compile Include="Events\UnturnedPlayerEvents.cs" />
-    <Compile Include="Events\UnturnedEvents.cs" />
     <Compile Include="Extensions\SteamPlayerExtension.cs" />
     <Compile Include="Environment.cs" />
     <Compile Include="Permissions\UnturnedPermissions.cs" />

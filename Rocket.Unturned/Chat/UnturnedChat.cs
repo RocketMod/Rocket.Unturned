@@ -1,22 +1,23 @@
-﻿using Rocket.Core;
-using Rocket.Unturned.Events;
+﻿using Rocket.Unturned.Events;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 using Steamworks;
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using Rocket.API;
-using Rocket.Logging;
+using Rocket.API.Chat;
+using Logger = Rocket.API.Logging.Logger;
 
 namespace Rocket.Unturned.Chat
 {
-    public sealed class UnturnedChat : MonoBehaviour
+    public sealed class UnturnedChat : MonoBehaviour, IChat
     {
+        public event PlayerChatted OnPlayerChatted;
+
         private void Awake()
         {
-            SDG.Unturned.ChatManager.OnChatted += handleChat;
+            ChatManager.OnChatted += handleChat;
         }
 
         private void handleChat(SteamPlayer steamPlayer, EChatMode chatMode, ref Color incomingColor, string message, ref bool cancel)
@@ -36,7 +37,7 @@ namespace Rocket.Unturned.Chat
             incomingColor = color;
         }
 
-        public static Color GetColorFromName(string colorName, Color fallback)
+        public Color GetColorFromName(string colorName, Color fallback)
         {
             switch (colorName.Trim().ToLower())
             {
@@ -60,7 +61,7 @@ namespace Rocket.Unturned.Chat
             return fallback;
         }
 
-        public static Color? GetColorFromHex(string hexString)
+        public Color? GetColorFromHex(string hexString)
         {
             hexString = hexString.Replace("#", "");
             if(hexString.Length == 3)
@@ -79,35 +80,35 @@ namespace Rocket.Unturned.Chat
             byte b = (byte)(argb & 0xff);
             return GetColorFromRGB(r, g, b);
         }
-		public static Color GetColorFromRGB(byte R,byte G,byte B)
+		public Color GetColorFromRGB(byte R,byte G,byte B)
 		{
 			return GetColorFromRGB (R, G, B, 100);
 		}
-        public static Color GetColorFromRGB(byte R,byte G,byte B,short A)
+        public Color GetColorFromRGB(byte R,byte G,byte B,short A)
         {
             return new Color((1f / 255f) * R, (1f / 255f) * G, (1f / 255f) * B,(1f/100f) * A);
         }
 
-        public static void Say(string message)
+        public void Say(string message)
         {
             Say(message, Palette.Server);
         }
 
-        public static void Say(string message,Color color)
+        public void Say(string message, Color? color = default(Color?))
         {
             Logger.Info("Broadcast: " + message);
             foreach (string m in wrapMessage(message))
             {
-                ChatManager.Instance.SteamChannel.send("tellChat", ESteamCall.OTHERS, ESteamPacket.UPDATE_UNRELIABLE_BUFFER, new object[] { CSteamID.Nil, (byte)EChatMode.GLOBAL,color, m });
+                ChatManager.Instance.SteamChannel.send("tellChat", ESteamCall.OTHERS, ESteamPacket.UPDATE_UNRELIABLE_BUFFER, new object[] { CSteamID.Nil, (byte)EChatMode.GLOBAL, color, m });
             }
         }
-       
-        public static void Say(IRocketPlayer player, string message)
+
+        public void Say(IRocketPlayer player, string message)
         {
             Say(player, message, Palette.Server);
         }
 
-        public static void Say(IRocketPlayer player, string message, Color color)
+        public void Say(IRocketPlayer player, string message, Color? color = default(Color?))
         {
             if (player is ConsolePlayer)
             {
@@ -119,12 +120,12 @@ namespace Rocket.Unturned.Chat
             }
         }
 
-        public static void Say(CSteamID CSteamID, string message)
+        public void Say(CSteamID CSteamID, string message)
         {
             Say(CSteamID, message, Palette.Server);
         }
 
-        public static void Say(CSteamID CSteamID, string message, Color color)
+        public void Say(CSteamID CSteamID, string message, Color? color)
         {
             if (CSteamID == null || CSteamID.ToString() == "0")
             {
@@ -139,7 +140,7 @@ namespace Rocket.Unturned.Chat
             }
         }
 
-         public static List<string> wrapMessage(string text)
+         public List<string> wrapMessage(string text)
          {
              if (text.Length == 0) return new List<string>();
              string[] words = text.Split(' ');
@@ -167,5 +168,6 @@ namespace Rocket.Unturned.Chat
                  lines.Add(currentLine);
                  return lines;
             }
+
     }
 }

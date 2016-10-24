@@ -1,6 +1,6 @@
 using Rocket.API;
 using Rocket.Core;
-using Rocket.Logging;
+using Logger = Rocket.API.Logging.Logger;
 using Rocket.Unturned.Player;
 using SDG.Provider;
 using SDG.Provider.Services.Achievements;

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using Rocket.API;
 using Rocket.Unturned.Chat;
 using Rocket.API.Extensions;
-using Rocket.Logging;
+using Logger = Rocket.API.Logging.Logger;
 using Rocket.API.Exceptions;
 using Rocket.API.Commands;
 
