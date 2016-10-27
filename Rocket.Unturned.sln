@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rocket.Unturned", "Rocket.Unturned\Rocket.Unturned.csproj", "{BADB74F6-90C0-40AF-865D-27795B50C469}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{74BDC6CC-BAF0-4205-83F7-4244A41EA255}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rocket.Unturned.Launcher", "Rocket.Unturned.Launcher\Rocket.Unturned.Launcher.csproj", "{0F68CF17-C7C9-41BF-8F76-4DAF1D5146B4}"
 EndProject

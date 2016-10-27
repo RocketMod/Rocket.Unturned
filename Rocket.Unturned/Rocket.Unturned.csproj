@@ -38,7 +38,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Local|AnyCPU'">
-    <OutputPath>..\..\..\..\Desktop\Unturned\Unturned_Data\Managed\</OutputPath>
+    <OutputPath>..\..\..\..\..\Desktop\unturned\Unturned_Data\Managed\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <Optimize>True</Optimize>
     <DebugType>full</DebugType>
@@ -51,6 +51,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Rocket.API">
@@ -152,7 +155,7 @@
     <PostBuildEvent>if $(ConfigurationName) == Local (
 $(SolutionDir)Rocket.Unturned\dev\pdb2mdb.exe $(TargetPath)
 @echo listen 803286173 1 1 &gt; $(TargetDir)..\PlayerConnectionConfigFile
-copy $(SolutionDir)Rocket.Unturned\dev\Game.exe $(TargetDir)..\..\Unturned.exe
+rem copy $(SolutionDir)Rocket.Unturned\dev\Game.exe $(TargetDir)..\..\Unturned.exe
 )</PostBuildEvent>
   </PropertyGroup>
   <Target Name="AfterBuild" Condition="'$(Configuration)' == 'Release'">
