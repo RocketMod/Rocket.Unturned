@@ -61,14 +61,17 @@ namespace Rocket.Unturned.Permissions
 
             try
             {
-                RocketPermissionsGroup g = R.Permissions.GetGroups(new Rocket.API.RocketPlayer(r.m_SteamID.ToString()),false).FirstOrDefault();
+                RocketPermissionsGroup g = R.Permissions.GetGroups(new Rocket.API.RocketPlayer(r.m_SteamID.ToString()),true).FirstOrDefault();
                 if (g != null)
                 {
                     SteamPending steamPending = Provider.pending.FirstOrDefault(x => x.playerID.CSteamID == r.m_SteamID);
                     if (steamPending != null)
                     {
-                        if (!String.IsNullOrEmpty(g.Prefix) && !String.IsNullOrEmpty(g.Suffix) && !steamPending.playerID.CharacterName.StartsWith(g.Prefix) && !steamPending.playerID.CharacterName.EndsWith(g.Suffix))
+                        if (!steamPending.playerID.CharacterName.StartsWith(g.Prefix) && !steamPending.playerID.CharacterName.EndsWith(g.Suffix))
                         {
+                            string prefix = g.Prefix == null ? "" : g.Prefix;
+                            string suffix = g.Suffix == null ? "" : g.Suffix;
+
                             steamPending.playerID.CharacterName = g.Prefix + steamPending.playerID.CharacterName + g.Suffix;
                         }
                     }

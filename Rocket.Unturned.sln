@@ -5,8 +5,6 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rocket.Unturned", "Rocket.Unturned\Rocket.Unturned.csproj", "{BADB74F6-90C0-40AF-865D-27795B50C469}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rocket.Unturned.Launcher", "Rocket.Unturned.Launcher\Rocket.Unturned.Launcher.csproj", "{0F68CF17-C7C9-41BF-8F76-4DAF1D5146B4}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,24 +36,6 @@ Global
 		{BADB74F6-90C0-40AF-865D-27795B50C469}.Release|x64.Build.0 = Release|Any CPU
 		{BADB74F6-90C0-40AF-865D-27795B50C469}.Release|x86.ActiveCfg = Release|Any CPU
 		{BADB74F6-90C0-40AF-865D-27795B50C469}.Release|x86.Build.0 = Release|Any CPU
-		{0F68CF17-C7C9-41BF-8F76-4DAF1D5146B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0F68CF17-C7C9-41BF-8F76-4DAF1D5146B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0F68CF17-C7C9-41BF-8F76-4DAF1D5146B4}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{0F68CF17-C7C9-41BF-8F76-4DAF1D5146B4}.Debug|x64.Build.0 = Debug|Any CPU
-		{0F68CF17-C7C9-41BF-8F76-4DAF1D5146B4}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{0F68CF17-C7C9-41BF-8F76-4DAF1D5146B4}.Debug|x86.Build.0 = Debug|Any CPU
-		{0F68CF17-C7C9-41BF-8F76-4DAF1D5146B4}.Local|Any CPU.ActiveCfg = Local|Any CPU
-		{0F68CF17-C7C9-41BF-8F76-4DAF1D5146B4}.Local|Any CPU.Build.0 = Local|Any CPU
-		{0F68CF17-C7C9-41BF-8F76-4DAF1D5146B4}.Local|x64.ActiveCfg = Local|Any CPU
-		{0F68CF17-C7C9-41BF-8F76-4DAF1D5146B4}.Local|x64.Build.0 = Local|Any CPU
-		{0F68CF17-C7C9-41BF-8F76-4DAF1D5146B4}.Local|x86.ActiveCfg = Local|Any CPU
-		{0F68CF17-C7C9-41BF-8F76-4DAF1D5146B4}.Local|x86.Build.0 = Local|Any CPU
-		{0F68CF17-C7C9-41BF-8F76-4DAF1D5146B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0F68CF17-C7C9-41BF-8F76-4DAF1D5146B4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0F68CF17-C7C9-41BF-8F76-4DAF1D5146B4}.Release|x64.ActiveCfg = Release|Any CPU
-		{0F68CF17-C7C9-41BF-8F76-4DAF1D5146B4}.Release|x64.Build.0 = Release|Any CPU
-		{0F68CF17-C7C9-41BF-8F76-4DAF1D5146B4}.Release|x86.ActiveCfg = Release|Any CPU
-		{0F68CF17-C7C9-41BF-8F76-4DAF1D5146B4}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
