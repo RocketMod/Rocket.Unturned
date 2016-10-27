@@ -72,7 +72,7 @@ namespace Rocket.Unturned.Permissions
                             string prefix = g.Prefix == null ? "" : g.Prefix;
                             string suffix = g.Suffix == null ? "" : g.Suffix;
 
-                            steamPending.playerID.CharacterName = g.Prefix + steamPending.playerID.CharacterName + g.Suffix;
+                            steamPending.playerID.CharacterName = prefix + steamPending.playerID.CharacterName + suffix;
                         }
                     }
                 }
