@@ -67,12 +67,15 @@ namespace Rocket.Unturned.Permissions
                     SteamPending steamPending = Provider.pending.FirstOrDefault(x => x.playerID.CSteamID == r.m_SteamID);
                     if (steamPending != null)
                     {
-                        if (!steamPending.playerID.CharacterName.StartsWith(g.Prefix) && !steamPending.playerID.CharacterName.EndsWith(g.Suffix))
+                        string prefix = g.Prefix == null ? "" : g.Prefix;
+                        string suffix = g.Suffix == null ? "" : g.Suffix;
+                        if (prefix != "" && !steamPending.playerID.CharacterName.StartsWith(g.Prefix))
                         {
-                            string prefix = g.Prefix == null ? "" : g.Prefix;
-                            string suffix = g.Suffix == null ? "" : g.Suffix;
-
-                            steamPending.playerID.CharacterName = prefix + steamPending.playerID.CharacterName + suffix;
+                            steamPending.playerID.CharacterName = prefix + steamPending.playerID.CharacterName;
+                        }
+                        if (suffix != "" && !steamPending.playerID.CharacterName.EndsWith(g.Suffix))
+                        {
+                            steamPending.playerID.CharacterName = steamPending.playerID.CharacterName + suffix;
                         }
                     }
                 }
