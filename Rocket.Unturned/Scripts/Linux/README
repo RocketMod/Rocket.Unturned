@@ -7,12 +7,14 @@ to extend this file at https://github.com/RocketMod/Rocket.Unturned/new/master/S
 
 ## Recipe for Ubuntu 12.04 LTS / Ubuntu 14.04 LTS
 apt-get install screen htop unzip #Utils
+dpkg --add-architecture i386
 apt-get install lib32stdc++6 #SteamCMD dependencies
 apt-get install mono-runtime libmono2.0-cil
 apt-get install libc6:i386 libgl1-mesa-glx:i386 libxcursor1:i386 libxrandr2:i386 # 32 bit prerequisites for Unity 3D
 
 ##Recipe for Ubuntu 16.04 LTS
 apt-get install screen htop unzip #Utils
+dpkg --add-architecture i386
 apt-get install lib32stdc++6 #SteamCMD dependencies
 apt-get install mono-runtime mono-reference-assemblies-2.0		                        
 apt-get install libc6:i386 libgl1-mesa-glx:i386 libxcursor1:i386 libxrandr2:i386 # 32 bit prerequisites for Unity 3D
