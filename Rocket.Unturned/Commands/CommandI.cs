@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Rocket.API;
 using Rocket.Unturned.Chat;
 using Rocket.Unturned.Items;
+using System.Linq;
 
 namespace Rocket.Unturned.Commands
 {
@@ -60,7 +61,8 @@ namespace Rocket.Unturned.Commands
 
             if (!ushort.TryParse(itemString, out id))
             {
-                ItemAsset asset = UnturnedItems.GetItemAssetByName(itemString.ToLower());
+                List<ItemAsset> sortedAssets = new List<ItemAsset>(SDG.Unturned.Assets.find(EAssetType.ITEM).Cast<ItemAsset>());
+                ItemAsset asset = sortedAssets.Where(asset => asset.Name != null).OrderBy(asset => asset.Name.Length).Where(i => i.Name.ToLower().Contains(itemString.ToLower())).FirstOrDefault();
                 if (asset != null) id = asset.Id;
                 if (String.IsNullOrEmpty(itemString.Trim()) || id == 0)
                 {
