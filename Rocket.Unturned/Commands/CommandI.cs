@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Rocket.API;
 using Rocket.Unturned.Chat;
 using Rocket.Unturned.Items;
+using System.Linq;
 
 namespace Rocket.Unturned.Commands
 {
@@ -58,11 +59,18 @@ namespace Rocket.Unturned.Commands
 
             string itemString = command[0].ToString();
 
-            if (!ushort.TryParse(itemString, out id))
+            if (!ushort.TryParse(itemString, out id)) 
             {
-                ItemAsset asset = UnturnedItems.GetItemAssetByName(itemString.ToLower());
+                List<ItemAsset> sortedAssets = new List<ItemAsset>(SDG.Unturned.Assets.find(EAssetType.ITEM).Cast<ItemAsset>());
+                sortedAssets.Sort((a1, a2) => {
+                    if (a1.name != null && a2.name != null)
+                        return a1.name.Length.CompareTo(a2.name.Length);
+                    return 0;
+                });
+
+                ItemAsset asset = sortedAssets.Where(i => i.Name != null && i.Name.ToLower().Contains(itemString.ToLower())).FirstOrDefault();
                 if (asset != null) id = asset.Id;
-                if (String.IsNullOrEmpty(itemString.Trim()) || id == 0)
+                if (String.IsNullOrEmpty(itemString.Trim()) || id == 0) 
                 {
                     UnturnedChat.Say(player, U.Translate("command_generic_invalid_parameter"));
                     throw new WrongUsageOfCommandException(caller, this);
