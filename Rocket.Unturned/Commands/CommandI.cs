@@ -59,7 +59,7 @@ namespace Rocket.Unturned.Commands
 
             string itemString = command[0].ToString();
 
-            if (!ushort.TryParse(itemString, out id)) 
+            if (!ushort.TryParse(itemString, out id))
             {
                 List<ItemAsset> sortedAssets = new List<ItemAsset>(SDG.Unturned.Assets.find(EAssetType.ITEM).Cast<ItemAsset>());
                 sortedAssets.RemoveAll(value => value.Name == null);
@@ -67,7 +67,7 @@ namespace Rocket.Unturned.Commands
 
                 ItemAsset asset = sortedAssets.Where(i => i.Name.ToLower().Contains(itemString.ToLower())).FirstOrDefault();
                 if (asset != null) id = asset.Id;
-                if (String.IsNullOrEmpty(itemString.Trim()) || id == 0) 
+                if (String.IsNullOrEmpty(itemString.Trim()) || id == 0)
                 {
                     UnturnedChat.Say(player, U.Translate("command_generic_invalid_parameter"));
                     throw new WrongUsageOfCommandException(caller, this);
