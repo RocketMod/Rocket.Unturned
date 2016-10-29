@@ -62,7 +62,7 @@ namespace Rocket.Unturned.Commands
             if (!ushort.TryParse(itemString, out id))
             {
                 List<ItemAsset> sortedAssets = new List<ItemAsset>(SDG.Unturned.Assets.find(EAssetType.ITEM).Cast<ItemAsset>());
-                ItemAsset asset = sortedAssets.Where(asset => asset.Name != null).OrderBy(asset => asset.Name.Length).Where(i => i.Name.ToLower().Contains(itemString.ToLower())).FirstOrDefault();
+                ItemAsset asset = sortedAssets.Where(i => i.Name != null).OrderBy(i => i.Name.Length).Where(i => i.Name.ToLower().Contains(itemString.ToLower())).FirstOrDefault();
                 if (asset != null) id = asset.Id;
                 if (String.IsNullOrEmpty(itemString.Trim()) || id == 0)
                 {
