@@ -63,10 +63,7 @@ namespace Rocket.Unturned.Commands
             {
                 List<ItemAsset> sortedAssets = new List<ItemAsset>(SDG.Unturned.Assets.find(EAssetType.ITEM).Cast<ItemAsset>());
                 sortedAssets.RemoveAll(value => value.Name == null);
-
-                sortedAssets.Sort((a1, a2) => {
-                    return a1.Name.Length.CompareTo(a2.Name.Length);
-                });
+                sortedAssets.Sort((a1, a2) => a1.Name.Length.CompareTo(a2.Name.Length));
 
                 ItemAsset asset = sortedAssets.Where(i => i.Name.ToLower().Contains(itemString.ToLower())).FirstOrDefault();
                 if (asset != null) id = asset.Id;
