@@ -48,3 +48,14 @@ apt-get install libc6:i386 libgl1-mesa-glx:i386 libxcursor1:i386 libxrandr2:i386
     ./start.sh <instance name>
 
 5. To update Unturned & Rocket simply exit the server and the screen and start from step 2
+
+## Issues on Linux, and how to solve them
+1.
+Symptoms:
+	My server crashes frequently or not so frequently during startup, runtime or shutdown. 
+	The console becomes unresponsive and output freezes completely but it does forward console input to the server instance. 
+	After being unresponsive for an unknown time period the server finally crashes with a SIGSEGV exception.
+Solution: 
+	Downgrade from Mono v4.x.x to Mono v3.12.1
+System:
+	Ubuntu 16.04, 64-bit
