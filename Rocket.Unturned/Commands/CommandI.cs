@@ -62,8 +62,8 @@ namespace Rocket.Unturned.Commands
             if (!ushort.TryParse(itemString, out id))
             {
                 List<ItemAsset> sortedAssets = new List<ItemAsset>(SDG.Unturned.Assets.find(EAssetType.ITEM).Cast<ItemAsset>());
-                ItemAsset asset = sortedAssets.Where(i => i.Name != null).OrderBy(i => i.Name.Length).Where(i => i.Name.ToLower().Contains(itemString.ToLower())).FirstOrDefault();
-                if (asset != null) id = asset.Id;
+                ItemAsset asset = sortedAssets.Where(i => i.itemName != null).OrderBy(i => i.itemName.Length).Where(i => i.itemName.ToLower().Contains(itemString.ToLower())).FirstOrDefault();
+                if (asset != null) id = asset.id;
                 if (String.IsNullOrEmpty(itemString.Trim()) || id == 0)
                 {
                     UnturnedChat.Say(player, U.Translate("command_generic_invalid_parameter"));
@@ -79,7 +79,7 @@ namespace Rocket.Unturned.Commands
                 throw new WrongUsageOfCommandException(caller, this);
             }
 
-            string assetName = ((ItemAsset)a).Name;
+            string assetName = ((ItemAsset)a).itemName;
 
             if (player.GiveItem(id, amount))
             {

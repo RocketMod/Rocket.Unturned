@@ -50,9 +50,9 @@ namespace Rocket.Unturned.Commands
             }
 
             SteamPlayer otherPlayer = PlayerTool.getSteamPlayer(command[0]);
-            if (otherPlayer != null && (caller == null || otherPlayer.SteamPlayerID.CSteamID.ToString() != caller.ToString()))
+            if (otherPlayer != null && (caller == null || otherPlayer.playerID.steamID.ToString() != caller.ToString()))
             {
-                UnturnedChat.Say(caller, U.Translate("command_investigate_private", otherPlayer.SteamPlayerID.CharacterName, otherPlayer.SteamPlayerID.CSteamID.ToString()));
+                UnturnedChat.Say(caller, U.Translate("command_investigate_private", otherPlayer.playerID.characterName, otherPlayer.playerID.steamID.ToString()));
             }
             else
             {

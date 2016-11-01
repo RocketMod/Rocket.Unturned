@@ -14,11 +14,11 @@ namespace Rocket.Unturned.Events
     {
         protected override void Load()
         {
-            Player.Player.PlayerLife.OnUpdateStamina += onUpdateStamina;
-            Player.Player.Inventory.OnInventoryAdded += onInventoryAdded;
-            Player.Player.Inventory.OnInventoryRemoved += onInventoryRemoved;
-            Player.Player.Inventory.OnInventoryResized += onInventoryResized;
-            Player.Player.Inventory.OnInventoryUpdated += onInventoryUpdated;
+            Player.Player.life.onStaminaUpdated += onUpdateStamina;
+            Player.Player.inventory.onInventoryAdded += onInventoryAdded;
+            Player.Player.inventory.onInventoryRemoved += onInventoryRemoved;
+            Player.Player.inventory.onInventoryResized += onInventoryResized;
+            Player.Player.inventory.onInventoryUpdated += onInventoryUpdated;
         }
 
         private void Start()
@@ -26,7 +26,7 @@ namespace Rocket.Unturned.Events
             UnturnedEvents.triggerOnPlayerConnected(Player);
         }
 
-        internal static void TriggerReceive(SteamChannel instance, CSteamID d, byte[] a, int b)
+        internal static void TriggerReceive(SteamChannel instance, CSteamID d, byte[] a, int b,int size)
         {
 #if DEBUG
             /*ESteamPacket eSteamPacket = (ESteamPacket)a[0];
@@ -51,8 +51,8 @@ namespace Rocket.Unturned.Events
         {
             try
             {
-                if (s == null || s.Player == null || s.Player.transform == null || R == null) return;
-                UnturnedPlayerEvents instance = s.Player.transform.GetComponent<UnturnedPlayerEvents>();
+                if (s == null || s.player == null || s.player.transform == null || R == null) return;
+                UnturnedPlayerEvents instance = s.player.transform.GetComponent<UnturnedPlayerEvents>();
                 UnturnedPlayer rp = UnturnedPlayer.FromSteamPlayer(s);
 #if DEBUG
                  //string o = "";

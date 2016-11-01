@@ -14,7 +14,7 @@ namespace Rocket.Unturned
         {
             try
             {
-                fileStream = new FileStream(String.Format(Environment.ConsoleFile, Dedicator.InstanceName), FileMode.Create,FileAccess.Write,FileShare.ReadWrite);
+                fileStream = new FileStream(String.Format(Environment.ConsoleFile, Dedicator.serverID), FileMode.Create,FileAccess.Write,FileShare.ReadWrite);
 
                 StreamWriter streamWriter = new StreamWriter(fileStream, System.Text.Encoding.ASCII)
                 {
@@ -52,7 +52,7 @@ namespace Rocket.Unturned
                 {
                 x = System.Console.ReadLine();
                  
-                if (x != null && CommandWindow.ConsoleInput != null && CommandWindow.ConsoleInput.onInputText != null && x.Trim().Length != 0) CommandWindow.ConsoleInput.onInputText(x);
+                if (x != null && CommandWindow.input != null && CommandWindow.input.onInputText != null && x.Trim().Length != 0) CommandWindow.input.onInputText(x);
 
                 }
                 catch (Exception ex)

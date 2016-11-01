@@ -38,7 +38,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Local|AnyCPU'">
-    <OutputPath>..\..\..\..\..\Desktop\unturned\Unturned_Data\Managed\</OutputPath>
+    <OutputPath>..\..\..\..\..\Desktop\unturned\Modules\Rocket.Unturned\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <Optimize>True</Optimize>
     <DebugType>full</DebugType>
@@ -118,8 +118,6 @@
     <Compile Include="Environment.cs" />
     <Compile Include="Permissions\UnturnedPermissions.cs" />
     <Compile Include="UnturnedConsole.cs" />
-    <Compile Include="Interface.cs" />
-    <Compile Include="UI.cs" />
     <Compile Include="U.cs" />
     <Compile Include="Player\UnturnedPlayer.cs" />
     <Compile Include="Player\UnturnedPlayerComponent.cs" />
@@ -131,8 +129,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Rocket.Unturned.nuspec">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Scripts\Linux\start.sh" />
     <None Include="Scripts\Linux\update.sh" />
