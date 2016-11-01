@@ -5,8 +5,8 @@
 
 #CONFIG
 INSTANCE_NAME=$1
-STEAMCMD_HOME="../steamcmd"
-UNTURNED_HOME="../unturned"
+STEAMCMD_HOME="../../steamcmd"
+UNTURNED_HOME="../"
 
 #COLORS
 RED='\033[0;31m'
@@ -27,21 +27,6 @@ if [ -f $STEAMCMD_API ]; then
 	fi
 else
 	printf "${RED}NOT FOUND${NC}\n\n"
-fi
-
-#Update checks
-ASSEMBLIES=( "Rocket.API.dll" "Rocket.Core.dll" "Rocket.Unturned.dll" "Assembly-CSharp.dll" )
-for i in "${ASSEMBLIES[@]}"
-do
-	if [ -f ../$i ]; then
-		\cp ../$i $UNTURNED_HOME/Unturned_Headless_Data/Managed/$i
-		mv ../$i $UNTURNED_HOME/Unturned_Data/Managed/$i
-		printf "Updating "$i": ${YELLLOW}UPDATING${NC}\n\n"
-	fi
-done
-
-if [ -f ../RocketLauncher.exe ]; then
-	mv ../RocketLauncher.exe $UNTURNED_HOME/RocketLauncher.exe
 fi
 
 cd $UNTURNED_HOME

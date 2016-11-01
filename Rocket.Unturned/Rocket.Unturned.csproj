@@ -142,6 +142,7 @@
     <None Include="Scripts\Linux\update.sh" />
     <None Include="Scripts\Windows\MyFirstRocketServer.bat" />
     <None Include="Scripts\Windows\start.bat" />
+    <None Include="Scripts\Windows\update.bat" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="dev\Game.exe" />
