@@ -1,5 +1,4 @@
-﻿using Rocket.Unturned.Events;
-using Rocket.Unturned.Player;
+﻿using Rocket.Unturned.Player;
 using SDG.Unturned;
 using Steamworks;
 using System;
@@ -8,6 +7,7 @@ using UnityEngine;
 using Rocket.API;
 using Rocket.API.Chat;
 using Logger = Rocket.API.Logging.Logger;
+using System.Linq;
 
 namespace Rocket.Unturned.Chat
 {
@@ -17,7 +17,7 @@ namespace Rocket.Unturned.Chat
 
         private void Awake()
         {
-            ChatManager.OnChatted += handleChat;
+            ChatManager.onChatted += handleChat;
         }
 
         private void handleChat(SteamPlayer steamPlayer, EChatMode chatMode, ref Color incomingColor, string message, ref bool cancel)
@@ -27,7 +27,21 @@ namespace Rocket.Unturned.Chat
             try
             {
                 UnturnedPlayer player = UnturnedPlayer.FromSteamPlayer(steamPlayer);
-                color = UnturnedPlayerEvents.firePlayerChatted(player, chatMode, player.Color, message, ref cancel);
+    
+                if (OnPlayerChatted != null)
+                {
+                    foreach (var handler in OnPlayerChatted.GetInvocationList().Cast<PlayerChatted>())
+                    {
+                        try
+                        {
+                            handler(player, ref color, message, ref cancel);
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.Error(ex);
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -91,7 +105,7 @@ namespace Rocket.Unturned.Chat
 
         public void Say(string message)
         {
-            Say(message, Palette.Server);
+            Say(message, Palette.SERVER);
         }
 
         public void Say(string message, Color? color = default(Color?))
@@ -99,13 +113,13 @@ namespace Rocket.Unturned.Chat
             Logger.Info("Broadcast: " + message);
             foreach (string m in wrapMessage(message))
             {
-                ChatManager.Instance.SteamChannel.send("tellChat", ESteamCall.OTHERS, ESteamPacket.UPDATE_UNRELIABLE_BUFFER, new object[] { CSteamID.Nil, (byte)EChatMode.GLOBAL, color, m });
+                ChatManager.instance.channel.send("tellChat", ESteamCall.OTHERS, ESteamPacket.UPDATE_UNRELIABLE_BUFFER, new object[] { CSteamID.Nil, (byte)EChatMode.GLOBAL, color, m });
             }
         }
 
         public void Say(IRocketPlayer player, string message)
         {
-            Say(player, message, Palette.Server);
+            Say(player, message, Palette.SERVER);
         }
 
         public void Say(IRocketPlayer player, string message, Color? color = default(Color?))
@@ -122,7 +136,7 @@ namespace Rocket.Unturned.Chat
 
         public void Say(CSteamID CSteamID, string message)
         {
-            Say(CSteamID, message, Palette.Server);
+            Say(CSteamID, message, Palette.SERVER);
         }
 
         public void Say(CSteamID CSteamID, string message, Color? color)
@@ -135,7 +149,7 @@ namespace Rocket.Unturned.Chat
             {   
                 foreach (string m in wrapMessage(message))
                 {
-                    ChatManager.Instance.SteamChannel.send("tellChat", CSteamID, ESteamPacket.UPDATE_UNRELIABLE_BUFFER, new object[] { CSteamID.Nil, (byte)EChatMode.SAY,color, m });
+                    ChatManager.instance.channel.send("tellChat", CSteamID, ESteamPacket.UPDATE_UNRELIABLE_BUFFER, new object[] { CSteamID.Nil, (byte)EChatMode.SAY,color, m });
                 }
             }
         }

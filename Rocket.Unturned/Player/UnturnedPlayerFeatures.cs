@@ -17,7 +17,27 @@ namespace Rocket.Unturned.Player
             get { return color; }
             set { color = value; }
         }
-        
+
+
+        private bool vanishMode = false;
+        public bool VanishMode
+        {
+            get { return vanishMode; }
+            set
+            {
+                Player.GetComponent<UnturnedPlayerMovement>().VanishMode = value;
+                PlayerMovement pMovement = Player.GetComponent<PlayerMovement>();
+                pMovement.canAddSimulationResultsToUpdates = !value;
+                if (vanishMode && !value)
+                {
+                    pMovement.updates.Add(new PlayerStateUpdate(pMovement.real, Player.Player.look.angle, Player.Player.look.rot));
+                    pMovement.isUpdated = true;
+                    PlayerManager.updates++;
+                }
+                vanishMode = value;
+            }
+        }
+
         private bool godMode = false;
         public bool GodMode
         {
@@ -65,7 +85,7 @@ namespace Rocket.Unturned.Player
         private void Check()
         {
             initialCheck = true;
-           
+
             if (U.Instance.Settings.Instance.CharacterNameValidation)
             {
                 string username = Player.CharacterName;

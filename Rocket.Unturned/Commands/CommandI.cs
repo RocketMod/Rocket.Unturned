@@ -63,7 +63,7 @@ namespace Rocket.Unturned.Commands
             if (!ushort.TryParse(itemString, out id))
             {
                 ItemAsset asset = UnturnedItems.GetItemAssetByName(itemString.ToLower());
-                if (asset != null) id = asset.Id;
+                if (asset != null) id = asset.id;
                 if (String.IsNullOrEmpty(itemString.Trim()) || id == 0)
                 {
                     U.Instance.Chat.Say(player, U.Translate("command_generic_invalid_parameter"));
@@ -79,7 +79,7 @@ namespace Rocket.Unturned.Commands
                 throw new WrongUsageOfCommandException(caller, this);
             }
 
-            string assetName = ((ItemAsset)a).Name;
+            string assetName = ((ItemAsset)a).itemName;
 
             if (player.GiveItem(id, amount))
             {

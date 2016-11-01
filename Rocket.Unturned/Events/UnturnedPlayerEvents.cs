@@ -14,11 +14,11 @@ namespace Rocket.Unturned.Events
     {
         protected override void Load()
         {
-            Player.Player.PlayerLife.OnUpdateStamina += onUpdateStamina;
-            Player.Player.Inventory.OnInventoryAdded += onInventoryAdded;
-            Player.Player.Inventory.OnInventoryRemoved += onInventoryRemoved;
-            Player.Player.Inventory.OnInventoryResized += onInventoryResized;
-            Player.Player.Inventory.OnInventoryUpdated += onInventoryUpdated;
+            Player.Player.life.onStaminaUpdated += onUpdateStamina;
+            Player.Player.inventory.onInventoryAdded += onInventoryAdded;
+            Player.Player.inventory.onInventoryRemoved += onInventoryRemoved;
+            Player.Player.inventory.onInventoryResized += onInventoryResized;
+            Player.Player.inventory.onInventoryUpdated += onInventoryUpdated;
         }
 
         private void Start()
@@ -51,8 +51,8 @@ namespace Rocket.Unturned.Events
         {
             try
             {
-                if (s == null || s.Player == null || s.Player.transform == null || R == null) return;
-                UnturnedPlayerEvents instance = s.Player.transform.GetComponent<UnturnedPlayerEvents>();
+                if (s == null || s.player == null || s.player.transform == null || R == null) return;
+                UnturnedPlayerEvents instance = s.player.transform.GetComponent<UnturnedPlayerEvents>();
                 UnturnedPlayer rp = UnturnedPlayer.FromSteamPlayer(s);
 #if DEBUG
                  //string o = "";
@@ -251,30 +251,7 @@ namespace Rocket.Unturned.Events
             OnPlayerInventoryAdded.TryInvoke(Player,(InventoryGroup)Enum.Parse(typeof(InventoryGroup), E.ToString()), u, J);
             OnInventoryAdded.TryInvoke(Player, (InventoryGroup)Enum.Parse(typeof(InventoryGroup), E.ToString()), u, J);
         }
-
-        public delegate void PlayerChatted(UnturnedPlayer player, ref Color color, string message, EChatMode chatMode, ref bool cancel);
-        public static event PlayerChatted OnPlayerChatted;
-
-        internal static Color firePlayerChatted(UnturnedPlayer player, EChatMode chatMode, Color color, string msg, ref bool cancel)
-        {
-            if (OnPlayerChatted != null)
-            {
-                foreach (var handler in OnPlayerChatted.GetInvocationList().Cast<PlayerChatted>())
-                {
-                    try
-                    {
-                        handler(player, ref color, msg, chatMode, ref cancel);
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.Error(ex);
-                    }
-                }
-            }
-
-            return color;
-        }
-
+        
         public enum Wearables { Hat = 0, Mask = 1, Vest = 2, Pants = 3, Shirt = 4, Glasses = 5, Backpack = 6};
         public delegate void PlayerWear(UnturnedPlayer player, Wearables wear, ushort id, byte? quality);
         public static event PlayerWear OnPlayerWear;

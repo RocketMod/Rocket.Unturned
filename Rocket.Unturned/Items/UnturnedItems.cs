@@ -18,7 +18,7 @@ namespace Rocket.Unturned.Items
         public static ItemAsset GetItemAssetByName(string name)
         {
             if (String.IsNullOrEmpty(name)) return null;
-            return SDG.Unturned.Assets.find(EAssetType.ITEM).Cast<ItemAsset>().Where(i => i.Name != null && i.Name.ToLower().Contains(name.ToLower())).FirstOrDefault();
+            return SDG.Unturned.Assets.find(EAssetType.ITEM).Cast<ItemAsset>().Where(i => i.itemName != null && i.itemName.ToLower().Contains(name.ToLower())).FirstOrDefault();
         }
 
         public static ItemAsset GetItemAssetById(ushort id)

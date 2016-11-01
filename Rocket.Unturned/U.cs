@@ -22,10 +22,12 @@ using Rocket.API.Commands;
 using System.Collections.Generic;
 using Rocket.Unturned.Player;
 using Logger = Rocket.API.Logging.Logger;
+using SDG.Framework.Modules;
+using Rocket.Unturned.Permissions;
 
 namespace Rocket.Unturned
 {
-    public class U : MonoBehaviour, IRocketImplementation
+    public class U : MonoBehaviour, IRocketImplementation, IModuleNexus
     {
         #region Events
         public event ImplementationInitialized OnInitialized;
@@ -48,7 +50,31 @@ namespace Rocket.Unturned
         #endregion
 
         #region Static Methods
-        internal static void Splash()
+        public static string Translate(string translationKey, params object[] placeholder)
+        {
+            return Instance.Translation.Instance.Translate(translationKey, placeholder);
+        }
+
+        #endregion
+
+        #region Properties
+        public IChat Chat { get; private set; }
+        public XMLFileAsset<UnturnedSettings> Settings { get; private set; }
+        public XMLFileAsset<TranslationList> Translation { get; private set; }
+        public string Name { get; private set; } = "Unturned";
+        public string InstanceName { get; private set; } = Dedicator.serverID;
+        #endregion
+
+        private static GameObject rocketGameObject;
+
+
+        private void Awake()
+        {
+            Instance = this;
+            Environment.Initialize();
+        }
+
+        public void initialize()
         {
             rocketGameObject = new GameObject("Rocket");
             DontDestroyOnLoad(rocketGameObject);
@@ -68,37 +94,14 @@ namespace Rocket.Unturned
             };
         }
 
-        public static string Translate(string translationKey, params object[] placeholder)
-        {
-            return Instance.Translation.Instance.Translate(translationKey, placeholder);
-        }
-
-        #endregion
-
-        #region Properties
-        public IChat Chat { get; private set; }
-        public XMLFileAsset<UnturnedSettings> Settings { get; private set; }
-        public XMLFileAsset<TranslationList> Translation { get; private set; }
-        public string Name { get; private set; } = "Unturned";
-        public string InstanceName { get; private set; } = Dedicator.InstanceName;
-        #endregion
-
-        private static GameObject rocketGameObject;
-
-
-        private void Awake()
-        {
-            Instance = this;
-            Environment.Initialize();
-        }
-
         private void Initialize()
         {
             try
             {
                 Settings = new XMLFileAsset<UnturnedSettings>(Environment.SettingsFile);
 
-                UnturnedTranslations defaultTranslations = new UnturnedTranslations();
+                TranslationList defaultTranslations = new TranslationList();
+                defaultTranslations.AddRange(new UnturnedTranslations());
                 Translation = new XMLFileAsset<TranslationList>(String.Format(Environment.TranslationFile, R.Instance.Settings.Instance.LanguageCode), new Type[] { typeof(TranslationList), typeof(TranslationListEntry) }, defaultTranslations);
                 Translation.AddUnknownEntries(defaultTranslations);
 
@@ -170,7 +173,7 @@ namespace Rocket.Unturned
                 new Commands.CommandV()
             };
 
-            foreach (Command vanillaCommand in Commander.Commands)
+            foreach (Command vanillaCommand in Commander.commands)
             {
                 commands.Add(new UnturnedVanillaCommand(vanillaCommand));
             }
@@ -180,13 +183,65 @@ namespace Rocket.Unturned
 
         public ReadOnlyCollection<IRocketPlayer> GetAllPlayers()
         {
-            return Provider.Players.Select(p => (IRocketPlayer)UnturnedPlayer.FromSteamPlayer(p)).ToList().AsReadOnly();
+            return Provider.clients.Select(p => (IRocketPlayer)UnturnedPlayer.FromSteamPlayer(p)).ToList().AsReadOnly();
+        }
+
+
+        private void bindDelegates()
+        {
+            CommandWindow.onCommandWindowInputted += (string text, ref bool shouldExecuteCommand) =>
+            {
+                if (text.StartsWith("/")) text.Substring(1);
+                    shouldExecuteCommand = R.Instance.Execute(new ConsolePlayer(), text);
+            };
+
+            CommandWindow.onCommandWindowOutputted += (object text, ConsoleColor color) =>
+            {
+                Logger.Info(text);
+            };
+
+            /*
+            SteamChannel.onTriggerReceive += (SteamChannel channel, CSteamID steamID, byte[] packet, int offset, int size) =>
+             {
+                 UnturnedPlayerEvents.TriggerReceive(channel, steamID, packet, offset, size);
+             };
+             */
+
+            SteamChannel.onTriggerSend += (SteamPlayer player, string name, ESteamCall mode, ESteamPacket type, object[] arguments) =>
+            {
+                UnturnedPlayerEvents.TriggerSend(player, name, mode, type, arguments);
+            };
+
+            ChatManager.onCheckPermissions += (SteamPlayer player, string text, ref bool shouldExecuteCommand, ref bool shouldList) =>
+            {
+                if (text.StartsWith("/"))
+                {
+                    text.Substring(1);
+                    if (UnturnedPermissions.CheckPermissions(player, text))
+                    {
+                        R.Instance.Execute(UnturnedPlayer.FromSteamPlayer(player), text);
+                    }
+                    shouldList = false;
+                }
+                shouldExecuteCommand = false;
+            };
+
+            Provider.onCheckValid += (ValidateAuthTicketResponse_t callback, ref bool isValid) =>
+            {
+                isValid = UnturnedPermissions.CheckValid(callback);
+            };
         }
 
         public void Reload()
         {
             Translation.Load();
             Settings.Load();
+            OnReload?.Invoke();
+        }
+
+        public void shutdown()
+        {
+            Shutdown();
         }
 
         public void Shutdown()

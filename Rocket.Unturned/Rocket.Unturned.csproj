@@ -38,7 +38,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Local|AnyCPU'">
-    <OutputPath>..\..\..\..\..\Desktop\Unturned\Unturned_Data\Managed\</OutputPath>
+    <OutputPath>..\..\..\..\..\Desktop\unturned\Modules\Rocket.Unturned\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <Optimize>True</Optimize>
     <DebugType>full</DebugType>
@@ -104,8 +104,6 @@
     <Compile Include="Extensions\SteamPlayerExtension.cs" />
     <Compile Include="Environment.cs" />
     <Compile Include="Permissions\UnturnedPermissions.cs" />
-    <Compile Include="Interface.cs" />
-    <Compile Include="UI.cs" />
     <Compile Include="U.cs" />
     <Compile Include="Player\UnturnedPlayer.cs" />
     <Compile Include="Player\UnturnedPlayerComponent.cs" />
@@ -120,10 +118,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </None>
+    <None Include="Scripts\Linux\README" />
     <None Include="Scripts\Linux\start.sh" />
     <None Include="Scripts\Linux\update.sh" />
     <None Include="Scripts\Windows\MyFirstRocketServer.bat" />
     <None Include="Scripts\Windows\start.bat" />
+    <None Include="Scripts\Windows\update.bat" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="lib\Assembly-CSharp-firstpass.dll" />
