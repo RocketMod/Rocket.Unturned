@@ -136,9 +136,9 @@ namespace Rocket.Unturned
 #if LINUX
         Console = rocketGameObject.AddComponent<UnturnedConsole>();
 #endif
-            Console.Clear();
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("Rocket Unturned v" + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " for Unturned v" + Provider.APP_VERSION + "\n");
+            System.Console.Clear();
+            System.Console.ForegroundColor = ConsoleColor.Cyan;
+            System.Console.WriteLine("Rocket Unturned v" + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " for Unturned v" + Provider.APP_VERSION + "\n");
 
             R.OnRockedInitialized += () =>
             {
