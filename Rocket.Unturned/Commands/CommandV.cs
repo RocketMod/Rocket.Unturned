@@ -87,7 +87,7 @@ namespace Rocket.Unturned.Commands
 
             if (VehicleTool.giveVehicle(player.Player, id.Value))
             {
-                Logger.Warn(U.Translate("command_v_giving_console", player.CharacterName, id));
+                Logger.Warn(U.Translate("command_v_giving_console", player.DisplayName, id));
                 U.Instance.Chat.Say(caller, U.Translate("command_v_giving_private", assetName, id));
             }
             else

@@ -75,7 +75,7 @@ namespace Rocket.Unturned.Commands
             if (x != null && y != null && z != null)
             {
                 player.Teleport(new Vector3((float)x, (float)y, (float)z), MeasurementTool.angleToByte(player.Rotation));
-                Logger.Info(U.Translate("command_tp_teleport_console", player.CharacterName, (float)x + "," + (float)y + "," + (float)z));
+                Logger.Info(U.Translate("command_tp_teleport_console", player.DisplayName, (float)x + "," + (float)y + "," + (float)z));
                 U.Instance.Chat.Say(player, U.Translate("command_tp_teleport_private", (float)x + "," + (float)y + "," + (float)z));
             }
             else
@@ -84,8 +84,8 @@ namespace Rocket.Unturned.Commands
                 if (otherplayer != null && otherplayer != player)
                 {
                     player.Teleport(otherplayer);
-                    Logger.Info(U.Translate("command_tp_teleport_console", player.CharacterName, otherplayer.CharacterName));
-                    U.Instance.Chat.Say(player, U.Translate("command_tp_teleport_private", otherplayer.CharacterName));
+                    Logger.Info(U.Translate("command_tp_teleport_console", player.DisplayName, otherplayer.DisplayName));
+                    U.Instance.Chat.Say(player, U.Translate("command_tp_teleport_private", otherplayer.DisplayName));
                 }
                 else
                 {
@@ -94,7 +94,7 @@ namespace Rocket.Unturned.Commands
                     {
                         Vector3 c = item.point + new Vector3(0f, 0.5f, 0f);
                         player.Teleport(c, MeasurementTool.angleToByte(player.Rotation));
-                        Logger.Info(U.Translate("command_tp_teleport_console", player.CharacterName, ((LocationNode)item).name));
+                        Logger.Info(U.Translate("command_tp_teleport_console", player.DisplayName, ((LocationNode)item).name));
                         U.Instance.Chat.Say(player, U.Translate("command_tp_teleport_private", ((LocationNode)item).name));
                     }
                     else

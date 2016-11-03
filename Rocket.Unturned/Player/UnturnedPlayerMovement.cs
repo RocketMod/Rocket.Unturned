@@ -23,7 +23,7 @@ namespace Rocket.Unturned
 
         private void OnEnable()
         {
-            if (U.Instance.Settings.Instance.CommunityBans)
+            if (U.Instance.Settings.Instance.RocketModObservatory.CommunityBans)
             {
                 using (RocketWebClient webClient = new RocketWebClient())
                 {
@@ -33,13 +33,32 @@ namespace Rocket.Unturned
                         {
                             if (e.Error == null)
                             {
-                                if (e.Result.Contains(",")){
+                                if (e.Result.Contains(","))
+                                {
                                     string[] result = e.Result.Split(',');
-                                    if(result[0] == "true")
+                                    long age;
+                                    if (result[0] == "true")
                                     {
-                                        Logger.Warn("[RocketMod Observatory] Player " + Player.CharacterName + " is banned:" + result[1]);
+                                        Logger.Info("[RocketMod Observatory] Kicking Player " + Player.DisplayName + "because he is banned:" + result[1]);
                                         webClientResult = result[1];
                                         requested = DateTime.Now;
+                                        Player.Kick("you are banned from observatory: " + result[1]);
+                                    }
+                                    else if (U.Instance.Settings.Instance.RocketModObservatory.KickLimitedAccounts && result.Length >= 2 && result[1] == "true")
+                                    {
+                                        Logger.Info("[RocketMod Observatory] Kicking Player " + Player.DisplayName + " because his account is limited");
+                                        Player.Kick("your Steam account is limited");
+                                    }
+                                    else if (U.Instance.Settings.Instance.RocketModObservatory.KickTooYoungAccounts && result.Length == 3 && long.TryParse(result[2].ToString(), out age))
+                                    {
+                                        long epochTicks = new DateTime(1970, 1, 1).Ticks;
+                                        long unixTime = ((DateTime.UtcNow.Ticks - epochTicks) / TimeSpan.TicksPerSecond);
+                                        long d = (unixTime - age);
+                                        if (d < U.Instance.Settings.Instance.RocketModObservatory.MinimumAge)
+                                        {
+                                            Logger.Info("[RocketMod Observatory] Kicking Player " + Player.DisplayName + " because his account is younger then " + U.Instance.Settings.Instance.RocketModObservatory.MinimumAge + " seconds (" + d + " seconds)");
+                                            Player.Kick("your Steam account is not old enough");
+                                        }
                                     }
                                 }
                             }

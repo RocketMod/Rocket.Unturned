@@ -110,8 +110,9 @@
     <Compile Include="Player\UnturnedPlayerFeatures.cs" />
     <Compile Include="Plugins\PluginUnturnedPlayerComponentManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Serialisation\UnturnedSettings.cs" />
+    <Compile Include="UnturnedSettings.cs" />
     <Compile Include="Items\UnturnedItems.cs" />
+    <Compile Include="Utils\AutomaticSaveWatchdog.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Rocket.Unturned.nuspec">
@@ -132,9 +133,7 @@
     <Content Include="lib\Rocket.Core.dll" />
     <Content Include="lib\UnityEngine.dll" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Utils\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

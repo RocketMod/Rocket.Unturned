@@ -28,17 +28,17 @@ namespace Rocket.Unturned.Permissions
             Regex r = new Regex("^\\/[a-zA-Z]*");
             string requestedCommand = r.Match(permission.ToLower()).Value.ToString().TrimStart('/').ToLower();
 
-            IRocketCommand command = R.Instance.GetCommand(requestedCommand);
+            IRocketCommand command = R.GetCommand(requestedCommand);
 
             if (command != null)
             {
-                if (R.Instance.Permissions.HasPermission(player, command))
+                if (R.Permissions.HasPermission(player, command))
                 {
                     return true;
                 }
                 else
                 {
-                    U.Instance.Chat.Say(player, R.Instance.Translation.Instance.Translate("command_no_permission"), Color.red);
+                    U.Instance.Chat.Say(player, R.Translate("command_no_permission"), Color.red);
                     return false;
                 }
             }

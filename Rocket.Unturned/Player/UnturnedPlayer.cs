@@ -30,7 +30,7 @@ namespace Rocket.Unturned.Player
         {
             get
             {
-                return CharacterName;
+                return player.channel.owner.playerID.characterName;
             }
         }
 
@@ -78,7 +78,7 @@ namespace Rocket.Unturned.Player
                     return Palette.ADMIN;
                 }
 
-                RocketPermissionsGroup group = R.Instance.Permissions.GetGroups(this, false).Where(g => g.Color != null && g.Color != "white").FirstOrDefault();
+                RocketPermissionsGroup group = R.Permissions.GetGroups(this, false).Where(g => g.Color != null && g.Color != "white").FirstOrDefault();
                 string color = "";
                 if (group != null) color = group.Color;
                 return UnturnedChat.GetColorFromName(color, Palette.COLOR_W);
@@ -343,15 +343,7 @@ namespace Rocket.Unturned.Player
                 return player.life.stamina;
             }
         }
-
-        public string CharacterName
-        {
-            get
-            {
-                return player.channel.owner.playerID.characterName;
-            }
-        }
-
+        
         public string SteamName
         {
             get

@@ -9,7 +9,6 @@ using Rocket.Unturned.Chat;
 using Rocket.Unturned.Commands;
 using Rocket.Unturned.Events;
 using Rocket.Unturned.Plugins;
-using Rocket.Unturned.Serialisation;
 using SDG.Unturned;
 using Steamworks;
 using System;
@@ -24,6 +23,7 @@ using Rocket.Unturned.Player;
 using Logger = Rocket.API.Logging.Logger;
 using SDG.Framework.Modules;
 using Rocket.Unturned.Permissions;
+using Rocket.Unturned.Utils;
 
 namespace Rocket.Unturned
 {
@@ -83,16 +83,14 @@ namespace Rocket.Unturned
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("Rocket Unturned v" + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " for Unturned v" + Provider.APP_VERSION + "\n");
 
-            Provider.onServerHosted += () =>
+            rocketGameObject.TryAddComponent<U>();
+            R.OnInitialized += () =>
             {
-                rocketGameObject.TryAddComponent<U>();
-                R.OnInitialized += () =>
-                {
-                    Instance.Initialize();
-                };
-                rocketGameObject.TryAddComponent<R>();
+                Instance.Initialize();
             };
-        }
+            bindDelegates();
+            rocketGameObject.TryAddComponent<R>();
+    }
 
         private void Initialize()
         {
@@ -102,10 +100,11 @@ namespace Rocket.Unturned
 
                 TranslationList defaultTranslations = new TranslationList();
                 defaultTranslations.AddRange(new UnturnedTranslations());
-                Translation = new XMLFileAsset<TranslationList>(String.Format(Environment.TranslationFile, R.Instance.Settings.Instance.LanguageCode), new Type[] { typeof(TranslationList), typeof(TranslationListEntry) }, defaultTranslations);
+                Translation = new XMLFileAsset<TranslationList>(String.Format(Environment.TranslationFile, R.Settings.Instance.LanguageCode), new Type[] { typeof(TranslationList), typeof(TranslationListEntry) }, defaultTranslations);
                 Translation.AddUnknownEntries(defaultTranslations);
 
                 Chat = (IChat)gameObject.TryAddComponent<UnturnedChat>();
+                gameObject.TryAddComponent<AutomaticSaveWatchdog>();
 
                 Provider.onServerShutdown += () => { OnShutdown.TryInvoke(); };
                 Provider.onServerDisconnected += (CSteamID r) => {
@@ -119,7 +118,7 @@ namespace Rocket.Unturned
                     p.Player.gameObject.TryAddComponent<UnturnedPlayerEvents>();
                     OnBeforePlayerConnected.TryInvoke(p);
                 };
-
+                
                 RocketPluginBase.OnPluginsLoading += (RocketPluginBase plugin, ref bool cancelLoading) =>
                 {
                     try
@@ -137,16 +136,6 @@ namespace Rocket.Unturned
                 {
                     plugin.gameObject.TryRemoveComponent<PluginUnturnedPlayerComponentManager>();
                 };
-
-                try
-                {
-                    SteamGameServer.SetKeyValue("rocket", Assembly.GetExecutingAssembly().GetName().Version.ToString());
-                    SteamGameServer.SetBotPlayerCount(1);
-                }
-                catch (Exception ex)
-                {
-                    Logger.Error("Steam can not be initialized: " + ex.Message);
-                }
 
                 OnInitialized.TryInvoke();
 
@@ -189,15 +178,71 @@ namespace Rocket.Unturned
 
         private void bindDelegates()
         {
+            Logger.OnLog += (API.Logging.LogMessage message) =>
+            {
+                if (message == null) return;
+                string m = message.Message;
+                if (m == null) m = "NULL";
+                if (m.StartsWith("[Unturned]")) return;
+                
+                ConsoleColor old = Console.ForegroundColor;
+
+                switch (message.LogLevel)
+                {
+                    case API.Logging.LogLevel.DEBUG:
+                        if (U.Instance.Settings.Instance.Debug) { 
+                            Console.ForegroundColor = ConsoleColor.Gray;
+                            Console.WriteLine(m);
+                        }
+                        break;
+                    case API.Logging.LogLevel.INFO:
+                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.WriteLine(m);
+                        break;
+                    case API.Logging.LogLevel.WARN:
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine(m);
+                        break;
+                    case API.Logging.LogLevel.ERROR:
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine(m);
+                        if (message.Exception != null) 
+                            Console.WriteLine(message.Exception);
+                        break;
+                    case API.Logging.LogLevel.FATAL:
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine(m);
+                        if (message.Exception != null)
+                            Console.WriteLine(message.Exception);
+                        break;
+                }
+                Console.ForegroundColor = old;
+            };
+
+            Provider.onServerHosted += () =>
+            {
+                try
+                {
+                    SteamGameServer.SetKeyValue("rocket", Assembly.GetExecutingAssembly().GetName().Version.ToString());
+                    SteamGameServer.SetKeyValue("rocketplugins",String.Join(", ",R.GetAllPlugins().Select(p => p.Name).ToArray()));
+                    SteamGameServer.SetBotPlayerCount(1);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error("Steam can not be initialized: " + ex.Message);
+                }
+            };
+
             CommandWindow.onCommandWindowInputted += (string text, ref bool shouldExecuteCommand) =>
             {
                 if (text.StartsWith("/")) text.Substring(1);
-                    shouldExecuteCommand = R.Instance.Execute(new ConsolePlayer(), text);
+                R.Execute(new ConsolePlayer(), text);
+                shouldExecuteCommand = false;
             };
 
             CommandWindow.onCommandWindowOutputted += (object text, ConsoleColor color) =>
             {
-                Logger.Info(text);
+                Logger.Debug("[Unturned] "+text);
             };
 
             /*
@@ -219,7 +264,7 @@ namespace Rocket.Unturned
                     text.Substring(1);
                     if (UnturnedPermissions.CheckPermissions(player, text))
                     {
-                        R.Instance.Execute(UnturnedPlayer.FromSteamPlayer(player), text);
+                        R.Execute(UnturnedPlayer.FromSteamPlayer(player), text);
                     }
                     shouldList = false;
                 }
@@ -231,7 +276,7 @@ namespace Rocket.Unturned
                 isValid = UnturnedPermissions.CheckValid(callback);
             };
         }
-
+        
         public void Reload()
         {
             Translation.Load();
