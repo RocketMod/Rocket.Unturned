@@ -1,0 +1,19 @@
+{
+	"Name": "Rocket.Unturned",
+	"Version": "4.9.3.0",
+	"Assemblies":
+	[
+		{
+			"Path": "/Rocket.API.dll",
+			"Role": "Server"
+		},
+		{
+			"Path": "/Rocket.Core.dll",
+			"Role": "Server"
+		},
+		{
+			"Path": "/Rocket.Unturned.dll",
+			"Role": "Server"
+		}
+	]
+}

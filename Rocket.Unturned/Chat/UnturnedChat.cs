@@ -113,7 +113,7 @@ namespace Rocket.Unturned.Chat
             Logger.Info("Broadcast: " + message);
             foreach (string m in wrapMessage(message))
             {
-                ChatManager.instance.channel.send("tellChat", ESteamCall.OTHERS, ESteamPacket.UPDATE_UNRELIABLE_BUFFER, new object[] { CSteamID.Nil, (byte)EChatMode.GLOBAL, color, m });
+                ChatManager.instance.tellChat(CSteamID.Nil, Provider.server, (byte)EChatMode.GLOBAL, color.Value, m);
             }
         }
 
