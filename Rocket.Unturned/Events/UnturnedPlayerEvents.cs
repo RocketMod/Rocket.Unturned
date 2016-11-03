@@ -47,13 +47,13 @@ namespace Rocket.Unturned.Events
             return;
         }
         
-        internal static void TriggerSend(SteamPlayer s, string W, ESteamCall X, ESteamPacket l, params object[] R)
+        internal static void TriggerSend(SteamPlayer player, string name, ESteamCall mode, ESteamPacket type, params object[] arguments)
         {
             try
             {
-                if (s == null || s.player == null || s.player.transform == null || R == null) return;
-                UnturnedPlayerEvents instance = s.player.transform.GetComponent<UnturnedPlayerEvents>();
-                UnturnedPlayer rp = UnturnedPlayer.FromSteamPlayer(s);
+                if (player == null || player.player == null || player.player.transform == null || arguments == null) return;
+                UnturnedPlayerEvents instance = player.player.transform.GetComponent<UnturnedPlayerEvents>();
+                UnturnedPlayer rp = UnturnedPlayer.FromSteamPlayer(player);
 #if DEBUG
                  //string o = "";
                  //foreach (object r in R)
@@ -62,66 +62,66 @@ namespace Rocket.Unturned.Events
                  //}
                  //Logger.Log("Send+" + s.SteamPlayerID.CSteamID.ToString() + ": " + W + " - " + o);
 #endif
-                if (W.StartsWith("tellWear")) {
-                    OnPlayerWear.TryInvoke(rp, Enum.Parse(typeof(Wearables), W.Replace("tellWear", "")), (ushort)R[0], R.Count() > 1 ? (byte?)R[1] : null);
+                if (name.StartsWith("tellWear")) {
+                    OnPlayerWear.TryInvoke(rp, Enum.Parse(typeof(Wearables), name.Replace("tellWear", "")), (ushort)arguments[0], arguments.Count() > 1 ? (byte?)arguments[1] : null);
                 }
-                switch (W)
+                switch (name)
                 {
                     case "tellBleeding":
-                        OnPlayerUpdateBleeding.TryInvoke(rp, (bool)R[0]);
-                        instance.OnUpdateBleeding.TryInvoke( rp, (bool)R[0]);
+                        OnPlayerUpdateBleeding.TryInvoke(rp, (bool)arguments[0]);
+                        instance.OnUpdateBleeding.TryInvoke( rp, (bool)arguments[0]);
                         break;
                     case "tellBroken":
-                        OnPlayerUpdateBroken.TryInvoke(rp, (bool)R[0]);
-                        instance.OnUpdateBroken.TryInvoke(rp, (bool)R[0]);
+                        OnPlayerUpdateBroken.TryInvoke(rp, (bool)arguments[0]);
+                        instance.OnUpdateBroken.TryInvoke(rp, (bool)arguments[0]);
                         break;
                     case "tellLife":
-                        OnPlayerUpdateLife.TryInvoke(rp, (byte)R[0]);
-                        instance.OnUpdateLife.TryInvoke(rp, (byte)R[0]);
+                        OnPlayerUpdateLife.TryInvoke(rp, (byte)arguments[0]);
+                        instance.OnUpdateLife.TryInvoke(rp, (byte)arguments[0]);
                         break;
                     case "tellFood":
-                        OnPlayerUpdateFood.TryInvoke(rp, (byte)R[0]);
-                        instance.OnUpdateFood.TryInvoke(rp, (byte)R[0]);
+                        OnPlayerUpdateFood.TryInvoke(rp, (byte)arguments[0]);
+                        instance.OnUpdateFood.TryInvoke(rp, (byte)arguments[0]);
                         break;
                     case "tellHealth":
-                        OnPlayerUpdateHealth.TryInvoke(rp, (byte)R[0]);
-                        instance.OnUpdateHealth.TryInvoke(rp, (byte)R[0]);
+                        OnPlayerUpdateHealth.TryInvoke(rp, (byte)arguments[0]);
+                        instance.OnUpdateHealth.TryInvoke(rp, (byte)arguments[0]);
                         break;
                     case "tellVirus":
-                        OnPlayerUpdateVirus.TryInvoke(rp, (byte)R[0]);
-                        instance.OnUpdateVirus.TryInvoke(rp, (byte)R[0]);
+                        OnPlayerUpdateVirus.TryInvoke(rp, (byte)arguments[0]);
+                        instance.OnUpdateVirus.TryInvoke(rp, (byte)arguments[0]);
                         break;
                     case "tellWater":
-                        OnPlayerUpdateWater.TryInvoke(rp, (byte)R[0]);
-                        instance.OnUpdateWater.TryInvoke(rp, (byte)R[0]);
+                        OnPlayerUpdateWater.TryInvoke(rp, (byte)arguments[0]);
+                        instance.OnUpdateWater.TryInvoke(rp, (byte)arguments[0]);
                         break;
                     case "tellStance":
-                        OnPlayerUpdateStance.TryInvoke(rp, (byte)R[0]);
-                        instance.OnUpdateStance.TryInvoke( rp, (byte)R[0]);
+                        OnPlayerUpdateStance.TryInvoke(rp, (byte)arguments[0]);
+                        instance.OnUpdateStance.TryInvoke( rp, (byte)arguments[0]);
                         break;
                     case "tellGesture":
-                        OnPlayerUpdateGesture.TryInvoke(rp, (PlayerGesture)Enum.Parse(typeof(PlayerGesture), R[0].ToString()));
-                        instance.OnUpdateGesture.TryInvoke( rp, (PlayerGesture)Enum.Parse(typeof(PlayerGesture), R[0].ToString()));
+                        OnPlayerUpdateGesture.TryInvoke(rp, (PlayerGesture)Enum.Parse(typeof(PlayerGesture), arguments[0].ToString()));
+                        instance.OnUpdateGesture.TryInvoke( rp, (PlayerGesture)Enum.Parse(typeof(PlayerGesture), arguments[0].ToString()));
                         break;
                     case "tellStat":
-                        OnPlayerUpdateStat.TryInvoke(rp, (EPlayerStat)(byte)R[0]);
-                        instance.OnUpdateStat.TryInvoke(rp, (EPlayerStat)(byte)R[0]);
+                        OnPlayerUpdateStat.TryInvoke(rp, (EPlayerStat)(byte)arguments[0]);
+                        instance.OnUpdateStat.TryInvoke(rp, (EPlayerStat)(byte)arguments[0]);
                         break;
                     case "tellExperience":
-                        OnPlayerUpdateExperience.TryInvoke(rp, (uint)R[0]);
-                        instance.OnUpdateExperience.TryInvoke(rp, (uint)R[0]);
+                        OnPlayerUpdateExperience.TryInvoke(rp, (uint)arguments[0]);
+                        instance.OnUpdateExperience.TryInvoke(rp, (uint)arguments[0]);
                         break;
                     case "tellRevive":
-                        OnPlayerRevive.TryInvoke(rp, (Vector3)R[0], (byte)R[1]);
-                        instance.OnRevive.TryInvoke(rp, (Vector3)R[0], (byte)R[1]);
+                        OnPlayerRevive.TryInvoke(rp, (Vector3)arguments[0], (byte)arguments[1]);
+                        instance.OnRevive.TryInvoke(rp, (Vector3)arguments[0], (byte)arguments[1]);
                         break;
                     case "tellDead":
-                        OnPlayerDead.TryInvoke(rp, (Vector3)R[0]);
-                        instance.OnDead.TryInvoke(rp, (Vector3)R[0]);
+                        OnPlayerDead.TryInvoke(rp, (Vector3)arguments[0]);
+                        instance.OnDead.TryInvoke(rp, (Vector3)arguments[0]);
                         break;
                     case "tellDeath":
-                        OnPlayerDeath.TryInvoke(rp, (EDeathCause)(byte)R[0], (ELimb)(byte)R[1], new CSteamID(ulong.Parse(R[2].ToString())));
-                        instance.OnDeath.TryInvoke(rp, (EDeathCause)(byte)R[0], (ELimb)(byte)R[1], new CSteamID(ulong.Parse(R[2].ToString())));
+                        OnPlayerDeath.TryInvoke(rp, (EDeathCause)(byte)arguments[0], (ELimb)(byte)arguments[1], new CSteamID(ulong.Parse(arguments[2].ToString())));
+                        instance.OnDeath.TryInvoke(rp, (EDeathCause)(byte)arguments[0], (ELimb)(byte)arguments[1], new CSteamID(ulong.Parse(arguments[2].ToString())));
                         break;
                     default:
 #if DEBUG
@@ -133,7 +133,7 @@ namespace Rocket.Unturned.Events
             }
             catch (Exception ex)
             {
-                Logger.Error("Failed to receive packet \""+W+"\"",ex);
+                Logger.Error("Failed to receive packet \""+name+"\"",ex);
             }
         }
 
