@@ -12,6 +12,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
+using Rocket.API.Serialisation;
 
 namespace Rocket.Unturned.Permissions
 {
@@ -52,6 +53,34 @@ namespace Rocket.Unturned.Permissions
         internal static bool CheckValid(ValidateAuthTicketResponse_t r)
         {
             ESteamRejection? reason = null;
+
+            try
+            {
+                RocketPermissionsGroup g = R.Permissions.GetGroups(new Rocket.API.RocketPlayer(r.m_SteamID.ToString()), true).FirstOrDefault();
+                if (g != null)
+                {
+                    SteamPending steamPending = Provider.pending.FirstOrDefault(x => x.playerID.steamID == r.m_SteamID);
+                    if (steamPending != null)
+                    {
+                        string prefix = g.Prefix == null ? "" : g.Prefix;
+                        string suffix = g.Suffix == null ? "" : g.Suffix;
+                        if (prefix != "" && !steamPending.playerID.characterName.StartsWith(g.Prefix))
+                        {
+                            steamPending.playerID.characterName = prefix + steamPending.playerID.characterName;
+                        }
+                        if (suffix != "" && !steamPending.playerID.characterName.EndsWith(g.Suffix))
+                        {
+                            steamPending.playerID.characterName = steamPending.playerID.characterName + suffix;
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Logger.Info("Failed adding prefix/suffix to player " + r.m_SteamID + ": " + ex.ToString());
+            }
+
             if (OnJoinRequested != null)
             {
                 foreach (var handler in OnJoinRequested.GetInvocationList().Cast<JoinRequested>())
