@@ -6,8 +6,8 @@
 
 STEAM_USERNAME=$1
 STEAM_PASSWORD=$2
-STEAMCMD_HOME="../steamcmd"
-UNTURNED_HOME="../unturned"
+STEAMCMD_HOME="../../steamcmd"
+UNTURNED_HOME="../"
 
 mkdir -p $STEAMCMD_HOME
 mkdir -p $UNTURNED_HOME

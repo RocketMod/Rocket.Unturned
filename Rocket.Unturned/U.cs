@@ -11,9 +11,11 @@ using Rocket.Unturned.Commands;
 using Rocket.Unturned.Effects;
 using Rocket.Unturned.Events;
 using Rocket.Unturned.Permissions;
+using Rocket.Unturned.Player;
 using Rocket.Unturned.Plugins;
 using Rocket.Unturned.Serialisation;
 using Rocket.Unturned.Utils;
+using SDG.Framework.Modules;
 using SDG.Unturned;
 using Steamworks;
 using System;
@@ -23,7 +25,7 @@ using UnityEngine;
 
 namespace Rocket.Unturned
 {
-    public class U : MonoBehaviour, IRocketImplementation
+    public class U : MonoBehaviour, IRocketImplementation, IModuleNexus
     {
         private static GameObject rocketGameObject; 
         public static U Instance;
@@ -126,12 +128,13 @@ namespace Rocket.Unturned
         public static UnturnedConsole Console;
 #endif
 
-        internal static void Splash()
+        public void initialize()
         {
+           
             rocketGameObject = new GameObject("Rocket");
             DontDestroyOnLoad(rocketGameObject);
 #if LINUX
-            Console = rocketGameObject.AddComponent<UnturnedConsole>();
+        Console = rocketGameObject.AddComponent<UnturnedConsole>();
 #endif
             System.Console.Clear();
             System.Console.ForegroundColor = ConsoleColor.Cyan;
@@ -142,11 +145,9 @@ namespace Rocket.Unturned
                 Instance.Initialize();
             };
 
-            Provider.onServerHosted += () =>
-            {
-                rocketGameObject.TryAddComponent<U>();
-                rocketGameObject.TryAddComponent<R>();
-            };
+
+            rocketGameObject.TryAddComponent<U>();
+            rocketGameObject.TryAddComponent<R>();
         }
         
         private void Awake()
@@ -164,12 +165,13 @@ namespace Rocket.Unturned
                 defaultTranslations.AddUnknownEntries(Translation);
                 Events = gameObject.TryAddComponent<UnturnedEvents>();
 
-                gameObject.TryAddComponent<UnturnedEffectManager>();
                 gameObject.TryAddComponent<UnturnedPermissions>();
                 gameObject.TryAddComponent<UnturnedChat>();
                 gameObject.TryAddComponent<UnturnedCommands>();
 
                 gameObject.TryAddComponent<AutomaticSaveWatchdog>();
+
+                bindDelegates();
 
                 RocketPlugin.OnPluginLoading += (IRocketPlugin plugin, ref bool cancelLoading) =>
                 {
@@ -191,21 +193,25 @@ namespace Rocket.Unturned
 
                 R.Commands.RegisterFromAssembly(Assembly.GetExecutingAssembly());
 
-
-                try
+                Provider.onServerHosted += () =>
                 {
-                    R.Plugins.OnPluginsLoaded += () =>
+                    try
                     {
-                        SteamGameServer.SetKeyValue("rocketplugins", String.Join(",", R.Plugins.GetPlugins().Select(p => p.Name).ToArray()));
-                    };
+                        R.Plugins.OnPluginsLoaded += () =>
+                        {
+                            SteamGameServer.SetKeyValue("rocketplugins", String.Join(",", R.Plugins.GetPlugins().Select(p => p.Name).ToArray()));
+                        };
 
-                    SteamGameServer.SetKeyValue("rocket", Assembly.GetExecutingAssembly().GetName().Version.ToString());
-                    SteamGameServer.SetBotPlayerCount(1);
-                }
-                catch (Exception ex)
-                {
-                    Core.Logging.Logger.LogError("Steam can not be initialized: " + ex.Message);
-                }
+
+                        SteamGameServer.SetKeyValue("rocket", Assembly.GetExecutingAssembly().GetName().Version.ToString());
+                        SteamGameServer.SetBotPlayerCount(1);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Core.Logging.Logger.LogError("Steam can not be initialized: " + ex.Message);
+                    }
+                };
 
                 OnRocketImplementationInitialized.TryInvoke();
 
@@ -216,23 +222,75 @@ namespace Rocket.Unturned
             }
         }
         
+        private void bindDelegates()
+        {
+            CommandWindow.onCommandWindowInputted += (string text, ref bool shouldExecuteCommand) =>
+            {
+                if (text.StartsWith("/")) text.Substring(1);
+                if (R.Commands != null)
+                    shouldExecuteCommand = R.Commands.Execute(new ConsolePlayer(), text);
+            };
+
+            CommandWindow.onCommandWindowOutputted += (object text, ConsoleColor color) =>
+            {
+                Core.Logging.Logger.ExternalLog(text, color);
+            };
+
+            /*
+            SteamChannel.onTriggerReceive += (SteamChannel channel, CSteamID steamID, byte[] packet, int offset, int size) =>
+             {
+                 UnturnedPlayerEvents.TriggerReceive(channel, steamID, packet, offset, size);
+             };
+             */
+
+            SteamChannel.onTriggerSend += (SteamPlayer player, string name, ESteamCall mode, ESteamPacket type, object[] arguments) =>
+            {
+                UnturnedPlayerEvents.TriggerSend(player, name, mode, type, arguments);
+            };
+
+            ChatManager.onCheckPermissions += (SteamPlayer player, string text, ref bool shouldExecuteCommand, ref bool shouldList) =>
+            {
+                if (text.StartsWith("/"))
+                {
+                    text.Substring(1);
+                    if (R.Commands != null && UnturnedPermissions.CheckPermissions(player, text))
+                    {
+                        R.Commands.Execute(UnturnedPlayer.FromSteamPlayer(player), text);
+                    }
+                    shouldList = false;
+                }
+                shouldExecuteCommand = false;
+            };
+
+            Provider.onCheckValid += (ValidateAuthTicketResponse_t callback, ref bool isValid) =>
+            {
+                isValid = UnturnedPermissions.CheckValid(callback);
+            };
+    }
+
         public void Reload()
         {
             Translation.Load();
             Settings.Load();
         }
 
+        public void shutdown()
+        {
+            Shutdown();
+        }
+
         public void Shutdown()
         {
-            Provider.shutdown();
+
         }
 
         public string InstanceId
         {
             get
             {
-                return Dedicator.InstanceName;
+                return Dedicator.serverID;
             } 
         }
     }
+               
 }

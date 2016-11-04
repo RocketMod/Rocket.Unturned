@@ -16,7 +16,7 @@ namespace Rocket.Unturned.Chat
     {
         private void Awake()
         {
-            SDG.Unturned.ChatManager.OnChatted += handleChat;
+            SDG.Unturned.ChatManager.onChatted += handleChat;
         }
 
         private void handleChat(SteamPlayer steamPlayer, EChatMode chatMode, ref Color incomingColor, string message, ref bool cancel)
@@ -90,7 +90,7 @@ namespace Rocket.Unturned.Chat
 
         public static void Say(string message)
         {
-            Say(message, Palette.Server);
+            Say(message, Palette.SERVER);
         }
 
         public static void Say(string message,Color color)
@@ -98,13 +98,13 @@ namespace Rocket.Unturned.Chat
             Core.Logging.Logger.Log("Broadcast: " + message, ConsoleColor.Gray);
             foreach (string m in wrapMessage(message))
             {
-                ChatManager.Instance.SteamChannel.send("tellChat", ESteamCall.OTHERS, ESteamPacket.UPDATE_UNRELIABLE_BUFFER, new object[] { CSteamID.Nil, (byte)EChatMode.GLOBAL,color, m });
+                ChatManager.instance.channel.send("tellChat", ESteamCall.OTHERS, ESteamPacket.UPDATE_UNRELIABLE_BUFFER, new object[] { CSteamID.Nil, (byte)EChatMode.GLOBAL,color, m });
             }
         }
        
         public static void Say(IRocketPlayer player, string message)
         {
-            Say(player, message, Palette.Server);
+            Say(player, message, Palette.SERVER);
         }
 
         public static void Say(IRocketPlayer player, string message, Color color)
@@ -121,7 +121,7 @@ namespace Rocket.Unturned.Chat
 
         public static void Say(CSteamID CSteamID, string message)
         {
-            Say(CSteamID, message, Palette.Server);
+            Say(CSteamID, message, Palette.SERVER);
         }
 
         public static void Say(CSteamID CSteamID, string message, Color color)
@@ -134,7 +134,7 @@ namespace Rocket.Unturned.Chat
             {   
                 foreach (string m in wrapMessage(message))
                 {
-                    ChatManager.Instance.SteamChannel.send("tellChat", CSteamID, ESteamPacket.UPDATE_UNRELIABLE_BUFFER, new object[] { CSteamID.Nil, (byte)EChatMode.SAY,color, m });
+                    ChatManager.instance.channel.send("tellChat", CSteamID, ESteamPacket.UPDATE_UNRELIABLE_BUFFER, new object[] { CSteamID.Nil, (byte)EChatMode.SAY,color, m });
                 }
             }
         }

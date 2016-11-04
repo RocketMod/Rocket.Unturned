@@ -51,7 +51,7 @@ namespace Rocket.Unturned.Commands
                 System.Console.ForegroundColor = ConsoleColor.Cyan;
                 System.Console.WriteLine("[Vanilla]");
                 System.Console.ForegroundColor = ConsoleColor.White;
-                Commander.Commands.OrderBy(c => c.command).All(c => { System.Console.WriteLine(c.command.ToLower().PadRight(20, ' ') + " " + c.info.Replace(c.command, "").TrimStart().ToLower()); return true; });
+                Commander.commands.OrderBy(c => c.command).All(c => { System.Console.WriteLine(c.command.ToLower().PadRight(20, ' ') + " " + c.info.Replace(c.command, "").TrimStart().ToLower()); return true; });
 
                 System.Console.WriteLine();
 

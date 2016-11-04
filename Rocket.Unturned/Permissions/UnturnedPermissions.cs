@@ -64,18 +64,18 @@ namespace Rocket.Unturned.Permissions
                 RocketPermissionsGroup g = R.Permissions.GetGroups(new Rocket.API.RocketPlayer(r.m_SteamID.ToString()),true).FirstOrDefault();
                 if (g != null)
                 {
-                    SteamPending steamPending = Provider.pending.FirstOrDefault(x => x.playerID.CSteamID == r.m_SteamID);
+                    SteamPending steamPending = Provider.pending.FirstOrDefault(x => x.playerID.steamID == r.m_SteamID);
                     if (steamPending != null)
                     {
                         string prefix = g.Prefix == null ? "" : g.Prefix;
                         string suffix = g.Suffix == null ? "" : g.Suffix;
-                        if (prefix != "" && !steamPending.playerID.CharacterName.StartsWith(g.Prefix))
+                        if (prefix != "" && !steamPending.playerID.characterName.StartsWith(g.Prefix))
                         {
-                            steamPending.playerID.CharacterName = prefix + steamPending.playerID.CharacterName;
+                            steamPending.playerID.characterName = prefix + steamPending.playerID.characterName;
                         }
-                        if (suffix != "" && !steamPending.playerID.CharacterName.EndsWith(g.Suffix))
+                        if (suffix != "" && !steamPending.playerID.characterName.EndsWith(g.Suffix))
                         {
-                            steamPending.playerID.CharacterName = steamPending.playerID.CharacterName + suffix;
+                            steamPending.playerID.characterName = steamPending.playerID.characterName + suffix;
                         }
                     }
                 }
@@ -95,7 +95,7 @@ namespace Rocket.Unturned.Permissions
                         handler(r.m_SteamID, ref reason);
                         if (reason != null)
                         {
-                            Provider.Reject(r.m_SteamID, reason.Value);
+                            Provider.reject(r.m_SteamID, reason.Value);
                             return false;
                         }
                     }

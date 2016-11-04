@@ -38,7 +38,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Local|AnyCPU'">
-    <OutputPath>..\..\..\..\..\Desktop\unturned\Unturned_Data\Managed\</OutputPath>
+    <OutputPath>..\..\..\..\..\Desktop\unturned\Modules\Rocket.Unturned\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <Optimize>True</Optimize>
     <DebugType>full</DebugType>
@@ -118,8 +118,6 @@
     <Compile Include="Environment.cs" />
     <Compile Include="Permissions\UnturnedPermissions.cs" />
     <Compile Include="UnturnedConsole.cs" />
-    <Compile Include="Interface.cs" />
-    <Compile Include="UI.cs" />
     <Compile Include="U.cs" />
     <Compile Include="Player\UnturnedPlayer.cs" />
     <Compile Include="Player\UnturnedPlayerComponent.cs" />
@@ -131,13 +129,20 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Rocket.Unturned.nuspec">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Rocket.Unturned\English.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Rocket.Unturned\Rocket.Unturned.module">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Scripts\Linux\start.sh" />
     <None Include="Scripts\Linux\update.sh" />
     <None Include="Scripts\Windows\MyFirstRocketServer.bat" />
     <None Include="Scripts\Windows\start.bat" />
+    <None Include="Scripts\Windows\update.bat" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="dev\Game.exe" />
@@ -149,6 +154,9 @@
     <Content Include="lib\Rocket.API.dll" />
     <Content Include="lib\Rocket.Core.dll" />
     <Content Include="lib\UnityEngine.dll" />
+    <Content Include="Rocket.Unturned\Icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
