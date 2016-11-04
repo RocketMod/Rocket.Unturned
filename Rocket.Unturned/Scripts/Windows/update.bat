@@ -19,7 +19,7 @@ IF NOT EXIST %STEAMHOME% (
 
 %STEAMHOME%steamcmd.exe +login unturnedrocksupdate force_update +force_install_dir ..\Unturned +app_update 304930 validate +exit
 
-bitsadmin.exe /transfer "Downloading Rocket.Unturned" "https://ci.rocketmod.net/job/Rocket.Unturned Alpha/lastSuccessfulBuild/artifact/Rocket.Unturned/bin/Release/Rocket-Alpha.zip" "%~dp0Rocket.zip"
+bitsadmin.exe /transfer "Downloading Rocket.Unturned" "https://ci.rocketmod.net/job/Rocket.Unturned/lastSuccessfulBuild/artifact/Rocket.Unturned/bin/Release/Rocket.zip" "%~dp0Rocket.zip"
 CALL :unzip "%~dp0" "%~dp0Rocket.zip"
 XCOPY /S "Scripts" "%UNTURNEDHOME%Scripts"
 XCOPY /S "Modules" "%UNTURNEDHOME%Modules"
