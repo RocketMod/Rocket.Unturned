@@ -130,24 +130,31 @@ namespace Rocket.Unturned
 
         public void initialize()
         {
-           
-            rocketGameObject = new GameObject("Rocket");
-            DontDestroyOnLoad(rocketGameObject);
-#if LINUX
-        Console = rocketGameObject.AddComponent<UnturnedConsole>();
-#endif
-            System.Console.Clear();
-            System.Console.ForegroundColor = ConsoleColor.Cyan;
-            System.Console.WriteLine("Rocket Unturned v" + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " for Unturned v" + Provider.APP_VERSION + "\n");
-
-            R.OnRockedInitialized += () =>
+            SDG.Unturned.Player.onPlayerCreated += (SDG.Unturned.Player player) =>
             {
-                Instance.Initialize();
+                player.transform.gameObject.TryAddComponent<HUD>();
             };
 
+            if (Dedicator.isDedicated)
+            {
+                rocketGameObject = new GameObject("Rocket");
+                DontDestroyOnLoad(rocketGameObject);
+#if LINUX
+    Console = rocketGameObject.AddComponent<UnturnedConsole>();
+#endif
+                System.Console.Clear();
+                System.Console.ForegroundColor = ConsoleColor.Cyan;
+                System.Console.WriteLine("Rocket Unturned v" + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " for Unturned v" + Provider.APP_VERSION + "\n");
 
-            rocketGameObject.TryAddComponent<U>();
-            rocketGameObject.TryAddComponent<R>();
+                R.OnRockedInitialized += () =>
+                {
+                    Instance.Initialize();
+                };
+
+
+                rocketGameObject.TryAddComponent<U>();
+                rocketGameObject.TryAddComponent<R>();
+            }
         }
         
         private void Awake()

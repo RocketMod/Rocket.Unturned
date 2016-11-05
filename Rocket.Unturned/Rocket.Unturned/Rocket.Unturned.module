@@ -5,15 +5,15 @@
 	[
 		{
 			"Path": "/Rocket.API.dll",
-			"Role": "Server"
+			"Role": "Both_Optional"
 		},
 		{
 			"Path": "/Rocket.Core.dll",
-			"Role": "Server"
+			"Role": "Both_Optional"
 		},
 		{
 			"Path": "/Rocket.Unturned.dll",
-			"Role": "Server"
+			"Role": "Both_Optional"
 		}
 	],
 	"Dependencies":
