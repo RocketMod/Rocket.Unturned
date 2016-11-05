@@ -15,13 +15,17 @@ namespace Rocket.Unturned
         private void Awake()
         {
             channel = GetComponent<SteamChannel>();
-            channel.build();
+            //channel.build();
             player = UnturnedPlayer.FromPlayer(gameObject.transform.GetComponent<SDG.Unturned.Player>());
         }
 
         private void Start()
         {
+        try{
             channel.send("tellToggleHud", player.CSteamID, ESteamPacket.UPDATE_RELIABLE_BUFFER, true);
+            }catch(Exception e){
+            //
+            }
         }
 
         [SteamCall]
