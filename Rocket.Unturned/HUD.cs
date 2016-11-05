@@ -8,20 +8,20 @@ namespace Rocket.Unturned
 {
     public class HUD : MonoBehaviour
     {
-        SteamChannel channel = null;
-        UnturnedPlayer player = null;
+        private UnturnedPlayer player = null;
+        private SteamChannel channel = null;
         bool visible = false;
 
         private void Awake()
         {
+            player = UnturnedPlayer.FromPlayer(gameObject.GetComponent<SDG.Unturned.Player>());
             channel = GetComponent<SteamChannel>();
-            channel.build();
-            player = UnturnedPlayer.FromPlayer(gameObject.transform.GetComponent<SDG.Unturned.Player>());
         }
 
         private void Start()
         {
-            channel.send("tellToggleHud", player.CSteamID, ESteamPacket.UPDATE_RELIABLE_BUFFER, true);
+           // channel.build();
+            //channel.send("tellToggleHud", player.CSteamID, ESteamPacket.UPDATE_RELIABLE_BUFFER, true);
         }
 
         [SteamCall]
