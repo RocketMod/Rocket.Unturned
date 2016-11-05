@@ -81,6 +81,28 @@ namespace Rocket.Unturned.Commands
 
             string assetName = ((ItemAsset)a).itemName;
 
+            if (U.Settings.Instance.ItemBlacklisting && !player.HasPermission("itemblacklisting.bypass"))
+            {
+                for(int i = 0; i < U.Settings.Instance.Items.Count; i++)
+                {
+                    Blacklisting Item = U.Settings.Instance.Items[i];
+                    if(id == Item.id)
+                    {
+                        UnturnedChat.Say(player, U.Translate("command_i_blacklisted"));
+                        return;
+                    }
+                }
+            }
+
+            if (U.Settings.Instance.ItemSpawnLimiting && !player.HasPermission("itemspawnlimiting.bypass"))
+            {
+                if (amount > U.Settings.Instance.MaxSpawnAmount)
+                {
+                    UnturnedChat.Say(player, U.Translate("command_i_too_much", U.Settings.Instance.MaxSpawnAmount));
+                    return;
+                }
+            }
+
             if (player.GiveItem(id, amount))
             {
                 Logger.Log(U.Translate("command_i_giving_console", player.DisplayName, id, amount));
