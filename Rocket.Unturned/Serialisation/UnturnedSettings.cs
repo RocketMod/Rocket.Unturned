@@ -1,5 +1,7 @@
 ﻿using Rocket.API;
 using System.Xml.Serialization;
+using Rocket.Unturned.Items;
+using System.Collections.Generic;
 using System;
 
 namespace Rocket.Unturned.Serialisation
@@ -44,13 +46,29 @@ namespace Rocket.Unturned.Serialisation
 
         public bool LogSuspiciousPlayerMovement = true;
 
-        public void LoadDefaults()
+        [XmlArrayItem(ElementName = "Item")]
+        public List<Blacklist> Items;
+
+        public bool EnableItemBlacklist;
+
+        public bool EnableItemSpawnLimit;
+
+        public int MaxSpawnAmount;
+
+    public void LoadDefaults()
         {
             AutomaticSave = new AutomaticSaveSettings();
             RocketModObservatory = new RocketModObservatorySettings();
             CharacterNameValidation = true;
             CharacterNameValidationRule = @"([\x00-\xAA]|[\w_\ \.\+\-])+";
             LogSuspiciousPlayerMovement = true;
+            EnableItemBlacklist = false;
+            EnableItemSpawnLimit = false;
+            MaxSpawnAmount = 10;
+            Items = new List<Blacklist>()
+            {
+                new Items.Blacklist(518)
+            };
         }
     }
 }
