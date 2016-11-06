@@ -5,11 +5,11 @@ using System.Text;
 
 namespace Rocket.Unturned.Items
 {
-    public class Blacklisting
+    public class Blacklist
     {
         public int id;
-        private Blacklisting() { }
-        public Blacklisting(int ID)
+        private Blacklist() { }
+        public Blacklist(int ID)
         {
             id = ID;
         }

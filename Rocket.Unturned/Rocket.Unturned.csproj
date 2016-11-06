@@ -89,7 +89,7 @@
     <Compile Include="Commands\UnturnedCommands.cs" />
     <Compile Include="Commands\UnturnedCommandExtensions.cs" />
     <Compile Include="HUD.cs" />
-    <Compile Include="Items\Blacklisting.cs" />
+    <Compile Include="Items\Blacklist.cs" />
     <Compile Include="Player\UnturnedPlayerMovement.cs" />
     <Compile Include="Skills\UnturnedSkill.cs" />
     <Compile Include="Utils\AutomaticSaveWatchdog.cs" />
