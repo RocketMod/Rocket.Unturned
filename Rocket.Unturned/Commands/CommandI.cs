@@ -81,11 +81,11 @@ namespace Rocket.Unturned.Commands
 
             string assetName = ((ItemAsset)a).itemName;
 
-            if (U.Settings.Instance.ItemBlacklisting && !player.HasPermission("itemblacklisting.bypass"))
+            if (U.Settings.Instance.EnableItemBlacklist && !player.HasPermission("itemblacklist.bypass"))
             {
                 for(int i = 0; i < U.Settings.Instance.Items.Count; i++)
                 {
-                    Blacklisting Item = U.Settings.Instance.Items[i];
+                    Blacklist Item = U.Settings.Instance.Items[i];
                     if(id == Item.id)
                     {
                         UnturnedChat.Say(player, U.Translate("command_i_blacklisted"));
@@ -94,7 +94,7 @@ namespace Rocket.Unturned.Commands
                 }
             }
 
-            if (U.Settings.Instance.ItemSpawnLimiting && !player.HasPermission("itemspawnlimiting.bypass"))
+            if (U.Settings.Instance.EnableItemSpawnLimit && !player.HasPermission("itemspawnlimit.bypass"))
             {
                 if (amount > U.Settings.Instance.MaxSpawnAmount)
                 {

@@ -47,11 +47,11 @@ namespace Rocket.Unturned.Serialisation
         public bool LogSuspiciousPlayerMovement = true;
 
         [XmlArrayItem(ElementName = "Item")]
-        public List<Blacklisting> Items;
+        public List<Blacklist> Items;
 
-        public bool ItemBlacklisting;
+        public bool EnableItemBlacklist;
 
-        public bool ItemSpawnLimiting;
+        public bool EnableItemSpawnLimit;
 
         public int MaxSpawnAmount;
 
@@ -62,12 +62,12 @@ namespace Rocket.Unturned.Serialisation
             CharacterNameValidation = true;
             CharacterNameValidationRule = @"([\x00-\xAA]|[\w_\ \.\+\-])+";
             LogSuspiciousPlayerMovement = true;
-            ItemBlacklisting = false;
-            ItemSpawnLimiting = false;
+            EnableItemBlacklist = false;
+            EnableItemSpawnLimit = false;
             MaxSpawnAmount = 10;
-            Items = new List<Blacklisting>()
+            Items = new List<Blacklist>()
             {
-                new Items.Blacklisting(518)
+                new Items.Blacklist(518)
             };
         }
     }
