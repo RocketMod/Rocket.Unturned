@@ -18,7 +18,7 @@ namespace Rocket.Unturned
         }
 
         public void askToggleHud(bool visible)
-        {
+        {     
             base.channel.send("tellToggleHud", ESteamCall.OWNER, ESteamPacket.UPDATE_RELIABLE_BUFFER, true);
         }
 

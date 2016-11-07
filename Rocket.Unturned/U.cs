@@ -153,9 +153,11 @@ namespace Rocket.Unturned
                     Instance.Initialize();
                 };
 
-
-                rocketGameObject.TryAddComponent<U>();
-                rocketGameObject.TryAddComponent<R>();
+                Provider.onServerHosted += () =>
+                {
+                    rocketGameObject.TryAddComponent<U>();
+                    rocketGameObject.TryAddComponent<R>();
+                };
             }
         }
         
@@ -202,25 +204,22 @@ namespace Rocket.Unturned
 
                 R.Commands.RegisterFromAssembly(Assembly.GetExecutingAssembly());
 
-                Provider.onServerHosted += () =>
+                try
                 {
-                    try
+                    R.Plugins.OnPluginsLoaded += () =>
                     {
-                        R.Plugins.OnPluginsLoaded += () =>
-                        {
-                            SteamGameServer.SetKeyValue("rocketplugins", String.Join(",", R.Plugins.GetPlugins().Select(p => p.Name).ToArray()));
-                        };
+                        SteamGameServer.SetKeyValue("rocketplugins", String.Join(",", R.Plugins.GetPlugins().Select(p => p.Name).ToArray()));
+                    };
 
 
-                        SteamGameServer.SetKeyValue("rocket", Assembly.GetExecutingAssembly().GetName().Version.ToString());
-                        SteamGameServer.SetBotPlayerCount(1);
+                    SteamGameServer.SetKeyValue("rocket", Assembly.GetExecutingAssembly().GetName().Version.ToString());
+                    SteamGameServer.SetBotPlayerCount(1);
 
-                    }
-                    catch (Exception ex)
-                    {
-                        Core.Logging.Logger.LogError("Steam can not be initialized: " + ex.Message);
-                    }
-                };
+                }
+                catch (Exception ex)
+                {
+                    Core.Logging.Logger.LogError("Steam can not be initialized: " + ex.Message);
+                }
 
                 OnRocketImplementationInitialized.TryInvoke();
 
