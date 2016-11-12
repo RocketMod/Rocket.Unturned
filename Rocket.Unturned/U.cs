@@ -66,8 +66,11 @@ namespace Rocket.Unturned
         #endregion
 
         private static GameObject rocketGameObject;
-
-
+#if DEBUG
+        private bool debug = true;
+#else
+        private bool debug = false;
+#endif
         private void Awake()
         {
             Instance = this;
@@ -136,9 +139,10 @@ namespace Rocket.Unturned
                 {
                     plugin.gameObject.TryRemoveComponent<PluginUnturnedPlayerComponentManager>();
                 };
-
+#if !DEBUG
+                debug = Instance.Settings.Instance.Debug;
+#endif
                 OnInitialized.TryInvoke();
-
             }
             catch (Exception ex)
             {
@@ -189,12 +193,12 @@ namespace Rocket.Unturned
 
                 switch (message.LogLevel)
                 {
+#if DEBUG
                     case API.Logging.LogLevel.DEBUG:
-                        if (U.Instance.Settings.Instance.Debug) { 
-                            Console.ForegroundColor = ConsoleColor.Gray;
+                        Console.ForegroundColor = ConsoleColor.Gray;
                             Console.WriteLine(m);
-                        }
-                        break;
+                    break;
+#endif
                     case API.Logging.LogLevel.INFO:
                         Console.ForegroundColor = ConsoleColor.White;
                         Console.WriteLine(m);
@@ -240,10 +244,7 @@ namespace Rocket.Unturned
                 shouldExecuteCommand = false;
             };
 
-            CommandWindow.onCommandWindowOutputted += (object text, ConsoleColor color) =>
-            {
-                Logger.Debug("[Unturned] "+text);
-            };
+            CommandWindow.onCommandWindowOutputted += UnturnedConsole;
 
             /*
             SteamChannel.onTriggerReceive += (SteamChannel channel, CSteamID steamID, byte[] packet, int offset, int size) =>
@@ -276,8 +277,12 @@ namespace Rocket.Unturned
                 isValid = UnturnedPermissions.CheckValid(callback);
             };
         }
-        
-        public void Reload()
+
+        private void UnturnedConsole(object text, ConsoleColor color)  {
+                Logger.Debug(text);
+         }
+
+    public void Reload()
         {
             Translation.Load();
             Settings.Load();

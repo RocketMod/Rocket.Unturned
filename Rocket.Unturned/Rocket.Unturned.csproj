@@ -139,7 +139,8 @@
     <Content Include="Rocket.Unturned\System.IdentityModel.dll" />
     <Content Include="Rocket.Unturned\System.Runtime.Serialization.dll" />
     <Content Include="Rocket.Unturned\System.ServiceModel.dll" />
-    <Content Include="Rocket.Unturned\UnityEngine.dll" />
+    <Content Include="Rocket.Unturned\System.Web.dll" />
+    <Content Include="Rocket.Unturned\System.Web.Services.dll" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
