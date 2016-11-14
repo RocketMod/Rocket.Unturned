@@ -3,32 +3,33 @@ using Rocket.API.Assets;
 using Rocket.API.Collections;
 using Rocket.API.Extensions;
 using Rocket.API.Plugins;
+using Rocket.API.Chat;
+using Rocket.API.Commands;
 using Rocket.Core;
 using Rocket.Core.Extensions;
 using Rocket.Unturned.Chat;
 using Rocket.Unturned.Commands;
 using Rocket.Unturned.Events;
 using Rocket.Unturned.Plugins;
+using Rocket.Unturned.Player;
+using Rocket.Unturned.Permissions;
+using Rocket.Unturned.Utils;
+using SDG.Framework.Modules;
 using SDG.Unturned;
 using Steamworks;
 using System;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
-using Rocket.API.Chat;
 using System.Collections.ObjectModel;
-using Rocket.API.Commands;
 using System.Collections.Generic;
-using Rocket.Unturned.Player;
 using Logger = Rocket.API.Logging.Logger;
-using SDG.Framework.Modules;
-using Rocket.Unturned.Permissions;
-using Rocket.Unturned.Utils;
 
 namespace Rocket.Unturned
 {
     public class U : MonoBehaviour, IRocketImplementation, IModuleNexus
     {
+        
         #region Events
         public event ImplementationInitialized OnInitialized;
 
@@ -89,13 +90,13 @@ namespace Rocket.Unturned
             rocketGameObject.TryAddComponent<U>();
             R.OnInitialized += () =>
             {
-                Instance.Initialize();
+                Instance.load();
             };
             bindDelegates();
             rocketGameObject.TryAddComponent<R>();
-    }
+        }
 
-        private void Initialize()
+        private void load()
         {
             try
             {
@@ -106,7 +107,7 @@ namespace Rocket.Unturned
                 Translation = new XMLFileAsset<TranslationList>(String.Format(Environment.TranslationFile, R.Settings.Instance.LanguageCode), new Type[] { typeof(TranslationList), typeof(TranslationListEntry) }, defaultTranslations);
                 Translation.AddUnknownEntries(defaultTranslations);
 
-                Chat = (IChat)gameObject.TryAddComponent<UnturnedChat>();
+                Chat = gameObject.TryAddComponent<UnturnedChat>();
                 gameObject.TryAddComponent<AutomaticSaveWatchdog>();
 
                 Provider.onServerShutdown += () => { OnShutdown.TryInvoke(); };
