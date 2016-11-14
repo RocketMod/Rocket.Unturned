@@ -381,7 +381,7 @@ namespace Rocket.Unturned.Player
             }
             set
             {
-                player.skills.askAward(value);
+                player.skills.askPay(value);
             }
         }
 
