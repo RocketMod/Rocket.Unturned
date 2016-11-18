@@ -27,7 +27,7 @@ using Logger = Rocket.API.Logging.Logger;
 
 namespace Rocket.Unturned
 {
-    public class U : MonoBehaviour, IRocketImplementation, IModuleNexus
+    public class U : MonoBehaviour, IRocketImplementation
     {
         
         #region Events
@@ -78,7 +78,7 @@ namespace Rocket.Unturned
             Environment.Initialize();
         }
 
-        public void initialize()
+        public static void Initialize()
         {
             rocketGameObject = new GameObject("Rocket");
             DontDestroyOnLoad(rocketGameObject);
@@ -86,17 +86,108 @@ namespace Rocket.Unturned
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("Rocket Unturned v" + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " for Unturned v" + Provider.APP_VERSION + "\n");
-
+           
             rocketGameObject.TryAddComponent<U>();
-            R.OnInitialized += () =>
+            Logger.OnLog += (API.Logging.LogMessage message) =>
             {
-                Instance.load();
+                if (message == null) return;
+                string m = message.Message;
+                if (m == null) m = "NULL";
+                if (m.StartsWith("[Unturned]")) return;
+
+                ConsoleColor old = Console.ForegroundColor;
+
+                switch (message.LogLevel)
+                {
+#if DEBUG
+                    case API.Logging.LogLevel.DEBUG:
+                        Console.ForegroundColor = ConsoleColor.Gray;
+                        Console.WriteLine(m);
+                        break;
+#endif
+                    case API.Logging.LogLevel.INFO:
+                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.WriteLine(m);
+                        break;
+                    case API.Logging.LogLevel.WARN:
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine(m);
+                        break;
+                    case API.Logging.LogLevel.ERROR:
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine(m);
+                        if (message.Exception != null)
+                            Console.WriteLine(message.Exception);
+                        break;
+                    case API.Logging.LogLevel.FATAL:
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine(m);
+                        if (message.Exception != null)
+                            Console.WriteLine(message.Exception);
+                        break;
+                }
+                Console.ForegroundColor = old;
             };
-            bindDelegates();
+
+            Provider.onServerHosted += () =>
+            {
+                try
+                {
+                    SteamGameServer.SetKeyValue("rocket", Assembly.GetExecutingAssembly().GetName().Version.ToString());
+                    SteamGameServer.SetKeyValue("rocketplugins", String.Join(", ", R.GetAllPlugins().Select(p => p.Name).ToArray()));
+                    SteamGameServer.SetBotPlayerCount(1);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error("Steam can not be initialized: " + ex.Message);
+                }
+            };
+
+            CommandWindow.onCommandWindowInputted += (string text, ref bool shouldExecuteCommand) =>
+            {
+                if (text.StartsWith("/")) text.Substring(1);
+                R.Execute(new ConsolePlayer(), text);
+                shouldExecuteCommand = false;
+            };
+
+            CommandWindow.onCommandWindowOutputted += (object text, ConsoleColor color) =>  {
+                Logger.Debug(text);
+            };
+
+            /*
+            SteamChannel.onTriggerReceive += (SteamChannel channel, CSteamID steamID, byte[] packet, int offset, int size) =>
+             {
+                 UnturnedPlayerEvents.TriggerReceive(channel, steamID, packet, offset, size);
+             };
+             */
+
+            SteamChannel.onTriggerSend += (SteamPlayer player, string name, ESteamCall mode, ESteamPacket type, object[] arguments) =>
+            {
+                UnturnedPlayerEvents.TriggerSend(player, name, mode, type, arguments);
+            };
+
+            ChatManager.onCheckPermissions += (SteamPlayer player, string text, ref bool shouldExecuteCommand, ref bool shouldList) =>
+            {
+                if (text.StartsWith("/"))
+                {
+                    text.Substring(1);
+                    if (UnturnedPermissions.CheckPermissions(player, text))
+                    {
+                        R.Execute(UnturnedPlayer.FromSteamPlayer(player), text);
+                    }
+                    shouldList = false;
+                }
+                shouldExecuteCommand = false;
+            };
+
+            Provider.onCheckValid += (ValidateAuthTicketResponse_t callback, ref bool isValid) =>
+            {
+                isValid = UnturnedPermissions.CheckValid(callback);
+            };
             rocketGameObject.TryAddComponent<R>();
         }
 
-        private void load()
+        private void Start()
         {
             try
             {
@@ -109,7 +200,6 @@ namespace Rocket.Unturned
 
                 Chat = gameObject.TryAddComponent<UnturnedChat>();
                 gameObject.TryAddComponent<AutomaticSaveWatchdog>();
-
                 Provider.onServerShutdown += () => { OnShutdown.TryInvoke(); };
                 Provider.onServerDisconnected += (CSteamID r) => {
                     OnPlayerDisconnected?.TryInvoke(UnturnedPlayer.FromCSteamID(r));
@@ -122,7 +212,7 @@ namespace Rocket.Unturned
                     p.Player.gameObject.TryAddComponent<UnturnedPlayerEvents>();
                     OnBeforePlayerConnected.TryInvoke(p);
                 };
-                
+
                 RocketPluginBase.OnPluginsLoading += (RocketPluginBase plugin, ref bool cancelLoading) =>
                 {
                     try
@@ -155,16 +245,16 @@ namespace Rocket.Unturned
         {
             List<IRocketCommand> commands = new List<IRocketCommand>()
             {
-                new Commands.CommandBroadcast(),
-                new Commands.CommandCompass(),
-                new Commands.CommandEffect(),
-                new Commands.CommandGod(),
-                new Commands.CommandHome(),
-                new Commands.CommandI(),
-                new Commands.CommandInvestigate(),
-                new Commands.CommandTp(),
-                new Commands.CommandTphere(),
-                new Commands.CommandV()
+                new CommandBroadcast(),
+                new CommandCompass(),
+                new CommandEffect(),
+                new CommandGod(),
+                new CommandHome(),
+                new CommandI(),
+                new CommandInvestigate(),
+                new CommandTp(),
+                new CommandTphere(),
+                new CommandV()
             };
 
             foreach (Command vanillaCommand in Commander.commands)
@@ -179,120 +269,12 @@ namespace Rocket.Unturned
         {
             return Provider.clients.Select(p => (IRocketPlayer)UnturnedPlayer.FromSteamPlayer(p)).ToList().AsReadOnly();
         }
-
-
-        private void bindDelegates()
-        {
-            Logger.OnLog += (API.Logging.LogMessage message) =>
-            {
-                if (message == null) return;
-                string m = message.Message;
-                if (m == null) m = "NULL";
-                if (m.StartsWith("[Unturned]")) return;
-                
-                ConsoleColor old = Console.ForegroundColor;
-
-                switch (message.LogLevel)
-                {
-#if DEBUG
-                    case API.Logging.LogLevel.DEBUG:
-                        Console.ForegroundColor = ConsoleColor.Gray;
-                            Console.WriteLine(m);
-                    break;
-#endif
-                    case API.Logging.LogLevel.INFO:
-                        Console.ForegroundColor = ConsoleColor.White;
-                        Console.WriteLine(m);
-                        break;
-                    case API.Logging.LogLevel.WARN:
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.WriteLine(m);
-                        break;
-                    case API.Logging.LogLevel.ERROR:
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine(m);
-                        if (message.Exception != null) 
-                            Console.WriteLine(message.Exception);
-                        break;
-                    case API.Logging.LogLevel.FATAL:
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine(m);
-                        if (message.Exception != null)
-                            Console.WriteLine(message.Exception);
-                        break;
-                }
-                Console.ForegroundColor = old;
-            };
-
-            Provider.onServerHosted += () =>
-            {
-                try
-                {
-                    SteamGameServer.SetKeyValue("rocket", Assembly.GetExecutingAssembly().GetName().Version.ToString());
-                    SteamGameServer.SetKeyValue("rocketplugins",String.Join(", ",R.GetAllPlugins().Select(p => p.Name).ToArray()));
-                    SteamGameServer.SetBotPlayerCount(1);
-                }
-                catch (Exception ex)
-                {
-                    Logger.Error("Steam can not be initialized: " + ex.Message);
-                }
-            };
-
-            CommandWindow.onCommandWindowInputted += (string text, ref bool shouldExecuteCommand) =>
-            {
-                if (text.StartsWith("/")) text.Substring(1);
-                R.Execute(new ConsolePlayer(), text);
-                shouldExecuteCommand = false;
-            };
-
-            CommandWindow.onCommandWindowOutputted += UnturnedConsole;
-
-            /*
-            SteamChannel.onTriggerReceive += (SteamChannel channel, CSteamID steamID, byte[] packet, int offset, int size) =>
-             {
-                 UnturnedPlayerEvents.TriggerReceive(channel, steamID, packet, offset, size);
-             };
-             */
-
-            SteamChannel.onTriggerSend += (SteamPlayer player, string name, ESteamCall mode, ESteamPacket type, object[] arguments) =>
-            {
-                UnturnedPlayerEvents.TriggerSend(player, name, mode, type, arguments);
-            };
-
-            ChatManager.onCheckPermissions += (SteamPlayer player, string text, ref bool shouldExecuteCommand, ref bool shouldList) =>
-            {
-                if (text.StartsWith("/"))
-                {
-                    text.Substring(1);
-                    if (UnturnedPermissions.CheckPermissions(player, text))
-                    {
-                        R.Execute(UnturnedPlayer.FromSteamPlayer(player), text);
-                    }
-                    shouldList = false;
-                }
-                shouldExecuteCommand = false;
-            };
-
-            Provider.onCheckValid += (ValidateAuthTicketResponse_t callback, ref bool isValid) =>
-            {
-                isValid = UnturnedPermissions.CheckValid(callback);
-            };
-        }
-
-        private void UnturnedConsole(object text, ConsoleColor color)  {
-                Logger.Debug(text);
-         }
-
-    public void Reload()
+        
+        public void Reload()
         {
             Translation.Load();
             Settings.Load();
             OnReload?.Invoke();
-        }
-
-        public void shutdown()
-        {
-            Shutdown();
         }
 
         public void Shutdown()

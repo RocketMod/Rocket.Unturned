@@ -1,58 +1,53 @@
 {
+	"IsEnabled": true,
 	"Name": "Rocket.Unturned",
 	"Version": "5.0.0.0",
 	"Assemblies":
 	[
 		{
-			"Path": "/Rocket.API.dll",
-			"Role": "Both_Optional"
-		},
-		{
-			"Path": "/Rocket.Core.dll",
-			"Role": "Both_Optional"
-		},
-		{
-			"Path": "/Rocket.Unturned.dll",
-			"Role": "Both_Optional"
-		},
-		{
-			"Path": "/Rocket.Plugins.Native.dll",
-			"Role": "Both_Optional"
-		},
-		{
-			"Path": "/log4net.dll",
-			"Role": "Both_Optional"
-		},
-		{
-			"Path": "/System.IdentityModel.dll",
-			"Role": "Both_Optional"
-		},
-		{
-			"Path": "/System.Runtime.Serialization.dll",
-			"Role": "Both_Optional"
-		},
-		{
-			"Path": "/System.ServiceModel.dll",
-			"Role": "Both_Optional"
-		},
-		{
 			"Path": "/System.Web.dll",
-			"Role": "Both_Optional"
+			"Role": "Server"
 		},
 		{
 			"Path": "/System.Web.Services.dll",
-			"Role": "Both_Optional"
-		}
-	],
-	"Dependencies":
-	[
-		{
-			"Name": "Framework",
-			"Version": "3.17.4.0"
+			"Role": "Server"
 		},
 		{
-			"Name": "Unturned",
-			"Version": "3.17.4.0"
+			"Path": "/System.ServiceModel.dll",
+			"Role": "Server"
+		},
+		{
+			"Path": "/System.IdentityModel.dll",
+			"Role": "Server"
+		},
+		{
+			"Path": "/System.IdentityModel.Selectors.dll",
+			"Role": "Server"
+		},
+		{
+			"Path": "/System.Runtime.Serialization.dll",
+			"Role": "Server"
+		},
+		{
+			"Path": "/log4net.dll",
+			"Role": "Server"
+		},
+		{
+			"Path": "/Rocket.API.dll",
+			"Role": "Server"
+		},
+		{
+			"Path": "/Rocket.Plugins.Native.dll",
+			"Role": "Server"
+		},
+		{
+			"Path": "/Rocket.Core.dll",
+			"Role": "Server"
+		},
+		{
+			"Path": "/Rocket.Unturned.dll",
+			"Role": "Server"
 		}
-	]
-}
+	],
+	"Dependencies": []
+} 

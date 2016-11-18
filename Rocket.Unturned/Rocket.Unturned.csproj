@@ -65,6 +65,10 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel, Version=3.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Rocket.Unturned\System.ServiceModel.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
@@ -86,6 +90,7 @@
     <Compile Include="Commands\UnturnedVanillaCommand.cs" />
     <Compile Include="Commands\UnturnedCommandExtensions.cs" />
     <Compile Include="Player\UnturnedPlayerMovement.cs" />
+    <Compile Include="RocketNexus.cs" />
     <Compile Include="UnturnedTranslations.cs" />
     <Compile Include="Skills\UnturnedSkill.cs" />
     <Compile Include="Chat\UnturnedChat.cs" />
@@ -121,7 +126,9 @@
     </None>
     <None Include="Rocket.Unturned\English.dat" />
     <None Include="Rocket.Unturned\LICENSE" />
-    <None Include="Rocket.Unturned\Rocket.Unturned.module" />
+    <None Include="Rocket.Unturned\Rocket.Unturned.module">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Scripts\Linux\README" />
     <None Include="Scripts\Linux\start.sh" />
     <None Include="Scripts\Linux\update.sh" />
@@ -136,11 +143,28 @@
     <Content Include="lib\Rocket.Core.dll" />
     <Content Include="lib\UnityEngine.dll" />
     <Content Include="Rocket.Unturned\Icon.png" />
-    <Content Include="Rocket.Unturned\System.IdentityModel.dll" />
-    <Content Include="Rocket.Unturned\System.Runtime.Serialization.dll" />
-    <Content Include="Rocket.Unturned\System.ServiceModel.dll" />
-    <Content Include="Rocket.Unturned\System.Web.dll" />
-    <Content Include="Rocket.Unturned\System.Web.Services.dll" />
+    <Content Include="Rocket.Unturned\log4net.dll" />
+    <Content Include="Rocket.Unturned\System.IdentityModel.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Rocket.Unturned\System.IdentityModel.Selectors.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Rocket.Unturned\System.Runtime.Serialization.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Rocket.Unturned\System.ServiceModel.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Rocket.Unturned\System.Web.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Rocket.Unturned\System.Web.Services.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Rocket.Unturned\System.Windows.Forms.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
