@@ -168,7 +168,7 @@ $(SolutionDir)Rocket.Unturned\dev\pdb2mdb.exe $(TargetPath)
 rem copy $(SolutionDir)Rocket.Unturned\dev\Game.exe $(TargetDir)..\..\Unturned.exe
 )</PostBuildEvent>
   </PropertyGroup>
-  <Target Name="AfterBuild" Condition="'$(Configuration)' == 'Release'">
+  <Target Name="AfterBuild" Condition="'$(Configuration)' == 'Debug'">
     <GetAssemblyIdentity AssemblyFiles="$(TargetPath)">
       <Output TaskParameter="Assemblies" ItemName="AssemblyVersion" />
     </GetAssemblyIdentity>
