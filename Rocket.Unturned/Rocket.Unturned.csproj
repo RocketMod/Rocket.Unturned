@@ -68,10 +68,8 @@
     <Reference Include="System.ServiceModel, Version=3.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Rocket.Unturned\System.ServiceModel.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Assembly-CSharp">
       <HintPath>lib\Assembly-CSharp.dll</HintPath>
@@ -144,27 +142,11 @@
     <Content Include="lib\UnityEngine.dll" />
     <Content Include="Rocket.Unturned\Icon.png" />
     <Content Include="Rocket.Unturned\log4net.dll" />
-    <Content Include="Rocket.Unturned\System.IdentityModel.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Rocket.Unturned\System.IdentityModel.Selectors.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Rocket.Unturned\System.Runtime.Serialization.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Rocket.Unturned\System.ServiceModel.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Rocket.Unturned\System.Web.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Rocket.Unturned\System.Web.Services.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Rocket.Unturned\System.Windows.Forms.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Rocket.Unturned\System.IdentityModel.dll" />
+    <Content Include="Rocket.Unturned\System.IdentityModel.Selectors.dll" />
+    <Content Include="Rocket.Unturned\System.ServiceModel.dll" />
+    <Content Include="Rocket.Unturned\System.Web.dll" />
+    <Content Include="Rocket.Unturned\System.Web.Services.dll" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
