@@ -43,12 +43,10 @@ namespace Rocket.Unturned
                 { "command_vanish_enable_private","You are vanished now..."},
                 { "command_vanish_disable_console","{0} disabled Vanishmode"},
                 { "command_vanish_disable_private","You are no longer vanished..."},
-
                 { "command_duty_enable_console","{0} is in duty"},
                 { "command_duty_enable_private","You are in duty now..."},
                 { "command_duty_disable_console","{0} is no longer in duty"},
                 { "command_duty_disable_private","You are no longer in duty..."},
-
                 { "command_bed_no_bed_found_private","You do not have a bed to teleport to."},
                 { "command_i_too_much","You have tried to spawn too many items! The limit is {0}." },
                 { "command_i_blacklisted","This item is restricted!" },
