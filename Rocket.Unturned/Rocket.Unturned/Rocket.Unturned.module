@@ -34,6 +34,10 @@
 		{
 			"Path": "/System.Web.Services.dll",
 			"Role": "Both_Optional"
+		},
+		{
+			"Path": "/System.Runtime.Serialization.dll",
+			"Role": "Both_Optional"
 		}
 	],
 	"Dependencies":

@@ -64,6 +64,14 @@ namespace Rocket.Unturned
         public XMLFileAsset<TranslationList> Translation { get; private set; }
         public string Name { get; private set; } = "Unturned";
         public string InstanceName { get; private set; } = Dedicator.serverID;
+
+        public ushort Port
+        {
+            get
+            {
+                return Provider.port;
+            }
+        }
         #endregion
 
         private static GameObject rocketGameObject;

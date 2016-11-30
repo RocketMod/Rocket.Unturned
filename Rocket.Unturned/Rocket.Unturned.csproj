@@ -122,8 +122,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </None>
-    <None Include="Rocket.Unturned\English.dat" />
-    <None Include="Rocket.Unturned\LICENSE" />
+    <None Include="Rocket.Unturned\English.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Rocket.Unturned\LICENSE">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Rocket.Unturned\Rocket.Unturned.module">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -140,13 +144,30 @@
     <Content Include="lib\Rocket.API.dll" />
     <Content Include="lib\Rocket.Core.dll" />
     <Content Include="lib\UnityEngine.dll" />
-    <Content Include="Rocket.Unturned\Icon.png" />
-    <Content Include="Rocket.Unturned\log4net.dll" />
-    <Content Include="Rocket.Unturned\System.IdentityModel.dll" />
-    <Content Include="Rocket.Unturned\System.IdentityModel.Selectors.dll" />
-    <Content Include="Rocket.Unturned\System.ServiceModel.dll" />
-    <Content Include="Rocket.Unturned\System.Web.dll" />
-    <Content Include="Rocket.Unturned\System.Web.Services.dll" />
+    <Content Include="Rocket.Unturned\Icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Rocket.Unturned\log4net.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Rocket.Unturned\System.IdentityModel.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Rocket.Unturned\System.IdentityModel.Selectors.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Rocket.Unturned\System.Runtime.Serialization.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Rocket.Unturned\System.ServiceModel.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Rocket.Unturned\System.Web.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Rocket.Unturned\System.Web.Services.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
