@@ -381,7 +381,8 @@ namespace Rocket.Unturned.Player
             }
             set
             {
-                player.skills.askAward(value);
+                player.skills.channel.send("tellExperience", ESteamCall.SERVER, ESteamPacket.UPDATE_RELIABLE_BUFFER, value);
+                player.skills.channel.send("tellExperience", ESteamCall.OWNER, ESteamPacket.UPDATE_RELIABLE_BUFFER, value);
             }
         }
 
