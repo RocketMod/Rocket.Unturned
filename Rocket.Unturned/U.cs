@@ -210,6 +210,7 @@ namespace Rocket.Unturned
                     };
 
 
+                    SteamGameServer.SetKeyValue("unturned", Provider.APP_VERSION);
                     SteamGameServer.SetKeyValue("rocket", Assembly.GetExecutingAssembly().GetName().Version.ToString());
                     SteamGameServer.SetBotPlayerCount(1);
 
