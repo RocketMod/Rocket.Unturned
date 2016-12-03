@@ -73,7 +73,7 @@ namespace Rocket.Unturned.Player
                 {
                     return Features.Color.Value;
                 }
-                if (IsAdmin)
+                if (IsAdmin && !Provider.hideAdmins)
                 {
                     return Palette.ADMIN;
                 }
