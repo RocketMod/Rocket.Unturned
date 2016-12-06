@@ -73,7 +73,7 @@ namespace Rocket.Unturned.Player
                 {
                     return Features.Color.Value;
                 }
-                if (IsAdmin)
+                if (IsAdmin && !Provider.hideAdmins)
                 {
                     return Palette.ADMIN;
                 }
@@ -381,7 +381,8 @@ namespace Rocket.Unturned.Player
             }
             set
             {
-                player.skills.askPay(value);
+                player.skills.channel.send("tellExperience", ESteamCall.SERVER, ESteamPacket.UPDATE_RELIABLE_BUFFER, value);
+                player.skills.channel.send("tellExperience", ESteamCall.OWNER, ESteamPacket.UPDATE_RELIABLE_BUFFER, value);
             }
         }
 
