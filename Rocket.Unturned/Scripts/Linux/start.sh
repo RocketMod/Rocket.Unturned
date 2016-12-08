@@ -5,8 +5,8 @@
 
 #CONFIG
 INSTANCE_NAME=$1
-STEAMCMD_HOME="../../steamcmd"
-UNTURNED_HOME="../"
+STEAMCMD_HOME="$PWD/../../steamcmd"
+UNTURNED_HOME="$PWD/../"
 
 #COLORS
 RED='\033[0;31m'
