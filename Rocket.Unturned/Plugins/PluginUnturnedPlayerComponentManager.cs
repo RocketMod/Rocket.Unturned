@@ -25,10 +25,11 @@ namespace Rocket.Unturned.Plugins
                 U.Events.OnPlayerConnected -= addPlayerComponents;
                 unturnedPlayerComponents = unturnedPlayerComponents.Where(p => p.Assembly != assembly).ToList();
                 List<Type> playerComponents = RocketHelper.GetTypesFromParentClass(assembly, typeof(UnturnedPlayerComponent));
-                foreach (Type playerComponent in playerComponents)
+                /*for(int i = 0; i < playerComponents.Count; i++)
                 {
-                    //Provider.Players.ForEach(p => p.Player.gameObject.TryRemoveComponent(playerComponent.GetType()));
-                }
+                    Type playerComponent = playerComponents[i];
+                    Provider.clients.ForEach(p => p.player.gameObject.TryRemoveComponent(playerComponent.GetType()));
+                }*/
             }
             catch (Exception ex)
             {
@@ -46,9 +47,10 @@ namespace Rocket.Unturned.Plugins
                 U.Events.OnBeforePlayerConnected += addPlayerComponents;
                 unturnedPlayerComponents.AddRange(RocketHelper.GetTypesFromParentClass(assembly, typeof(UnturnedPlayerComponent)));
 
-                foreach (Type playerComponent in unturnedPlayerComponents)
+                for(int i = 0; i < unturnedPlayerComponents.Count; i++)
                 {
-                    Core.Logging.Logger.Log("Adding UnturnedPlayerComponent: "+playerComponent.Name);
+                    Type playerComponent = unturnedPlayerComponents[i];
+                    Core.Logging.Logger.Log("Adding UnturnedPlayerComponent: " + playerComponent.Name);
                     //Provider.Players.ForEach(p => p.Player.gameObject.TryAddComponent(playerComponent.GetType()));
                 }
             }
@@ -60,8 +62,9 @@ namespace Rocket.Unturned.Plugins
 
         private void addPlayerComponents(IRocketPlayer p)
         {
-            foreach (Type component in unturnedPlayerComponents)
+            for(int i = 0; i < unturnedPlayerComponents.Count; i++)
             {
+                Type component = unturnedPlayerComponents[i];
                 ((UnturnedPlayer)p).Player.gameObject.AddComponent(component);
             }
         }

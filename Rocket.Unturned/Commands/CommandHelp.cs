@@ -62,8 +62,9 @@ namespace Rocket.Unturned.Commands
 
                 System.Console.WriteLine();
                 
-                foreach (IRocketPlugin plugin in R.Plugins.GetPlugins())
+                for(int i = 0; i < R.Plugins.GetPlugins().Count; i++)
                 {
+                    IRocketPlugin plugin = R.Plugins.GetPlugins()[i];
                     System.Console.ForegroundColor = ConsoleColor.Cyan;
                     System.Console.WriteLine("[" + plugin.GetType().Assembly.GetName().Name + "]");
                     System.Console.ForegroundColor = ConsoleColor.White;
