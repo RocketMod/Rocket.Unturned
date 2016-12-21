@@ -37,9 +37,10 @@ namespace Rocket.Unturned.Events
                 object[] objects = SteamPacker.getObjects(d, 2, a, instance.Methods[num].Types);
 
                 string o = "";
-                foreach (object r in objects)
+                for(int i = 0; i < objects.Length; i++)
                 {
-                    o += r.ToString() + ",";
+                    object r = objects[i];
+                    o += r.ToString() = ",";
                 }
                 Logger.Log("Receive+" + d.ToString() + ": " + o + " - " + b);
             }*/

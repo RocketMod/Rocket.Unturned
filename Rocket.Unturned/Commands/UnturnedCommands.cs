@@ -17,9 +17,10 @@ namespace Rocket.Unturned.Commands
     {
         private void Awake()
         {
-            foreach(Command vanillaCommand in Commander.commands)
+            for(int i = 0; i < Commander.commands.Count; i++)
             {
-                R.Commands.Register(new UnturnedVanillaCommand(vanillaCommand),vanillaCommand.command.ToLower(),Core.Serialization.CommandPriority.Low);
+                Command vanillaCommand = Commander.commands[i];
+                R.Commands.Register(new UnturnedVanillaCommand(vanillaCommand), vanillaCommand.command.ToLower(), Core.Serialization.CommandPriority.Low);
             }
         }
 
