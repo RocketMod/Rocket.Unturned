@@ -53,6 +53,11 @@ namespace Rocket.Unturned.Commands
             UnturnedPlayer otherPlayer = UnturnedPlayer.FromName(command[0]);
             if (otherPlayer!=null && otherPlayer != caller)
             {
+            	if(otherPlayer.IsInVehicle)
+            	{
+            		UnturnedChat.Say(caller, U.Translate("command_tphere_vehicle"));
+            		return;
+            	}
                 otherPlayer.Teleport(player);
                 Logger.Log(U.Translate("command_tphere_teleport_console", otherPlayer.CharacterName, player.CharacterName));
                 UnturnedChat.Say(caller, U.Translate("command_tphere_teleport_from_private", otherPlayer.CharacterName));
