@@ -3,6 +3,9 @@
 # Syntax: start.sh <instance name>
 # Author: fr34kyn01535
 
+export MONO_IOMAP=all
+#Fixing Lowercase / Uppercase mismatch 
+
 #CONFIG
 INSTANCE_NAME=$1
 STEAMCMD_HOME="$PWD/../../steamcmd"
