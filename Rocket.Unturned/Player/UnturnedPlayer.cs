@@ -188,6 +188,50 @@ namespace Rocket.Unturned.Player
         {
             SDG.Unturned.EffectManager.instance.channel.send("tellEffectPoint", CSteamID, ESteamPacket.UPDATE_UNRELIABLE_BUFFER, new object[] { effectID, player.transform.position });
         }
+        
+        public string IP
+        {
+            get
+            {
+                P2PSessionState_t State;
+                SteamGameServerNetworking.GetP2PSessionState(CSteamID, out State);
+                return Parser.getIPFromUInt32(State.m_nRemoteIP);
+            }
+        }
+
+        public void MaxSkills()
+        {
+            foreach (Skill skill in (player.skills.skills.SelectMany((Skill[] skills) => skills)))
+            {
+                skill.level = skill.max;
+            }
+        }
+
+        public string SteamGroupName()
+        {
+            FriendsGroupID_t id;
+            id.m_FriendsGroupID = (short)SteamGroupID.m_SteamID;
+            return SteamFriends.GetFriendsGroupName(id);
+        }
+
+        public int SteamGroupMembersCount()
+        {
+            FriendsGroupID_t id;
+            id.m_FriendsGroupID = (short)SteamGroupID.m_SteamID;
+            return SteamFriends.GetFriendsGroupMembersCount(id);
+        }
+
+        public SteamPlayer SteamPlayer()
+        {
+            foreach (var SteamPlayer in Provider.clients)
+            {
+                if (CSteamID == SteamPlayer.playerID.steamID)
+                {
+                    return SteamPlayer;
+                }
+            }
+            return null;
+        }
 
         public PlayerInventory Inventory
         {
