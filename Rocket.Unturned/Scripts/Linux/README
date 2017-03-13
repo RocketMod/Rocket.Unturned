@@ -26,7 +26,7 @@ apt install libc6-dev-i386 libgcc-4.8-dev:i386 # prequesites for BattlEye
 1. Install the prerequisites (Shown in the recipe above)
 2. Copy the contents of the linux download in the root of the folder you want your Unturned 3 environment in
     cd ~
-    wget http://api.rocketmod.net/download/unturned-linux/latest/YOURAPIKEY/rocket.zip -O rocket.zip
+    wget https://ci.rocketmod.net/job/Rocket.Unturned%20Linux/lastSuccessfulBuild/artifact/Rocket.Unturned/bin/Release/Rocket.zip -O rocket.zip
     unzip -o rocket.zip
     rm rocket.zip
 3. Fix permissions and run the update script to install Unturned 3
