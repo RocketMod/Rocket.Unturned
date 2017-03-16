@@ -30,37 +30,20 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>True</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Local|AnyCPU'">
-    <OutputPath>..\..\..\..\..\Desktop\unturned\Modules\Rocket.Unturned\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <Optimize>True</Optimize>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <WarningLevel>4</WarningLevel>
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.8\lib\net35-full\log4net.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Rocket.API">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>lib\Rocket.API.dll</HintPath>
+      <HintPath>..\lib\Rocket.API.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Rocket.Core">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>lib\Rocket.Core.dll</HintPath>
+      <HintPath>..\lib\Rocket.Core.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -118,17 +101,18 @@
     <Compile Include="Utils\AutomaticSaveWatchdog.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="Rocket.Unturned.nuspec">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </None>
-    <None Include="Rocket.Unturned\English.dat">
+    <None Include="Modules\Rocket.Unturned\English.dat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Rocket.Unturned\LICENSE">
+    <None Include="Modules\Rocket.Unturned\LICENSE">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Rocket.Unturned\Rocket.Unturned.module">
+    <None Include="Modules\Rocket.Unturned\Rocket.Unturned.module">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Scripts\Linux\README" />
@@ -141,39 +125,19 @@
   <ItemGroup>
     <Content Include="lib\Assembly-CSharp-firstpass.dll" />
     <Content Include="lib\Assembly-CSharp.dll" />
-    <Content Include="lib\Rocket.API.dll" />
-    <Content Include="lib\Rocket.Core.dll" />
     <Content Include="lib\UnityEngine.dll" />
-    <Content Include="Rocket.Unturned\Icon.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Rocket.Unturned\log4net.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Rocket.Unturned\System.IdentityModel.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Rocket.Unturned\System.IdentityModel.Selectors.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Rocket.Unturned\System.Runtime.Serialization.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Rocket.Unturned\System.ServiceModel.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Rocket.Unturned\System.Web.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Rocket.Unturned\System.Web.Services.dll">
+    <Content Include="Modules\Rocket.Unturned\Icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>move  /Y $(TargetPath) $(TargetDir)Modules\Rocket.Unturned\
+xcopy /F /Y $(SolutionDir)lib\* $(TargetDir)Modules\Rocket.Unturned\</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>del $(TargetDir)* /F /Q</PreBuildEvent>
   </PropertyGroup>
   <Target Name="AfterBuild" Condition="'$(Configuration)' == 'Release'">
     <GetAssemblyIdentity AssemblyFiles="$(TargetPath)">
