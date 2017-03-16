@@ -24,6 +24,7 @@ using UnityEngine;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using Logger = Rocket.API.Logging.Logger;
+using Rocket.API.Serialisation;
 
 namespace Rocket.Unturned
 {
@@ -203,7 +204,7 @@ namespace Rocket.Unturned
 
                 TranslationList defaultTranslations = new TranslationList();
                 defaultTranslations.AddRange(new UnturnedTranslations());
-                Translation = new XMLFileAsset<TranslationList>(String.Format(Environment.TranslationFile, R.Settings.Instance.LanguageCode), new Type[] { typeof(TranslationList), typeof(TranslationListEntry) }, defaultTranslations);
+                Translation = new XMLFileAsset<TranslationList>(String.Format(Environment.TranslationFile, R.Settings.Instance.LanguageCode), new Type[] { typeof(TranslationList), typeof(PropertyListEntry) }, defaultTranslations);
                 Translation.AddUnknownEntries(defaultTranslations);
 
                 Chat = gameObject.TryAddComponent<UnturnedChat>();

@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using Rocket.API.Serialisation;
+using Rocket.API.Providers;
 
 namespace Rocket.Unturned.Permissions
 {
@@ -56,19 +57,19 @@ namespace Rocket.Unturned.Permissions
 
             try
             {
-                RocketPermissionsGroup g = R.Permissions.GetGroups(new Rocket.API.RocketPlayer(r.m_SteamID.ToString()), true).FirstOrDefault();
+                RocketPermissionsGroup g = R.Permissions.GetGroups(new Rocket.API.RocketPlayer(r.m_SteamID.ToString())).FirstOrDefault();
                 if (g != null)
                 {
                     SteamPending steamPending = Provider.pending.FirstOrDefault(x => x.playerID.steamID == r.m_SteamID);
                     if (steamPending != null)
                     {
-                        string prefix = g.Prefix == null ? "" : g.Prefix;
-                        string suffix = g.Suffix == null ? "" : g.Suffix;
-                        if (prefix != "" && !steamPending.playerID.characterName.StartsWith(g.Prefix))
+                        string prefix = g.Properties[BuiltinProperties.PREFIX] == null ? "" : g.Properties[BuiltinProperties.PREFIX];
+                        string suffix = g.Properties[BuiltinProperties.SUFFIX] == null ? "" : g.Properties[BuiltinProperties.SUFFIX];
+                        if (prefix != "" && !steamPending.playerID.characterName.StartsWith(prefix))
                         {
                             steamPending.playerID.characterName = prefix + steamPending.playerID.characterName;
                         }
-                        if (suffix != "" && !steamPending.playerID.characterName.EndsWith(g.Suffix))
+                        if (suffix != "" && !steamPending.playerID.characterName.EndsWith(suffix))
                         {
                             steamPending.playerID.characterName = steamPending.playerID.characterName + suffix;
                         }

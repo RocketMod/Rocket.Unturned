@@ -78,9 +78,9 @@ namespace Rocket.Unturned.Player
                     return Palette.ADMIN;
                 }
 
-                RocketPermissionsGroup group = R.Permissions.GetGroups(this, false).Where(g => g.Color != null && g.Color != "white").FirstOrDefault();
+                RocketPermissionsGroup group = R.Permissions.GetGroups(this).Where(g => g.Properties[BuiltinProperties.COLOR] != null && g.Properties[BuiltinProperties.COLOR] != "white").FirstOrDefault();
                 string color = "";
-                if (group != null) color = group.Color;
+                if (group != null) color = group.Properties[BuiltinProperties.COLOR];
                 return UnturnedChat.GetColorFromName(color, Palette.COLOR_W);
             }
             set

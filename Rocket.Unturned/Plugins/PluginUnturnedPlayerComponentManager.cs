@@ -28,7 +28,7 @@ namespace Rocket.Unturned.Plugins
                 List<Type> playerComponents = assembly.GetTypesFromParentClass(typeof(UnturnedPlayerComponent));
                 foreach (Type playerComponent in playerComponents)
                 {
-                    //Provider.Players.ForEach(p => p.Player.gameObject.TryRemoveComponent(playerComponent.GetType()));
+                    Provider.clients.ForEach(p => p.player.gameObject.TryRemoveComponent(playerComponent.GetType()));
                 }
             }
             catch (Exception ex)
