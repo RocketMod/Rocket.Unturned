@@ -16,7 +16,7 @@ namespace Rocket.Unturned
             {
                 fileStream = new FileStream(String.Format(Environment.ConsoleFile, Dedicator.serverID), FileMode.Create,FileAccess.Write,FileShare.ReadWrite);
 
-                StreamWriter streamWriter = new StreamWriter(fileStream, System.Text.Encoding.ASCII)
+                StreamWriter streamWriter = new StreamWriter(fileStream, System.Text.Encoding.UTF8)
                 {
                     AutoFlush = true
                 };
