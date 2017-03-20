@@ -1,7 +1,7 @@
 The scripts in this folder can be used to create a Unturned 3 environment on various linux distros.
 Before you launch your server there are a few dependencies that have to be installed. 
 
-Right now there is only a recipe available tested on Ubuntu 12.04 LTS / Ubuntu 14.04 LTS and Ubuntu 16.04 LTS. 
+Right now there is only a recipe available tested on Ubuntu 12.04 LTS / Ubuntu 14.04 LTS, Ubuntu 16.04 LTS and Debian 8. 
 If you figure how to install Rocket on another distro or UNIX/Mac then feel free
 to extend this file at https://github.com/RocketMod/Rocket.Unturned/new/master/Scripts/Linux/README
 
@@ -20,6 +20,14 @@ apt install lib32stdc++6 #SteamCMD dependencies
 apt install mono-runtime mono-reference-assemblies-2.0		                        
 apt install libc6:i386 libgl1-mesa-glx:i386 libxcursor1:i386 libxrandr2:i386 # 32 bit prerequisites for Unity 3D
 apt install libc6-dev-i386 libgcc-4.8-dev:i386 # prequesites for BattlEye
+
+##Recipe for Debian GNU/Linux 8.7 (jessie) 
+apt install screen htop unzip #Utils
+dpkg --add-architecture i386
+apt install lib32stdc++6 #SteamCMD dependencies
+apt install mono-runtime libmono2.0-cil 
+apt install libc6 libgl1-mesa-glx libxcursor1 libxrandr2 
+apt install libc6-dev-i386 libgcc-4.8-dev 
 
 ## Steps to install
 
