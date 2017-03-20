@@ -6,7 +6,7 @@ If you figure how to install Rocket on another distro or UNIX/Mac then feel free
 to extend this file at https://github.com/RocketMod/Rocket.Unturned/new/master/Scripts/Linux/README
 
 ## Recipe for Ubuntu 12.04 LTS / Ubuntu 14.04 LTS
-apt install screen htop unzip #Utils
+apt-get install screen htop unzip #Utils
 dpkg --add-architecture i386
 apt-get install lib32stdc++6 #SteamCMD dependencies
 apt-get install mono-runtime libmono2.0-cil
