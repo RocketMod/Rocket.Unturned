@@ -56,7 +56,7 @@ namespace Rocket.Unturned.Commands
             if (otherPlayer!=null && otherPlayer != caller)
             {
                 otherPlayer.Teleport(player);
-                Logger.Info(U.Translate("command_tphere_teleport_console", otherPlayer.DisplayName, player.DisplayName));
+                Logger.Info(R.Translation.Translate("command_tphere_teleport_console", otherPlayer.DisplayName, player.DisplayName));
                 U.Instance.Chat.Say(caller, U.Translate("command_tphere_teleport_from_private", otherPlayer.DisplayName));
                 U.Instance.Chat.Say(otherPlayer, U.Translate("command_tphere_teleport_to_private", player.DisplayName));
             }

@@ -3,13 +3,13 @@ using Steamworks;
 using System;
 using UnityEngine;
 using System.Linq;
+using Rocket.API.Player;
 using Rocket.Unturned.Events;
-using Rocket.API;
 using Rocket.Core;
 using Rocket.Unturned.Chat;
 using Rocket.Unturned.Skills;
-using Rocket.Core.Steam;
 using Rocket.API.Serialisation;
+using Rocket.Core.Utils.Steam;
 
 namespace Rocket.Unturned.Player
 {

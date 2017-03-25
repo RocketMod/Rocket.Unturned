@@ -14,6 +14,7 @@ using System.Text.RegularExpressions;
 using UnityEngine;
 using Rocket.API.Serialisation;
 using Rocket.API.Providers;
+using Rocket.API.Player;
 
 namespace Rocket.Unturned.Permissions
 {
@@ -30,7 +31,7 @@ namespace Rocket.Unturned.Permissions
             Regex r = new Regex("^\\/[a-zA-Z]*");
             string requestedCommand = r.Match(permission.ToLower()).Value.ToString().TrimStart('/').ToLower();
 
-            IRocketCommand command = R.GetCommand(requestedCommand);
+            IRocketCommand command = R.com.GetCommand(requestedCommand);
 
             if (command != null)
             {
@@ -57,7 +58,7 @@ namespace Rocket.Unturned.Permissions
 
             try
             {
-                RocketPermissionsGroup g = R.Permissions.GetGroups(new Rocket.API.RocketPlayer(r.m_SteamID.ToString())).FirstOrDefault();
+                RocketPermissionsGroup g = R.Permissions.GetGroups(new IRocketPlayer(r.m_SteamID.ToString())).FirstOrDefault();
                 if (g != null)
                 {
                     SteamPending steamPending = Provider.pending.FirstOrDefault(x => x.playerID.steamID == r.m_SteamID);

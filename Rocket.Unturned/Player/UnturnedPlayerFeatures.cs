@@ -25,7 +25,7 @@ namespace Rocket.Unturned.Player
             get { return vanishMode; }
             set
             {
-                Player.GetComponent<UnturnedPlayerMovement>().VanishMode = value;
+               // Player.GetComponent<UnturnedPlayerMovement>().VanishMode = value;
                 PlayerMovement pMovement = Player.GetComponent<PlayerMovement>();
                 pMovement.canAddSimulationResultsToUpdates = !value;
                 if (vanishMode && !value)
@@ -86,16 +86,16 @@ namespace Rocket.Unturned.Player
         {
             initialCheck = true;
 
-            if (U.Instance.Settings.Instance.CharacterNameValidation)
-            {
-                string username = Player.DisplayName;
-                System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(U.Instance.Settings.Instance.CharacterNameValidationRule);
-                System.Text.RegularExpressions.Match match = regex.Match(username);
-                if (match.Groups[0].Length != username.Length)
-                {
-                    Provider.kick(Player.CSteamID, U.Translate("invalid_character_name"));
-                }
-            }
+            //if (U.Instance.Settings.Instance.CharacterNameValidation)
+            //{
+            //    string username = Player.DisplayName;
+            //    System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(U.Instance.Settings.Instance.CharacterNameValidationRule);
+            //    System.Text.RegularExpressions.Match match = regex.Match(username);
+            //    if (match.Groups[0].Length != username.Length)
+            //    {
+            //        Provider.kick(Player.CSteamID, U.Translate("invalid_character_name"));
+            //    }
+            //}
         }
 
         private static string reverse(string s)
