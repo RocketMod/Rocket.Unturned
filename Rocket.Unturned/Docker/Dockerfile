@@ -1,6 +1,7 @@
 FROM ubuntu
 
-EXPOSE 27015/udp
+EXPOSE 27016/udp
+EXPOSE 27017/udp
 VOLUME ["/home/rocket/unturned/Servers/"]
 
 RUN useradd -ms /bin/bash rocket
