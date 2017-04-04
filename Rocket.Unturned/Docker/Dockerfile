@@ -19,7 +19,6 @@ RUN (crontab -l ; echo "@daily /home/rocket/steamcmd/update.sh") | sort - | uniq
 
 ADD credentials/STEAM_USERNAME /root/.steam_user
 ADD credentials/STEAM_PASSWORD /root/.steam_pass
-ADD credentials/ROCKET_API_KEY /root/.rocket_id
 
 ONBUILD USER root
 ONBUILD run /home/rocket/update.sh
