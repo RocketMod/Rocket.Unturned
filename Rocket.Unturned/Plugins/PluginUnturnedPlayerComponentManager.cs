@@ -1,29 +1,29 @@
-﻿using Rocket.API;
-using Rocket.API.Extensions;
-using Rocket.API.Plugins;
-using Rocket.Core.Extensions;
-using Logger = Rocket.API.Logging.Logger;
-using Rocket.Unturned.Events;
+﻿using Rocket.API.Extensions;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Rocket.API.Event;
+using Rocket.API.Event.Player;
+using Rocket.API.Player;
+using Rocket.API.Providers.Plugins;
+using Rocket.Core;
 using UnityEngine;
 
 namespace Rocket.Unturned.Plugins
 {
-    public sealed class PluginUnturnedPlayerComponentManager : MonoBehaviour
+    public sealed class PluginUnturnedPlayerComponentManager : MonoBehaviour, IListener
     {
         private Assembly assembly;
         private List<Type> unturnedPlayerComponents = new List<Type>();
-        
+        private bool _enabled = false;
         private void OnDisable()
         {
             try
             {
-                U.Instance.OnPlayerConnected -= addPlayerComponents;
+                _enabled = false;
                 unturnedPlayerComponents = unturnedPlayerComponents.Where(p => p.Assembly != assembly).ToList();
                 List<Type> playerComponents = assembly.GetTypesFromParentClass(typeof(UnturnedPlayerComponent));
                 foreach (Type playerComponent in playerComponents)
@@ -33,30 +33,36 @@ namespace Rocket.Unturned.Plugins
             }
             catch (Exception ex)
             {
-                Logger.Error(ex);
+                R.Logger.Error(ex);
             }
         }
 
         private void OnEnable()
         {
             try
-            {  
+            {
+                _enabled = true;
                 IRocketPlugin plugin = GetComponent<IRocketPlugin>();
                 assembly = plugin.GetType().Assembly;
-
-                U.Instance.OnBeforePlayerConnected += addPlayerComponents;
+                EventManager.Instance.RegisterEventsInternal(this, null);
                 unturnedPlayerComponents.AddRange(assembly.GetTypesFromParentClass(typeof(UnturnedPlayerComponent)));
 
                 foreach (Type playerComponent in unturnedPlayerComponents)
                 {
-                    Logger.Info("Adding UnturnedPlayerComponent: "+playerComponent.Name);
+                    R.Logger.Info("Adding UnturnedPlayerComponent: "+playerComponent.Name);
                     //Provider.Players.ForEach(p => p.Player.gameObject.TryAddComponent(playerComponent.GetType()));
                 }
             }
             catch (Exception ex)
             {
-                Logger.Error(ex);
+                R.Logger.Error(ex);
             }
+        }
+
+        [API.Event.EventHandler]
+        public void OnPreConnect(PrePlayerConnectedEvent @event)
+        {
+            addPlayerComponents(@event.Player);
         }
 
         private void addPlayerComponents(IRocketPlayer p)

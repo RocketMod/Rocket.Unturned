@@ -1,8 +1,5 @@
-﻿using Rocket.API;
-using Rocket.API.Commands;
+﻿using Rocket.API.Commands;
 using Rocket.Core;
-using Logger = Rocket.API.Logging.Logger;
-using Rocket.Unturned.Chat;
 using Rocket.Unturned.Extensions;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
@@ -13,15 +10,12 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using Rocket.API.Serialisation;
-using Rocket.API.Providers;
+using Rocket.Unturned.Event;
 
 namespace Rocket.Unturned.Permissions
 {
     public class UnturnedPermissions
     {
-        public delegate void JoinRequested(CSteamID player, ref ESteamRejection? rejectionReason);
-        public static event JoinRequested OnJoinRequested;
-        
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal static bool CheckPermissions(SteamPlayer caller, string permission)
         {
@@ -30,7 +24,7 @@ namespace Rocket.Unturned.Permissions
             Regex r = new Regex("^\\/[a-zA-Z]*");
             string requestedCommand = r.Match(permission.ToLower()).Value.ToString().TrimStart('/').ToLower();
 
-            IRocketCommand command = R.GetCommand(requestedCommand);
+            IRocketCommand command = R.Plugins.GetCommand(requestedCommand);
 
             if (command != null)
             {
@@ -40,7 +34,8 @@ namespace Rocket.Unturned.Permissions
                 }
                 else
                 {
-                    U.Instance.Chat.Say(player, R.Translate("command_no_permission"), Color.red);
+                    string language = R.Translations.GetCurrentLanguage();
+                    U.Instance.Chat.Say(player, R.Translations.Translate("command_no_permission", language), Color.red);
                     return false;
                 }
             }
@@ -57,7 +52,7 @@ namespace Rocket.Unturned.Permissions
 
             try
             {
-                RocketPermissionsGroup g = R.Permissions.GetGroups(new Rocket.API.RocketPlayer(r.m_SteamID.ToString())).FirstOrDefault();
+                RocketPermissionsGroup g = R.Permissions.GetGroups(r.m_SteamID.ToString()).FirstOrDefault();
                 if (g != null)
                 {
                     SteamPending steamPending = Provider.pending.FirstOrDefault(x => x.playerID.steamID == r.m_SteamID);
@@ -79,28 +74,18 @@ namespace Rocket.Unturned.Permissions
             }
             catch (Exception ex)
             {
-                Logger.Info("Failed adding prefix/suffix to player " + r.m_SteamID + ": " + ex.ToString());
+                R.Logger.Info("Failed adding prefix/suffix to player " + r.m_SteamID + ": " + ex.ToString());
+            }
+            var pendings = Provider.pending.ToList(); // use ToList to create a copy of the original list
+            PlayerJoinRequestEvent @event = new PlayerJoinRequestEvent(pendings.First(c => c.playerID.steamID == r.m_SteamID));
+            @event.Fire();
+
+            if (@event.Result != null)
+            {
+                Provider.reject(r.m_SteamID, @event.Result.Value);
+                return false;
             }
 
-            if (OnJoinRequested != null)
-            {
-                foreach (var handler in OnJoinRequested.GetInvocationList().Cast<JoinRequested>())
-                {
-                    try
-                    {
-                        handler(r.m_SteamID, ref reason);
-                        if (reason != null)
-                        {
-                            Provider.reject(r.m_SteamID, reason.Value);
-                            return false;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.Error(ex);
-                    }
-                }
-            }
             return true;
         }
     }

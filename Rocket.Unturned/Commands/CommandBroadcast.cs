@@ -1,52 +1,24 @@
-﻿using Rocket.API;
-using Rocket.Unturned.Player;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using System;
-using Rocket.Unturned.Chat;
-using Rocket.API.Extensions;
 using Rocket.API.Commands;
 using Rocket.API.Exceptions;
+using Rocket.API.Player;
 
 namespace Rocket.Unturned.Commands
 {
     public class CommandBroadcast : IRocketCommand
     {
-        public AllowedCaller AllowedCaller
-        {
-            get
-            {
-                return AllowedCaller.Both;
-            }
-        }
+        public AllowedCaller AllowedCaller => AllowedCaller.Both;
 
-        public string Name
-        {
-            get { return "broadcast"; }
-        }
+        public string Name => "broadcast";
 
-        public string Help
-        {
-            get { return "Broadcast a message"; }
-        }
+        public string Help => "Broadcast a message";
 
-        public string Syntax
-        {
-            get { return "<color> <message>"; }
-        }
+        public string Syntax => "<color> <message>";
 
-        public List<string> Aliases
-        {
-            get { return new List<string>(); }
-        }
+        public List<string> Aliases => new List<string>();
 
-        public List<string> Permissions
-        {
-            get
-            {
-                return new List<string>() { "rocket.broadcast" };
-            }
-        }
+        public List<string> Permissions => new List<string>() { "rocket.broadcast" };
 
         public void Execute(IRocketPlayer caller, string[] command)
         {

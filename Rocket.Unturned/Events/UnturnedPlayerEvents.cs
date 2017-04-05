@@ -5,8 +5,8 @@ using Steamworks;
 using System;
 using UnityEngine;
 using System.Linq;
-using Rocket.Core.Extensions;
-using Logger = Rocket.API.Logging.Logger;
+using Rocket.API.Extensions;
+using Rocket.Core;
 
 namespace Rocket.Unturned.Events
 {
@@ -46,86 +46,94 @@ namespace Rocket.Unturned.Events
 #endif
             return;
         }
-        
-        internal static void TriggerSend(SteamPlayer player, string name, ESteamCall mode, ESteamPacket type, params object[] arguments)
+
+        internal static void TriggerSend(SteamPlayer player, string name, ESteamCall mode, ESteamPacket type,
+            params object[] arguments)
         {
             try
             {
-                if (player == null || player.player == null || player.player.transform == null || arguments == null) return;
+                if (player == null || player.player == null || player.player.transform == null || arguments == null)
+                    return;
                 UnturnedPlayerEvents instance = player.player.transform.GetComponent<UnturnedPlayerEvents>();
                 UnturnedPlayer rp = UnturnedPlayer.FromSteamPlayer(player);
 #if DEBUG
-                 //string o = "";
-                 //foreach (object r in R)
-                 //{
-                 //    o += r.ToString();
-                 //}
-                 //Logger.Log("Send+" + s.SteamPlayerID.CSteamID.ToString() + ": " + W + " - " + o);
+                //string o = "";
+                //foreach (object r in R)
+                //{
+                //    o += r.ToString();
+                //}
+                //Logger.Log("Send+" + s.SteamPlayerID.CSteamID.ToString() + ": " + W + " - " + o);
 #endif
-                if (name.StartsWith("tellWear")) {
-                    OnPlayerWear.TryInvoke(rp, Enum.Parse(typeof(Wearables), name.Replace("tellWear", "")), (ushort)arguments[0], arguments.Count() > 1 ? (byte?)arguments[1] : null);
+                if (name.StartsWith("tellWear"))
+                {
+                    OnPlayerWear.TryInvoke(rp, Enum.Parse(typeof(Wearables), name.Replace("tellWear", "")),
+                        (ushort) arguments[0], arguments.Count() > 1 ? (byte?) arguments[1] : null);
                 }
                 switch (name)
                 {
                     case "tellBleeding":
-                        OnPlayerUpdateBleeding.TryInvoke(rp, (bool)arguments[0]);
-                        instance.OnUpdateBleeding.TryInvoke( rp, (bool)arguments[0]);
+                        OnPlayerUpdateBleeding.TryInvoke(rp, (bool) arguments[0]);
+                        instance.OnUpdateBleeding.TryInvoke(rp, (bool) arguments[0]);
                         break;
                     case "tellBroken":
-                        OnPlayerUpdateBroken.TryInvoke(rp, (bool)arguments[0]);
-                        instance.OnUpdateBroken.TryInvoke(rp, (bool)arguments[0]);
+                        OnPlayerUpdateBroken.TryInvoke(rp, (bool) arguments[0]);
+                        instance.OnUpdateBroken.TryInvoke(rp, (bool) arguments[0]);
                         break;
                     case "tellLife":
-                        OnPlayerUpdateLife.TryInvoke(rp, (byte)arguments[0]);
-                        instance.OnUpdateLife.TryInvoke(rp, (byte)arguments[0]);
+                        OnPlayerUpdateLife.TryInvoke(rp, (byte) arguments[0]);
+                        instance.OnUpdateLife.TryInvoke(rp, (byte) arguments[0]);
                         break;
                     case "tellFood":
-                        OnPlayerUpdateFood.TryInvoke(rp, (byte)arguments[0]);
-                        instance.OnUpdateFood.TryInvoke(rp, (byte)arguments[0]);
+                        OnPlayerUpdateFood.TryInvoke(rp, (byte) arguments[0]);
+                        instance.OnUpdateFood.TryInvoke(rp, (byte) arguments[0]);
                         break;
                     case "tellHealth":
-                        OnPlayerUpdateHealth.TryInvoke(rp, (byte)arguments[0]);
-                        instance.OnUpdateHealth.TryInvoke(rp, (byte)arguments[0]);
+                        OnPlayerUpdateHealth.TryInvoke(rp, (byte) arguments[0]);
+                        instance.OnUpdateHealth.TryInvoke(rp, (byte) arguments[0]);
                         break;
                     case "tellVirus":
-                        OnPlayerUpdateVirus.TryInvoke(rp, (byte)arguments[0]);
-                        instance.OnUpdateVirus.TryInvoke(rp, (byte)arguments[0]);
+                        OnPlayerUpdateVirus.TryInvoke(rp, (byte) arguments[0]);
+                        instance.OnUpdateVirus.TryInvoke(rp, (byte) arguments[0]);
                         break;
                     case "tellWater":
-                        OnPlayerUpdateWater.TryInvoke(rp, (byte)arguments[0]);
-                        instance.OnUpdateWater.TryInvoke(rp, (byte)arguments[0]);
+                        OnPlayerUpdateWater.TryInvoke(rp, (byte) arguments[0]);
+                        instance.OnUpdateWater.TryInvoke(rp, (byte) arguments[0]);
                         break;
                     case "tellStance":
-                        OnPlayerUpdateStance.TryInvoke(rp, (byte)arguments[0]);
-                        instance.OnUpdateStance.TryInvoke( rp, (byte)arguments[0]);
+                        OnPlayerUpdateStance.TryInvoke(rp, (byte) arguments[0]);
+                        instance.OnUpdateStance.TryInvoke(rp, (byte) arguments[0]);
                         break;
                     case "tellGesture":
-                        OnPlayerUpdateGesture.TryInvoke(rp, (PlayerGesture)Enum.Parse(typeof(PlayerGesture), arguments[0].ToString()));
-                        instance.OnUpdateGesture.TryInvoke( rp, (PlayerGesture)Enum.Parse(typeof(PlayerGesture), arguments[0].ToString()));
+                        OnPlayerUpdateGesture.TryInvoke(rp,
+                            (PlayerGesture) Enum.Parse(typeof(PlayerGesture), arguments[0].ToString()));
+                        instance.OnUpdateGesture.TryInvoke(rp,
+                            (PlayerGesture) Enum.Parse(typeof(PlayerGesture), arguments[0].ToString()));
                         break;
                     case "tellStat":
-                        OnPlayerUpdateStat.TryInvoke(rp, (EPlayerStat)(byte)arguments[0]);
-                        instance.OnUpdateStat.TryInvoke(rp, (EPlayerStat)(byte)arguments[0]);
+                        OnPlayerUpdateStat.TryInvoke(rp, (EPlayerStat) (byte) arguments[0]);
+                        instance.OnUpdateStat.TryInvoke(rp, (EPlayerStat) (byte) arguments[0]);
                         break;
                     case "tellExperience":
-                        OnPlayerUpdateExperience.TryInvoke(rp, (uint)arguments[0]);
-                        instance.OnUpdateExperience.TryInvoke(rp, (uint)arguments[0]);
+                        OnPlayerUpdateExperience.TryInvoke(rp, (uint) arguments[0]);
+                        instance.OnUpdateExperience.TryInvoke(rp, (uint) arguments[0]);
                         break;
                     case "tellRevive":
-                        OnPlayerRevive.TryInvoke(rp, (Vector3)arguments[0], (byte)arguments[1]);
-                        instance.OnRevive.TryInvoke(rp, (Vector3)arguments[0], (byte)arguments[1]);
+                        OnPlayerRevive.TryInvoke(rp, (Vector3) arguments[0], (byte) arguments[1]);
+                        instance.OnRevive.TryInvoke(rp, (Vector3) arguments[0], (byte) arguments[1]);
                         break;
                     case "tellDead":
-                        OnPlayerDead.TryInvoke(rp, (Vector3)arguments[0]);
-                        instance.OnDead.TryInvoke(rp, (Vector3)arguments[0]);
+                        OnPlayerDead.TryInvoke(rp, (Vector3) arguments[0]);
+                        instance.OnDead.TryInvoke(rp, (Vector3) arguments[0]);
                         break;
                     case "tellDeath":
-                        OnPlayerDeath.TryInvoke(rp, (EDeathCause)(byte)arguments[0], (ELimb)(byte)arguments[1], new CSteamID(ulong.Parse(arguments[2].ToString())));
-                        instance.OnDeath.TryInvoke(rp, (EDeathCause)(byte)arguments[0], (ELimb)(byte)arguments[1], new CSteamID(ulong.Parse(arguments[2].ToString())));
+                        OnPlayerDeath.TryInvoke(rp, (EDeathCause) (byte) arguments[0], (ELimb) (byte) arguments[1],
+                            new CSteamID(ulong.Parse(arguments[2].ToString())));
+                        instance.OnDeath.TryInvoke(rp, (EDeathCause) (byte) arguments[0], (ELimb) (byte) arguments[1],
+                            new CSteamID(ulong.Parse(arguments[2].ToString())));
                         break;
                     default:
 #if DEBUG
-                       // Logger.Log("Send+" + s.SteamPlayerID.CSteamID.ToString() + ": " + W + " - " + String.Join(",",R.Select(e => e.ToString()).ToArray()));
+                        // Logger.Log("Send+" + s.SteamPlayerID.CSteamID.ToString() + ": " + W + " - " + String.Join(",",R.Select(e => e.ToString()).ToArray()));
 #endif
                         break;
                 }
@@ -133,128 +141,8 @@ namespace Rocket.Unturned.Events
             }
             catch (Exception ex)
             {
-                Logger.Error("Failed to receive packet \""+name+"\"",ex);
+                R.Logger.Error("Failed to receive packet \"" + name + "\"", ex);
             }
         }
-
-
-        public delegate void PlayerUpdatePosition(UnturnedPlayer player, Vector3 position);
-        public static event PlayerUpdatePosition OnPlayerUpdatePosition;
-        internal static void fireOnPlayerUpdatePosition(UnturnedPlayer player)
-        {
-            OnPlayerUpdatePosition.TryInvoke(player,player.Position);
-        }
-
-        public delegate void PlayerUpdateBleeding(UnturnedPlayer player, bool bleeding);
-        public static event PlayerUpdateBleeding OnPlayerUpdateBleeding;
-        public event PlayerUpdateBleeding OnUpdateBleeding;
-
-        public delegate void PlayerUpdateBroken(UnturnedPlayer player, bool broken);
-        public static event PlayerUpdateBroken OnPlayerUpdateBroken;
-        public event PlayerUpdateBroken OnUpdateBroken;
-
-        public delegate void PlayerDeath(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer);
-        public static event PlayerDeath OnPlayerDeath;
-        public event PlayerDeath OnDeath;
-
-        public delegate void PlayerDead(UnturnedPlayer player, Vector3 position);
-        public static event PlayerDead OnPlayerDead;
-        public event PlayerDead OnDead;
-
-        public delegate void PlayerUpdateLife(UnturnedPlayer player, byte life);
-        public static event PlayerUpdateLife OnPlayerUpdateLife;
-        public event PlayerUpdateLife OnUpdateLife;
-
-        public delegate void PlayerUpdateFood(UnturnedPlayer player, byte food);
-        public static event PlayerUpdateFood OnPlayerUpdateFood;
-        public event PlayerUpdateFood OnUpdateFood;
-
-        public delegate void PlayerUpdateHealth(UnturnedPlayer player, byte health);
-        public static event PlayerUpdateHealth OnPlayerUpdateHealth;
-        public event PlayerUpdateHealth OnUpdateHealth;
-
-        public delegate void PlayerUpdateVirus(UnturnedPlayer player, byte virus);
-        public static event PlayerUpdateVirus OnPlayerUpdateVirus;
-        public event PlayerUpdateVirus OnUpdateVirus;
-
-        public delegate void PlayerUpdateWater(UnturnedPlayer player, byte water);
-        public static event PlayerUpdateWater OnPlayerUpdateWater;
-        public event PlayerUpdateWater OnUpdateWater;
-
-        public enum PlayerGesture { None = 0, InventoryOpen = 1, InventoryClose = 2, Pickup = 3, PunchLeft = 4, PunchRight = 5, SurrenderStart = 6, SurrenderStop = 7, Point = 8, Wave = 9 };
-        public delegate void PlayerUpdateGesture(UnturnedPlayer player, PlayerGesture gesture);
-        public static event PlayerUpdateGesture OnPlayerUpdateGesture;
-        public event PlayerUpdateGesture OnUpdateGesture;
-
-        public delegate void PlayerUpdateStance(UnturnedPlayer player, byte stance);
-        public static event PlayerUpdateStance OnPlayerUpdateStance;
-        public event PlayerUpdateStance OnUpdateStance;
-
-        public delegate void PlayerRevive(UnturnedPlayer player, Vector3 position, byte angle);
-        public static event PlayerRevive OnPlayerRevive;
-        public event PlayerRevive OnRevive;
-
-        public delegate void PlayerUpdateStat(UnturnedPlayer player, EPlayerStat stat);
-        public static event PlayerUpdateStat OnPlayerUpdateStat;
-        public event PlayerUpdateStat OnUpdateStat;
-
-        public delegate void PlayerUpdateExperience(UnturnedPlayer player, uint experience);
-        public static event PlayerUpdateExperience OnPlayerUpdateExperience;
-        public event PlayerUpdateExperience OnUpdateExperience;
-
-        public delegate void PlayerUpdateStamina(UnturnedPlayer player, byte stamina);
-        public static event PlayerUpdateStamina OnPlayerUpdateStamina;
-        public event PlayerUpdateStamina OnUpdateStamina;
-
-        private void onUpdateStamina(byte stamina)
-        {
-            OnPlayerUpdateStamina.TryInvoke(Player, stamina);
-            OnUpdateStamina.TryInvoke(Player, stamina);
-        }
-
-        public delegate void PlayerInventoryUpdated(UnturnedPlayer player, InventoryGroup inventoryGroup, byte inventoryIndex, ItemJar P);
-        public static event PlayerInventoryUpdated OnPlayerInventoryUpdated;
-        public event PlayerInventoryUpdated OnInventoryUpdated;
-
-        private void onInventoryUpdated(byte E, byte O, ItemJar P)
-        {
-            OnPlayerInventoryUpdated.TryInvoke(Player, (InventoryGroup)Enum.Parse(typeof(InventoryGroup), E.ToString()), O, P);
-            OnInventoryUpdated.TryInvoke(Player, (InventoryGroup)Enum.Parse(typeof(InventoryGroup), E.ToString()), O, P);
-        }
-
-        public delegate void PlayerInventoryResized(UnturnedPlayer player, InventoryGroup inventoryGroup, byte O, byte U);
-        public static event PlayerInventoryResized OnPlayerInventoryResized;
-        public event PlayerInventoryResized OnInventoryResized;
-
-        private void onInventoryResized(byte E, byte M, byte U)
-        {
-            OnPlayerInventoryResized.TryInvoke(Player, (InventoryGroup)Enum.Parse(typeof(InventoryGroup), E.ToString()), M, U);
-            OnInventoryResized.TryInvoke(Player, (InventoryGroup)Enum.Parse(typeof(InventoryGroup), E.ToString()), M, U);
-        }
-
-        public delegate void PlayerInventoryRemoved(UnturnedPlayer player, InventoryGroup inventoryGroup, byte inventoryIndex, ItemJar P);
-        public static event PlayerInventoryRemoved OnPlayerInventoryRemoved;
-        public event PlayerInventoryRemoved OnInventoryRemoved;
-
-        private void onInventoryRemoved(byte E, byte y, ItemJar f)
-        {
-            OnPlayerInventoryRemoved.TryInvoke(Player, (InventoryGroup)Enum.Parse(typeof(InventoryGroup), E.ToString()), y, f);
-            OnInventoryRemoved.TryInvoke(Player, (InventoryGroup)Enum.Parse(typeof(InventoryGroup), E.ToString()), y, f);
-        }
-
-        public delegate void PlayerInventoryAdded(UnturnedPlayer player, InventoryGroup inventoryGroup, byte inventoryIndex, ItemJar P);
-        public static event PlayerInventoryAdded OnPlayerInventoryAdded;
-        public event PlayerInventoryAdded OnInventoryAdded;
-
-        private void onInventoryAdded(byte E, byte u, ItemJar J)
-        {
-            OnPlayerInventoryAdded.TryInvoke(Player,(InventoryGroup)Enum.Parse(typeof(InventoryGroup), E.ToString()), u, J);
-            OnInventoryAdded.TryInvoke(Player, (InventoryGroup)Enum.Parse(typeof(InventoryGroup), E.ToString()), u, J);
-        }
-        
-        public enum Wearables { Hat = 0, Mask = 1, Vest = 2, Pants = 3, Shirt = 4, Glasses = 5, Backpack = 6};
-        public delegate void PlayerWear(UnturnedPlayer player, Wearables wear, ushort id, byte? quality);
-        public static event PlayerWear OnPlayerWear;
-
     }
 }

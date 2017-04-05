@@ -1,6 +1,6 @@
-﻿using Logger = Rocket.API.Logging.Logger;
-using SDG.Unturned;
+﻿using SDG.Unturned;
 using System;
+using Rocket.Core;
 using UnityEngine;
 
 namespace Rocket.Unturned.Utils
@@ -23,13 +23,13 @@ namespace Rocket.Unturned.Utils
             {
                 if (U.Instance.Settings.Instance.AutomaticSave.Interval < interval)
                 {
-                    Logger.Error("AutomaticSave interval must be atleast 30 seconds, changed to 30 seconds");
+                    R.Logger.Error("AutomaticSave interval must be atleast 30 seconds, changed to 30 seconds");
                 }
                 else
                 {
                     interval = U.Instance.Settings.Instance.AutomaticSave.Interval;
                 }
-                Logger.Info(String.Format("This server will automatically save every {0} seconds", interval));
+                R.Logger.Info(String.Format("This server will automatically save every {0} seconds", interval));
                 restartTimer();
             }
         }
@@ -47,7 +47,7 @@ namespace Rocket.Unturned.Utils
                 {
                     if (nextSaveTime.Value < DateTime.Now)
                     {
-                        Logger.Info("Saving server");
+                        R.Logger.Info("Saving server");
                         restartTimer();
                         SaveManager.save();
                     }
@@ -55,7 +55,7 @@ namespace Rocket.Unturned.Utils
             }
             catch (Exception er)
             {
-                Logger.Fatal(er);
+                R.Logger.Fatal(er);
             }
         }
     }

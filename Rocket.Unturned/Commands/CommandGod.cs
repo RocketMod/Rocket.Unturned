@@ -1,63 +1,37 @@
-﻿using Rocket.API;
-using System.Collections.Generic;
-using System;
+﻿using System.Collections.Generic;
 using Rocket.Unturned.Player;
-using Rocket.Unturned.Chat;
 using Rocket.API.Commands;
-using Logger = Rocket.API.Logging.Logger;
+using Rocket.API.Player;
+using Rocket.Core;
 
 namespace Rocket.Unturned.Commands
 {
     public class CommandGod : IRocketCommand
     {
-        public AllowedCaller AllowedCaller
-        {
-            get
-            {
-                return AllowedCaller.Player;
-            }
-        }
+        public AllowedCaller AllowedCaller => AllowedCaller.Player;
 
-        public string Name
-        {
-            get { return "god"; }
-        }
+        public string Name => "god";
 
-        public string Help
-        {
-            get { return "Cause you ain't givin a shit";}
-        }
+        public string Help => "Cause you ain't givin a shit";
 
-        public string Syntax
-        {
-            get { return ""; }
-        }
+        public string Syntax => "";
 
-        public List<string> Aliases
-        {
-            get { return new List<string>(); }
-        }
+        public List<string> Aliases => new List<string>();
 
-        public List<string> Permissions
-        {
-            get
-            {
-                return new List<string>() { "rocket.god" };
-            }
-        }
+        public List<string> Permissions => new List<string>() { "rocket.god" };
 
         public void Execute(IRocketPlayer caller, string[] command)
         {
             UnturnedPlayer player = (UnturnedPlayer)caller;
             if (player.Features.GodMode)
             {
-                Logger.Info(U.Translate("command_god_disable_console", player.DisplayName));
+                R.Logger.Info(U.Translate("command_god_disable_console", player.DisplayName));
                 U.Instance.Chat.Say(caller, U.Translate("command_god_disable_private"));
                 player.Features.GodMode = false;
             }
             else
             {
-                Logger.Info(U.Translate("command_god_enable_console", player.DisplayName));
+                R.Logger.Info(U.Translate("command_god_enable_console", player.DisplayName));
                 U.Instance.Chat.Say(caller, U.Translate("command_god_enable_private"));
                 player.Features.GodMode = true;
             }

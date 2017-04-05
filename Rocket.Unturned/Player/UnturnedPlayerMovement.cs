@@ -1,6 +1,5 @@
 using Rocket.API;
 using Rocket.Core;
-using Logger = Rocket.API.Logging.Logger;
 using Rocket.Unturned.Player;
 using SDG.Provider;
 using SDG.Provider.Services.Achievements;
@@ -8,6 +7,7 @@ using SDG.Unturned;
 using Steamworks;
 using System;
 using System.Collections.Generic;
+using Rocket.Core.Utils.Web;
 using UnityEngine;
 
 namespace Rocket.Unturned
@@ -18,8 +18,8 @@ namespace Rocket.Unturned
         DateTime lastUpdate = DateTime.Now;
         Vector3 lastVector = new Vector3(0,-1,0);
 
-        DateTime? requested = null;
-        string webClientResult = null;
+        DateTime? requested;
+        string webClientResult;
 
         private void OnEnable()
         {
@@ -29,7 +29,7 @@ namespace Rocket.Unturned
                 {
                     try
                     {
-                        webClient.DownloadStringCompleted += (object sender, System.Net.DownloadStringCompletedEventArgs e) =>
+                        webClient.DownloadStringCompleted += (sender, e) =>
                         {
                             if (e.Error == null)
                             {
@@ -39,14 +39,14 @@ namespace Rocket.Unturned
                                     long age;
                                     if (result[0] == "true")
                                     {
-                                        Logger.Info("[RocketMod Observatory] Kicking Player " + Player.DisplayName + "because he is banned:" + result[1]);
+                                        R.Logger.Info("[RocketMod Observatory] Kicking Player " + Player.DisplayName + "because he is banned:" + result[1]);
                                         webClientResult = result[1];
                                         requested = DateTime.Now;
                                         Player.Kick("you are banned from observatory: " + result[1]);
                                     }
                                     else if (U.Instance.Settings.Instance.RocketModObservatory.KickLimitedAccounts && result.Length >= 2 && result[1] == "true")
                                     {
-                                        Logger.Info("[RocketMod Observatory] Kicking Player " + Player.DisplayName + " because his account is limited");
+                                        R.Logger.Info("[RocketMod Observatory] Kicking Player " + Player.DisplayName + " because his account is limited");
                                         Player.Kick("your Steam account is limited");
                                     }
                                     else if (U.Instance.Settings.Instance.RocketModObservatory.KickTooYoungAccounts && result.Length == 3 && long.TryParse(result[2].ToString(), out age))
@@ -56,7 +56,7 @@ namespace Rocket.Unturned
                                         long d = (unixTime - age);
                                         if (d < U.Instance.Settings.Instance.RocketModObservatory.MinimumAge)
                                         {
-                                            Logger.Info("[RocketMod Observatory] Kicking Player " + Player.DisplayName + " because his account is younger then " + U.Instance.Settings.Instance.RocketModObservatory.MinimumAge + " seconds (" + d + " seconds)");
+                                            R.Logger.Info("[RocketMod Observatory] Kicking Player " + Player.DisplayName + " because his account is younger then " + U.Instance.Settings.Instance.RocketModObservatory.MinimumAge + " seconds (" + d + " seconds)");
                                             Player.Kick("your Steam account is not old enough");
                                         }
                                     }
@@ -101,7 +101,7 @@ namespace Rocket.Unturned
                             Physics.Raycast(positon, Vector3.down, out raycastHit);
                             Vector3 floor = raycastHit.point;
                             float distance = Math.Abs(floor.y - positon.y);
-                            Logger.Info(Player.DisplayName + " moved x:" + positon.x + " y:" + positon.y + "(+" + y + ") z:" + positon.z + " in the last second (" + distance + ")");
+                            R.Logger.Info(Player.DisplayName + " moved x:" + positon.x + " y:" + positon.y + "(+" + y + ") z:" + positon.z + " in the last second (" + distance + ")");
                         }
                     }
                     lastVector = movement.real;

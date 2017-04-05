@@ -3,49 +3,26 @@ using UnityEngine;
 using System.Linq;
 using Rocket.Unturned.Player;
 using System.Collections.Generic;
-using Rocket.API;
-using Rocket.Unturned.Chat;
-using Rocket.API.Extensions;
-using Logger = Rocket.API.Logging.Logger;
 using Rocket.API.Exceptions;
 using Rocket.API.Commands;
+using Rocket.API.Player;
+using Rocket.Core;
 
 namespace Rocket.Unturned.Commands
 {
     public class CommandTp : IRocketCommand
     {
-        public AllowedCaller AllowedCaller
-        {
-            get
-            {
-                return AllowedCaller.Player;
-            }
-        }
+        public AllowedCaller AllowedCaller => AllowedCaller.Player;
 
-        public string Name
-        {
-            get { return "tp"; }
-        }
+        public string Name => "tp";
 
-        public string Help
-        {
-            get { return "Teleports you to another player or location";}
-        }
+        public string Help => "Teleports you to another player or location";
 
-        public string Syntax
-        {
-            get { return "<player | place | x y z>"; }
-        }
+        public string Syntax => "<player | place | x y z>";
 
-        public List<string> Aliases
-        {
-            get { return new List<string>(); }
-        }
+        public List<string> Aliases => new List<string>();
 
-        public List<string> Permissions
-        {
-            get { return new List<string>() { "rocket.tp", "rocket.teleport" }; }
-        }
+        public List<string> Permissions => new List<string>() { "rocket.tp", "rocket.teleport" };
 
         public void Execute(IRocketPlayer caller, string[] command)
         {
@@ -75,7 +52,7 @@ namespace Rocket.Unturned.Commands
             if (x != null && y != null && z != null)
             {
                 player.Teleport(new Vector3((float)x, (float)y, (float)z), MeasurementTool.angleToByte(player.Rotation));
-                Logger.Info(U.Translate("command_tp_teleport_console", player.DisplayName, (float)x + "," + (float)y + "," + (float)z));
+                R.Logger.Info(U.Translate("command_tp_teleport_console", player.DisplayName, (float)x + "," + (float)y + "," + (float)z));
                 U.Instance.Chat.Say(player, U.Translate("command_tp_teleport_private", (float)x + "," + (float)y + "," + (float)z));
             }
             else
@@ -84,17 +61,17 @@ namespace Rocket.Unturned.Commands
                 if (otherplayer != null && otherplayer != player)
                 {
                     player.Teleport(otherplayer);
-                    Logger.Info(U.Translate("command_tp_teleport_console", player.DisplayName, otherplayer.DisplayName));
+                    R.Logger.Info(U.Translate("command_tp_teleport_console", player.DisplayName, otherplayer.DisplayName));
                     U.Instance.Chat.Say(player, U.Translate("command_tp_teleport_private", otherplayer.DisplayName));
                 }
                 else
                 {
-                    Node item = LevelNodes.nodes.Where(n => n.type == ENodeType.LOCATION && ((LocationNode)n).name.ToLower().Contains(command[0].ToLower())).FirstOrDefault();
+                    Node item = LevelNodes.nodes.FirstOrDefault(n => n.type == ENodeType.LOCATION && ((LocationNode)n).name.ToLower().Contains(command[0].ToLower()));
                     if (item != null)
                     {
                         Vector3 c = item.point + new Vector3(0f, 0.5f, 0f);
                         player.Teleport(c, MeasurementTool.angleToByte(player.Rotation));
-                        Logger.Info(U.Translate("command_tp_teleport_console", player.DisplayName, ((LocationNode)item).name));
+                        R.Logger.Info(U.Translate("command_tp_teleport_console", player.DisplayName, ((LocationNode)item).name));
                         U.Instance.Chat.Say(player, U.Translate("command_tp_teleport_private", ((LocationNode)item).name));
                     }
                     else
