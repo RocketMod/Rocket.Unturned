@@ -1,47 +1,25 @@
-﻿using Rocket.API;
-using Rocket.API.Commands;
+﻿using Rocket.API.Commands;
 using Rocket.API.Exceptions;
-using Logger = Rocket.API.Logging.Logger;
-using Rocket.Unturned.Chat;
 using Rocket.Unturned.Player;
 using System.Collections.Generic;
+using Rocket.API.Player;
+using Rocket.Core;
 
 namespace Rocket.Unturned.Commands
 {
     internal class CommandTphere : IRocketCommand
     {
-        public AllowedCaller AllowedCaller
-        {
-            get
-            {
-                return AllowedCaller.Player;
-            }
-        }
+        public AllowedCaller AllowedCaller => AllowedCaller.Player;
 
-        public string Name
-        {
-            get { return "tphere"; }
-        }
+        public string Name => "tphere";
 
-        public string Help
-        {
-            get { return "Teleports another player to you";}
-        }
+        public string Help => "Teleports another player to you";
 
-        public string Syntax
-        {
-            get { return "<player>"; }
-        }
+        public string Syntax => "<player>";
 
-        public List<string> Aliases
-        {
-            get { return new List<string>(); }
-        }
+        public List<string> Aliases => new List<string>();
 
-        public List<string> Permissions
-        {
-            get { return new List<string>() { "rocket.tphere", "rocket.teleporthere" }; }
-        }
+        public List<string> Permissions => new List<string>() { "rocket.tphere", "rocket.teleporthere" };
 
         public void Execute(IRocketPlayer caller, string[] command)
         {
@@ -56,7 +34,7 @@ namespace Rocket.Unturned.Commands
             if (otherPlayer!=null && otherPlayer != caller)
             {
                 otherPlayer.Teleport(player);
-                Logger.Info(R.Translation.Translate("command_tphere_teleport_console", otherPlayer.DisplayName, player.DisplayName));
+                R.Logger.Info(U.Translate("command_tphere_teleport_console", otherPlayer.DisplayName, player.DisplayName));
                 U.Instance.Chat.Say(caller, U.Translate("command_tphere_teleport_from_private", otherPlayer.DisplayName));
                 U.Instance.Chat.Say(otherPlayer, U.Translate("command_tphere_teleport_to_private", player.DisplayName));
             }

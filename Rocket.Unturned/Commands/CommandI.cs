@@ -2,49 +2,27 @@
 using SDG.Unturned;
 using System;
 using System.Collections.Generic;
-using Rocket.API;
-using Rocket.Unturned.Chat;
 using Rocket.Unturned.Items;
 using Rocket.API.Exceptions;
 using Rocket.API.Commands;
-using Logger = Rocket.API.Logging.Logger;
+using Rocket.API.Player;
+using Rocket.Core;
 
 namespace Rocket.Unturned.Commands
 {
     public class CommandI : IRocketCommand
     {
-        public AllowedCaller AllowedCaller
-        {
-            get
-            {
-                return AllowedCaller.Player;
-            }
-        }
+        public AllowedCaller AllowedCaller => AllowedCaller.Player;
 
-        public string Name
-        {
-            get { return "i"; }
-        }
+        public string Name => "i";
 
-        public string Help
-        {
-            get { return "Gives yourself an item";}
-        }
+        public string Help => "Gives yourself an item";
 
-        public string Syntax
-        {
-            get { return "<id> [amount]"; }
-        }
+        public string Syntax => "<id> [amount]";
 
-        public List<string> Aliases
-        {
-            get { return new List<string>() { "item" }; }
-        }
+        public List<string> Aliases => new List<string>() { "item" };
 
-        public List<string> Permissions
-        {
-            get { return new List<string>() { "rocket.item" , "rocket.i" }; }
-        }
+        public List<string> Permissions => new List<string>() { "rocket.item" , "rocket.i" };
 
         public void Execute(IRocketPlayer caller, string[] command)
         {
@@ -83,7 +61,7 @@ namespace Rocket.Unturned.Commands
 
             if (player.GiveItem(id, amount))
             {
-                Logger.Info(U.Translate("command_i_giving_console", player.DisplayName, id, amount));
+                R.Logger.Info(U.Translate("command_i_giving_console", player.DisplayName, id, amount));
                 U.Instance.Chat.Say(player, U.Translate("command_i_giving_private", amount, assetName, id));
             }
             else

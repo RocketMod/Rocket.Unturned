@@ -1,49 +1,26 @@
-﻿using Rocket.API;
-using Rocket.API.Commands;
+﻿using Rocket.API.Commands;
 using Rocket.API.Exceptions;
-using Rocket.API.Extensions;
-using Logger = Rocket.API.Logging.Logger;
-using Rocket.Unturned.Chat;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 using System.Collections.Generic;
+using Rocket.API.Player;
+using Rocket.Core;
 
 namespace Rocket.Unturned.Commands
 {
     public class CommandV : IRocketCommand
     {
-        public AllowedCaller AllowedCaller
-        {
-            get
-            {
-                return AllowedCaller.Player;
-            }
-        }
+        public AllowedCaller AllowedCaller => AllowedCaller.Player;
 
-        public string Name
-        {
-            get { return "v"; }
-        }
+        public string Name => "v";
 
-        public string Help
-        {
-            get { return "Gives yourself an vehicle";}
-        }
+        public string Help => "Gives yourself an vehicle";
 
-        public string Syntax
-        {
-            get { return "<id>"; }
-        }
+        public string Syntax => "<id>";
 
-        public List<string> Aliases
-        {
-            get { return new List<string>(); }
-        }
+        public List<string> Aliases => new List<string>();
 
-        public List<string> Permissions
-        {
-            get { return new List<string>() { "rocket.v", "rocket.vehicle" }; }
-        }
+        public List<string> Permissions => new List<string>() { "rocket.v", "rocket.vehicle" };
 
         public void Execute(IRocketPlayer caller, string[] command)
         {
@@ -87,7 +64,7 @@ namespace Rocket.Unturned.Commands
 
             if (VehicleTool.giveVehicle(player.Player, id.Value))
             {
-                Logger.Warn(U.Translate("command_v_giving_console", player.DisplayName, id));
+                R.Logger.Warn(U.Translate("command_v_giving_console", player.DisplayName, id));
                 U.Instance.Chat.Say(caller, U.Translate("command_v_giving_private", assetName, id));
             }
             else

@@ -68,6 +68,7 @@
   <ItemGroup>
     <Compile Include="Commands\UnturnedVanillaCommand.cs" />
     <Compile Include="Commands\UnturnedCommandExtensions.cs" />
+    <Compile Include="Event\PlayerJoinRequestEvent.cs" />
     <Compile Include="Player\UnturnedPlayerMovement.cs" />
     <Compile Include="RocketNexus.cs" />
     <Compile Include="UnturnedTranslations.cs" />

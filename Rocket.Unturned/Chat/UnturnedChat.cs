@@ -4,17 +4,17 @@ using Steamworks;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Rocket.API;
-using Rocket.API.Chat;
-using Logger = Rocket.API.Logging.Logger;
-using System.Linq;
+using Rocket.API.Event;
+using Rocket.API.Event.Player;
+using Rocket.API.Player;
+using Rocket.API.Providers.Implementation.Managers;
+using Rocket.Core;
+using Rocket.Core.Player;
 
 namespace Rocket.Unturned.Chat
 {
-    public sealed class UnturnedChat : MonoBehaviour, IChat
+    public sealed class UnturnedChat : MonoBehaviour, IChatManager
     {
-        public event PlayerChatted OnPlayerChatted;
-
         private void Awake()
         {
             ChatManager.onChatted += handleChat;
@@ -27,25 +27,15 @@ namespace Rocket.Unturned.Chat
             try
             {
                 UnturnedPlayer player = UnturnedPlayer.FromSteamPlayer(steamPlayer);
-    
-                if (OnPlayerChatted != null)
-                {
-                    foreach (var handler in OnPlayerChatted.GetInvocationList().Cast<PlayerChatted>())
-                    {
-                        try
-                        {
-                            handler(player, ref color, message, ref cancel);
-                        }
-                        catch (Exception ex)
-                        {
-                            Logger.Error(ex);
-                        }
-                    }
-                }
+                PlayerChatEvent @event = new PlayerChatEvent(player, incomingColor, message, (PlayerChatMode)chatMode);
+                @event.IsCancelled = cancel;
+                EventManager.Instance.CallEvent(@event);
+                cancel = @event.IsCancelled;
+
             }
             catch (Exception ex)
             {
-                Logger.Error(ex);
+                R.Logger.Error(ex);
             }
             cancel = !cancel;
             incomingColor = color;
@@ -78,7 +68,7 @@ namespace Rocket.Unturned.Chat
         public static Color? GetColorFromHex(string hexString)
         {
             hexString = hexString.Replace("#", "");
-            if(hexString.Length == 3)
+            if (hexString.Length == 3)
             { // #99f
                 hexString = hexString.Insert(1, System.Convert.ToString(hexString[0])); // #999f
                 hexString = hexString.Insert(3, System.Convert.ToString(hexString[2])); // #9999f
@@ -94,13 +84,13 @@ namespace Rocket.Unturned.Chat
             byte b = (byte)(argb & 0xff);
             return GetColorFromRGB(r, g, b);
         }
-		public static Color GetColorFromRGB(byte R,byte G,byte B)
-		{
-			return GetColorFromRGB (R, G, B, 100);
-		}
-        public static Color GetColorFromRGB(byte R,byte G,byte B,short A)
+        public static Color GetColorFromRGB(byte R, byte G, byte B)
         {
-            return new Color((1f / 255f) * R, (1f / 255f) * G, (1f / 255f) * B,(1f/100f) * A);
+            return GetColorFromRGB(R, G, B, 100);
+        }
+        public static Color GetColorFromRGB(byte R, byte G, byte B, short A)
+        {
+            return new Color((1f / 255f) * R, (1f / 255f) * G, (1f / 255f) * B, (1f / 100f) * A);
         }
 
         public void Say(string message)
@@ -110,7 +100,7 @@ namespace Rocket.Unturned.Chat
 
         public void Say(string message, Color? color = default(Color?))
         {
-            Logger.Info("Broadcast: " + message);
+            R.Logger.Info("Broadcast: " + message);
             foreach (string m in wrapMessage(message))
             {
                 ChatManager.instance.tellChat(CSteamID.Nil, Provider.server, (byte)EChatMode.GLOBAL, color.Value, m);
@@ -126,7 +116,7 @@ namespace Rocket.Unturned.Chat
         {
             if (player is ConsolePlayer)
             {
-                Logger.Info(message);
+                R.Logger.Info(message);
             }
             else
             {
@@ -141,47 +131,46 @@ namespace Rocket.Unturned.Chat
 
         public void Say(CSteamID CSteamID, string message, Color? color)
         {
-            if (CSteamID == null || CSteamID.ToString() == "0")
+            if (CSteamID == CSteamID.Nil)
             {
-                Logger.Info(message);
+                R.Logger.Info(message);
             }
             else
-            {   
+            {
                 foreach (string m in wrapMessage(message))
                 {
-                    ChatManager.instance.channel.send("tellChat", CSteamID, ESteamPacket.UPDATE_UNRELIABLE_BUFFER, new object[] { CSteamID.Nil, (byte)EChatMode.SAY,color, m });
+                    ChatManager.instance.channel.send("tellChat", CSteamID, ESteamPacket.UPDATE_UNRELIABLE_BUFFER, new object[] { CSteamID.Nil, (byte)EChatMode.SAY, color, m });
                 }
             }
         }
 
-         public static List<string> wrapMessage(string text)
-         {
-             if (text.Length == 0) return new List<string>();
-             string[] words = text.Split(' ');
-             List<string> lines = new List<string>();
-             string currentLine = "";
-             int maxLength = 90;
-             foreach (var currentWord in words)
-             {
-  
-                 if ((currentLine.Length > maxLength) ||
-                     ((currentLine.Length + currentWord.Length) > maxLength))
-                 {
-                     lines.Add(currentLine);
-                     currentLine = "";
-                 }
-  
-                 if (currentLine.Length > 0)
-                     currentLine += " " + currentWord;
-                 else
-                     currentLine += currentWord;
-  
-             }
-  
-             if (currentLine.Length > 0)
-                 lines.Add(currentLine);
-                 return lines;
+        public static List<string> wrapMessage(string text)
+        {
+            if (text.Length == 0) return new List<string>();
+            string[] words = text.Split(' ');
+            List<string> lines = new List<string>();
+            string currentLine = "";
+            int maxLength = 90;
+            foreach (var currentWord in words)
+            {
+
+                if ((currentLine.Length > maxLength) ||
+                    ((currentLine.Length + currentWord.Length) > maxLength))
+                {
+                    lines.Add(currentLine);
+                    currentLine = "";
+                }
+
+                if (currentLine.Length > 0)
+                    currentLine += " " + currentWord;
+                else
+                    currentLine += currentWord;
+
             }
 
+            if (currentLine.Length > 0)
+                lines.Add(currentLine);
+            return lines;
+        }
     }
 }
