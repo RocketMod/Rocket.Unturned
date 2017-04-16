@@ -58,6 +58,7 @@ namespace Rocket.Unturned
                 { "command_v_giving_console","Giving {0} vehicle {1}"},
                 { "command_v_giving_private","Giving you a {0} ({1})"},
                 { "command_v_giving_failed_private","Failed giving you a {0} ({1})"},
+                { "command_v_not_found","Vehicle Not Found [{0}] "},
                 { "command_tps_tps","TPS: {0}"},
                 { "command_tps_running_since","Running since: {0} UTC"},
                 { "command_p_reload_private","Reloaded permissions"},
