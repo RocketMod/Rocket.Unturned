@@ -139,8 +139,8 @@ namespace Rocket.Unturned
                 try
                 {
                     SteamGameServer.SetKeyValue("rocket", Assembly.GetExecutingAssembly().GetName().Version.ToString());
-                    SteamGameServer.SetKeyValue("rocketplugins", String.Join(", ", R.Plugins.GetPlugins().Select(p => p.Name).ToArray()));
-                    SteamGameServer.SetBotPlayerCount(1);
+                    SteamGameServer.SetKeyValue("rocketplugins", String.Join(", ", R.Plugins.Plugins.Select(p => p.Name).ToArray()));
+                    SteamGameServer.SetBotPlayerCount(1); //best solution to set server as rocket server 10/10
                 }
                 catch (Exception ex)
                 {
@@ -243,16 +243,16 @@ namespace Rocket.Unturned
         public void OnPluginLoaded(PluginLoadedEvent @event)
         {
             var plugin = @event.Plugin;
-            if(plugin is RocketPluginBase)
-                ((RocketPluginBase)plugin).gameObject.TryAddComponent<PluginUnturnedPlayerComponentManager>();
+            if(plugin is MonoBehaviour)
+                ((MonoBehaviour)plugin).gameObject.TryAddComponent<PluginUnturnedPlayerComponentManager>();
         }
 
         [API.Event.EventHandler]
         public void OnPluginUnloaded(PluginUnloadedEvent @event)
         {
             var plugin = @event.Plugin;
-            if (plugin is RocketPluginBase)
-                ((RocketPluginBase)plugin).TryRemoveComponent<PluginUnturnedPlayerComponentManager>();
+            if (plugin is MonoBehaviour)
+                ((MonoBehaviour)plugin).gameObject.TryRemoveComponent<PluginUnturnedPlayerComponentManager>();
         }
 
         public ReadOnlyCollection<IRocketCommand> GetAllCommands()
@@ -306,7 +306,7 @@ namespace Rocket.Unturned
         }
 
         public TranslationList DefaultTranslation => new TranslationList();
-        public void Unload()
+        public void Unload(bool isReload = false)
         {
             throw new NotImplementedException();
         }
@@ -325,7 +325,7 @@ namespace Rocket.Unturned
         {
             get
             {
-                return Provider.clients.Select(c => UnturnedPlayer.FromCSteamID(c.playerID.steamID)).ToList();
+                return Provider.clients.Select(c => (IRocketPlayer) UnturnedPlayer.FromCSteamID(c.playerID.steamID)).ToList();
             }
         }
     }

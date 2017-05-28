@@ -10,7 +10,7 @@ namespace Rocket.Unturned.Commands
         {
             return (array.Length <= index) ? null : UnturnedPlayer.FromName(array[index]);
         }
-
+        /*
         public static RocketPlayer GetRocketPlayerParameter(this string[] array, int index)
         {
             if(array.Length > index)
@@ -23,7 +23,8 @@ namespace Rocket.Unturned.Commands
             }
             return null;
         }
-
+        */
+       
         public static ulong? GetCSteamIDParameter(this string[] array, int index)
         {
             if (array.Length > index)

@@ -24,7 +24,7 @@ namespace Rocket.Unturned.Permissions
             Regex r = new Regex("^\\/[a-zA-Z]*");
             string requestedCommand = r.Match(permission.ToLower()).Value.ToString().TrimStart('/').ToLower();
 
-            IRocketCommand command = R.Plugins.GetCommand(requestedCommand);
+            IRocketCommand command = R.Commands.Commands.FirstOrDefault(c => c.Name.Equals(requestedCommand, StringComparison.OrdinalIgnoreCase));
 
             if (command != null)
             {

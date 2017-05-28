@@ -4,8 +4,6 @@ using System;
 using UnityEngine;
 using System.Linq;
 using Rocket.Unturned.Events;
-using Rocket.API;
-using Rocket.API.Player;
 using Rocket.Core;
 using Rocket.Unturned.Chat;
 using Rocket.Unturned.Skills;

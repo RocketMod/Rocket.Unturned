@@ -7,6 +7,7 @@ using Rocket.API.Exceptions;
 using Rocket.API.Commands;
 using Rocket.API.Player;
 using Rocket.Core;
+using Rocket.Core.Commands;
 
 namespace Rocket.Unturned.Commands
 {
