@@ -17,6 +17,7 @@ namespace Rocket.Unturned.Player
 
         private void OnEnable()
         {
+            /*
             if (U.Instance.Settings.Instance.RocketModObservatory.CommunityBans)
             {
                 using (RocketWebClient webClient = new RocketWebClient())
@@ -65,6 +66,7 @@ namespace Rocket.Unturned.Player
                     }
                 }
             }
+            */
         }
 
         private void FixedUpdate()
@@ -78,6 +80,7 @@ namespace Rocket.Unturned.Player
 
             if (!VanishMode)
             {
+                /*
                 if (U.Instance.Settings.Instance.LogSuspiciousPlayerMovement && lastUpdate.AddSeconds(1) < DateTime.Now)
                 {
                     lastUpdate = DateTime.Now;
@@ -100,6 +103,7 @@ namespace Rocket.Unturned.Player
                     }
                     lastVector = movement.real;
                 }
+                */
             }
         }
     }
