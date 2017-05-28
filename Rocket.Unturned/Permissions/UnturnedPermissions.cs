@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using UnityEngine;
 using Rocket.API.Serialisation;
 using Rocket.Unturned.Event;
+using Rocket.Unturned.Event.Player;
 
 namespace Rocket.Unturned.Permissions
 {
@@ -22,26 +23,24 @@ namespace Rocket.Unturned.Permissions
             UnturnedPlayer player = caller.ToUnturnedPlayer();
 
             Regex r = new Regex("^\\/[a-zA-Z]*");
-            string requestedCommand = r.Match(permission.ToLower()).Value.ToString().TrimStart('/').ToLower();
+            string requestedCommand = r.Match(permission.ToLower()).Value.TrimStart('/').ToLower();
 
             IRocketCommand command = R.Commands.Commands.FirstOrDefault(c => c.Name.Equals(requestedCommand, StringComparison.OrdinalIgnoreCase));
 
             if (command != null)
             {
-                if (R.Permissions.HasPermission(player, command))
+                if ((command.Permissions != null && command.Permissions.Any(c => R.Permissions.HasPermission(player, c))) || R.Permissions.HasPermission(player, command.Name) || (command.Aliases != null && command.Aliases.Any(c => R.Permissions.HasPermission(player, c))))
                 {
                     return true;
                 }
-                else
-                {
-                    string language = R.Translations.GetCurrentLanguage();
-                    U.Instance.Chat.Say(player, R.Translations.Translate("command_no_permission", language), Color.red);
-                    return false;
-                }
+
+                string language = R.Translations.GetCurrentLanguage();
+                R.Implementation.Chat.Say(player, R.Translations.Translate("command_no_permission", language), Color.red);
+                return false;
             }
             else
             {
-                U.Instance.Chat.Say(player, R.Translations.Translate("command_not_found"), Color.red);
+                R.Implementation.Chat.Say(player, R.Translations.Translate("command_not_found"), Color.red);
                 return false;
             }
         }

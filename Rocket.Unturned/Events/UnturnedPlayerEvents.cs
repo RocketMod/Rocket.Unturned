@@ -1,12 +1,13 @@
-﻿using Rocket.Unturned.Enumerations;
-using Rocket.Unturned.Player;
+﻿using Rocket.Unturned.Player;
 using SDG.Unturned;
 using Steamworks;
 using System;
 using UnityEngine;
 using System.Linq;
-using Rocket.API.Extensions;
 using Rocket.Core;
+using Rocket.Unturned.Event;
+using Rocket.Unturned.Event.Player;
+using Rocket.Unturned.Event.Player.Inventory;
 
 namespace Rocket.Unturned.Events
 {
@@ -14,11 +15,28 @@ namespace Rocket.Unturned.Events
     {
         protected override void Load()
         {
-            Player.Player.life.onStaminaUpdated += onUpdateStamina;
-            Player.Player.inventory.onInventoryAdded += onInventoryAdded;
-            Player.Player.inventory.onInventoryRemoved += onInventoryRemoved;
-            Player.Player.inventory.onInventoryResized += onInventoryResized;
-            Player.Player.inventory.onInventoryUpdated += onInventoryUpdated;
+            Player.Player.life.onStaminaUpdated += delegate(byte newStamina)
+            {
+                new PlayerUpdateStaminaEvent(Player, newStamina).Fire();
+            };
+            Player.Player.inventory.onInventoryAdded += delegate(byte page, byte index, ItemJar item)
+            {
+                new PlayerInventoryAddedEvent(Player, page, index, item).Fire();
+            };
+            Player.Player.inventory.onInventoryRemoved += delegate (byte page, byte index, ItemJar item)
+            {
+                new PlayerInventoryRemovedEvent(Player, page, index, item).Fire();
+            };
+
+            Player.Player.inventory.onInventoryResized += delegate(byte page, byte newWidth, byte newHeight)
+            {
+                new PlayerInventoryResizedEvent(Player, page, newWidth, newHeight);
+            };
+
+            Player.Player.inventory.onInventoryUpdated += delegate (byte page, byte index, ItemJar item)
+            {
+                new PlayerInventoryUpdatedEvent(Player, page, index, item).Fire();
+            };
         }
 
         private void Start()
@@ -54,7 +72,7 @@ namespace Rocket.Unturned.Events
             {
                 if (player == null || player.player == null || player.player.transform == null || arguments == null)
                     return;
-                UnturnedPlayerEvents instance = player.player.transform.GetComponent<UnturnedPlayerEvents>();
+
                 UnturnedPlayer rp = UnturnedPlayer.FromSteamPlayer(player);
 #if DEBUG
                 //string o = "";
@@ -66,70 +84,54 @@ namespace Rocket.Unturned.Events
 #endif
                 if (name.StartsWith("tellWear"))
                 {
-                    OnPlayerWear.TryInvoke(rp, Enum.Parse(typeof(Wearables), name.Replace("tellWear", "")),
-                        (ushort) arguments[0], arguments.Count() > 1 ? (byte?) arguments[1] : null);
+                    new PlayerUpdateWearEvent(rp, (Wearable)Enum.Parse(typeof(Wearable), name.Replace("tellWear", "")), (ushort)arguments[0]).Fire();
                 }
                 switch (name)
                 {
                     case "tellBleeding":
-                        OnPlayerUpdateBleeding.TryInvoke(rp, (bool) arguments[0]);
-                        instance.OnUpdateBleeding.TryInvoke(rp, (bool) arguments[0]);
+                        new PlayerUpdateBleedingEvent(rp, (bool) arguments[0]).Fire();
                         break;
+
                     case "tellBroken":
-                        OnPlayerUpdateBroken.TryInvoke(rp, (bool) arguments[0]);
-                        instance.OnUpdateBroken.TryInvoke(rp, (bool) arguments[0]);
+                        new PlayerUpdateBrokenEvent(rp, (bool) arguments[0]).Fire();
                         break;
+
                     case "tellLife":
-                        OnPlayerUpdateLife.TryInvoke(rp, (byte) arguments[0]);
-                        instance.OnUpdateLife.TryInvoke(rp, (byte) arguments[0]);
+                        new PlayerUpdateLifeEvent(rp, (byte)arguments[0]).Fire();
                         break;
                     case "tellFood":
-                        OnPlayerUpdateFood.TryInvoke(rp, (byte) arguments[0]);
-                        instance.OnUpdateFood.TryInvoke(rp, (byte) arguments[0]);
+                        new PlayerUpdateFoodEvent(rp, (byte)arguments[0]).Fire();
                         break;
                     case "tellHealth":
-                        OnPlayerUpdateHealth.TryInvoke(rp, (byte) arguments[0]);
-                        instance.OnUpdateHealth.TryInvoke(rp, (byte) arguments[0]);
+                        new PlayerUpdateHealthEvent(rp, (byte)arguments[0]).Fire();
                         break;
                     case "tellVirus":
-                        OnPlayerUpdateVirus.TryInvoke(rp, (byte) arguments[0]);
-                        instance.OnUpdateVirus.TryInvoke(rp, (byte) arguments[0]);
+                        new PlayerUpdateVirusEvent(rp, (byte)arguments[0]).Fire();
                         break;
                     case "tellWater":
-                        OnPlayerUpdateWater.TryInvoke(rp, (byte) arguments[0]);
-                        instance.OnUpdateWater.TryInvoke(rp, (byte) arguments[0]);
+                        new PlayerUpdateWaterEvent(rp, (byte)arguments[0]).Fire();
                         break;
                     case "tellStance":
-                        OnPlayerUpdateStance.TryInvoke(rp, (byte) arguments[0]);
-                        instance.OnUpdateStance.TryInvoke(rp, (byte) arguments[0]);
+                        new PlayerUpdateStanceEvent(rp, (byte) arguments[0]);
                         break;
                     case "tellGesture":
-                        OnPlayerUpdateGesture.TryInvoke(rp,
-                            (PlayerGesture) Enum.Parse(typeof(PlayerGesture), arguments[0].ToString()));
-                        instance.OnUpdateGesture.TryInvoke(rp,
-                            (PlayerGesture) Enum.Parse(typeof(PlayerGesture), arguments[0].ToString()));
+                        new PlayerUpdateGestureEvent(rp, (EPlayerGesture) Enum.Parse(typeof(EPlayerGesture), arguments[0].ToString())).Fire();
                         break;
                     case "tellStat":
-                        OnPlayerUpdateStat.TryInvoke(rp, (EPlayerStat) (byte) arguments[0]);
-                        instance.OnUpdateStat.TryInvoke(rp, (EPlayerStat) (byte) arguments[0]);
+                        new PlayerUpdateStatEvent(rp, (EPlayerStat)(byte)arguments[0]).Fire();
                         break;
                     case "tellExperience":
-                        OnPlayerUpdateExperience.TryInvoke(rp, (uint) arguments[0]);
-                        instance.OnUpdateExperience.TryInvoke(rp, (uint) arguments[0]);
+                        new PlayerUpdateExperienceEvent(rp, (uint) arguments[0]).Fire();
                         break;
                     case "tellRevive":
-                        OnPlayerRevive.TryInvoke(rp, (Vector3) arguments[0], (byte) arguments[1]);
-                        instance.OnRevive.TryInvoke(rp, (Vector3) arguments[0], (byte) arguments[1]);
+                        new PlayerReviveEvent(rp, (Vector3)arguments[0], (byte)arguments[1]).Fire();
                         break;
                     case "tellDead":
-                        OnPlayerDead.TryInvoke(rp, (Vector3) arguments[0]);
-                        instance.OnDead.TryInvoke(rp, (Vector3) arguments[0]);
+                        new PlayerDeadEvent(rp, (Vector3)arguments[0]).Fire();
                         break;
                     case "tellDeath":
-                        OnPlayerDeath.TryInvoke(rp, (EDeathCause) (byte) arguments[0], (ELimb) (byte) arguments[1],
-                            new CSteamID(ulong.Parse(arguments[2].ToString())));
-                        instance.OnDeath.TryInvoke(rp, (EDeathCause) (byte) arguments[0], (ELimb) (byte) arguments[1],
-                            new CSteamID(ulong.Parse(arguments[2].ToString())));
+                        new PlayerDeathEvent(rp, (EDeathCause)(byte)arguments[0], (ELimb)(byte)arguments[1],
+                            new CSteamID(ulong.Parse(arguments[2].ToString()))).Fire();
                         break;
                     default:
 #if DEBUG
@@ -144,5 +146,16 @@ namespace Rocket.Unturned.Events
                 R.Logger.Error("Failed to receive packet \"" + name + "\"", ex);
             }
         }
+    }
+
+    public enum Wearable
+    {
+        Backpack,
+        Glasses,
+        Hat,
+        Mask,
+        Pants,
+        Shirt,
+        Vest
     }
 }

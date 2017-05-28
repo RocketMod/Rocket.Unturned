@@ -18,18 +18,20 @@ namespace Rocket.Unturned.Plugins
     {
         private Assembly assembly;
         private List<Type> unturnedPlayerComponents = new List<Type>();
-        private bool _enabled = false;
+        private bool _enabled;
         private void OnDisable()
         {
             try
             {
                 _enabled = false;
                 unturnedPlayerComponents = unturnedPlayerComponents.Where(p => p.Assembly != assembly).ToList();
-                List<Type> playerComponents = assembly.GetTypesFromParentClass(typeof(UnturnedPlayerComponent));
+                List<Type> playerComponents = GetTypesFromParentClass(assembly, typeof(UnturnedPlayerComponent));
                 foreach (Type playerComponent in playerComponents)
                 {
                     Provider.clients.ForEach(p => p.player.gameObject.TryRemoveComponent(playerComponent.GetType()));
                 }
+
+                EventManager.Instance.UnregisterEventsInternal(this, null);
             }
             catch (Exception ex)
             {
@@ -45,7 +47,7 @@ namespace Rocket.Unturned.Plugins
                 IRocketPlugin plugin = GetComponent<IRocketPlugin>();
                 assembly = plugin.GetType().Assembly;
                 EventManager.Instance.RegisterEventsInternal(this, null);
-                unturnedPlayerComponents.AddRange(assembly.GetTypesFromParentClass(typeof(UnturnedPlayerComponent)));
+                unturnedPlayerComponents.AddRange(GetTypesFromParentClass(assembly, typeof(UnturnedPlayerComponent)));
 
                 foreach (Type playerComponent in unturnedPlayerComponents)
                 {
@@ -59,6 +61,28 @@ namespace Rocket.Unturned.Plugins
             }
         }
 
+        private List<Type> GetTypesFromParentClass(Assembly assembly, Type parentClass)
+        {
+            List<Type> allTypes = new List<Type>();
+            Type[] types;
+            try
+            {
+                types = assembly.GetTypes();
+            }
+            catch (ReflectionTypeLoadException e)
+            {
+                types = e.Types;
+            }
+            foreach (Type type in types.Where(t => t != null))
+            {
+                if (type.IsSubclassOf(parentClass))
+                {
+                    allTypes.Add(type);
+                }
+            }
+            return allTypes;
+        }
+        
         [API.Event.EventHandler]
         public void OnPreConnect(PrePlayerConnectedEvent @event)
         {

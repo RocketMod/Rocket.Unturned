@@ -2,13 +2,14 @@
 using Rocket.Unturned.Events;
 using SDG.Unturned;
 using System;
+using Rocket.API.Event;
+using Rocket.Unturned.Event.Player;
 using UnityEngine;
 
 namespace Rocket.Unturned.Player
 {
-    public sealed class UnturnedPlayerFeatures : UnturnedPlayerComponent
+    public sealed class UnturnedPlayerFeatures : UnturnedPlayerComponent, IListener
     {
-
         public DateTime Joined = DateTime.Now;
 
         internal Color? color = null;
@@ -18,6 +19,15 @@ namespace Rocket.Unturned.Player
             set { color = value; }
         }
 
+        private void Start()
+        {
+            EventManager.Instance.RegisterEventsInternal(this, null);
+        }
+
+        private void Stop()
+        {
+            EventManager.Instance.UnregisterEventsInternal(this, null);
+        }
 
         private bool vanishMode = false;
         public bool VanishMode
@@ -32,38 +42,13 @@ namespace Rocket.Unturned.Player
                 {
                     pMovement.updates.Add(new PlayerStateUpdate(pMovement.real, Player.Player.look.angle, Player.Player.look.rot));
                     pMovement.isUpdated = true;
-                    PlayerManager.updates++;
+                    //PlayerManager.updates++;
                 }
                 vanishMode = value;
             }
         }
 
-        private bool godMode = false;
-        public bool GodMode
-        {
-            set
-            {
-                if (value)
-                {
-                    Player.Events.OnUpdateHealth += e_OnPlayerUpdateHealth;
-                    Player.Events.OnUpdateWater += e_OnPlayerUpdateWater;
-                    Player.Events.OnUpdateFood += e_OnPlayerUpdateFood;
-                    Player.Events.OnUpdateVirus += e_OnPlayerUpdateVirus;
-                }
-                else
-                {
-                    Player.Events.OnUpdateHealth -= e_OnPlayerUpdateHealth;
-                    Player.Events.OnUpdateWater -= e_OnPlayerUpdateWater;
-                    Player.Events.OnUpdateFood -= e_OnPlayerUpdateFood;
-                    Player.Events.OnUpdateVirus -= e_OnPlayerUpdateVirus;
-                }
-                godMode = value;
-            }
-            get
-            {
-                return godMode;
-            }
-        }
+        public bool GodMode { get; set; }
 
         private bool initialCheck;
 
@@ -73,7 +58,7 @@ namespace Rocket.Unturned.Player
         {
             if (oldPosition != Player.Position)
             {
-                UnturnedPlayerEvents.fireOnPlayerUpdatePosition(Player);
+                new PlayerUpdatePositionEvent(Player, oldPosition, Player.Position).Fire();
                 oldPosition = Player.Position;
             }
             if (!initialCheck && (DateTime.Now - Joined).TotalSeconds > 3)
@@ -107,13 +92,8 @@ namespace Rocket.Unturned.Player
 
         protected override void Load()
         {
-
-            if (godMode)
+            if (GodMode)
             {
-                Player.Events.OnUpdateHealth += e_OnPlayerUpdateHealth;
-                Player.Events.OnUpdateWater += e_OnPlayerUpdateWater;
-                Player.Events.OnUpdateFood += e_OnPlayerUpdateFood;
-                Player.Events.OnUpdateVirus += e_OnPlayerUpdateVirus;
                 Player.Heal(100);
                 Player.Infection = 0;
                 Player.Hunger = 0;
@@ -123,24 +103,40 @@ namespace Rocket.Unturned.Player
             }
         }
 
-        private void e_OnPlayerUpdateVirus(UnturnedPlayer player, byte virus)
+        [API.Event.EventHandler]
+        private void e_OnPlayerUpdateVirus(PlayerUpdateVirusEvent @event)
         {
-            if (virus < 95) Player.Infection = 0;
+            if (!GodMode ||!@event.Player.Id.Equals(Player.Id))
+                return;
+
+            if (@event.NewVirus < 95) Player.Infection = 0;
         }
 
-        private void e_OnPlayerUpdateFood(UnturnedPlayer player, byte food)
+        [API.Event.EventHandler]
+        private void e_OnPlayerUpdateFood(PlayerUpdateFoodEvent @event)
         {
-            if (food < 95) Player.Hunger = 0;
+            if (!GodMode || !@event.Player.Id.Equals(Player.Id))
+                return;
+
+            if (@event.NewFood < 95) Player.Hunger = 0;
         }
 
-        private void e_OnPlayerUpdateWater(UnturnedPlayer player, byte water)
+        [API.Event.EventHandler]
+        private void e_OnPlayerUpdateWater(PlayerUpdateWaterEvent @event)
         {
-            if (water < 95) Player.Thirst = 0;
+            if (!GodMode || !@event.Player.Id.Equals(Player.Id))
+                return;
+
+            if (@event.NewWater < 95) Player.Thirst = 0;
         }
 
-        private void e_OnPlayerUpdateHealth(UnturnedPlayer player, byte health)
+        [API.Event.EventHandler]
+        private void e_OnPlayerUpdateHealth(PlayerUpdateHealthEvent @event)
         {
-            if (health < 95)
+            if (!GodMode || !@event.Player.Id.Equals(Player.Id))
+                return;
+
+            if (@event.NewHealth < 95)
             {
                 Player.Heal(100);
                 Player.Bleeding = false;

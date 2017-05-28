@@ -1,16 +1,10 @@
-using Rocket.API;
-using Rocket.Core;
-using Rocket.Unturned.Player;
-using SDG.Provider;
-using SDG.Provider.Services.Achievements;
-using SDG.Unturned;
-using Steamworks;
 using System;
-using System.Collections.Generic;
+using Rocket.Core;
 using Rocket.Core.Utils.Web;
+using SDG.Unturned;
 using UnityEngine;
 
-namespace Rocket.Unturned
+namespace Rocket.Unturned.Player
 {
     public class UnturnedPlayerMovement : UnturnedPlayerComponent
     {

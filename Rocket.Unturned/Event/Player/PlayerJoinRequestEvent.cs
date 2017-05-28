@@ -1,6 +1,6 @@
 ﻿using SDG.Unturned;
 
-namespace Rocket.Unturned.Event
+namespace Rocket.Unturned.Event.Player
 {
     public class PlayerJoinRequestEvent : API.Event.Event
     {
