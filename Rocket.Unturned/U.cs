@@ -1,19 +1,15 @@
-﻿using Rocket.API.Assets;
-using Rocket.API.Collections;
+﻿using Rocket.API.Collections;
 using Rocket.API.Commands;
 using Rocket.API.Extensions;
 using Rocket.API.Player;
 using Rocket.API.Providers.Implementation;
 using Rocket.API.Providers.Implementation.Managers;
 using Rocket.Core;
-using Rocket.Unturned.Chat;
 using Rocket.Unturned.Commands;
 using Rocket.Unturned.Events;
 using Rocket.Unturned.Permissions;
 using Rocket.Unturned.Player;
 using Rocket.Unturned.Plugins;
-using Rocket.Unturned.Utils;
-using SDG.Framework.Translations;
 using SDG.Unturned;
 using Steamworks;
 using System;
@@ -21,6 +17,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
+using Rocket.API.Event.Implementation;
+using Rocket.API.Event.Player;
+using Rocket.API.Event.Plugin;
+using Rocket.Core.Player;
+using UnityEngine;
 
 namespace Rocket.Unturned
 {
@@ -29,30 +30,48 @@ namespace Rocket.Unturned
         
         internal void triggerOnPlayerConnected(UnturnedPlayer player)
         {
-            OnPlayerConnected.TryInvoke(player);
+            new PlayerConnectedEvent(player).Fire();
         }
 
         public static U Instance { get; private set; }
 
-        public string Name { get; private set; } = "Unturned";
-        public string InstanceName { get; private set; } = Dedicator.serverID;
+        public string Name { get; } = "Unturned";
+        public string InstanceName { get; } = Dedicator.serverID;
 
-        public ushort Port
+        public ushort Port => Provider.port;
+
+        IChatManager IRocketImplementationProvider.Chat
         {
             get
             {
-                return Provider.port;
+                throw new NotImplementedException();
+            }
+        } 
+
+        public IPlayerManager Players
+        {
+            get
+            {
+                throw new NotImplementedException();
             }
         }
 
-        IChatManager IRocketImplementationProvider.Chat => throw new NotImplementedException();
+        public ReadOnlyCollection<Type> Providers
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
 
-        public IPlayerManager Players => throw new NotImplementedException();
+        public TranslationList DefaultTranslation
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
 
-        public ReadOnlyCollection<Type> Providers => throw new NotImplementedException();
-
-        public TranslationList DefaultTranslation => throw new NotImplementedException();
-     
 
         public U()
         {
@@ -197,8 +216,6 @@ namespace Rocket.Unturned
         
         public void Reload()
         {
-            Translation.Load();
-            Settings.Load();
             ImplementationReloadEvent @event = new ImplementationReloadEvent(this);
             @event.Fire();
         }
@@ -208,15 +225,6 @@ namespace Rocket.Unturned
             Provider.shutdown();
         }
 
-        public ReadOnlyCollection<Type> Providers
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public TranslationList DefaultTranslation => new TranslationList();
         public void Unload(bool isReload = false)
         {
             throw new NotImplementedException();
@@ -226,8 +234,6 @@ namespace Rocket.Unturned
         {
             throw new NotImplementedException();
         }
-
-        public IPlayerManager Players => new PlayerManager();
     }
 
     public class PlayerManager : IPlayerManager
