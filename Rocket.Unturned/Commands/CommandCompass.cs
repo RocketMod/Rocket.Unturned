@@ -2,7 +2,7 @@
 using Rocket.API.Exceptions;
 using Rocket.Unturned.Player;
 using System.Collections.Generic;
-using Rocket.API.Player;
+using Rocket.Core;
 
 namespace Rocket.Unturned.Commands
 {
@@ -20,10 +20,11 @@ namespace Rocket.Unturned.Commands
 
         public List<string> Permissions => new List<string>() { "rocket.compass" };
 
-        public void Execute(IRocketPlayer caller, string[] command)
+        public void Execute(ICommandContext ctx)
         {
-            UnturnedPlayer player = (UnturnedPlayer)caller;
+            UnturnedPlayer player = (UnturnedPlayer)ctx.Caller;
             float currentDirection = player.Rotation;
+            var command = ctx.Parameters;
 
             if (command.Length == 1)
             {
@@ -42,8 +43,7 @@ namespace Rocket.Unturned.Commands
                         currentDirection = 270;
                         break;
                     default:
-                        U.Instance.Chat.Say(caller, U.Translate("command_generic_invalid_parameter"));
-                        throw new WrongUsageOfCommandException(caller, this);
+                        throw new WrongUsageOfCommandException(ctx);
                 }
                 player.Teleport(player.Position, currentDirection);
             }
@@ -52,38 +52,38 @@ namespace Rocket.Unturned.Commands
 
             if (currentDirection > 30 && currentDirection < 60)
             {
-                directionName = U.Translate("command_compass_northeast");
+                directionName = R.Translations.Translate("command_compass_northeast");
             }
             else if (currentDirection > 60 && currentDirection < 120)
             {
-                directionName = U.Translate("command_compass_east");
+                directionName = R.Translations.Translate("command_compass_east");
             }
             else if (currentDirection > 120 && currentDirection < 150)
             {
-                directionName = U.Translate("command_compass_southeast");
+                directionName = R.Translations.Translate("command_compass_southeast");
             }
             else if (currentDirection > 150 && currentDirection < 210)
             {
-                directionName = U.Translate("command_compass_south");
+                directionName = R.Translations.Translate("command_compass_south");
             }
             else if (currentDirection > 210 && currentDirection < 240)
             {
-                directionName = U.Translate("command_compass_southwest");
+                directionName = R.Translations.Translate("command_compass_southwest");
             }
             else if (currentDirection > 240 && currentDirection < 300)
             {
-                directionName = U.Translate("command_compass_west");
+                directionName = R.Translations.Translate("command_compass_west");
             }
             else if (currentDirection > 300 && currentDirection < 330)
             {
-                directionName = U.Translate("command_compass_northwest");
+                directionName = R.Translations.Translate("command_compass_northwest");
             }
             else if (currentDirection > 330 || currentDirection < 30)
             {
-                directionName = U.Translate("command_compass_north");
+                directionName = R.Translations.Translate("command_compass_north");
             }
 
-            U.Instance.Chat.Say(caller, U.Translate("command_compass_facing_private", directionName));
+            ctx.Print(R.Translations.Translate("command_compass_facing_private", directionName));
         }
     }
 }

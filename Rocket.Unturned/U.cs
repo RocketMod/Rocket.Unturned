@@ -92,7 +92,7 @@ namespace Rocket.Unturned
             CommandWindow.onCommandWindowInputted += (string text, ref bool shouldExecuteCommand) =>
             {
                 if (text.StartsWith("/")) text.Substring(1);
-                R.Commands.Execute(new ConsolePlayer(), text);
+                R.Execute(new ConsolePlayer(), text);
                 shouldExecuteCommand = false;
             };
 
@@ -107,10 +107,7 @@ namespace Rocket.Unturned
              };
              */
 
-            SteamChannel.onTriggerSend += (SteamPlayer player, string name, ESteamCall mode, ESteamPacket type, object[] arguments) =>
-            {
-                UnturnedPlayerEvents.TriggerSend(player, name, mode, type, arguments);
-            };
+            SteamChannel.onTriggerSend += UnturnedPlayerEvents.TriggerSend;
 
             ChatManager.onCheckPermissions += (SteamPlayer player, string text, ref bool shouldExecuteCommand, ref bool shouldList) =>
             {
@@ -118,7 +115,7 @@ namespace Rocket.Unturned
                 {
                     if (UnturnedPermissions.CheckPermissions(player, text))
                     {
-                        R.Commands.Execute(UnturnedPlayer.FromSteamPlayer(player), text);
+                        R.Execute(UnturnedPlayer.FromSteamPlayer(player), text);
                     }
                     shouldList = false;
                 }

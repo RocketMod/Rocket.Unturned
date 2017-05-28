@@ -93,7 +93,7 @@ namespace Rocket.Unturned.Player
             //    System.Text.RegularExpressions.Match match = regex.Match(username);
             //    if (match.Groups[0].Length != username.Length)
             //    {
-            //        Provider.kick(Player.CSteamID, U.Translate("invalid_character_name"));
+            //        Provider.kick(Player.CSteamID, R.Translations.Translate("invalid_character_name"));
             //    }
             //}
         }

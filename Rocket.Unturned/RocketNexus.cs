@@ -13,7 +13,7 @@ namespace Rocket.Unturned
     {
         public void initialize() {
             Dictionary<string, string> dependencies = new Dictionary<string, string>();
-            foreach (FileInfo library in new DirectoryInfo("./Modules/Rocket.Unturned").GetFiles("*.dll", SearchOption.AllDirectories)
+            foreach (FileInfo library in new DirectoryInfo("./Modules/Rocket.Unturned").GetFiles("*.dll", SearchOption.AllDirectories))
             {
                 try {
                     AssemblyName name = AssemblyName.GetAssemblyName(library.FullName);

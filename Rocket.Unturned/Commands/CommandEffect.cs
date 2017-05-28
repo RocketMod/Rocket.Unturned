@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using Rocket.API.Commands;
 using Rocket.API.Exceptions;
-using Rocket.API.Player;
-using Rocket.Core.Commands;
+using Rocket.Core;
 
 namespace Rocket.Unturned.Commands
 {
@@ -21,14 +20,13 @@ namespace Rocket.Unturned.Commands
 
         public List<string> Permissions => new List<string>() { "rocket.effect" };
 
-        public void Execute(IRocketPlayer caller, string[] command)
+        public void Execute(ICommandContext ctx)
         {
-            UnturnedPlayer player = (UnturnedPlayer)caller;
-            ushort? id = command.GetUInt16Parameter(0);
+            UnturnedPlayer player = (UnturnedPlayer)ctx.Caller;
+            ushort? id = ctx.Parameters.GetUInt16Parameter(0);
             if (id == null)
             {
-                U.Instance.Chat.Say(caller, U.Translate("command_generic_invalid_parameter"));
-                throw new WrongUsageOfCommandException(caller, this);
+                throw new WrongUsageOfCommandException(ctx);
             }
             player.TriggerEffect(id.Value);
         }

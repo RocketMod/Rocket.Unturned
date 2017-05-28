@@ -2,8 +2,7 @@
 using UnityEngine;
 using Rocket.API.Commands;
 using Rocket.API.Exceptions;
-using Rocket.API.Player;
-using Rocket.Core.Commands;
+using Rocket.Core;
 
 namespace Rocket.Unturned.Commands
 {
@@ -21,21 +20,20 @@ namespace Rocket.Unturned.Commands
 
         public List<string> Permissions => new List<string>() { "rocket.broadcast" };
 
-        public void Execute(IRocketPlayer caller, string[] command)
+        public void Execute(ICommandContext ctx)
         {
-            Color? color = command.GetColorParameter(0);
+            Color? color = ctx.Parameters.GetColorParameter(0);
 
             int i = 1;
             if (color == null) i = 0;
-            string message = command.GetParameterString(i);
+            string message = ctx.Parameters.GetParameterString(i);
 
             if (message == null)
             {
-                U.Instance.Chat.Say(caller, U.Translate("command_generic_invalid_parameter"));
-                throw new WrongUsageOfCommandException(caller, this);
+                throw new WrongUsageOfCommandException(ctx);
             }
 
-            U.Instance.Chat.Say(message, (color.HasValue) ? (Color)color : Color.green);
+            R.Implementation.Chat.Say(message, color ?? Color.green);
         }
     }
 }

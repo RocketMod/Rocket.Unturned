@@ -2,7 +2,6 @@
 using Rocket.API.Exceptions;
 using Rocket.Unturned.Player;
 using System.Collections.Generic;
-using Rocket.API.Player;
 using Rocket.Core;
 
 namespace Rocket.Unturned.Commands
@@ -21,28 +20,27 @@ namespace Rocket.Unturned.Commands
 
         public List<string> Permissions => new List<string>() { "rocket.tphere", "rocket.teleporthere" };
 
-        public void Execute(IRocketPlayer caller, string[] command)
+        public void Execute(ICommandContext ctx)
         {
-            UnturnedPlayer player = (UnturnedPlayer)caller;
+            UnturnedPlayer player = (UnturnedPlayer)ctx.Caller;
+            var command = ctx.Parameters;
 
             if (command.Length != 1)
             {
-                U.Instance.Chat.Say(caller, U.Translate("command_generic_invalid_parameter"));
-                throw new WrongUsageOfCommandException(caller, this);
+                throw new WrongUsageOfCommandException(ctx);
             }
+
             UnturnedPlayer otherPlayer = UnturnedPlayer.FromName(command[0]);
-            if (otherPlayer!=null && otherPlayer != caller)
+            if (otherPlayer!=null && otherPlayer != player)
             {
                 otherPlayer.Teleport(player);
-                R.Logger.Info(U.Translate("command_tphere_teleport_console", otherPlayer.DisplayName, player.DisplayName));
-                U.Instance.Chat.Say(caller, U.Translate("command_tphere_teleport_from_private", otherPlayer.DisplayName));
-                U.Instance.Chat.Say(otherPlayer, U.Translate("command_tphere_teleport_to_private", player.DisplayName));
+                R.Logger.Info(R.Translations.Translate("command_tphere_teleport_console", otherPlayer.DisplayName, player.DisplayName));
+                ctx.Print(R.Translations.Translate("command_tphere_teleport_from_private", otherPlayer.DisplayName));
+                R.Implementation.Chat.Say(otherPlayer, R.Translations.Translate("command_tphere_teleport_to_private", player.DisplayName));
+                return;
             }
-            else
-            {
-                U.Instance.Chat.Say(caller, U.Translate("command_generic_failed_find_player"));
-                throw new WrongUsageOfCommandException(caller, this);
-            }
+
+            ctx.Print(R.Translations.Translate("command_generic_failed_find_player"));
         }
     }
 }

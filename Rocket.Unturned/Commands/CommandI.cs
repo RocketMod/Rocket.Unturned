@@ -24,19 +24,20 @@ namespace Rocket.Unturned.Commands
 
         public List<string> Permissions => new List<string>() { "rocket.item" , "rocket.i" };
 
-        public void Execute(IRocketPlayer caller, string[] command)
+        public void Execute(ICommandContext ctx)
         {
-            UnturnedPlayer player = (UnturnedPlayer)caller;
+            UnturnedPlayer player = (UnturnedPlayer)ctx.Caller;
+
+            var command = ctx.Parameters;
             if (command.Length == 0 || command.Length > 2)
             {
-                U.Instance.Chat.Say(player, U.Translate("command_generic_invalid_parameter"));
-                throw new WrongUsageOfCommandException(caller, this);
+                throw new WrongUsageOfCommandException(ctx);
             }
 
-            ushort id = 0;
+            ushort id;
             byte amount = 1;
 
-            string itemString = command[0].ToString();
+            string itemString = command[0];
 
             if (!ushort.TryParse(itemString, out id))
             {
@@ -44,30 +45,27 @@ namespace Rocket.Unturned.Commands
                 if (asset != null) id = asset.id;
                 if (String.IsNullOrEmpty(itemString.Trim()) || id == 0)
                 {
-                    U.Instance.Chat.Say(player, U.Translate("command_generic_invalid_parameter"));
-                    throw new WrongUsageOfCommandException(caller, this);
+                    throw new WrongUsageOfCommandException(ctx);
                 }
             }
 
-            Asset a = SDG.Unturned.Assets.find(EAssetType.ITEM,id);
+            Asset a = Assets.find(EAssetType.ITEM,id);
 
             if (command.Length == 2 && !byte.TryParse(command[1].ToString(), out amount) || a == null)
             {
-                U.Instance.Chat.Say(player, U.Translate("command_generic_invalid_parameter"));
-                throw new WrongUsageOfCommandException(caller, this);
+                throw new WrongUsageOfCommandException(ctx);
             }
 
             string assetName = ((ItemAsset)a).itemName;
 
             if (player.GiveItem(id, amount))
             {
-                R.Logger.Info(U.Translate("command_i_giving_console", player.DisplayName, id, amount));
-                U.Instance.Chat.Say(player, U.Translate("command_i_giving_private", amount, assetName, id));
+                R.Logger.Info(R.Translations.Translate("command_i_giving_console", player.DisplayName, id, amount));
+                ctx.Print(R.Translations.Translate("command_i_giving_private", amount, assetName, id));
+                return;
+
             }
-            else
-            {
-                U.Instance.Chat.Say(player, U.Translate("command_i_giving_failed_private", amount, assetName, id));
-            }
+            ctx.Print(R.Translations.Translate("command_i_giving_failed_private", amount, assetName, id));
         }
     }
 }

@@ -5,7 +5,6 @@ using SDG.Unturned;
 using System.Collections.Generic;
 using Rocket.API.Player;
 using Rocket.Core;
-using Rocket.Core.Commands;
 
 namespace Rocket.Unturned.Commands
 {
@@ -23,13 +22,13 @@ namespace Rocket.Unturned.Commands
 
         public List<string> Permissions => new List<string>() { "rocket.v", "rocket.vehicle" };
 
-        public void Execute(IRocketPlayer caller, string[] command)
+        public void Execute(ICommandContext ctx)
         {
-            UnturnedPlayer player = (UnturnedPlayer)caller;
+            var command = ctx.Parameters;
+            UnturnedPlayer player = (UnturnedPlayer)ctx.Caller;
             if (command.Length != 1)
             {
-                U.Instance.Chat.Say(caller, U.Translate("command_generic_invalid_parameter"));
-                throw new WrongUsageOfCommandException(caller, this);
+                throw new WrongUsageOfCommandException(ctx);
             }
 
             ushort? id = command.GetUInt16Parameter(0);
@@ -40,11 +39,10 @@ namespace Rocket.Unturned.Commands
 
                 if (itemString == null)
                 {
-                    U.Instance.Chat.Say(caller, U.Translate("command_generic_invalid_parameter"));
-                    throw new WrongUsageOfCommandException(caller, this);
+                    throw new WrongUsageOfCommandException(ctx);
                 }
 
-                Asset[] assets = SDG.Unturned.Assets.find(EAssetType.VEHICLE);
+                Asset[] assets = Assets.find(EAssetType.VEHICLE);
                 foreach (VehicleAsset ia in assets)
                 {
                     if (ia != null && ia.vehicleName != null && ia.vehicleName.ToLower().Contains(itemString.ToLower()))
@@ -55,23 +53,21 @@ namespace Rocket.Unturned.Commands
                 }
                 if (!id.HasValue)
                 {
-                    U.Instance.Chat.Say(caller, U.Translate("command_generic_invalid_parameter"));
-                    throw new WrongUsageOfCommandException(caller, this);
+                    throw new WrongUsageOfCommandException(ctx);
                 }
             }
 
-            Asset a = SDG.Unturned.Assets.find(EAssetType.VEHICLE, id.Value);
+            Asset a = Assets.find(EAssetType.VEHICLE, id.Value);
             string assetName = ((VehicleAsset)a).vehicleName;
 
             if (VehicleTool.giveVehicle(player.Player, id.Value))
             {
-                R.Logger.Warn(U.Translate("command_v_giving_console", player.DisplayName, id));
-                U.Instance.Chat.Say(caller, U.Translate("command_v_giving_private", assetName, id));
+                R.Logger.Warn(R.Translations.Translate("command_v_giving_console", player.DisplayName, id));
+                ctx.Print(R.Translations.Translate("command_v_giving_private", assetName, id));
+                return;
             }
-            else
-            {
-                U.Instance.Chat.Say(caller, U.Translate("command_v_giving_failed_private", assetName, id));
-            }
+
+            ctx.Print(R.Translations.Translate("command_v_giving_failed_private", assetName, id));
         }
     }
 }

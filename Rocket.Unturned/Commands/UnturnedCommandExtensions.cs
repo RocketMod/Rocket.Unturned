@@ -1,4 +1,5 @@
-﻿using Rocket.Unturned.Chat;
+﻿using System;
+using Rocket.Unturned.Chat;
 using Rocket.Unturned.Player;
 using UnityEngine;
 
@@ -6,6 +7,7 @@ namespace Rocket.Unturned.Commands
 {
     public static class UnturnedCommandExtensions
     {
+        [Obsolete("Use GetParameter<T> instead")]
         public static UnturnedPlayer GetUnturnedPlayerParameter(this string[] array, int index)
         {
             return (array.Length <= index) ? null : UnturnedPlayer.FromName(array[index]);
@@ -24,7 +26,8 @@ namespace Rocket.Unturned.Commands
             return null;
         }
         */
-       
+
+        [Obsolete("Use GetParameter<T> instead")]
         public static ulong? GetCSteamIDParameter(this string[] array, int index)
         {
             if (array.Length > index)
@@ -38,6 +41,7 @@ namespace Rocket.Unturned.Commands
             return null;
         }
 
+        [Obsolete("Use GetParameter<T> instead")]
         public static Color? GetColorParameter(this string[] array, int index)
         {
             if(array.Length <= index) return null;

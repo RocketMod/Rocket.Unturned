@@ -5,7 +5,6 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using Rocket.API.Commands;
-using Rocket.API.Player;
 
 namespace Rocket.Unturned.Commands
 {
@@ -31,14 +30,14 @@ namespace Rocket.Unturned.Commands
 
         public string Syntax => Command.info.Replace("/", " ");
 
-        public void Execute(IRocketPlayer caller, string[] command)
+        public void Execute(ICommandContext ctx)
         {
             CSteamID id = CSteamID.Nil;
-            if (caller is UnturnedPlayer)
+            if (ctx.Caller is UnturnedPlayer)
             {
-                id = ((UnturnedPlayer)caller).CSteamID;
+                id = ((UnturnedPlayer)ctx.Caller).CSteamID;
             }
-            Commander.commands.FirstOrDefault(c => c.command == Name)?.check(id, Name, String.Join("/", command));
+            Commander.commands.FirstOrDefault(c => c.command == Name)?.check(id, Name, String.Join("/", ctx.Parameters));
         }
     }
 }

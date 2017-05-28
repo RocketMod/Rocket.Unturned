@@ -20,21 +20,20 @@ namespace Rocket.Unturned.Commands
 
         public List<string> Permissions => new List<string>() { "rocket.god" };
 
-        public void Execute(IRocketPlayer caller, string[] command)
+        public void Execute(ICommandContext ctx)
         {
-            UnturnedPlayer player = (UnturnedPlayer)caller;
+            UnturnedPlayer player = (UnturnedPlayer)ctx.Caller;
             if (player.Features.GodMode)
             {
-                R.Logger.Info(U.Translate("command_god_disable_console", player.DisplayName));
-                U.Instance.Chat.Say(caller, U.Translate("command_god_disable_private"));
+                R.Logger.Info(R.Translations.Translate("command_god_disable_console", player.DisplayName));
+                ctx.Print(R.Translations.Translate("command_god_disable_private"));
                 player.Features.GodMode = false;
+                return;
             }
-            else
-            {
-                R.Logger.Info(U.Translate("command_god_enable_console", player.DisplayName));
-                U.Instance.Chat.Say(caller, U.Translate("command_god_enable_private"));
-                player.Features.GodMode = true;
-            }
+
+            R.Logger.Info(R.Translations.Translate("command_god_enable_console", player.DisplayName));
+            ctx.Print(R.Translations.Translate("command_god_enable_private"));
+            player.Features.GodMode = true;
         }
     }
 }

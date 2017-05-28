@@ -41,7 +41,7 @@ namespace Rocket.Unturned.Permissions
             }
             else
             {
-                U.Instance.Chat.Say(player, U.Translate("command_not_found"), Color.red);
+                U.Instance.Chat.Say(player, R.Translations.Translate("command_not_found"), Color.red);
                 return false;
             }
         }

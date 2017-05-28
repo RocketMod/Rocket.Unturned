@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Rocket.API.Exceptions;
 using Rocket.API.Commands;
 using Rocket.API.Player;
+using Rocket.Core;
 
 namespace Rocket.Unturned.Commands
 {
@@ -20,24 +21,22 @@ namespace Rocket.Unturned.Commands
 
         public List<string> Permissions => new List<string>() { "rocket.investigate" };
 
-        public void Execute(IRocketPlayer caller, string[] command)
+        public void Execute(ICommandContext ctx)
         {
+            var command = ctx.Parameters;
+            var caller = ctx.Caller;
+
             if (command.Length!=1)
             {
-                U.Instance.Chat.Say(caller, U.Translate("command_generic_invalid_parameter"));
-                throw new WrongUsageOfCommandException(caller, this);
+                throw new WrongUsageOfCommandException(ctx);
             }
 
             SteamPlayer otherPlayer = PlayerTool.getSteamPlayer(command[0]);
-            if (otherPlayer != null && (caller == null || otherPlayer.playerID.steamID.ToString() != caller.ToString()))
-            {
-                U.Instance.Chat.Say(caller, U.Translate("command_investigate_private", otherPlayer.playerID.characterName, otherPlayer.playerID.steamID.ToString()));
-            }
-            else
-            {
-                U.Instance.Chat.Say(caller, U.Translate("command_generic_failed_find_player"));
-                throw new WrongUsageOfCommandException(caller, this);
-            }
+            if (otherPlayer == null || (caller != null && otherPlayer.playerID.steamID.ToString() == caller.ToString()))
+                throw new WrongUsageOfCommandException(ctx);
+
+            ctx.Print(R.Translations.Translate("command_investigate_private", otherPlayer.playerID.characterName,
+                otherPlayer.playerID.steamID.ToString()));
         }
     }
 }
