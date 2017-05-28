@@ -1,146 +1,68 @@
-﻿using Rocket.API;
-using Rocket.API.Assets;
+﻿using Rocket.API.Assets;
 using Rocket.API.Collections;
-using Rocket.API.Extensions;
 using Rocket.API.Commands;
+using Rocket.API.Extensions;
+using Rocket.API.Player;
+using Rocket.API.Providers.Implementation;
+using Rocket.API.Providers.Implementation.Managers;
 using Rocket.Core;
 using Rocket.Unturned.Chat;
 using Rocket.Unturned.Commands;
 using Rocket.Unturned.Events;
-using Rocket.Unturned.Plugins;
-using Rocket.Unturned.Player;
 using Rocket.Unturned.Permissions;
+using Rocket.Unturned.Player;
+using Rocket.Unturned.Plugins;
 using Rocket.Unturned.Utils;
-using SDG.Framework.Modules;
+using SDG.Framework.Translations;
 using SDG.Unturned;
 using Steamworks;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
-using UnityEngine;
-using System.Collections.ObjectModel;
-using System.Collections.Generic;
-using Rocket.API.Event;
-using Rocket.API.Event.Implementation;
-using Rocket.API.Event.Player;
-using Rocket.API.Event.Plugin;
-using Rocket.API.Player;
-using Rocket.API.Providers;
-using Rocket.API.Providers.Implementation;
-using Rocket.API.Providers.Implementation.Managers;
-using Rocket.API.Providers.Logging;
-using Rocket.API.Serialisation;
-using Rocket.Core.Player;
 
 namespace Rocket.Unturned
 {
-    [NoProviderAutoRegistration]
-    public class U : MonoBehaviour, IRocketImplementationProvider, IListener
+    public class U : IRocketImplementationProvider
     {
         
-        #region Events
         internal void triggerOnPlayerConnected(UnturnedPlayer player)
         {
-            PlayerConnectedEvent @event = new PlayerConnectedEvent(player);
-            EventManager.Instance.CallEvent(@event);
+            OnPlayerConnected.TryInvoke(player);
         }
 
-        #endregion
-
-        #region Static Properties
         public static U Instance { get; private set; }
-        #endregion
 
-        #region Static Methods
-        public static string Translate(string translationKey, params object[] placeholder)
-        {
-            return Instance.Translation.Instance.Translate(translationKey, placeholder);
-        }
-
-        #endregion
-
-        #region Properties
-        public IChatManager Chat { get; private set; }
-        public XMLFileAsset<UnturnedSettings> Settings { get; private set; }
-        public XMLFileAsset<TranslationList> Translation { get; private set; }
         public string Name { get; private set; } = "Unturned";
         public string InstanceName { get; private set; } = Dedicator.serverID;
 
-        public ushort Port => Provider.port;
-
-        #endregion
-
-        private static GameObject rocketGameObject;
-#if DEBUG
-        private bool debug = true;
-#else
-        private bool debug = false;
-#endif
-        private void Awake()
+        public ushort Port
         {
-            Instance = this;
-            Environment.Initialize();
+            get
+            {
+                return Provider.port;
+            }
         }
 
-        public static void Initialize()
+        IChatManager IRocketImplementationProvider.Chat => throw new NotImplementedException();
+
+        public IPlayerManager Players => throw new NotImplementedException();
+
+        public ReadOnlyCollection<Type> Providers => throw new NotImplementedException();
+
+        public TranslationList DefaultTranslation => throw new NotImplementedException();
+     
+
+        public U()
         {
-            rocketGameObject = new GameObject("Rocket");
-            DontDestroyOnLoad(rocketGameObject);
-
-            Console.Clear();
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("Rocket Unturned v" + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " for Unturned v" + Provider.APP_VERSION + "\n");
-           
-            rocketGameObject.TryAddComponent<U>();
-            R.Logger.OnLog += message =>
-            {
-                if (message == null) return;
-                string m = message.Message;
-                if (m == null) m = "NULL";
-                if (m.StartsWith("[Unturned]")) return;
-
-                ConsoleColor old = Console.ForegroundColor;
-
-                switch (message.LogLevel)
-                {
-#if DEBUG
-                    case LogLevel.DEBUG:
-                        Console.ForegroundColor = ConsoleColor.Gray;
-                        Console.WriteLine(m);
-                        break;
-#endif
-                    case LogLevel.INFO:
-                        Console.ForegroundColor = ConsoleColor.White;
-                        Console.WriteLine(m);
-                        break;
-                    case LogLevel.WARN:
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.WriteLine(m);
-                        break;
-                    case LogLevel.ERROR:
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine(m);
-                        if (message.Exception != null)
-                            Console.WriteLine(message.Exception);
-                        break;
-
-                    case LogLevel.FATAL:
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine(m);
-                        if (message.Exception != null)
-                            Console.WriteLine(message.Exception);
-                        break;
-                }
-                Console.ForegroundColor = old;
-            };
-
             Provider.onServerHosted += () =>
             {
                 try
                 {
                     SteamGameServer.SetKeyValue("rocket", Assembly.GetExecutingAssembly().GetName().Version.ToString());
-                    SteamGameServer.SetKeyValue("rocketplugins", String.Join(", ", R.Plugins.Plugins.Select(p => p.Name).ToArray()));
-                    SteamGameServer.SetBotPlayerCount(1); //best solution to set server as rocket server 10/10
+                    //Todo: readd SteamGameServer.SetKeyValue("rocketplugins", String.Join(", ", R.GetAllPlugins().Select(p => p.Name).ToArray()));
+                    SteamGameServer.SetBotPlayerCount(1);
                 }
                 catch (Exception ex)
                 {
@@ -151,11 +73,11 @@ namespace Rocket.Unturned
             CommandWindow.onCommandWindowInputted += (string text, ref bool shouldExecuteCommand) =>
             {
                 if (text.StartsWith("/")) text.Substring(1);
-                R.Execute(new ConsolePlayer(), text);
+                R.Commands.Execute(new ConsolePlayer(), text);
                 shouldExecuteCommand = false;
             };
 
-            CommandWindow.onCommandWindowOutputted += (text, color) =>  {
+            CommandWindow.onCommandWindowOutputted += (object text, ConsoleColor color) =>  {
                 R.Logger.Debug(text);
             };
 
@@ -166,7 +88,7 @@ namespace Rocket.Unturned
              };
              */
 
-            SteamChannel.onTriggerSend += (player, name, mode, type, arguments) =>
+            SteamChannel.onTriggerSend += (SteamPlayer player, string name, ESteamCall mode, ESteamPacket type, object[] arguments) =>
             {
                 UnturnedPlayerEvents.TriggerSend(player, name, mode, type, arguments);
             };
@@ -175,10 +97,9 @@ namespace Rocket.Unturned
             {
                 if (text.StartsWith("/"))
                 {
-                    text.Substring(1);
                     if (UnturnedPermissions.CheckPermissions(player, text))
                     {
-                        R.Execute(UnturnedPlayer.FromSteamPlayer(player), text);
+                        R.Commands.Execute(UnturnedPlayer.FromSteamPlayer(player), text);
                     }
                     shouldList = false;
                 }
@@ -189,49 +110,39 @@ namespace Rocket.Unturned
             {
                 isValid = UnturnedPermissions.CheckValid(callback);
             };
-            
-            R.Bootstrap<U>();
-        }
-
-        private void Start()
-        {
             try
             {
-                Settings = new XMLFileAsset<UnturnedSettings>(Environment.SettingsFile);
+               
+                //Provider.onServerShutdown += () => { OnShutdown.TryInvoke(); };
+                //Provider.onServerDisconnected += (CSteamID r) => {
+                //    OnPlayerDisconnected?.TryInvoke(UnturnedPlayer.FromCSteamID(r));
+                //};
+                //Provider.onServerConnected += (CSteamID r) =>
+                //{
+                //    UnturnedPlayer p = UnturnedPlayer.FromCSteamID(r);
+                //    p.Player.gameObject.TryAddComponent<UnturnedPlayerFeatures>();
+                //    p.Player.gameObject.TryAddComponent<UnturnedPlayerMovement>();
+                //    p.Player.gameObject.TryAddComponent<UnturnedPlayerEvents>();
+                //    OnBeforePlayerConnected.TryInvoke(p);
+                //};
 
-                TranslationList defaultTranslations = new TranslationList();
-                defaultTranslations.AddRange(new UnturnedTranslations());
-                Translation = new XMLFileAsset<TranslationList>(String.Format(Environment.TranslationFile, R.Settings.Instance.LanguageCode), new Type[] { typeof(TranslationList), typeof(PropertyListEntry) }, defaultTranslations);
-                Translation.AddUnknownEntries(defaultTranslations);
+                //RocketPluginBase.OnPluginsLoading += (RocketPluginBase plugin, ref bool cancelLoading) =>
+                //{
+                //    try
+                //    {
+                //        plugin.gameObject.TryAddComponent<PluginUnturnedPlayerComponentManager>();
+                //    }
+                //    catch (Exception ex)
+                //    {
+                //        Logger.Fatal("Failed to load plugin " + plugin.Name + ".", ex);
+                //        cancelLoading = true;
+                //    }
+                //};
 
-                Chat = gameObject.TryAddComponent<UnturnedChat>();
-                gameObject.TryAddComponent<AutomaticSaveWatchdog>();
-                Provider.onServerShutdown += () =>
-                {
-                    ImplementationShutdownEvent @event = new ImplementationShutdownEvent(this);
-                    @event.Fire();
-                };
-                Provider.onServerDisconnected += r => {
-                    PlayerDisconnectedEvent @event = new PlayerDisconnectedEvent(UnturnedPlayer.FromCSteamID(r));
-                    @event.Fire();
-                };
-
-                Provider.onServerConnected += r =>
-                {
-                    UnturnedPlayer p = UnturnedPlayer.FromCSteamID(r);
-                    p.Player.gameObject.TryAddComponent<UnturnedPlayerFeatures>();
-                    p.Player.gameObject.TryAddComponent<UnturnedPlayerMovement>();
-                    p.Player.gameObject.TryAddComponent<UnturnedPlayerEvents>();
-                    PrePlayerConnectedEvent @event = new PrePlayerConnectedEvent(p);
-                    @event.Fire();
-                };
-
-                EventManager.Instance.RegisterEventsInternal(this, null);
-#if !DEBUG
-                debug = Instance.Settings.Instance.Debug;
-#endif
-                ImplementationInitializedEvent initedEvent = new ImplementationInitializedEvent(this);
-                @initedEvent.Fire();
+                //RocketPluginBase.OnPluginsUnloading += (RocketPluginBase plugin) =>
+                //{
+                //    plugin.gameObject.TryRemoveComponent<PluginUnturnedPlayerComponentManager>();
+                //};
             }
             catch (Exception ex)
             {
