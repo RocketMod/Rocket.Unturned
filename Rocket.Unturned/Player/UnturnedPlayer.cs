@@ -7,7 +7,7 @@ using Rocket.Unturned.Events;
 using Rocket.Core;
 using Rocket.Unturned.Chat;
 using Rocket.Unturned.Skills;
-using Rocket.API.Serialisation;
+using Rocket.API.Serialization;
 using Rocket.Core.Player;
 
 namespace Rocket.Unturned.Player

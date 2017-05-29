@@ -1,5 +1,5 @@
 ﻿using System.Xml.Serialization;
-using Rocket.API.Serialisation;
+using Rocket.API.Serialization;
 
 namespace Rocket.Unturned
 {
