@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Rocket.API.Providers.Logging;
+using Rocket.API.Providers.Permissions;
 using UnityEngine;
 using Rocket.API.Serialisation;
 using Rocket.Unturned.Event.Player;
@@ -29,7 +30,7 @@ namespace Rocket.Unturned.Permissions
 
             if (command != null)
             {
-                if ((command.Permissions != null && command.Permissions.Any(c => R.Permissions.HasPermission(player, c))) || R.Permissions.HasPermission(player, command.Name) || (command.Aliases != null && command.Aliases.Any(c => R.Permissions.HasPermission(player, c))))
+                if ((command.Permissions != null && command.Permissions.Any(c => R.Permissions.CheckPermission(player, c).Result == PermissionResultType.GRANT)) || R.Permissions.CheckPermission(player, command.Name).Result == PermissionResultType.GRANT || (command.Aliases != null && command.Aliases.Any(c => R.Permissions.CheckPermission(player, c).Result == PermissionResultType.GRANT)))
                 {
                     return true;
                 }
@@ -51,7 +52,7 @@ namespace Rocket.Unturned.Permissions
 
             try
             {
-                RocketPermissionsGroup g = R.Permissions.GetGroups(r.m_SteamID.ToString()).FirstOrDefault();
+                RocketPermissionsGroup g = R.Permissions.GetPlayerGroups(r.m_SteamID.ToString()).FirstOrDefault();
                 if (g != null)
                 {
                     SteamPending steamPending = Provider.pending.FirstOrDefault(x => x.playerID.steamID == r.m_SteamID);
