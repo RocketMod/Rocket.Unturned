@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Rocket.API.Exceptions;
 using Rocket.API.Commands;
-using Rocket.API.Player;
 using Rocket.Core;
 
 namespace Rocket.Unturned.Commands

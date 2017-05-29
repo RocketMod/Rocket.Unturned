@@ -1,6 +1,4 @@
-﻿using Rocket.API.Extensions;
-using Rocket.Unturned.Events;
-using SDG.Unturned;
+﻿using SDG.Unturned;
 using System;
 using Rocket.API.Event;
 using Rocket.Unturned.Event.Player;

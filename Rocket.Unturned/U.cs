@@ -20,6 +20,7 @@ using System.Reflection;
 using Rocket.API.Event.Implementation;
 using Rocket.API.Event.Player;
 using Rocket.API.Event.Plugin;
+using Rocket.API.Providers.Logging;
 using Rocket.Core.Player;
 using UnityEngine;
 
@@ -85,7 +86,7 @@ namespace Rocket.Unturned
                 }
                 catch (Exception ex)
                 {
-                    R.Logger.Error("Steam can not be initialized: " + ex.Message);
+                    R.Logger.Log(LogLevel.ERROR, "Steam can not be initialized: " + ex.Message);
                 }
             };
 
@@ -97,7 +98,7 @@ namespace Rocket.Unturned
             };
 
             CommandWindow.onCommandWindowOutputted += (object text, ConsoleColor color) =>  {
-                R.Logger.Debug(text);
+                R.Logger.Log(LogLevel.DEBUG, text);
             };
 
             /*
@@ -162,7 +163,7 @@ namespace Rocket.Unturned
             }
             catch (Exception ex)
             {
-                R.Logger.Error(ex);
+                R.Logger.Log(LogLevel.ERROR, ex);
             }
         }
 

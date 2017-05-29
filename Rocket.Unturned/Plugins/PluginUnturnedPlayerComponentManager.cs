@@ -8,6 +8,7 @@ using System.Reflection;
 using Rocket.API.Event;
 using Rocket.API.Event.Player;
 using Rocket.API.Player;
+using Rocket.API.Providers.Logging;
 using Rocket.API.Providers.Plugins;
 using Rocket.Core;
 using UnityEngine;
@@ -35,7 +36,7 @@ namespace Rocket.Unturned.Plugins
             }
             catch (Exception ex)
             {
-                R.Logger.Error(ex);
+                R.Logger.Log(LogLevel.ERROR, null, ex);
             }
         }
 
@@ -51,13 +52,13 @@ namespace Rocket.Unturned.Plugins
 
                 foreach (Type playerComponent in unturnedPlayerComponents)
                 {
-                    R.Logger.Info("Adding UnturnedPlayerComponent: "+playerComponent.Name);
+                    R.Logger.Log(LogLevel.INFO, "Adding UnturnedPlayerComponent: "+playerComponent.Name);
                     //Provider.Players.ForEach(p => p.Player.gameObject.TryAddComponent(playerComponent.GetType()));
                 }
             }
             catch (Exception ex)
             {
-                R.Logger.Error(ex);
+                R.Logger.Log(LogLevel.ERROR, null, ex);
             }
         }
 

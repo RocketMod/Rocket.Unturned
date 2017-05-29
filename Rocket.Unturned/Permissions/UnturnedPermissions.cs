@@ -8,9 +8,9 @@ using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Rocket.API.Providers.Logging;
 using UnityEngine;
 using Rocket.API.Serialisation;
-using Rocket.Unturned.Event;
 using Rocket.Unturned.Event.Player;
 
 namespace Rocket.Unturned.Permissions
@@ -73,7 +73,7 @@ namespace Rocket.Unturned.Permissions
             }
             catch (Exception ex)
             {
-                R.Logger.Info("Failed adding prefix/suffix to player " + r.m_SteamID + ": " + ex.ToString());
+                R.Logger.Log(LogLevel.INFO, "Failed adding prefix/suffix to player " + r.m_SteamID + ": " + ex.ToString());
             }
             var pendings = Provider.pending.ToList(); // use ToList to create a copy of the original list
             PlayerJoinRequestEvent @event = new PlayerJoinRequestEvent(pendings.First(c => c.playerID.steamID == r.m_SteamID));

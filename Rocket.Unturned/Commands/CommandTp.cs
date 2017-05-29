@@ -5,7 +5,7 @@ using Rocket.Unturned.Player;
 using System.Collections.Generic;
 using Rocket.API.Exceptions;
 using Rocket.API.Commands;
-using Rocket.API.Player;
+using Rocket.API.Providers.Logging;
 using Rocket.Core;
 
 namespace Rocket.Unturned.Commands
@@ -53,7 +53,7 @@ namespace Rocket.Unturned.Commands
             if (x != null && y != null && z != null)
             {
                 player.Teleport(new Vector3((float)x, (float)y, (float)z), MeasurementTool.angleToByte(player.Rotation));
-                R.Logger.Info(R.Translations.Translate("command_tp_teleport_console", player.DisplayName, (float)x + "," + (float)y + "," + (float)z));
+                R.Logger.Log(LogLevel.INFO, R.Translations.Translate("command_tp_teleport_console", player.DisplayName, (float)x + "," + (float)y + "," + (float)z));
                 ctx.Print(R.Translations.Translate("command_tp_teleport_private", (float)x + "," + (float)y + "," + (float)z));
                 return;
             }
@@ -61,7 +61,7 @@ namespace Rocket.Unturned.Commands
             if (otherplayer != null && otherplayer != player)
             {
                 player.Teleport(otherplayer);
-                R.Logger.Info(R.Translations.Translate("command_tp_teleport_console", player.DisplayName, otherplayer.DisplayName));
+                R.Logger.Log(LogLevel.INFO, R.Translations.Translate("command_tp_teleport_console", player.DisplayName, otherplayer.DisplayName));
                 ctx.Print(R.Translations.Translate("command_tp_teleport_private", otherplayer.DisplayName));
                 return;
             }
@@ -71,7 +71,7 @@ namespace Rocket.Unturned.Commands
             {
                 Vector3 c = item.point + new Vector3(0f, 0.5f, 0f);
                 player.Teleport(c, MeasurementTool.angleToByte(player.Rotation));
-                R.Logger.Info(R.Translations.Translate("command_tp_teleport_console", player.DisplayName, ((LocationNode)item).name));
+                R.Logger.Log(LogLevel.INFO, R.Translations.Translate("command_tp_teleport_console", player.DisplayName, ((LocationNode)item).name));
                 ctx.Print(R.Translations.Translate("command_tp_teleport_private", ((LocationNode)item).name));
                 return;
             }

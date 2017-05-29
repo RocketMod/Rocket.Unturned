@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Rocket.Unturned.Player;
 using Rocket.API.Commands;
-using Rocket.API.Player;
+using Rocket.API.Providers.Logging;
 using Rocket.Core;
 
 namespace Rocket.Unturned.Commands
@@ -25,13 +25,13 @@ namespace Rocket.Unturned.Commands
             UnturnedPlayer player = (UnturnedPlayer)ctx.Caller;
             if (player.Features.GodMode)
             {
-                R.Logger.Info(R.Translations.Translate("command_god_disable_console", player.DisplayName));
+                R.Logger.Log(LogLevel.INFO, R.Translations.Translate("command_god_disable_console", player.DisplayName));
                 ctx.Print(R.Translations.Translate("command_god_disable_private"));
                 player.Features.GodMode = false;
                 return;
             }
 
-            R.Logger.Info(R.Translations.Translate("command_god_enable_console", player.DisplayName));
+            R.Logger.Log(LogLevel.INFO, R.Translations.Translate("command_god_enable_console", player.DisplayName));
             ctx.Print(R.Translations.Translate("command_god_enable_private"));
             player.Features.GodMode = true;
         }

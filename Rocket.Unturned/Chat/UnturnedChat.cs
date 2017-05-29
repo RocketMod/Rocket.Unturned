@@ -8,6 +8,7 @@ using Rocket.API.Event;
 using Rocket.API.Event.Player;
 using Rocket.API.Player;
 using Rocket.API.Providers.Implementation.Managers;
+using Rocket.API.Providers.Logging;
 using Rocket.Core;
 using Rocket.Core.Player;
 
@@ -35,7 +36,7 @@ namespace Rocket.Unturned.Chat
             }
             catch (Exception ex)
             {
-                R.Logger.Error(ex);
+                R.Logger.Log(LogLevel.ERROR, null, ex);
             }
             cancel = !cancel;
             incomingColor = color;
@@ -100,7 +101,7 @@ namespace Rocket.Unturned.Chat
 
         public void Say(string message, Color? color = default(Color?))
         {
-            R.Logger.Info("Broadcast: " + message);
+            R.Logger.Log(LogLevel.INFO, "Broadcast: " + message);
             foreach (string m in wrapMessage(message))
             {
                 ChatManager.instance.tellChat(CSteamID.Nil, Provider.server, (byte)EChatMode.GLOBAL, color.Value, m);
@@ -116,7 +117,7 @@ namespace Rocket.Unturned.Chat
         {
             if (player is ConsolePlayer)
             {
-                R.Logger.Info(message);
+                R.Logger.Log(LogLevel.INFO, message);
             }
             else
             {
@@ -133,7 +134,7 @@ namespace Rocket.Unturned.Chat
         {
             if (CSteamID == CSteamID.Nil)
             {
-                R.Logger.Info(message);
+                R.Logger.Log(LogLevel.INFO, message);
             }
             else
             {

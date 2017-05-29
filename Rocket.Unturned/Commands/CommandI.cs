@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using Rocket.Unturned.Items;
 using Rocket.API.Exceptions;
 using Rocket.API.Commands;
-using Rocket.API.Player;
+using Rocket.API.Providers.Logging;
 using Rocket.Core;
 
 namespace Rocket.Unturned.Commands
@@ -60,7 +60,7 @@ namespace Rocket.Unturned.Commands
 
             if (player.GiveItem(id, amount))
             {
-                R.Logger.Info(R.Translations.Translate("command_i_giving_console", player.DisplayName, id, amount));
+                R.Logger.Log(LogLevel.INFO, R.Translations.Translate("command_i_giving_console", player.DisplayName, id, amount));
                 ctx.Print(R.Translations.Translate("command_i_giving_private", amount, assetName, id));
                 return;
 

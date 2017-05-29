@@ -2,6 +2,7 @@
 using Rocket.API.Exceptions;
 using Rocket.Unturned.Player;
 using System.Collections.Generic;
+using Rocket.API.Providers.Logging;
 using Rocket.Core;
 
 namespace Rocket.Unturned.Commands
@@ -34,7 +35,7 @@ namespace Rocket.Unturned.Commands
             if (otherPlayer!=null && otherPlayer != player)
             {
                 otherPlayer.Teleport(player);
-                R.Logger.Info(R.Translations.Translate("command_tphere_teleport_console", otherPlayer.DisplayName, player.DisplayName));
+                R.Logger.Log(LogLevel.INFO, R.Translations.Translate("command_tphere_teleport_console", otherPlayer.DisplayName, player.DisplayName));
                 ctx.Print(R.Translations.Translate("command_tphere_teleport_from_private", otherPlayer.DisplayName));
                 R.Implementation.Chat.Say(otherPlayer, R.Translations.Translate("command_tphere_teleport_to_private", player.DisplayName));
                 return;

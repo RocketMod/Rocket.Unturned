@@ -3,9 +3,8 @@ using SDG.Unturned;
 using Steamworks;
 using System;
 using UnityEngine;
-using System.Linq;
+using Rocket.API.Providers.Logging;
 using Rocket.Core;
-using Rocket.Unturned.Event;
 using Rocket.Unturned.Event.Player;
 using Rocket.Unturned.Event.Player.Inventory;
 
@@ -143,7 +142,7 @@ namespace Rocket.Unturned.Events
             }
             catch (Exception ex)
             {
-                R.Logger.Error("Failed to receive packet \"" + name + "\"", ex);
+                R.Logger.Log(LogLevel.ERROR, "Failed to receive packet \"" + name + "\"", ex);
             }
         }
     }

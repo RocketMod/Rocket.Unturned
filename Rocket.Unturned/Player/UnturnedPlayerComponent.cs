@@ -1,5 +1,4 @@
-﻿using SDG.Unturned;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Rocket.Unturned.Player
 {

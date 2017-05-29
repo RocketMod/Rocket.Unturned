@@ -3,7 +3,7 @@ using Rocket.API.Exceptions;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 using System.Collections.Generic;
-using Rocket.API.Player;
+using Rocket.API.Providers.Logging;
 using Rocket.Core;
 
 namespace Rocket.Unturned.Commands
@@ -62,7 +62,7 @@ namespace Rocket.Unturned.Commands
 
             if (VehicleTool.giveVehicle(player.Player, id.Value))
             {
-                R.Logger.Warn(R.Translations.Translate("command_v_giving_console", player.DisplayName, id));
+                R.Logger.Log(LogLevel.WARN, R.Translations.Translate("command_v_giving_console", player.DisplayName, id));
                 ctx.Print(R.Translations.Translate("command_v_giving_private", assetName, id));
                 return;
             }
