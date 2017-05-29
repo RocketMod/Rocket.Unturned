@@ -97,8 +97,12 @@ namespace Rocket.Unturned
                 shouldExecuteCommand = false;
             };
 
-            CommandWindow.onCommandWindowOutputted += (object text, ConsoleColor color) =>  {
-                R.Logger.Log(LogLevel.DEBUG, text);
+            CommandWindow.onCommandWindowOutputted += (text, color) =>  {
+                foreach (var logging in R.Providers.GetProviders<IRocketLoggingProvider>())
+                {
+                    if(logging.EchoNativeOutput)
+                        logging.Log(LogLevel.INFO, text);
+                }
             };
 
             /*
