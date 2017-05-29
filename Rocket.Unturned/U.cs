@@ -57,21 +57,10 @@ namespace Rocket.Unturned
             }
         }
 
-        public ReadOnlyCollection<Type> Providers
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public ReadOnlyCollection<Type> Providers => new List<Type>().AsReadOnly();
 
         public TranslationList DefaultTranslation
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+            => new TranslationList();
 
 
         public U()
@@ -229,12 +218,12 @@ namespace Rocket.Unturned
 
         public void Unload(bool isReload = false)
         {
-            throw new NotImplementedException();
+            //todo
         }
 
         public void Load(bool isReload = false)
         {
-            throw new NotImplementedException();
+            //todo
         }
     }
 
