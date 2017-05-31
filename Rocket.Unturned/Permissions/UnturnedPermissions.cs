@@ -1,7 +1,6 @@
 ﻿using Rocket.API;
 using Rocket.API.Serialisation;
 using Rocket.Core;
-using Rocket.Core.Logging;
 using Rocket.Unturned.Chat;
 using Rocket.Unturned.Extensions;
 using Rocket.Unturned.Player;
@@ -26,7 +25,7 @@ namespace Rocket.Unturned.Permissions
             UnturnedPlayer player = caller.ToUnturnedPlayer();
 
             Regex r = new Regex("^\\/[a-zA-Z]*");
-            string requestedCommand = r.Match(permission.ToLower()).Value.ToString().TrimStart('/').ToLower();
+            string requestedCommand = r.Match(permission.ToLower()).Value.TrimStart('/').ToLower();
 
             IRocketCommand command = R.Commands.GetCommand(requestedCommand);
             double cooldown = R.Commands.GetCooldown(player, command);
@@ -61,21 +60,25 @@ namespace Rocket.Unturned.Permissions
 
             try
             {
-                RocketPermissionsGroup g = R.Permissions.GetGroups(new Rocket.API.RocketPlayer(r.m_SteamID.ToString()),true).FirstOrDefault();
-                if (g != null)
+
+                IOrderedEnumerable<RocketPermissionsGroup> playerGroups =
+                    R.Permissions.GetGroups(new RocketPlayer(r.m_SteamID.ToString()), true).OrderBy(x => x.Priority);
+
+                string prefix = playerGroups.FirstOrDefault(x => x.Prefix != null)?.Prefix ?? "";
+                string suffix = playerGroups.FirstOrDefault(x => x.Suffix != null)?.Suffix ?? "";
+
+                if (prefix != "" || suffix != "") 
                 {
                     SteamPending steamPending = Provider.pending.FirstOrDefault(x => x.playerID.steamID == r.m_SteamID);
                     if (steamPending != null)
                     {
-                        string prefix = g.Prefix == null ? "" : g.Prefix;
-                        string suffix = g.Suffix == null ? "" : g.Suffix;
-                        if (prefix != "" && !steamPending.playerID.characterName.StartsWith(g.Prefix))
+                        if (prefix != "" && !steamPending.playerID.characterName.StartsWith(prefix)) 
                         {
-                            steamPending.playerID.characterName = prefix + steamPending.playerID.characterName;
+                            steamPending.playerID.characterName = $"{prefix}{steamPending.playerID.characterName}";
                         }
-                        if (suffix != "" && !steamPending.playerID.characterName.EndsWith(g.Suffix))
+                        if (suffix != "" && !steamPending.playerID.characterName.EndsWith(suffix)) 
                         {
-                            steamPending.playerID.characterName = steamPending.playerID.characterName + suffix;
+                            steamPending.playerID.characterName = $"{steamPending.playerID.characterName}{suffix}";
                         }
                     }
                 }
@@ -83,7 +86,7 @@ namespace Rocket.Unturned.Permissions
             }
             catch (Exception ex)
             {
-                Core.Logging.Logger.Log("Failed adding prefix/suffix to player "+r.m_SteamID+": "+ex.ToString());
+                Core.Logging.Logger.Log($"Failed adding prefix/suffix to player {r.m_SteamID}: {ex}");
             }
 
             if (OnJoinRequested != null)
