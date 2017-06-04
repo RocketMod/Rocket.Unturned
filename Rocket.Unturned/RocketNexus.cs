@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Rocket.Core;
+using SDG.Unturned;
 
 namespace Rocket.Unturned
 {
@@ -31,6 +32,11 @@ namespace Rocket.Unturned
                 }
                 return null;
             };
+
+            string rocketDirectory = $"Servers/{Dedicator.serverID}/Rocket/";
+            if (!Directory.Exists(rocketDirectory)) Directory.CreateDirectory(rocketDirectory);
+
+            Directory.SetCurrentDirectory(rocketDirectory);
 
             R.Bootstrap<U>();
         }
