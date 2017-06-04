@@ -22,6 +22,7 @@ using Rocket.API.Event.Player;
 using Rocket.API.Event.Plugin;
 using Rocket.API.Providers.Logging;
 using Rocket.Core.Player;
+using Rocket.Unturned.Manager;
 using UnityEngine;
 
 namespace Rocket.Unturned
@@ -41,30 +42,21 @@ namespace Rocket.Unturned
 
         public ushort Port => Provider.port;
 
-        IChatManager IRocketImplementationProvider.Chat
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        } 
-
-        public IPlayerManager Players
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        private readonly UnturnedChatManager _chatMgr = new UnturnedChatManager();
+        IChatManager IRocketImplementationProvider.Chat => _chatMgr;
+        
+        private readonly UnturnedPlayerManager _playerMgr = new UnturnedPlayerManager();
+        public IPlayerManager Players => _playerMgr;
 
         public ReadOnlyCollection<Type> Providers => new List<Type>().AsReadOnly();
 
         public TranslationList DefaultTranslation
             => new TranslationList();
 
-
         public U()
         {
+            ChatManager.onChatted += _chatMgr.handleChat;
+
             Provider.onServerHosted += () =>
             {
                 try
@@ -224,17 +216,6 @@ namespace Rocket.Unturned
         public void Load(bool isReload = false)
         {
             //todo
-        }
-    }
-
-    public class PlayerManager : IPlayerManager
-    {
-        public List<IRocketPlayer> Players
-        {
-            get
-            {
-                return Provider.clients.Select(c => (IRocketPlayer) UnturnedPlayer.FromCSteamID(c.playerID.steamID)).ToList();
-            }
         }
     }
 }

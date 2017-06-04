@@ -1,5 +1,5 @@
 ﻿using System;
-using Rocket.Unturned.Chat;
+using Rocket.Core.Utils;
 using Rocket.Unturned.Player;
 using UnityEngine;
 
@@ -45,7 +45,7 @@ namespace Rocket.Unturned.Commands
         public static Color? GetColorParameter(this string[] array, int index)
         {
             if(array.Length <= index) return null;
-            Color output = UnturnedChat.GetColorFromName(array[index], Color.clear);
+            Color output = ColorUtils.GetColorFromName(array[index], Color.clear);
             return (output == Color.clear) ? null : (Color?)output;
         }
     }

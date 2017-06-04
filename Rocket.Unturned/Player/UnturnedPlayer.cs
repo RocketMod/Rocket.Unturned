@@ -5,10 +5,11 @@ using UnityEngine;
 using System.Linq;
 using Rocket.Unturned.Events;
 using Rocket.Core;
-using Rocket.Unturned.Chat;
 using Rocket.Unturned.Skills;
 using Rocket.API.Serialization;
 using Rocket.Core.Player;
+using Rocket.Core.Utils;
+using Rocket.Unturned.Manager;
 
 namespace Rocket.Unturned.Player
 {
@@ -41,7 +42,7 @@ namespace Rocket.Unturned.Player
                 RocketPermissionsGroup group = R.Permissions.GetPlayerGroups(this).FirstOrDefault(g => g.Properties[BuiltinProperties.COLOR] != null && g.Properties[BuiltinProperties.COLOR] != "white");
                 string color = "";
                 if (group != null) color = group.Properties[BuiltinProperties.COLOR];
-                return UnturnedChat.GetColorFromName(color, Palette.COLOR_W);
+                return ColorUtils.GetColorFromName(color, Palette.COLOR_W);
             }
             set
             {
@@ -374,6 +375,15 @@ namespace Rocket.Unturned.Player
         {
             var skills = Player.skills;
             return skills.skills[skill.Speciality][skill.Skill];
-        }        
+        }
+
+        public override void Message(string message, Color? color)
+        {
+            color = color ?? Color.white;
+            foreach (string m in UnturnedChatManager.WrapMessage(message))
+            {
+                ChatManager.instance.channel.send("tellChat", CSteamID, ESteamPacket.UPDATE_UNRELIABLE_BUFFER, CSteamID.Nil, (byte)EChatMode.SAY, color, m);
+            }
+        }
     }
 }

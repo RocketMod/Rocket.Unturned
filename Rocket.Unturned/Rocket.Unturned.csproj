@@ -90,11 +90,12 @@
     <Compile Include="Event\Player\PlayerUpdateVirusEvent.cs" />
     <Compile Include="Event\Player\PlayerUpdateWaterEvent.cs" />
     <Compile Include="Event\Player\PlayerUpdateWearEvent.cs" />
+    <Compile Include="Manager\UnturnedChatManager.cs" />
+    <Compile Include="Manager\UnturnedPlayerManager.cs" />
     <Compile Include="Player\UnturnedPlayerMovement.cs" />
     <Compile Include="RocketNexus.cs" />
     <Compile Include="UnturnedTranslations.cs" />
     <Compile Include="Skills\UnturnedSkill.cs" />
-    <Compile Include="Chat\UnturnedChat.cs" />
     <Compile Include="Commands\CommandBroadcast.cs" />
     <Compile Include="Commands\CommandCompass.cs" />
     <Compile Include="Commands\CommandEffect.cs" />
