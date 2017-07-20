@@ -181,7 +181,7 @@ namespace Rocket.Unturned.Events
         public static event PlayerUpdateWater OnPlayerUpdateWater;
         public event PlayerUpdateWater OnUpdateWater;
 
-        public enum PlayerGesture { None = 0, InventoryOpen = 1, InventoryClose = 2, Pickup = 3, PunchLeft = 4, PunchRight = 5, SurrenderStart = 6, SurrenderStop = 7, Point = 8, Wave = 9 };
+        public enum PlayerGesture { None = 0, InventoryOpen = 1, InventoryClose = 2, Pickup = 3, PunchLeft = 4, PunchRight = 5, SurrenderStart = 6, SurrenderStop = 7, Point = 8, Wave = 9 , Salute = 10 , Arrest_Start = 11 , Arrest_Stop = 12 , Rest_Start = 13 , Rest_Stop = 14 , Facepalm = 15 };
         public delegate void PlayerUpdateGesture(UnturnedPlayer player, PlayerGesture gesture);
         public static event PlayerUpdateGesture OnPlayerUpdateGesture;
         public event PlayerUpdateGesture OnUpdateGesture;
