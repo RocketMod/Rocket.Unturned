@@ -12,7 +12,12 @@ namespace Rocket.Unturned.Launcher
         {
             string instanceName = args.Length > 0 ? args[0] : "Rocket";
 
-            string executableName = File.Exists("Unturned_Headless.x86") ? "Unturned_Headless.x86" : "Unturned.x86";
+            string executableName = "";
+            foreach (string s in new string[] { "Unturned_Headless.x86" , "Unturned.x86" , "Unturned.exe"})
+            {
+                if (File.Exists(s)) executableName = s;
+            }
+            if (String.IsNullOrEmpty(executableName)) throw new FileNotFoundException("Could not locate Unturned executable");
             string arguments = "-nographics -batchmode -logfile 'Servers/" + instanceName + "/unturned.log' +secureserver/" + instanceName;
 
             string consoleOutput = instanceName + ".console";
