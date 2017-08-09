@@ -15,14 +15,17 @@ namespace Rocket.Unturned
             try
             {
                 fileStream = new FileStream(String.Format(Environment.ConsoleFile, Dedicator.serverID), FileMode.Create,FileAccess.Write,FileShare.ReadWrite);
-
-                StreamWriter streamWriter = new StreamWriter(fileStream, System.Text.Encoding.UTF8)
+                
+                using (StreamWriter streamWriter = new StreamWriter(fileStream, System.Text.Encoding.UTF8)
                 {
                     AutoFlush = true
-                };
-
-
-                System.Console.SetOut(streamWriter);
+                })
+                {
+                    using (new UnturnedConsoleWriter(streamWriter))
+                    {
+                        // code using console output
+                    }
+                }
 
                 readingThread = new Thread(new ThreadStart(DoRead));
                 readingThread.Start();
