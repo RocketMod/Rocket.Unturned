@@ -13,10 +13,9 @@ namespace Rocket.Unturned.Launcher
             string instanceName = args.Length > 0 ? args[0] : "Rocket";
 
             string executableName = "";
-            string myAppPath = System.Reflection.Assembly.GetEntryAssembly().Location;
             foreach (string s in new string[] { "Unturned_Headless.x86" , "Unturned.x86" , "Unturned.exe"})
             {
-                if (File.Exists(Path.Combine(myAppPath,s))) {
+                if (File.Exists(s)) {
                     executableName = s;
                     break;
                 }
