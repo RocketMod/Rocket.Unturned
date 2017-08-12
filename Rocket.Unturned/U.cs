@@ -128,9 +128,9 @@ namespace Rocket.Unturned
             return Translation.Instance.Translate(translationKey, placeholder);
         }
 
-#if LINUX
+
         public static UnturnedConsole Console;
-#endif
+
 
         public void initialize()
         {
@@ -143,9 +143,11 @@ namespace Rocket.Unturned
             {
                 rocketGameObject = new GameObject("Rocket");
                 DontDestroyOnLoad(rocketGameObject);
-#if LINUX
-    Console = rocketGameObject.AddComponent<UnturnedConsole>();
-#endif
+
+
+                if(System.Environment.OSVersion.Platform == PlatformID.Unix || System.Environment.OSVersion.Platform == PlatformID.MacOSX)
+                    Console = rocketGameObject.AddComponent<UnturnedConsole>();
+
                 System.Console.Clear();
                 System.Console.ForegroundColor = ConsoleColor.Cyan;
                 System.Console.WriteLine("Rocket Unturned v" + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " for Unturned v" + Provider.APP_VERSION + "\n");
