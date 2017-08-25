@@ -1,0 +1,8 @@
+C:\Users\Test\Downloads\Rocket.Unturned-master\Rocket.Unturned\bin\Debug\Rocket.Unturned\Icon.png
+C:\Users\Test\Downloads\Rocket.Unturned-master\Rocket.Unturned\bin\Debug\Rocket.Unturned.nuspec
+C:\Users\Test\Downloads\Rocket.Unturned-master\Rocket.Unturned\bin\Debug\Rocket.Unturned\English.dat
+C:\Users\Test\Downloads\Rocket.Unturned-master\Rocket.Unturned\bin\Debug\Rocket.Unturned\Rocket.Unturned.module
+C:\Users\Test\Downloads\Rocket.Unturned-master\Rocket.Unturned\bin\Debug\Rocket.Unturned.dll
+C:\Users\Test\Downloads\Rocket.Unturned-master\Rocket.Unturned\bin\Debug\Rocket.Unturned.pdb
+C:\Users\Test\Downloads\Rocket.Unturned-master\Rocket.Unturned\obj\Debug\Rocket.Unturned.dll
+C:\Users\Test\Downloads\Rocket.Unturned-master\Rocket.Unturned\obj\Debug\Rocket.Unturned.pdb
