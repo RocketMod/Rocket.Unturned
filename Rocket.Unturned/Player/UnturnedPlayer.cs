@@ -186,7 +186,7 @@ namespace Rocket.Unturned.Player
 
         public void TriggerEffect(ushort effectID)
         {
-            SDG.Unturned.EffectManager.instance.channel.send("tellEffectPoint", CSteamID, ESteamPacket.UPDATE_UNRELIABLE_BUFFER, new object[] { effectID, player.transform.position });
+            EffectManager.instance.channel.send("tellEffectPoint", CSteamID, ESteamPacket.UPDATE_UNRELIABLE_BUFFER, new object[] { effectID, player.transform.position });
         }
         
         public string IP
@@ -201,10 +201,14 @@ namespace Rocket.Unturned.Player
 
         public void MaxSkills()
         {
-            foreach (Skill skill in (player.skills.skills.SelectMany((Skill[] skills) => skills)))
+            PlayerSkills skills = player.skills;
+            
+            foreach (var skill in skills.skills.SelectMany(s => s))
             {
                 skill.level = skill.max;
             }
+            
+            skills.askSkills(player.channel.owner.playerID.steamID);
         }
 
         public string SteamGroupName()
