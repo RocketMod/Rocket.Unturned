@@ -15,8 +15,8 @@ IF "%~1"=="-FIXED_CTRL_C" (
 
 SET INSTANCENAME=%1
 
-SET UNTURNEDHOME=%~dp0..\
-SET STEAMHOME=%~dp0..\..\Steam\
+SET UNTURNEDHOME=%~dp0..\..\
+SET STEAMHOME=%~dp0..\..\..\Steam\
 
 ECHO Steam directory: %STEAMHOME%
 ECHO Unturned directory: %UNTURNEDHOME%
