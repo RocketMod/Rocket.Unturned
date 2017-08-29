@@ -4,8 +4,8 @@ REM To quickstart, just create a new folder and place the contents of the Rocket
 REM Syntax: update.bat <unturned directory> <steam directory>
 REM Author: fr34kyn01535
 
-SET UNTURNEDHOME=%~dp0..\
-SET STEAMHOME=%~dp0..\..\Steam\
+SET UNTURNEDHOME=%~dp0..\..\
+SET STEAMHOME=%~dp0..\..\..\Steam\
 
 
 IF NOT EXIST %STEAMHOME% (
