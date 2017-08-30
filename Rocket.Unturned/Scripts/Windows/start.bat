@@ -1,6 +1,6 @@
 @ECHO OFF 
 REM This script installs and starts a Unturned 3 server on Windows machines
-REM To just start servers with this script place it next to Unturned.exe
+REM To start servers with this script place it next to Unturned.exe
 REM Syntax: start.bat <instance name>
 REM Author: fr34kyn01535
 
