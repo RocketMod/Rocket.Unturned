@@ -21,11 +21,7 @@ IF NOT EXIST %STEAMCMDHOME% (
 
 bitsadmin.exe /transfer "Downloading Rocket.Unturned" "https://ci.rocketmod.net/job/Rocket.Unturned/lastSuccessfulBuild/artifact/Rocket.Unturned/bin/Release/Rocket.zip" "%~dp0Rocket.zip"
 CALL :unzip "%~dp0" "%~dp0Rocket.zip"
-XCOPY /S "Scripts" "%UNTURNEDHOME%Scripts"
-XCOPY /S "Modules" "%UNTURNEDHOME%Modules"
 DEL Rocket.zip
-RD /s /q "Scripts"
-RD /s /q "Modules"
 pause
 
 exit /b
