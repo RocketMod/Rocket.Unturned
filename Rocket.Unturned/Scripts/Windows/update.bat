@@ -4,20 +4,20 @@ REM To quickstart, just create a new folder and place the contents of the Rocket
 REM Syntax: update.bat <unturned directory> <steam directory>
 REM Author: fr34kyn01535
 
-SET UNTURNEDHOME=%~dp0..\
-SET STEAMHOME=%~dp0..\..\Steam\
+SET UNTURNEDHOME=%~dp0
+SET STEAMCMDHOME=%~dp0..\SteamCMD\
 
 
-IF NOT EXIST %STEAMHOME% (
+IF NOT EXIST %STEAMCMDHOME% (
 	ECHO Installing SteamCMD into Steam directory
-	MKDIR "%STEAMHOME%"
+	MKDIR "%STEAMCMDHOME%"
 	bitsadmin.exe /transfer "Downloading SteamCMD" https://steamcdn-a.akamaihd.net/client/installer/steamcmd.zip "%~dp0SteamCMD.zip"
 	CALL :unzip "%~dp0" "%~dp0SteamCMD.zip"
 	DEL SteamCMD.zip
-	MOVE steamcmd.exe %STEAMHOME%
+	MOVE steamcmd.exe %STEAMCMDHOME%
 )
 
-%STEAMHOME%steamcmd.exe +login unturnedrocksupdate force_update +force_install_dir ..\Unturned +app_update 304930 validate +exit
+%STEAMCMDHOME%steamcmd.exe +login unturnedrocksupdate force_update +force_install_dir ..\Unturned +app_update 304930 validate +exit
 
 bitsadmin.exe /transfer "Downloading Rocket.Unturned" "https://ci.rocketmod.net/job/Rocket.Unturned/lastSuccessfulBuild/artifact/Rocket.Unturned/bin/Release/Rocket.zip" "%~dp0Rocket.zip"
 CALL :unzip "%~dp0" "%~dp0Rocket.zip"
