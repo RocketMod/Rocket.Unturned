@@ -1,15 +1,15 @@
 #!/bin/bash
 # This script starts a Unturned 3 server on Linux machines
+# To start servers with this script, place it next to Unturned.exe
 # Syntax: start.sh <instance name>
 # Author: fr34kyn01535
 
 export MONO_IOMAP=all
-#Fixing Lowercase / Uppercase mismatch 
 
 #CONFIG
 INSTANCE_NAME=$1
-STEAMCMD_HOME="$PWD/../../steamcmd"
-UNTURNED_HOME="$PWD/../"
+STEAMCMD_HOME="$PWD/../steamcmd"
+UNTURNED_HOME="$PWD"
 
 #COLORS
 RED='\033[0;31m'
