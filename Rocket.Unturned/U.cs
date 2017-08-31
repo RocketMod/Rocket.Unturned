@@ -211,9 +211,12 @@ namespace Rocket.Unturned
                 try
                 {
                     try{
-                        if (!System.IO.Directory.Exists(SDG.Framework.IO.IOUtility.rootPath + "/Bundles/Workshop/Content")) 
+                        if (!System.IO.Directory.Exists(SDG.Framework.IO.IOUtility.rootPath + "/Bundles/Workshop")) 
                         {
+                            System.IO.Directory.CreateDirectory(SDG.Framework.IO.IOUtility.rootPath + "/Bundles/Workshop");
                             System.IO.Directory.CreateDirectory(SDG.Framework.IO.IOUtility.rootPath + "/Bundles/Workshop/Content");
+                            System.IO.Directory.CreateDirectory(SDG.Framework.IO.IOUtility.rootPath + "/Bundles/Workshop/Steam");
+                            System.IO.Directory.CreateDirectory(SDG.Framework.IO.IOUtility.rootPath + "/Bundles/Workshop/Maps");
                             typeof(Provider).GetMethod("onDedicatedUGCInstalled", BindingFlags.Static | BindingFlags.NonPublic).Invoke(this, new object[] { });
                             System.Console.WriteLine("Applied gold bug hotfix.");
                         }
