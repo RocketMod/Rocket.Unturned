@@ -14,7 +14,7 @@ mkdir -p $UNTURNED_HOME
 
 cd $STEAMCMD_HOME
 if [ ! -f "steamcmd.sh" ]; then
-	wget https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz
+	wget http://media.steampowered.com/client/steamcmd_linux.tar.gz
 	tar -xvzf steamcmd_linux.tar.gz
 	rm steamcmd_linux.tar.gz
 fi
