@@ -5,13 +5,14 @@ Copyright (C) | Smartly Dressed Games | Nelson Sexton
 
 --------------------------------------------------------------------------------------
 
-Rocket.Unturned, as API used in plugins is licensed under GPLv3. All plugins are licensed under GPLv3.
-See https://www.gnu.org/licenses/gpl-3.0.en.html for the full license.
-The full source code for Rocket.Unturned is available at https://github.com/RocketMod/Rocket.Unturned/.
-
-You may aquire the right to license your plugins under your own license as part of a commercial license agreement.
-For more information about this topic visit https://rocketmod.net/licensing/.
+Rocket.Unturned, as API used in plugins is licensed under MIT. 
 
 Copyright (C) | RocketMod | Sven Mawby <fr34kyn01535@bam.yt>
 
-RocketMod is not affiliated with Unturned or Smartly Dressed Games.
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and 
+associated documentation files (the "Software"), to deal in the Software without restriction, 
+including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
+and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, 
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
