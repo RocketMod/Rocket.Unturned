@@ -277,7 +277,8 @@ namespace Rocket.Unturned
 
             Provider.onCheckValid += (ValidateAuthTicketResponse_t callback, ref bool isValid) =>
             {
-                isValid = UnturnedPermissions.CheckValid(callback);
+                if(isValid)
+                    isValid = UnturnedPermissions.CheckValid(callback);
             };
     }
 
