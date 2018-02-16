@@ -19,14 +19,14 @@ namespace Rocket.Unturned.Chat
             SDG.Unturned.ChatManager.onChatted += handleChat;
         }
 
-        private void handleChat(SteamPlayer steamPlayer, EChatMode chatMode, ref Color incomingColor, string message, ref bool cancel)
+        private void handleChat(SteamPlayer steamPlayer, EChatMode chatMode, ref Color incomingColor, ref bool isRich, string message, ref bool cancel)
         {
             cancel = false;
             Color color = incomingColor;
             try
             {
                 UnturnedPlayer player = UnturnedPlayer.FromSteamPlayer(steamPlayer);
-                color = UnturnedPlayerEvents.firePlayerChatted(player, chatMode, player.Color, message, ref cancel);
+                color = UnturnedPlayerEvents.firePlayerChatted(player, chatMode, player.Color, ref isRich, message, ref cancel);
             }
             catch (Exception ex)
             {
