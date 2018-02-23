@@ -61,11 +61,10 @@ namespace Rocket.Unturned.Permissions
             try
             {
 
-                IOrderedEnumerable<RocketPermissionsGroup> playerGroups =
-                    R.Permissions.GetGroups(new RocketPlayer(r.m_SteamID.ToString()), true).OrderBy(x => x.Priority);
+                var playerGroups = R.Permissions.GetGroups(new RocketPlayer(r.m_SteamID.ToString()), true);
 
-                string prefix = playerGroups.FirstOrDefault(x => x.Prefix != null)?.Prefix ?? "";
-                string suffix = playerGroups.FirstOrDefault(x => x.Suffix != null)?.Suffix ?? "";
+                string prefix = playerGroups.FirstOrDefault(x => !string.IsNullOrEmpty(x.Prefix))?.Prefix ?? "";
+                string suffix = playerGroups.FirstOrDefault(x => !string.IsNullOrEmpty(x.Suffix))?.Suffix ?? "";
 
                 if (prefix != "" || suffix != "") 
                 {
