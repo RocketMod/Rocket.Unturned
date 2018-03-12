@@ -155,7 +155,14 @@ namespace Rocket.Unturned.Player
             }
             else
             {
-                return new UnturnedPlayer(cSteamID);
+                UnturnedPlayer temp = new UnturnedPlayer(cSteamID);
+
+                if (temp.player == null)
+                {
+                    return null;
+                }
+
+                return temp;
             }
         }
 
