@@ -55,7 +55,12 @@ namespace Rocket.Unturned.Serialisation
 
         public int MaxSpawnAmount;
 
-    public void LoadDefaults()
+        public bool EnableVehicleBlacklist;
+
+        [XmlArrayItem(ElementName = "Vehicles")]
+        public List<Blacklist> Vehicles;
+
+        public void LoadDefaults()
         {
             AutomaticSave = new AutomaticSaveSettings();
             RocketModObservatory = new RocketModObservatorySettings();
@@ -68,6 +73,11 @@ namespace Rocket.Unturned.Serialisation
             Items = new List<Blacklist>()
             {
                 new Items.Blacklist(518)
+            };
+            EnableVehicleBlacklist = false;
+            Vehicles = new List<Blacklist>()
+            {
+                new Blacklist(1)
             };
         }
     }
