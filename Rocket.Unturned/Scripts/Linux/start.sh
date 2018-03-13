@@ -36,6 +36,7 @@ cd $UNTURNED_HOME
 
 if [ -f RocketLauncher.exe ]; then
 	ulimit -n 2048
+	export LD_LIBRARY_PATH=$UNTURNED_HOME/lib:$LD_LIBRARY_PATH
 	mono RocketLauncher.exe $INSTANCE_NAME
 else
 	echo "RocketLauncher not found."
