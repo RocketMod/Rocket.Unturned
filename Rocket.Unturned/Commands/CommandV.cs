@@ -86,14 +86,10 @@ namespace Rocket.Unturned.Commands
 
             if(U.Settings.Instance.EnableVehicleBlacklist && !player.HasPermission("vehicleblacklist.bypass"))
             {
-                if(U.Settings.Instance.Vehicles.Count != 0)
+                if(player.HasPermission("vehicle." + id))
                 {
-                    var BlacklistVehicle = U.Settings.Instance.Vehicles.First(x => x.id == id);
-                    if(BlacklistVehicle != null)
-                    {
-                        UnturnedChat.Say(player, U.Translate("command_v_blacklisted"));
-                        return;
-                    }
+                    UnturnedChat.Say(caller, U.Translate("command_v_blacklisted"));
+                    return;
                 }
             }
 

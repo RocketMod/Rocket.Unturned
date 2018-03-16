@@ -46,9 +46,6 @@ namespace Rocket.Unturned.Serialisation
 
         public bool LogSuspiciousPlayerMovement = true;
 
-        [XmlArrayItem(ElementName = "Item")]
-        public List<Blacklist> Items;
-
         public bool EnableItemBlacklist;
 
         public bool EnableItemSpawnLimit;
@@ -57,8 +54,6 @@ namespace Rocket.Unturned.Serialisation
 
         public bool EnableVehicleBlacklist;
 
-        [XmlArrayItem(ElementName = "Vehicles")]
-        public List<Blacklist> Vehicles;
 
         public void LoadDefaults()
         {
@@ -70,15 +65,7 @@ namespace Rocket.Unturned.Serialisation
             EnableItemBlacklist = false;
             EnableItemSpawnLimit = false;
             MaxSpawnAmount = 10;
-            Items = new List<Blacklist>()
-            {
-                new Items.Blacklist(518)
-            };
             EnableVehicleBlacklist = false;
-            Vehicles = new List<Blacklist>()
-            {
-                new Blacklist(1)
-            };
         }
     }
 }
