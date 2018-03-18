@@ -110,6 +110,13 @@ namespace Rocket.Unturned
                 { "command_more_usage", "Usage: /more <amount>" },
                 { "command_more_dequipped", "No item being held in hands." },
                 { "command_more_give", "Giving {0} of item: {1}." },
+                { "command_rwho_line", "#{0}, Connection ID: {1}, Authed: {2}, Address: {3}, Time Connected: {4}, Connected For: {5}." },
+                { "command_rkick_help", "Usage: rkick <ConnectionID> - Kicks a client off of RCON." },
+                { "command_rkick_notfound", "Error: RCON Client with Connection ID: {0} not found!" },
+                { "command_rkick_kicked", "RCON Client kicked with Connection ID: {0}, Address: {1}!" },
+                { "command_rflush_help", "Usage: rflush <y> - kicks all connected RCON clients on the server." },
+                { "command_rflush_total", "Closing {0} RCON connections." },
+                { "command_rflush_line", "#{0}, ConnectionID: {1}, Address: {2}, closed!" },
                 { "invalid_character_name","invalid character name"},
                 { "command_not_found","Command not found."}
         };
