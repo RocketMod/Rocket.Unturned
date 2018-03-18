@@ -87,6 +87,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\CommandMore.cs" />
+    <Compile Include="Commands\CommandRFlush.cs" />
+    <Compile Include="Commands\CommandRKick.cs" />
+    <Compile Include="Commands\CommandRWho.cs" />
     <Compile Include="Commands\UnturnedCommands.cs" />
     <Compile Include="Commands\UnturnedCommandExtensions.cs" />
     <Compile Include="HUD.cs" />
