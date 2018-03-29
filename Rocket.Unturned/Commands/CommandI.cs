@@ -83,14 +83,9 @@ namespace Rocket.Unturned.Commands
 
             if (U.Settings.Instance.EnableItemBlacklist && !player.HasPermission("itemblacklist.bypass"))
             {
-                for(int i = 0; i < U.Settings.Instance.Items.Count; i++)
-                {
-                    Blacklist Item = U.Settings.Instance.Items[i];
-                    if(id == Item.id)
-                    {
-                        UnturnedChat.Say(player, U.Translate("command_i_blacklisted"));
-                        return;
-                    }
+                if (player.HasPermission("item." + id)) {
+                    UnturnedChat.Say(player, U.Translate("command_i_blacklisted"));
+                    return;
                 }
             }
 

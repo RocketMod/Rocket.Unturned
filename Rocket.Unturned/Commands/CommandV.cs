@@ -5,6 +5,7 @@ using Rocket.Unturned.Chat;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Rocket.Unturned.Commands
 {
@@ -82,6 +83,15 @@ namespace Rocket.Unturned.Commands
 
             Asset a = SDG.Unturned.Assets.find(EAssetType.VEHICLE, id.Value);
             string assetName = ((VehicleAsset)a).vehicleName;
+
+            if(U.Settings.Instance.EnableVehicleBlacklist && !player.HasPermission("vehicleblacklist.bypass"))
+            {
+                if(player.HasPermission("vehicle." + id))
+                {
+                    UnturnedChat.Say(caller, U.Translate("command_v_blacklisted"));
+                    return;
+                }
+            }
 
             if (VehicleTool.giveVehicle(player.Player, id.Value))
             {
