@@ -56,15 +56,24 @@
     <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Rocket.API">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>lib\Rocket.API.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
-    <Reference Include="Rocket.Core">
+    <Reference Include="Microsoft.Practices.Unity, Version=2.1.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.2.1.505.2\lib\NET35\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Configuration, Version=2.1.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.2.1.505.2\lib\NET35\Microsoft.Practices.Unity.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Rocket.API, Version=5.0.0.192, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>lib\Rocket.Core.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\packages\Rocket.API.5.0.0.192\lib\net35\Rocket.API.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Rocket.Core, Version=5.0.0.192, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Rocket.Core.5.0.0.192\lib\net35\Rocket.Core.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -86,52 +95,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\CommandMore.cs" />
-    <Compile Include="Commands\UnturnedCommands.cs" />
-    <Compile Include="Commands\UnturnedCommandExtensions.cs" />
-    <Compile Include="HUD.cs" />
-    <Compile Include="Items\Blacklist.cs" />
-    <Compile Include="Player\UnturnedPlayerMovement.cs" />
-    <Compile Include="Skills\UnturnedSkill.cs" />
+    <Compile Include="Events\UnturnedPlayerChatEvent.cs" />
+    <Compile Include="Player\UnturnedPlayerManager.cs" />
+    <Compile Include="Properties\DependencyRegistrator.cs" />
     <Compile Include="UnturnedConsoleWriter.cs" />
+    <Compile Include="UnturnedImplementation.cs" />
     <Compile Include="Utils\AutomaticSaveWatchdog.cs" />
-    <Compile Include="Chat\UnturnedChat.cs" />
-    <Compile Include="Commands\CommandAdmin.cs" />
-    <Compile Include="Commands\CommandBroadcast.cs" />
-    <Compile Include="Commands\CommandCompass.cs" />
-    <Compile Include="Commands\CommandEffect.cs" />
-    <Compile Include="Commands\CommandExit.cs" />
-    <Compile Include="Commands\CommandGod.cs" />
-    <Compile Include="Commands\CommandHeal.cs" />
-    <Compile Include="Commands\CommandHelp.cs" />
-    <Compile Include="Commands\CommandHome.cs" />
-    <Compile Include="Commands\CommandI.cs" />
-    <Compile Include="Commands\CommandInvestigate.cs" />
-    <Compile Include="Commands\CommandP.cs" />
-    <Compile Include="Commands\CommandRocket.cs" />
-    <Compile Include="Commands\CommandTp.cs" />
-    <Compile Include="Commands\CommandTphere.cs" />
-    <Compile Include="Commands\CommandUnadmin.cs" />
-    <Compile Include="Commands\CommandV.cs" />
-    <Compile Include="Commands\CommandVanish.cs" />
-    <Compile Include="Effects\UnturnedEffectManager.cs" />
-    <Compile Include="Enumerations\InventoryGroup.cs" />
-    <Compile Include="Events\UnturnedPlayerEvents.cs" />
-    <Compile Include="Events\UnturnedEvents.cs" />
-    <Compile Include="Extensions\SteamPlayerExtension.cs" />
-    <Compile Include="Environment.cs" />
-    <Compile Include="Permissions\UnturnedPermissions.cs" />
+    <Compile Include="Chat\UnturnedChatManager.cs" />
     <Compile Include="UnturnedConsole.cs" />
-    <Compile Include="U.cs" />
     <Compile Include="Player\UnturnedPlayer.cs" />
-    <Compile Include="Player\UnturnedPlayerComponent.cs" />
-    <Compile Include="Player\UnturnedPlayerFeatures.cs" />
-    <Compile Include="Plugins\PluginUnturnedPlayerComponentManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Serialisation\UnturnedSettings.cs" />
-    <Compile Include="Items\UnturnedItems.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="Rocket.Unturned.nuspec">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -142,21 +118,10 @@
     <None Include="Rocket.Unturned\Rocket.Unturned.module">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Scripts\Linux\start.sh" />
-    <None Include="Scripts\Linux\update.sh" />
-    <None Include="Scripts\Windows\MyFirstRocketServer.bat" />
-    <None Include="Scripts\Windows\start.bat" />
-    <None Include="Scripts\Windows\update.bat" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="dev\Game.exe" />
-    <Content Include="dev\Mono.Cecil.dll" />
-    <Content Include="dev\Mono.CompilerServices.SymbolWriter.dll" />
-    <Content Include="dev\pdb2mdb.exe" />
     <Content Include="lib\Assembly-CSharp-firstpass.dll" />
     <Content Include="lib\Assembly-CSharp.dll" />
-    <Content Include="lib\Rocket.API.dll" />
-    <Content Include="lib\Rocket.Core.dll" />
     <Content Include="lib\UnityEngine.dll" />
     <Content Include="Rocket.Unturned\Icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

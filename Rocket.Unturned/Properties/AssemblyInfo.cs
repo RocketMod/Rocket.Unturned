@@ -6,4 +6,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyProduct("Rocket.Unturned")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: Guid("8870d132-f877-4fbd-9e73-49c8b1af8b3f")]
-[assembly: AssemblyVersion("4.9.3.0")]
+[assembly: AssemblyVersion("5.0.0.0")]

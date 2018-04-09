@@ -7,11 +7,12 @@ using SDG.Unturned;
 
 namespace Rocket.Unturned
 {
+    /*
     public class UnturnedConsole : MonoBehaviour
     {
-        FileStream fileStream = null;
-        StreamWriter streamWriter = null;
-        UnturnedConsoleWriter writer = null;
+        private FileStream fileStream;
+        private StreamWriter streamWriter;
+        private UnturnedConsoleWriter writer;
         private void Awake()
         {
             try
@@ -74,4 +75,5 @@ namespace Rocket.Unturned
             while (true);
         }
     }
+    */
 }
