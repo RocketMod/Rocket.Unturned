@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Rocket.API;
 using Rocket.API.DependencyInjection;
@@ -38,6 +39,7 @@ namespace Rocket.Unturned
 
         public IEnumerable<string> Capabilities => new List<string>();
         public string InstanceId => Provider.serverID;
+        public string WorkingDirectory => Environment.CurrentDirectory;
         public string Name => "Rocket.Unturned";
     }
 }

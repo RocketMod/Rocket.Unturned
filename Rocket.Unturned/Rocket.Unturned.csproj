@@ -65,11 +65,11 @@
     <Reference Include="Microsoft.Practices.Unity.Configuration, Version=2.1.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Unity.2.1.505.2\lib\NET35\Microsoft.Practices.Unity.Configuration.dll</HintPath>
     </Reference>
-    <Reference Include="Rocket.API, Version=5.0.0.199, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rocket.API.5.0.0.199\lib\net35\Rocket.API.dll</HintPath>
+    <Reference Include="Rocket.API, Version=5.0.0.225, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rocket.API.5.0.0.225\lib\net35\Rocket.API.dll</HintPath>
     </Reference>
-    <Reference Include="Rocket.Core, Version=5.0.0.199, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rocket.Core.5.0.0.199\lib\net35\Rocket.Core.dll</HintPath>
+    <Reference Include="Rocket.Core, Version=5.0.0.225, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rocket.Core.5.0.0.225\lib\net35\Rocket.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

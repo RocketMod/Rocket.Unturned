@@ -297,5 +297,6 @@ namespace Rocket.Unturned.Player
         }
 
         public string Name => Player.channel.owner.playerID.playerName;
+        public Type PlayerType => typeof(UnturnedPlayer);
     }
 }
