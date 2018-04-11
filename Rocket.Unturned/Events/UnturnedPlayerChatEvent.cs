@@ -13,7 +13,7 @@ namespace Rocket.Unturned.Events
         public bool IsRich { get; set; }
 
         public UnturnedPlayerChatEvent(IPlayer player, EChatMode mode, Color color, bool isRich, string message,
-                                       bool cancelled) : base(player, "", message, EventExecutionTargetContext.Sync)
+                                       bool cancelled) : base(player, null, message, EventExecutionTargetContext.Sync)
         {
             Mode = mode;
             Color = color;

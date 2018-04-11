@@ -1,10 +1,9 @@
-﻿using Rocket.Core;
-using Rocket.Unturned.Events;
+﻿using Rocket.Unturned.Events;
 using SDG.Unturned;
-using System;
 using System.Collections.Generic;
 using Rocket.API;
 using Rocket.API.Chat;
+using Rocket.API.Ioc;
 using Rocket.API.Eventing;
 using Rocket.API.I18N;
 using Rocket.API.Player;
@@ -22,7 +21,7 @@ namespace Rocket.Unturned.Chat
         private readonly IPlayerManager playerManager;
 
         public UnturnedChatManager(ILogger logger, IImplementation implementation, IEventManager eventManager,
-                                   IPlayerManager playerManager)
+                                   IPlayerManager playerManager, IDependencyContainer container)
         {
             this.logger = logger;
             this.implementation = implementation;
@@ -30,6 +29,9 @@ namespace Rocket.Unturned.Chat
             this.playerManager = playerManager;
 
             ChatManager.onChatted += HandleChat;
+
+            CommandWindow.onCommandWindowOutputted += (text, color) 
+                => logger.LogInformation(text?.ToString());
         }
 
         public void SendMessage(IPlayer player, string message, params object[] bindings)
@@ -66,7 +68,7 @@ namespace Rocket.Unturned.Chat
         {
             IPlayer p = playerManager.GetPlayer(player.playerID.steamID.m_SteamID.ToString());
             UnturnedPlayerChatEvent @event = new UnturnedPlayerChatEvent(p, mode, color, isRich, message, !isVisible);
-            eventManager.Emit((IEventEmitter) implementation, @event);
+            eventManager.Emit(implementation, @event);
             color = @event.Color;
             isRich = @event.IsRich;
             isVisible = !@event.IsCancelled;

@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text;
 
-namespace Rocket.Unturned
+namespace Rocket.Unturned.Console
 {
     public class UnturnedConsoleWriter : TextWriter
     {
@@ -14,11 +14,11 @@ namespace Rocket.Unturned
         public UnturnedConsoleWriter(StreamWriter streamWriter)
         {
             this.streamWriter = streamWriter;
-            consoleOutput = Console.Out;
-            consoleError = Console.Error;
+            consoleOutput = System.Console.Out;
+            consoleError = System.Console.Error;
 
-            Console.SetOut(this);
-            Console.SetError(this);
+            System.Console.SetOut(this);
+            System.Console.SetError(this);
         }
 
         public override Encoding Encoding => consoleOutput.Encoding;
@@ -256,8 +256,8 @@ namespace Rocket.Unturned
         {
             if (disposing)
             {
-                Console.SetOut(consoleOutput);
-                Console.SetError(consoleError);
+                System.Console.SetOut(consoleOutput);
+                System.Console.SetError(consoleError);
             }
         }
     }
