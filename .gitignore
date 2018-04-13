@@ -17,6 +17,8 @@ bld/
 [Oo]bj/
 .vs/
 
+UnityEngine.dll
+
 # Roslyn cache directories
 *.ide/
 
