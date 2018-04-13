@@ -123,8 +123,12 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="lib\Assembly-CSharp-firstpass.dll" />
-    <Content Include="lib\Assembly-CSharp.dll" />
+    <Content Include="lib\Assembly-CSharp-firstpass.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lib\Assembly-CSharp.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="lib\UnityEngine.dll" />
     <Content Include="Module\Icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

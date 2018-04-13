@@ -2,8 +2,8 @@
 <package >
   <metadata>
     <id>Rocket.Unturned</id>
-    <version>4.9.3.0</version>
-    <authors>fr34kyn01535, SDGNelson</authors>
+    <version>$version$</version>
+    <authors>fr34kyn01535, Enes Sadık Özbek &lt;esozbek.me&gt;</authors>
     <owners>fr34kyn01535</owners>
     <licenseUrl>https://github.com/RocketMod/Rocket.Unturned/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://rocketmod.net/</projectUrl>
@@ -12,7 +12,7 @@
     <copyright>fr34kyn01535 © 2015</copyright>
     <tags>Unturned3 Rocket Mod Unity3D</tags>
 	  <dependencies>
-		<dependency id="Rocket.Core" version="2.4.1.0" />
+		<dependency id="Rocket.Core" version="$version$" />y
 	  </dependencies>
   </metadata>
   <files>
