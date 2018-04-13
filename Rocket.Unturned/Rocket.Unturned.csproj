@@ -115,10 +115,10 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Rocket.Unturned\English.dat">
+    <None Include="Module\English.dat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Rocket.Unturned\Rocket.Unturned.module">
+    <None Include="Module\Rocket.Unturned.module">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -126,7 +126,7 @@
     <Content Include="lib\Assembly-CSharp-firstpass.dll" />
     <Content Include="lib\Assembly-CSharp.dll" />
     <Content Include="lib\UnityEngine.dll" />
-    <Content Include="Rocket.Unturned\Icon.png">
+    <Content Include="Module\Icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
