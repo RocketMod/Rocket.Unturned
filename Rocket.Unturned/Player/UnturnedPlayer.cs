@@ -13,8 +13,6 @@ namespace Rocket.Unturned.Player
 {
     public sealed class UnturnedPlayer : IPlayer
     {
-        public IDependencyContainer Container { get; }
-        private readonly IDependencyContainer container;
         public SDG.Unturned.Player Player { get; }
         public SteamPlayer SteamPlayer => Player.channel.owner;
 
@@ -26,18 +24,17 @@ namespace Rocket.Unturned.Player
 
         public CSteamID CSteamID => Player.channel.owner.playerID.steamID;
 
-        public Exception PlayerIsConsoleException;
+        private readonly IDependencyContainer container;
 
         public UnturnedPlayer(IDependencyContainer container, SteamPlayer player)
         {
-            Container = container;
+            this.container = container;
             Player = player.player;
         }
 
-        public UnturnedPlayer(IDependencyContainer container, CSteamID cSteamID)
+        public UnturnedPlayer(IDependencyContainer container, CSteamID cSteamID) : this(container, PlayerTool.getSteamPlayer(cSteamID))
         {
-            this.container = container;
-            Player = PlayerTool.getPlayer(cSteamID);
+            
         }
 
         public float Ping => Player.channel.owner.ping;
@@ -292,7 +289,7 @@ namespace Rocket.Unturned.Player
 
         public void SendMessage(string message)
         {
-            IChatManager chat = Container.Get<IChatManager>();
+            IChatManager chat = container.Get<IChatManager>();
             chat.SendMessage(this, message);
         }
 

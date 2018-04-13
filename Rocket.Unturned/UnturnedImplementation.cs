@@ -1,18 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Rocket.API;
 using Rocket.API.DependencyInjection;
 using Rocket.API.Eventing;
 using Rocket.API.Player;
+using Rocket.Core.Events.Implementation;
+using Rocket.Core.Events.Player;
 using Rocket.Unturned.Console;
+using Rocket.Unturned.Events.Player;
 using Rocket.Unturned.Player;
 using Rocket.Unturned.Utils;
 using SDG.Unturned;
 using Steamworks;
 using UnityEngine;
 using ILogger = Rocket.API.Logging.ILogger;
-
 namespace Rocket.Unturned
 {
     public class UnturnedImplementation : IImplementation
@@ -26,6 +29,7 @@ namespace Rocket.Unturned
         public void Load(IRuntime runtime)
         {
             rocketGameObject = new GameObject();
+            UnityEngine.Object.DontDestroyOnLoad(rocketGameObject);
 
             IDependencyContainer container = runtime.Container;
             eventManager = container.Get<IEventManager>();
@@ -41,10 +45,7 @@ namespace Rocket.Unturned
 
             Directory.SetCurrentDirectory(rocketDirectory);
 
-            Provider.onServerHosted += () =>
-            {
-                //todo: ImplementationReadyEvent
-            };
+            Provider.onServerHosted += OnServerHosted;
 
             if (Environment.OSVersion.Platform == PlatformID.Unix
                 || Environment.OSVersion.Platform == PlatformID.MacOSX)
@@ -54,20 +55,69 @@ namespace Rocket.Unturned
             }
 
             SteamChannel.onTriggerSend += TriggerSend;
+            Provider.onCheckValid += OnCheckValid;
+            Provider.onServerConnected += OnPlayerConnected;
+            Provider.onServerDisconnected += OnPlayerDisconnected;
+        }
+
+        private void OnPlayerConnected(CSteamID steamid)
+        {
+            var player = playerManager.GetPlayer(steamid.ToString());
+            PlayerConnectedEvent @event = new PlayerConnectedEvent(player);
+            eventManager.Emit(this, @event);
+        }
+
+        private void OnPlayerDisconnected(CSteamID steamid)
+        {
+            var player = playerManager.GetPlayer(steamid.ToString());
+            PlayerDisconnectedEvent @event = new PlayerDisconnectedEvent(player, null);
+            eventManager.Emit(this, @event);
+        }
+
+        private void OnCheckValid(ValidateAuthTicketResponse_t callback, ref bool isValid)
+        {
+            var pendingPlayer = Provider.pending.FirstOrDefault(c => c.playerID.steamID.Equals(callback.m_SteamID));
+            if (pendingPlayer == null) return;
+
+            PreConnectUnturnedPlayer player = new PreConnectUnturnedPlayer(pendingPlayer);
+            UnturnedPlayerPreConnectEvent @event = new UnturnedPlayerPreConnectEvent(player, callback);
+            eventManager.Emit(this, @event);
+
+            if (@event.UnturnedRejectionReason != null)
+            {
+                Provider.reject(callback.m_SteamID, @event.UnturnedRejectionReason.Value);
+                isValid = false;
+                return;
+            }
+
+            if (@event.IsCancelled)
+            {
+                Provider.reject(callback.m_SteamID, ESteamRejection.PLUGIN);
+                isValid = false;
+                return;
+            }
+
+            isValid = true;
+        }
+
+        private void OnServerHosted()
+        {
+            ImplementationReadyEvent @event = new ImplementationReadyEvent(this);
+            eventManager.Emit(this, @event);
         }
 
         internal void TriggerSend(SteamPlayer player, string method, ESteamCall steamCall, ESteamPacket steamPacket, params object[] data)
         {
             try
             {
-                if (player == null 
-                    || player.player == null 
-                    || player.playerID.steamID == CSteamID.Nil 
-                    || player.player.transform == null 
+                if (player == null
+                    || player.player == null
+                    || player.playerID.steamID == CSteamID.Nil
+                    || player.player.transform == null
                     || data == null) return;
 
-                UnturnedPlayer unturnedPlayer = 
-                    (UnturnedPlayer) playerManager.GetPlayer(player.playerID.steamID.ToString());
+                UnturnedPlayer unturnedPlayer =
+                    (UnturnedPlayer)playerManager.GetPlayer(player.playerID.steamID.ToString());
 
                 if (method.StartsWith("tellWear"))
                 {
@@ -114,11 +164,24 @@ namespace Rocket.Unturned
                         //OnPlayerReviveEvent (Vector3)data[0], (byte)data[1]
                         break;
                     case "tellDead":
-                        //PlayerDeadEvent (Vector3)data[0]
-                        break;
+                        {
+                            var position = (Vector3) data[0];
+                            UnturnedPlayerDeadEvent @event = new UnturnedPlayerDeadEvent(unturnedPlayer, position);
+                            eventManager.Emit(this, @event);
+                            break;
+                        }
                     case "tellDeath":
-                        //PlayerDeathEvent (EDeathCause)(byte)data[0], (ELimb)(byte)data[1], new CSteamID(ulong.Parse(data[2].ToString()))
-                        break;
+                        {
+                            var deathCause = (EDeathCause)(byte)data[0];
+                            var limb = (ELimb)(byte)data[1];
+                            var killerId = data[2].ToString();
+
+                            var killer = killerId != "0" ? playerManager.GetPlayer(killerId) : null;
+                            UnturnedPlayerDeathEvent @event =
+                                new UnturnedPlayerDeathEvent(unturnedPlayer, limb, deathCause, killer);
+                            eventManager.Emit(this, @event);
+                            break;
+                        }
                 }
             }
             catch (Exception ex)

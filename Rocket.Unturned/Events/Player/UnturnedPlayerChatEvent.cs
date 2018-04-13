@@ -4,7 +4,7 @@ using Rocket.Core.Events.Player;
 using SDG.Unturned;
 using UnityEngine;
 
-namespace Rocket.Unturned.Events
+namespace Rocket.Unturned.Events.Player
 {
     public class UnturnedPlayerChatEvent : PlayerChatEvent
     {

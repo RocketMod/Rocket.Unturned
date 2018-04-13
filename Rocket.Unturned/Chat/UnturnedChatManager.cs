@@ -7,6 +7,7 @@ using Rocket.API.DependencyInjection;
 using Rocket.API.Eventing;
 using Rocket.API.I18N;
 using Rocket.API.Player;
+using Rocket.Unturned.Events.Player;
 using Steamworks;
 using UnityEngine;
 using ILogger = Rocket.API.Logging.ILogger;

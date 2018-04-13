@@ -25,18 +25,25 @@ namespace Rocket.Unturned.Player
             this.container = container;
         }
 
-        public bool Kick(IPlayer player, string reason)
+        public bool Kick(IPlayer player, IPlayer kicker = null, string reason = null)
         {
-            Provider.kick(((UnturnedPlayer) player).CSteamID, reason);
             PlayerKickEvent @event = new PlayerKickEvent(player, reason, true);
-            eventManager.Emit((IEventEmitter) implementation, @event);
+            eventManager.Emit(implementation, @event);
+            if (@event.IsCancelled)
+                return false;
+
+            Provider.kick(((UnturnedPlayer)player).CSteamID, reason);
             return true;
         }
 
-        public bool Ban(IPlayer player, string reason, TimeSpan? timeSpan = null)
+        public bool Ban(IPlayer player, IPlayer banner = null, string reason = null, TimeSpan? duration = null)
         {
-            Provider.ban(((UnturnedPlayer) player).CSteamID, reason, (uint) (timeSpan?.TotalSeconds ?? uint.MaxValue));
-            //todo ban event
+            PlayerBanEvent @event = new PlayerBanEvent(player, banner, reason, duration, true);
+            eventManager.Emit(implementation, @event);
+            if (@event.IsCancelled)
+                return false;
+
+            Provider.ban(((UnturnedPlayer) player).CSteamID, reason, (uint) (duration?.TotalSeconds ?? uint.MaxValue));
             return true;
         }
 
@@ -59,6 +66,16 @@ namespace Rocket.Unturned.Player
             return new UnturnedPlayer(container, player);
         }
 
+        public IPlayer GetPendingPlayer(string uniqueID)
+        {
+            return PendingPlayers.FirstOrDefault(c => c.Id.Equals(uniqueID));
+        }
+
+        public IPlayer GetPendingPlayerByName(string displayName)
+        {
+            return PendingPlayers.FirstOrDefault(c => c.Name.Equals(displayName, StringComparison.OrdinalIgnoreCase));
+        }
+
         public bool TryGetPlayer(string uniqueID, out IPlayer output)
         {
             output = GetPlayer(uniqueID);
@@ -75,6 +92,14 @@ namespace Rocket.Unturned.Player
             return true;
         }
 
+        /// <summary>
+        /// Online players which succesfully joined the server.
+        /// </summary>
         public IEnumerable<IPlayer> Players => Provider.clients.Select(c => (IPlayer) new UnturnedPlayer(container, c));
+        
+        /// <summary>
+        /// Players which are not authenticated and have not joined yet.
+        /// </summary>
+        public IEnumerable<IPlayer> PendingPlayers => Provider.pending.Select(c => (IPlayer) new PreConnectUnturnedPlayer(c));
     }
 }
