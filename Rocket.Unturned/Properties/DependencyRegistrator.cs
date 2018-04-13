@@ -1,7 +1,7 @@
 ﻿using Rocket.API;
 using Rocket.API.Chat;
 using Rocket.API.Commands;
-using Rocket.API.Ioc;
+using Rocket.API.DependencyInjection;
 using Rocket.API.Player;
 using Rocket.Unturned.Chat;
 using Rocket.Unturned.Commands;

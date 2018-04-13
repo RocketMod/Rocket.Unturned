@@ -4,7 +4,7 @@ using System;
 using UnityEngine;
 using System.Linq;
 using Rocket.API.Chat;
-using Rocket.API.Ioc;
+using Rocket.API.DependencyInjection;
 using Rocket.API.Permissions;
 using Rocket.API.Player;
 using Node = SDG.Unturned.Node;

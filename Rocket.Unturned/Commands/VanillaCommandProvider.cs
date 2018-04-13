@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using Rocket.API.Commands;
-using Rocket.API.Ioc;
+using Rocket.API.DependencyInjection;
 using Rocket.API.Player;
-using Rocket.Core.Events.Player;
 using Rocket.Core.Extensions;
 using Rocket.Unturned.Console;
 using SDG.Unturned;
