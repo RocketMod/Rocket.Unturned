@@ -16,8 +16,8 @@
 	  </dependencies>
   </metadata>
   <files>
-    <file src="Assembly-CSharp.dll" target="lib/net35" />
-    <file src="Assembly-CSharp-firstpass.dll" target="lib/net35" />
+    <file src="lib\Assembly-CSharp.dll" target="lib/net35" />
+    <file src="lib\Assembly-CSharp-firstpass.dll" target="lib/net35" />
     <file src="Rocket.Unturned.dll" target="lib/net35" />
     <file src="LICENSE"/>
   </files>
