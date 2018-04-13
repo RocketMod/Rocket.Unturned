@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Rocket.API;
+using Rocket.API.Commands;
 using Rocket.API.DependencyInjection;
 using Rocket.API.Eventing;
 using Rocket.API.Player;
@@ -25,9 +26,9 @@ namespace Rocket.Unturned.Player
             this.container = container;
         }
 
-        public bool Kick(IPlayer player, IPlayer kicker = null, string reason = null)
+        public bool Kick(IPlayer player, ICommandCaller kicker = null, string reason = null)
         {
-            PlayerKickEvent @event = new PlayerKickEvent(player, reason, true);
+            PlayerKickEvent @event = new PlayerKickEvent(player, kicker, reason, true);
             eventManager.Emit(implementation, @event);
             if (@event.IsCancelled)
                 return false;
@@ -36,7 +37,7 @@ namespace Rocket.Unturned.Player
             return true;
         }
 
-        public bool Ban(IPlayer player, IPlayer banner = null, string reason = null, TimeSpan? duration = null)
+        public bool Ban(IPlayer player, ICommandCaller banner = null, string reason = null, TimeSpan? duration = null)
         {
             PlayerBanEvent @event = new PlayerBanEvent(player, banner, reason, duration, true);
             eventManager.Emit(implementation, @event);
