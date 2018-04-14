@@ -3,17 +3,18 @@ using System;
 using Rocket.API;
 using Rocket.API.Logging;
 using Rocket.API.Scheduler;
+using Rocket.UnityEngine.Scheduling;
 
 namespace Rocket.Unturned.Utils
 {
-    internal class AutomaticSaveWatchdog
+    public class AutomaticSaveWatchdog
     {
         private readonly ILogger logger;
         private DateTime? nextSaveTime;
         public static AutomaticSaveWatchdog Instance;
         private int interval = 30;
 
-        internal AutomaticSaveWatchdog(IImplementation implementation, ILogger logger, ITaskScheduler scheduler)
+        public AutomaticSaveWatchdog(IImplementation implementation, ILogger logger, ITaskScheduler scheduler)
         {
             this.logger = logger;
             scheduler.ScheduleEveryAsyncFrame(implementation, CheckTimer);

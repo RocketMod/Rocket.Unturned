@@ -6,6 +6,7 @@ using Rocket.API;
 using Rocket.API.DependencyInjection;
 using Rocket.API.Eventing;
 using Rocket.API.Player;
+using Rocket.API.Plugin;
 using Rocket.Core.Events.Implementation;
 using Rocket.Core.Events.Player;
 using Rocket.Unturned.Console;
@@ -16,6 +17,8 @@ using SDG.Unturned;
 using Steamworks;
 using UnityEngine;
 using ILogger = Rocket.API.Logging.ILogger;
+using Object = UnityEngine.Object;
+
 namespace Rocket.Unturned
 {
     public class UnturnedImplementation : IImplementation
@@ -24,14 +27,15 @@ namespace Rocket.Unturned
         private ILogger logger;
         private IPlayerManager playerManager;
         private IEventManager eventManager;
+        private IDependencyContainer container;
         public bool IsAlive => true;
 
         public void Load(IRuntime runtime)
         {
             rocketGameObject = new GameObject();
-            UnityEngine.Object.DontDestroyOnLoad(rocketGameObject);
+            Object.DontDestroyOnLoad(rocketGameObject);
 
-            IDependencyContainer container = runtime.Container;
+            container = runtime.Container;
             eventManager = container.Get<IEventManager>();
             playerManager = container.Get<IPlayerManager>("unturnedplayermanager");
             logger = container.Get<ILogger>();
@@ -102,6 +106,9 @@ namespace Rocket.Unturned
 
         private void OnServerHosted()
         {
+            foreach (var provider in container.GetAll<IPluginManager>())
+                provider.Init();
+
             ImplementationReadyEvent @event = new ImplementationReadyEvent(this);
             eventManager.Emit(this, @event);
         }

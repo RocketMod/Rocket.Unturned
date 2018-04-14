@@ -65,11 +65,17 @@
     <Reference Include="Microsoft.Practices.Unity.Configuration, Version=2.1.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Unity.2.1.505.2\lib\NET35\Microsoft.Practices.Unity.Configuration.dll</HintPath>
     </Reference>
-    <Reference Include="Rocket.API, Version=5.0.0.256, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rocket.API.5.0.0.256\lib\net35\Rocket.API.dll</HintPath>
+    <Reference Include="Rocket.API, Version=5.0.0.259, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rocket.API.5.0.0.259\lib\net35\Rocket.API.dll</HintPath>
     </Reference>
-    <Reference Include="Rocket.Core, Version=5.0.0.256, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rocket.Core.5.0.0.256\lib\net35\Rocket.Core.dll</HintPath>
+    <Reference Include="Rocket.Compability, Version=5.0.0.259, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rocket.Compability.5.0.0.259\lib\net35\Rocket.Compability.dll</HintPath>
+    </Reference>
+    <Reference Include="Rocket.Core, Version=5.0.0.259, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rocket.Core.5.0.0.259\lib\net35\Rocket.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Rocket.Runtime, Version=5.0.0.259, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rocket.Runtime.5.0.0.259\lib\net35\Rocket.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -102,6 +108,7 @@
     <Compile Include="Player\UnturnedPlayerManager.cs" />
     <Compile Include="Properties\DependencyRegistrator.cs" />
     <Compile Include="Console\UnturnedConsoleWriter.cs" />
+    <Compile Include="RocketUnturnedModule.cs" />
     <Compile Include="UnturnedImplementation.cs" />
     <Compile Include="Utils\AutomaticSaveWatchdog.cs" />
     <Compile Include="Chat\UnturnedChatManager.cs" />

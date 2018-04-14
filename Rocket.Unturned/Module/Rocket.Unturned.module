@@ -4,27 +4,7 @@
 	"Assemblies":
 	[
 		{
-			"Path": "/Rocket.API.dll",
-			"Role": "Server"
-		},
-		{
-			"Path": "/Rocket.Core.dll",
-			"Role": "Server"
-		},
-		{
 			"Path": "/Rocket.Unturned.dll",
-			"Role": "Server"
-		},
-		{
-			"Path": "/Microsoft.Practices.ServiceLocation.dll",
-			"Role": "Server"
-		},
-		{
-			"Path": "/Microsoft.Practices.Unity.Configuration.dll",
-			"Role": "Server"
-		},
-		{
-			"Path": "/Microsoft.Practices.Unity.ServiceLocation.dll",
 			"Role": "Server"
 		}
 	],
