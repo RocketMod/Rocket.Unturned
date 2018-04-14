@@ -2,7 +2,6 @@
 using System.Reflection;
 using Rocket.API;
 using Rocket.API.Plugin;
-using Rocket.UnityEngine.Scheduling;
 using SDG.Framework.Modules;
 
 namespace Rocket.Unturned
@@ -13,15 +12,21 @@ namespace Rocket.Unturned
 
         public void initialize()
         {
-            //ghetto way of force loading Rocket.UnityEngine.dll (don'T remove this or the dll won't be loaded for DI!)
-            typeof(UnityTaskScheduler).ToString();
+            //Force loading Rocket.UnityEngine.dll as just adding reference wont load it (since no code is referenced)
+            LoadAssembly("Rocket.UnityEngine.dll");
 
-            //thank you unturned for providing a very old Newtonsoft.Json
-            Assembly.LoadFrom(Path.Combine(Path.GetDirectoryName(typeof(RocketUnturnedModule).Assembly.Location), 
-                "Newtonsoft.Json.dll"));
+            //Thank you Unturned for providing a very old Newtonsoft.Json...we better should load our own one
+            LoadAssembly("Newtonsoft.Json.dll");
 
             System.Console.WriteLine("Initialzing Rocket...");
             runtime = Runtime.Bootstrap();
+        }
+
+        private void LoadAssembly(string dllName)
+        {
+            //Load the dll from the same directory as this assembly
+            var currentPath = Path.GetDirectoryName(typeof(RocketUnturnedModule).Assembly.Location);
+            Assembly.LoadFrom(Path.Combine(currentPath, dllName));
         }
 
         public void shutdown()
