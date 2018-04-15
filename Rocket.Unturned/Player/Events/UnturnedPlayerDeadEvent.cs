@@ -3,7 +3,7 @@ using Rocket.API.Player;
 using Rocket.Core.Events.Player;
 using UnityEngine;
 
-namespace Rocket.Unturned.Events.Player
+namespace Rocket.Unturned.Player.Events
 {
     public class UnturnedPlayerDeadEvent : PlayerEvent
     {

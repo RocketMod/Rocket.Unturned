@@ -1,5 +1,4 @@
-﻿using Rocket.Unturned.Events;
-using SDG.Unturned;
+﻿using SDG.Unturned;
 using System.Collections.Generic;
 using Rocket.API;
 using Rocket.API.Chat;
@@ -7,10 +6,10 @@ using Rocket.API.DependencyInjection;
 using Rocket.API.Eventing;
 using Rocket.API.I18N;
 using Rocket.API.Player;
-using Rocket.Unturned.Events.Player;
 using Steamworks;
 using UnityEngine;
 using ILogger = Rocket.API.Logging.ILogger;
+using Rocket.Unturned.Player.Events;
 
 namespace Rocket.Unturned.Chat
 {
@@ -30,7 +29,7 @@ namespace Rocket.Unturned.Chat
             this.playerManager = playerManager;
 
             ChatManager.onChatted += HandleChat;
-
+             
             CommandWindow.onCommandWindowOutputted += (text, color) 
                 => logger.LogInformation(text?.ToString());
         }
@@ -71,7 +70,7 @@ namespace Rocket.Unturned.Chat
             UnturnedPlayerChatEvent @event = new UnturnedPlayerChatEvent(p, mode, color, isRich, message, !isVisible);
             eventManager.Emit(implementation, @event);
             color = @event.Color;
-            isRich = @event.IsRich;
+            isRich = @event.IsRichText;
             isVisible = !@event.IsCancelled;
         }
 
