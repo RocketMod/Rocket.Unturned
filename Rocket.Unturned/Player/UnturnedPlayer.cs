@@ -112,16 +112,6 @@ namespace Rocket.Unturned.Player
 
         public CSteamID SteamGroupID => Player.channel.owner.playerID.group;
 
-        public void Kick(string reason)
-        {
-            Provider.kick(CSteamID, reason);
-        }
-
-        public void Ban(string reason, uint duration)
-        {
-            Provider.ban(CSteamID, reason, duration);
-        }
-
         public void Admin(bool admin)
         {
             Admin(admin, null);
