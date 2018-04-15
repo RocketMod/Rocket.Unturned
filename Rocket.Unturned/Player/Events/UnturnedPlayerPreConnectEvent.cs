@@ -1,6 +1,5 @@
 ﻿using Rocket.API.Eventing;
-using Rocket.Core.Events.Player;
-using Rocket.Unturned.Player;
+using Rocket.Core.Player.Events;
 using SDG.Unturned;
 using Steamworks;
 

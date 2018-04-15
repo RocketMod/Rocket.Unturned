@@ -1,6 +1,6 @@
 ﻿using Rocket.API.Eventing;
 using Rocket.API.Player;
-using Rocket.Core.Events.Player;
+using Rocket.Core.Player.Events;
 using SDG.Unturned;
 using UnityEngine;
 

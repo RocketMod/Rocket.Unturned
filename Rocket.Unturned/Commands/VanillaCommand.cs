@@ -25,6 +25,11 @@ namespace Rocket.Unturned.Commands
             Commander.commands.FirstOrDefault(c => c.command == Name)?.check(id, Name, string.Join("/", context.Parameters));
         }
 
+        public bool SupportsCaller(ICommandCaller caller)
+        {
+            return caller is UnturnedPlayer;
+        }
+
         public string Name => NativeCommand.command;
         public string Permission => null; /* default permission */
     }

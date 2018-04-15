@@ -7,8 +7,8 @@ using Rocket.API.DependencyInjection;
 using Rocket.API.Eventing;
 using Rocket.API.Player;
 using Rocket.API.Plugin;
-using Rocket.Core.Events.Implementation;
-using Rocket.Core.Events.Player;
+using Rocket.Core.Implementation.Events;
+using Rocket.Core.Player.Events;
 using Rocket.Unturned.Console;
 using Rocket.Unturned.Player;
 using Rocket.Unturned.Player.Events;
@@ -30,7 +30,7 @@ namespace Rocket.Unturned
         private IDependencyContainer container;
         public bool IsAlive => true;
 
-        public void Load(IRuntime runtime)
+        public void Init(IRuntime runtime)
         {
             rocketGameObject = new GameObject();
             Object.DontDestroyOnLoad(rocketGameObject);
@@ -207,6 +207,7 @@ namespace Rocket.Unturned
         public IEnumerable<string> Capabilities => new List<string>();
         public string InstanceId => Provider.serverID;
         public string WorkingDirectory => Environment.CurrentDirectory;
+        public string ConfigurationName => "Rocket.Unturned";
         public string Name => "Rocket.Unturned";
     }
 }

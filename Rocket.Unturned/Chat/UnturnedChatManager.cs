@@ -41,7 +41,7 @@ namespace Rocket.Unturned.Chat
                 ChatManager.instance.channel.send("tellChat", new CSteamID(ulong.Parse(player.Id)), ESteamPacket.UPDATE_UNRELIABLE_BUFFER, CSteamID.Nil, (byte)EChatMode.GLOBAL, Color.white, line);
         }
 
-        public void SendLocalizedMessage(ITranslations translations, IPlayer player, string translationKey, params object[] bindings)
+        public void SendLocalizedMessage(ITranslationLocator translations, IPlayer player, string translationKey, params object[] bindings)
         {
             var translatedMessage = translations.GetLocalizedMessage(translationKey, bindings);
             SendMessage(player, translatedMessage);
@@ -57,7 +57,7 @@ namespace Rocket.Unturned.Chat
             logger.LogInformation("[Broadcast] " + message);
         }
 
-        public void BroadcastLocalized(ITranslations translations, string translationKey, params object[] bindings)
+        public void BroadcastLocalized(ITranslationLocator translations, string translationKey, params object[] bindings)
         {
             var translatedMessage = translations.GetLocalizedMessage(translationKey, bindings);
             Broadcast(translatedMessage);
