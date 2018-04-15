@@ -106,11 +106,11 @@
     <Compile Include="Commands\VanillaCommand.cs" />
     <Compile Include="Commands\VanillaCommandProvider.cs" />
     <Compile Include="Console\ConsoleCaller.cs" />
-    <Compile Include="Events\Player\UnturnedPlayerDeadEvent.cs" />
-    <Compile Include="Events\Player\UnturnedPlayerDeathEvent.cs" />
+    <Compile Include="Player\Events\UnturnedPlayerDeadEvent.cs" />
+    <Compile Include="Player\Events\UnturnedPlayerDeathEvent.cs" />
     <Compile Include="Player\PreConnectUnturnedPlayer.cs" />
-    <Compile Include="Events\Player\UnturnedPlayerChatEvent.cs" />
-    <Compile Include="Events\Player\UnturnedPlayerPreConnectEvent.cs" />
+    <Compile Include="Player\Events\UnturnedPlayerChatEvent.cs" />
+    <Compile Include="Player\Events\UnturnedPlayerPreConnectEvent.cs" />
     <Compile Include="Player\UnturnedPlayerManager.cs" />
     <Compile Include="Properties\DependencyRegistrator.cs" />
     <Compile Include="Console\UnturnedConsoleWriter.cs" />

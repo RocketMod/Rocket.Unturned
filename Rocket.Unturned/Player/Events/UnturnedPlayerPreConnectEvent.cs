@@ -4,7 +4,7 @@ using Rocket.Unturned.Player;
 using SDG.Unturned;
 using Steamworks;
 
-namespace Rocket.Unturned.Events.Player
+namespace Rocket.Unturned.Player.Events
 {
     public class UnturnedPlayerPreConnectEvent : PlayerPreConnectEvent
     {
