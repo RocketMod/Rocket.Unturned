@@ -106,8 +106,9 @@ namespace Rocket.Unturned
 
         private void OnServerHosted()
         {
-            foreach (var provider in container.GetAll<IPluginManager>())
-                provider.Init();
+            //proxied
+            var pluginManager = container.Get<IPluginManager>();
+            pluginManager.Init();
 
             ImplementationReadyEvent @event = new ImplementationReadyEvent(this);
             eventManager.Emit(this, @event);
@@ -172,7 +173,7 @@ namespace Rocket.Unturned
                         break;
                     case "tellDead":
                         {
-                            var position = (Vector3) data[0];
+                            var position = (Vector3)data[0];
                             UnturnedPlayerDeadEvent @event = new UnturnedPlayerDeadEvent(unturnedPlayer, position);
                             eventManager.Emit(this, @event);
                             break;

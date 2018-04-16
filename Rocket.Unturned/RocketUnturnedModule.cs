@@ -31,9 +31,10 @@ namespace Rocket.Unturned
 
         public void shutdown()
         {
-            foreach (var provider in runtime.Container.GetAll<IPluginManager>())
-                foreach (var plugin in provider)
-                    plugin.Unload();
+            //proxied
+            var provider = runtime.Container.Get<IPluginManager>();
+            foreach (var plugin in provider)
+                plugin.Unload();
         }
     }
 }
