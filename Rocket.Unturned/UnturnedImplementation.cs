@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Rocket.API;
+using Rocket.API.Commands;
 using Rocket.API.DependencyInjection;
 using Rocket.API.Eventing;
 using Rocket.API.Player;
@@ -29,6 +30,7 @@ namespace Rocket.Unturned
         private IEventManager eventManager;
         private IDependencyContainer container;
         public bool IsAlive => true;
+        private IConsoleCommandCaller consoleCaller;
 
         public void Init(IRuntime runtime)
         {
@@ -83,7 +85,7 @@ namespace Rocket.Unturned
             var pendingPlayer = Provider.pending.FirstOrDefault(c => c.playerID.steamID.Equals(callback.m_SteamID));
             if (pendingPlayer == null) return;
 
-            PreConnectUnturnedPlayer player = new PreConnectUnturnedPlayer(pendingPlayer);
+            PreConnectUnturnedPlayer player = new PreConnectUnturnedPlayer(container, pendingPlayer);
             UnturnedPlayerPreConnectEvent @event = new UnturnedPlayerPreConnectEvent(player, callback);
             eventManager.Emit(this, @event);
 
@@ -204,6 +206,13 @@ namespace Rocket.Unturned
         }
 
         public void Reload() { }
+        public IConsoleCommandCaller GetConsoleCaller()
+        {
+            if(consoleCaller == null)
+                consoleCaller = new ConsoleCaller();
+
+            return consoleCaller;
+        }
 
         public IEnumerable<string> Capabilities => new List<string>();
         public string InstanceId => Provider.serverID;

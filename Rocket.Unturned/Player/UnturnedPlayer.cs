@@ -7,16 +7,17 @@ using Rocket.API.Chat;
 using Rocket.API.DependencyInjection;
 using Rocket.API.Permissions;
 using Rocket.API.Player;
+using Rocket.Core.Player;
 using Node = SDG.Unturned.Node;
 
 namespace Rocket.Unturned.Player
 {
-    public sealed class UnturnedPlayer : IPlayer
+    public sealed class UnturnedPlayer : BaseOnlinePlayer
     {
         public SDG.Unturned.Player Player { get; }
         public SteamPlayer SteamPlayer => Player.channel.owner;
 
-        public string Id => CSteamID.ToString();
+        public override string Id => CSteamID.ToString();
 
         public string DisplayName => CharacterName;
 
@@ -26,7 +27,7 @@ namespace Rocket.Unturned.Player
 
         private readonly IDependencyContainer container;
 
-        public UnturnedPlayer(IDependencyContainer container, SteamPlayer player)
+        public UnturnedPlayer(IDependencyContainer container, SteamPlayer player) : base(container)
         {
             this.container = container;
             Player = player.player;
@@ -47,22 +48,6 @@ namespace Rocket.Unturned.Player
         }
 
         public T GetComponent<T>() => (T) (object) Player.GetComponent(typeof(T));
-
-        public int CompareTo(IIdentifiable other) => string.Compare(Id, other.Id, StringComparison.Ordinal);
-
-        public bool Equals(IIdentifiable other)
-        {
-            if (other == null)
-                return false;
-
-            return Id.Equals(other.Id, StringComparison.OrdinalIgnoreCase);
-        }
-
-        public int CompareTo(string other) => string.Compare(Id, other, StringComparison.Ordinal);
-
-        public bool Equals(string other) => Id.Equals(other, StringComparison.OrdinalIgnoreCase);
-
-        public override string ToString() => Id;
 
         public void TriggerEffect(ushort effectID)
         {
@@ -204,7 +189,13 @@ namespace Rocket.Unturned.Player
             set => Player.skills.askRep(value);
         }
 
-        public byte Health => Player.life.health;
+        public override double Health
+        {
+            get { return Player.life.health; }
+            set => throw new NotImplementedException();
+        }
+
+        public override double MaxHealth { get; set; }
 
         public byte Hunger
         {
@@ -275,15 +266,16 @@ namespace Rocket.Unturned.Player
 
         public bool IsInVehicle => CurrentVehicle != null;
 
-        public int CompareTo(object obj) => Id.CompareTo(obj);
-
-        public void SendMessage(string message)
+        public override void SendMessage(string message, ConsoleColor? color = null)
         {
+            //todo: assign color
             IChatManager chat = container.Get<IChatManager>();
             chat.SendMessage(this, message);
         }
 
-        public string Name => Player.channel.owner.playerID.playerName;
-        public Type PlayerType => typeof(UnturnedPlayer);
+        public override string Name => Player.channel.owner.playerID.playerName;
+        public override Type CallerType => typeof(UnturnedPlayer);
+        public override bool IsOnline => Provider.clients.Any(c => c.playerID.steamID == CSteamID);
+        public override DateTime? LastSeen => throw new NotImplementedException();
     }
 }

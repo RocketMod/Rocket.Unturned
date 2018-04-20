@@ -4,7 +4,7 @@ using Rocket.API.Permissions;
 
 namespace Rocket.Unturned.Console
 {
-    public class ConsoleCaller : ICommandCaller //Todo: IConsoleCommandCaller
+    public class ConsoleCaller : IConsoleCommandCaller
     {
         private static ConsoleCaller instance;
         public static ConsoleCaller Instance
@@ -40,13 +40,28 @@ namespace Rocket.Unturned.Console
         }
 
         public string Id => "Console";
-        public void SendMessage(string message)
+        public void SendMessage(string message, ConsoleColor? color)
         {
-            //Todo use logger
+            var tmp = System.Console.ForegroundColor;
+            System.Console.ForegroundColor = color ?? tmp;
             System.Console.WriteLine(message);
+            System.Console.ForegroundColor = tmp;
         }
 
         public string Name => "Console";
-        public Type PlayerType => typeof(ConsoleCaller);
+        public Type CallerType => typeof(ConsoleCaller);
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
+            if (format == null)
+                return Name.ToString(formatProvider); ;
+
+            if (format.Equals("id", StringComparison.OrdinalIgnoreCase))
+                return Id.ToString(formatProvider);
+
+            if (format.Equals("name", StringComparison.OrdinalIgnoreCase))
+                return Name.ToString(formatProvider);
+
+            throw new FormatException($"\"{format}\" is not a valid format.");
+        }
     }
 }

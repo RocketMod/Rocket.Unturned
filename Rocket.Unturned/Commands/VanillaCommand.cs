@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Rocket.API.Commands;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
@@ -22,7 +23,7 @@ namespace Rocket.Unturned.Commands
             {
                 id = player.CSteamID;
             }
-            Commander.commands.FirstOrDefault(c => c.command == Name)?.check(id, Name, string.Join("/", context.Parameters));
+            Commander.commands.FirstOrDefault(c => c.command == Name)?.check(id, Name, string.Join("/", context.Parameters.ToArray()));
         }
 
         public bool SupportsCaller(ICommandCaller caller)
@@ -31,6 +32,10 @@ namespace Rocket.Unturned.Commands
         }
 
         public string Name => NativeCommand.command;
+        public string Description => NativeCommand.info;
         public string Permission => null; /* default permission */
+        public string Syntax => NativeCommand.help;
+        public List<ISubCommand> ChildCommands => null;
+        public List<string> Aliases => null;
     }
 }

@@ -18,14 +18,10 @@ namespace Rocket.Unturned.Commands
                 if (commandLine.StartsWith("/"))
                 {
                     commandLine = commandLine.Substring(1);
-                    var caller = manager.GetPlayer(player.playerID.steamID.ToString());
+                    var caller = manager.GetOnlinePlayer(player.playerID.steamID.ToString());
 
-                    foreach (var handler in container.GetHandlers<ICommandHandler>())
-                    {
-                        if (handler.HandleCommand(caller, commandLine))
-                            break;
-                    }
-                    
+                    container.Get<ICommandHandler>().HandleCommand(caller, commandLine, "/");
+
                     shouldList = false;
                 }
                 shouldExecuteCommand = false;
@@ -37,11 +33,7 @@ namespace Rocket.Unturned.Commands
                 if (commandline.StartsWith("/"))
                     commandline = commandline.Substring(1);
 
-                var cmdHandlers = container.GetHandlers<ICommandHandler>();
-                foreach (ICommandHandler handler in cmdHandlers)
-                {
-                    handler.HandleCommand(ConsoleCaller.Instance, commandline);
-                }
+                container.Get<ICommandHandler>().HandleCommand(ConsoleCaller.Instance, commandline, "");
 
                 shouldExecuteCommand = false;
             };

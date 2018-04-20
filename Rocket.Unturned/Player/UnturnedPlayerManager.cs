@@ -44,21 +44,31 @@ namespace Rocket.Unturned.Player
             if (@event.IsCancelled)
                 return false;
 
-            Provider.ban(((UnturnedPlayer) player).CSteamID, reason, (uint) (duration?.TotalSeconds ?? uint.MaxValue));
+            Provider.ban(((UnturnedPlayer)player).CSteamID, reason, (uint)(duration?.TotalSeconds ?? uint.MaxValue));
             return true;
         }
 
-        public IPlayer GetPlayer(string uniqueID)
+        public IPlayer GetPlayer(string id)
         {
-            ulong steamId = ulong.Parse(uniqueID);
-            SteamPlayer player = PlayerTool.getSteamPlayer(new CSteamID(steamId));
+            return new UnturnedPlayer(container, new CSteamID(ulong.Parse(id)));
+        }
+
+        public IOnlinePlayer GetOnlinePlayer(string nameOrId)
+        {
+            SteamPlayer player;
+
+            if (ulong.TryParse(nameOrId, out var id))
+                player = PlayerTool.getSteamPlayer(new CSteamID(id));
+            else
+                player = PlayerTool.getSteamPlayer(id);
+
             if (player == null)
                 return null;
 
             return new UnturnedPlayer(container, player);
         }
 
-        public IPlayer GetPlayerByName(string displayName)
+        public IOnlinePlayer GetOnlinePlayerByName(string displayName)
         {
             SteamPlayer player = PlayerTool.getSteamPlayer(displayName);
             if (player == null)
@@ -66,6 +76,16 @@ namespace Rocket.Unturned.Player
 
             return new UnturnedPlayer(container, player);
         }
+
+        public IOnlinePlayer GetOnlinePlayerById(string id)
+        {
+            var player = PlayerTool.getSteamPlayer(new CSteamID(ulong.Parse(id)));
+            if (player == null)
+                return null;
+
+            return new UnturnedPlayer(container, player);
+        }
+
 
         public IPlayer GetPendingPlayer(string uniqueID)
         {
@@ -77,17 +97,25 @@ namespace Rocket.Unturned.Player
             return PendingPlayers.FirstOrDefault(c => c.Name.Equals(displayName, StringComparison.OrdinalIgnoreCase));
         }
 
-        public bool TryGetPlayer(string uniqueID, out IPlayer output)
+        public bool TryGetOnlinePlayer(string nameOrId, out IOnlinePlayer output)
         {
-            output = GetPlayer(uniqueID);
+            output = GetOnlinePlayer(nameOrId);
             if (output == null)
                 return false;
             return true;
         }
 
-        public bool TryGetPlayerByName(string displayName, out IPlayer output)
+        public bool TryGetOnlinePlayerById(string id, out IOnlinePlayer output)
         {
-            output = GetPlayerByName(displayName);
+            output = GetOnlinePlayerById(id);
+            if (output == null)
+                return false;
+            return true;
+        }
+
+        public bool TryGetOnlinePlayerByName(string displayName, out IOnlinePlayer output)
+        {
+            output = GetOnlinePlayerByName(displayName);
             if (output == null)
                 return false;
             return true;
@@ -96,11 +124,12 @@ namespace Rocket.Unturned.Player
         /// <summary>
         /// Online players which succesfully joined the server.
         /// </summary>
-        public IEnumerable<IPlayer> Players => Provider.clients.Select(c => (IPlayer) new UnturnedPlayer(container, c));
-        
+        public IEnumerable<IOnlinePlayer> OnlinePlayers => 
+            Provider.clients.Select(c => (IOnlinePlayer)new UnturnedPlayer(container, c));
+
         /// <summary>
         /// Players which are not authenticated and have not joined yet.
         /// </summary>
-        public IEnumerable<IPlayer> PendingPlayers => Provider.pending.Select(c => (IPlayer) new PreConnectUnturnedPlayer(c));
+        public IEnumerable<IPlayer> PendingPlayers => Provider.pending.Select(c => (IPlayer)new PreConnectUnturnedPlayer(container, c));
     }
 }

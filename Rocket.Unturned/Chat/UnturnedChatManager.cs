@@ -51,7 +51,7 @@ namespace Rocket.Unturned.Chat
         {
             var wrappedMessage = WrapMessage(message);
             foreach (var line in wrappedMessage)
-                foreach (IPlayer player in playerManager.Players)
+                foreach (IOnlinePlayer player in playerManager.OnlinePlayers)
                     player.SendMessage(line);
 
             logger.LogInformation("[Broadcast] " + message);

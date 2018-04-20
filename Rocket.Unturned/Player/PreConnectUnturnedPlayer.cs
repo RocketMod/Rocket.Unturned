@@ -1,14 +1,16 @@
 ﻿using System;
+using Rocket.API.DependencyInjection;
 using Rocket.API.Permissions;
 using Rocket.API.Player;
+using Rocket.Core.Player;
 using SDG.Unturned;
 
 namespace Rocket.Unturned.Player {
-    public class PreConnectUnturnedPlayer : IPlayer
+    public class PreConnectUnturnedPlayer : BasePlayer
     {
         public SteamPending PendingPlayer { get; }
 
-        public PreConnectUnturnedPlayer(SteamPending pendingPlayer)
+        public PreConnectUnturnedPlayer(IDependencyContainer container, SteamPending pendingPlayer) : base(container)
         {
             PendingPlayer = pendingPlayer;
         }
@@ -38,10 +40,14 @@ namespace Rocket.Unturned.Player {
             throw new NotSupportedException("Can not send messages to pre connect players");
         }
 
-        public string Name => PendingPlayer.playerID.playerName;
+        public override Type CallerType => typeof(UnturnedPlayer);
+        public override bool IsOnline => false;
 
-        public Type PlayerType => typeof(UnturnedPlayer);
+        public override DateTime? LastSeen => throw new NotImplementedException();
 
-        public string Id => PendingPlayer.playerID.steamID.ToString();
+
+
+        public override string Id => PendingPlayer.playerID.steamID.ToString();
+        public override string Name => PendingPlayer.playerID.playerName;
     }
 }
