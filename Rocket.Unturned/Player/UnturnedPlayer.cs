@@ -4,7 +4,9 @@ using System;
 using UnityEngine;
 using System.Linq;
 using Rocket.API.Chat;
+using Rocket.API.Commands;
 using Rocket.API.DependencyInjection;
+using Rocket.API.Entities;
 using Rocket.API.Permissions;
 using Rocket.API.Player;
 using Rocket.Core.Player;
@@ -12,7 +14,7 @@ using Node = SDG.Unturned.Node;
 
 namespace Rocket.Unturned.Player
 {
-    public sealed class UnturnedPlayer : BaseOnlinePlayer
+    public sealed class UnturnedPlayer : BaseOnlinePlayer, ILivingEntity
     {
         public SDG.Unturned.Player Player { get; }
         public SteamPlayer SteamPlayer => Player.channel.owner;
@@ -189,13 +191,32 @@ namespace Rocket.Unturned.Player
             set => Player.skills.askRep(value);
         }
 
-        public override double Health
+        public double Health
         {
             get { return Player.life.health; }
             set => throw new NotImplementedException();
         }
 
-        public override double MaxHealth { get; set; }
+        public void Kill()
+        {
+            DamageTool.damage(Player, EDeathCause.KILL, ELimb.SKULL, CSteamID.Nil, Vector3.up * 10f, (float) MaxHealth, 1, out var _);
+        }
+
+        public void Kill(IEntity killer)
+        {
+            Kill();
+        }
+
+        public void Kill(ICommandCaller caller)
+        {
+            Kill();
+        }
+
+        public double MaxHealth
+        {
+            get { return byte.MaxValue; }
+            set => throw new NotSupportedException();
+        }
 
         public byte Hunger
         {
@@ -272,6 +293,10 @@ namespace Rocket.Unturned.Player
             IChatManager chat = container.Get<IChatManager>();
             chat.SendMessage(this, message);
         }
+
+        public override DateTime SessionConnectTime => throw new NotImplementedException();
+        public override DateTime? SessionDisconnectTime => throw new NotImplementedException();
+        public override TimeSpan SessionOnlineTime => SessionConnectTime - (SessionDisconnectTime ?? DateTime.Now);
 
         public override string Name => Player.channel.owner.playerID.playerName;
         public override Type CallerType => typeof(UnturnedPlayer);

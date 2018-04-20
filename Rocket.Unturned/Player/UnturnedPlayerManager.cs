@@ -26,7 +26,7 @@ namespace Rocket.Unturned.Player
             this.container = container;
         }
 
-        public bool Kick(IPlayer player, ICommandCaller kicker = null, string reason = null)
+        public bool Kick(IOnlinePlayer player, ICommandCaller kicker = null, string reason = null)
         {
             PlayerKickEvent @event = new PlayerKickEvent(player, kicker, reason, true);
             eventManager.Emit(implementation, @event);
@@ -37,7 +37,7 @@ namespace Rocket.Unturned.Player
             return true;
         }
 
-        public bool Ban(IPlayer player, ICommandCaller banner = null, string reason = null, TimeSpan? duration = null)
+        public bool Ban(IOnlinePlayer player, ICommandCaller banner = null, string reason = null, TimeSpan? duration = null)
         {
             PlayerBanEvent @event = new PlayerBanEvent(player, banner, reason, duration, true);
             eventManager.Emit(implementation, @event);

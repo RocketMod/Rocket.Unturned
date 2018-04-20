@@ -66,7 +66,7 @@ namespace Rocket.Unturned.Chat
         private void HandleChat(SteamPlayer player, EChatMode mode, ref Color color, ref bool isRich, string message,
                                 ref bool isVisible)
         {
-            IPlayer p = playerManager.GetPlayer(player.playerID.steamID.m_SteamID.ToString());
+            IOnlinePlayer p = playerManager.GetOnlinePlayerById(player.playerID.steamID.m_SteamID.ToString());
             UnturnedPlayerChatEvent @event = new UnturnedPlayerChatEvent(p, mode, color, isRich, message, !isVisible);
             eventManager.Emit(implementation, @event);
             color = @event.Color;

@@ -68,14 +68,14 @@ namespace Rocket.Unturned
 
         private void OnPlayerConnected(CSteamID steamid)
         {
-            var player = playerManager.GetPlayer(steamid.ToString());
+            var player = playerManager.GetOnlinePlayerById(steamid.ToString());
             PlayerConnectedEvent @event = new PlayerConnectedEvent(player);
             eventManager.Emit(this, @event);
         }
 
         private void OnPlayerDisconnected(CSteamID steamid)
         {
-            var player = playerManager.GetPlayer(steamid.ToString());
+            var player = playerManager.GetOnlinePlayerById(steamid.ToString());
             PlayerDisconnectedEvent @event = new PlayerDisconnectedEvent(player, null);
             eventManager.Emit(this, @event);
         }
@@ -186,7 +186,7 @@ namespace Rocket.Unturned
                             var limb = (ELimb)(byte)data[1];
                             var killerId = data[2].ToString();
 
-                            var killer = killerId != "0" ? playerManager.GetPlayer(killerId) : null;
+                            var killer = killerId != "0" ? playerManager.GetOnlinePlayerById(killerId) : null;
                             UnturnedPlayerDeathEvent @event =
                                 new UnturnedPlayerDeathEvent(unturnedPlayer, limb, deathCause, killer);
                             eventManager.Emit(this, @event);
