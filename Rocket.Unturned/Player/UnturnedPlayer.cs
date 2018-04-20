@@ -35,7 +35,7 @@ namespace Rocket.Unturned.Player
 
         public UnturnedPlayer(IDependencyContainer container, CSteamID cSteamID) : this(container, PlayerTool.getSteamPlayer(cSteamID))
         {
-            
+
         }
 
         public float Ping => Player.channel.owner.ping;
@@ -47,7 +47,7 @@ namespace Rocket.Unturned.Player
             return CSteamID.ToString() == p.CSteamID.ToString();
         }
 
-        public T GetComponent<T>() => (T) (object) Player.GetComponent(typeof(T));
+        public T GetComponent<T>() => (T)(object)Player.GetComponent(typeof(T));
 
         public void TriggerEffect(ushort effectID)
         {
@@ -76,14 +76,14 @@ namespace Rocket.Unturned.Player
         public string SteamGroupName()
         {
             FriendsGroupID_t id;
-            id.m_FriendsGroupID = (short) SteamGroupID.m_SteamID;
+            id.m_FriendsGroupID = (short)SteamGroupID.m_SteamID;
             return SteamFriends.GetFriendsGroupName(id);
         }
 
         public int SteamGroupMembersCount()
         {
             FriendsGroupID_t id;
-            id.m_FriendsGroupID = (short) SteamGroupID.m_SteamID;
+            id.m_FriendsGroupID = (short)SteamGroupID.m_SteamID;
             return SteamFriends.GetFriendsGroupMembersCount(id);
         }
 
@@ -144,7 +144,7 @@ namespace Rocket.Unturned.Player
         {
             Node node = LevelNodes.nodes.FirstOrDefault(n
                 => n.type == ENodeType.LOCATION
-                    && ((LocationNode) n).name.ToLower().Contains(nodeName));
+                    && ((LocationNode)n).name.ToLower().Contains(nodeName));
             if (node != null)
             {
                 Vector3 c = node.point + new Vector3(0f, 0.5f, 0f);
@@ -277,5 +277,55 @@ namespace Rocket.Unturned.Player
         public override Type CallerType => typeof(UnturnedPlayer);
         public override bool IsOnline => Provider.clients.Any(c => c.playerID.steamID == CSteamID);
         public override DateTime? LastSeen => throw new NotImplementedException();
+
+        public override string ToString(string format, IFormatProvider formatProvider)
+        {
+            if (format != null && SteamPlayer != null)
+            {
+                string[] subFormats = format.Split(':');
+
+                format = subFormats[0];
+                string subFormat = subFormats.Length > 1 ? subFormats[1] : null;
+
+                if (format.Equals("nick", StringComparison.OrdinalIgnoreCase)
+                    || format.Equals("nickname", StringComparison.OrdinalIgnoreCase))
+                {
+                    return SteamPlayer.playerID.nickName.ToString(formatProvider);
+                }
+
+                if (format.Equals("playername", StringComparison.OrdinalIgnoreCase))
+                {
+                    return SteamPlayer.playerID.playerName.ToString(formatProvider);
+                }
+
+                if (format.Equals("charachtername", StringComparison.OrdinalIgnoreCase))
+                {
+                    return SteamPlayer.playerID.characterName.ToString(formatProvider);
+                }
+
+                if (format.Equals("group", StringComparison.OrdinalIgnoreCase) 
+                    || format.Equals("groupname", StringComparison.OrdinalIgnoreCase))
+                {
+                    var gid = SteamPlayer.playerID.@group;
+                    if (gid == CSteamID.Nil)
+                        return "no group";
+
+                    GroupInfo group = GroupManager.getGroupInfo(gid);
+                    return group.name.ToString(formatProvider);
+                }
+
+
+                if (format.Equals("groupid", StringComparison.OrdinalIgnoreCase))
+                {
+                    var gid = SteamPlayer.playerID.@group;
+                    if (gid == CSteamID.Nil)
+                        return "no group";
+
+                    return gid.m_SteamID.ToString(subFormat, formatProvider);
+                }
+            }
+
+            return base.ToString(format, formatProvider);
+        }
     }
 }
