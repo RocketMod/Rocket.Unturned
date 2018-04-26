@@ -37,7 +37,7 @@ namespace Rocket.Unturned.Player
             return true;
         }
 
-        public bool Ban(IOnlinePlayer player, ICommandCaller banner = null, string reason = null, TimeSpan? duration = null)
+        public bool Ban(IPlayer player, ICommandCaller banner = null, string reason = null, TimeSpan? duration = null)
         {
             PlayerBanEvent @event = new PlayerBanEvent(player, banner, reason, duration, true);
             eventManager.Emit(implementation, @event);
