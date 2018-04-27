@@ -110,12 +110,13 @@
     <Compile Include="Commands\CommandExit.cs" />
     <Compile Include="Commands\CommandHeal.cs" />
     <Compile Include="Commands\CommandHome.cs" />
-    <Compile Include="Commands\CommandI.cs" />
+    <Compile Include="Commands\CommandItem.cs" />
     <Compile Include="Commands\CommandInvestigate.cs" />
     <Compile Include="Commands\CommandMore.cs" />
     <Compile Include="Commands\CommandTp.cs" />
     <Compile Include="Commands\CommandTphere.cs" />
     <Compile Include="Commands\CommandUnadmin.cs" />
+    <Compile Include="Commands\CommandVehicle.cs" />
     <Compile Include="Commands\VanillaCommand.cs" />
     <Compile Include="Commands\VanillaCommandProvider.cs" />
     <Compile Include="Console\ConsoleCaller.cs" />

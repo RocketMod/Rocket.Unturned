@@ -105,7 +105,9 @@ namespace Rocket.Unturned
                 { "command_tp_failed_find_destination","Failed to find destination"},
                 { "command_tphere_vehicle", "The player you are trying to teleport is in a vehicle"},
                 { "command_tphere_teleport_from_private","Teleported {0} to you"},
-                { "command_tphere_teleport_to_private","You were teleported to {0}"}
+                { "command_tphere_teleport_to_private","You were teleported to {0}"},
+                { "command_v_giving_private","Giving you a {0} ({1})"},
+                { "command_v_giving_failed_private","Failed giving you a {0} ({1})"},
             });
         }
 

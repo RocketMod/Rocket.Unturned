@@ -10,7 +10,7 @@ using SDG.Unturned;
 
 namespace Rocket.Unturned.Commands
 {
-    public class CommandI : ICommand
+    public class CommandItem : ICommand
     {
         public bool SupportsCaller(ICommandCaller caller)
         {
@@ -62,6 +62,6 @@ namespace Rocket.Unturned.Commands
         public string Permission => "Rocket.Unturned.Item";
         public string Syntax => "[item id or name]";
         public ISubCommand[] ChildCommands => null;
-        public string[] Aliases => null;
+        public string[] Aliases => new[] { "I" };
     }
 }
