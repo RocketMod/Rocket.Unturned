@@ -4,12 +4,12 @@ using Rocket.API.Permissions;
 
 namespace Rocket.Unturned.Console
 {
-    public class ConsoleCaller : IConsoleCommandCaller
+    public class UnturnedConsoleCaller : IConsoleCommandCaller
     {
-        private static ConsoleCaller instance;
-        public static ConsoleCaller Instance
+        private static UnturnedConsoleCaller instance;
+        public static UnturnedConsoleCaller Instance
         {
-            get { return instance ?? (instance = new ConsoleCaller()); }
+            get { return instance ?? (instance = new UnturnedConsoleCaller()); }
         }
 
         public int CompareTo(object obj)
@@ -49,7 +49,7 @@ namespace Rocket.Unturned.Console
         }
 
         public string Name => "Console";
-        public Type CallerType => typeof(ConsoleCaller);
+        public Type CallerType => typeof(UnturnedConsoleCaller);
         public string ToString(string format, IFormatProvider formatProvider)
         {
             if (format == null)

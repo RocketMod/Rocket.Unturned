@@ -73,6 +73,28 @@ namespace Rocket.Unturned
             Provider.onCheckValid += OnCheckValid;
             Provider.onServerConnected += OnPlayerConnected;
             Provider.onServerDisconnected += OnPlayerDisconnected;
+            DamageTool.playerDamaged += OnPlayerDamaged;
+        }
+
+        private void OnPlayerDamaged(SDG.Unturned.Player uPlayer, ref EDeathCause cause, ref ELimb limb, ref CSteamID killerId, ref Vector3 direction, ref float damage, ref float times, ref bool canDamage)
+        {
+            var player = playerManager.GetOnlinePlayerById(uPlayer.channel.owner.playerID.steamID.m_SteamID.ToString());
+            var killer = playerManager.GetOnlinePlayerById(killerId.m_SteamID.ToString());
+
+            UnturnedPlayerDamagedEvent @event =
+                new UnturnedPlayerDamagedEvent(player, cause, limb, killer, direction, damage, times)
+                {
+                    IsCancelled = !canDamage
+                };
+
+            eventManager.Emit(this, @event);
+            cause = @event.DeathCause;
+            limb = @event.Limb;
+            killerId = @event.DamageDealer != null ? new CSteamID(ulong.Parse(@event.DamageDealer.Id)) : CSteamID.Nil;
+            direction = @event.Direction;
+            damage = @event.Damage;
+            times = @event.Times;
+            canDamage = !@event.IsCancelled;
         }
 
         private void LoadTranslations()
@@ -180,51 +202,49 @@ namespace Rocket.Unturned
                     return;
                 }
 
+                IEvent @event = null;
                 switch (method)
                 {
                     case "tellBleeding":
-                        //PlayerBleedingUpdateEvent (bool)data[0]
+                        @event = new UnturnedPlayerUpdateBleedingEvent(unturnedPlayer, (bool)data[0]);
                         break;
                     case "tellBroken":
-                        //PlayerUpdateBrokenEvent (bool)data[0]
+                        @event = new UnturnedPlayerUpdateBrokenEvent(unturnedPlayer, (bool)data[0]);
                         break;
                     case "tellLife":
-                        //PlayerUpdateLifeEvent (byte)data[0]
+                        @event = new UnturnedPlayerUpdateLifeEvent(unturnedPlayer, (byte)data[0]);
                         break;
                     case "tellFood":
-                        //PlayerUpdateFoodEvent (byte)data[0]
+                        @event = new UnturnedPlayerUpdateFoodEvent(unturnedPlayer, (byte)data[0]);
                         break;
                     case "tellHealth":
-                        //PlayerUpdateHealthEvent (byte)data[0]
+                        @event = new UnturnedPlayerUpdateHealthEvent(unturnedPlayer, (byte)data[0]);
                         break;
                     case "tellVirus":
-                        //PlayerUpdateVirusEvent (byte)data[0]
+                        @event = new UnturnedPlayerUpdateVirusEvent(unturnedPlayer, (byte)data[0]);
                         break;
                     case "tellWater":
-                        //PlayerUpdateWaterEvent (byte)data[0]
+                        @event = new UnturnedPlayerUpdateWaterEvent(unturnedPlayer, (byte)data[0]);
                         break;
                     case "tellStance":
-                        //PlayerUpdateStanceEvent (byte)data[0]
+                        @event = new UnturnedPlayerUpdateStanceEvent(unturnedPlayer, (EPlayerStance)(byte)data[0]);
                         break;
                     case "tellGesture":
-                        //PlayerUpdateGestureEvent (byte)data[0].ToString()
+                        @event = new UnturnedPlayerUpdateGestureEvent(unturnedPlayer, (EPlayerGesture)(byte)data[0]);
                         break;
                     case "tellStat":
-                        //PlayerUpdateStatEvent (EPlayerStat)(byte)data[0])
+                        @event = new UnturnedPlayerUpdateStatEvent(unturnedPlayer, (EPlayerStat)(byte)data[0]);
                         break;
                     case "tellExperience":
-                        //PlayerUpdateExperienceEvent (uint)data[0])
+                        @event = new UnturnedPlayerUpdateExperienceEvent(unturnedPlayer, (uint)data[0]);
                         break;
                     case "tellRevive":
+                        //todo
                         //OnPlayerReviveEvent (Vector3)data[0], (byte)data[1]
                         break;
                     case "tellDead":
-                        {
-                            var position = (Vector3)data[0];
-                            UnturnedPlayerDeadEvent @event = new UnturnedPlayerDeadEvent(unturnedPlayer, position);
-                            eventManager.Emit(this, @event);
-                            break;
-                        }
+                        @event = new UnturnedPlayerDeadEvent(unturnedPlayer, (Vector3)data[0]);
+                        break;
                     case "tellDeath":
                         {
                             var deathCause = (EDeathCause)(byte)data[0];
@@ -232,12 +252,13 @@ namespace Rocket.Unturned
                             var killerId = data[2].ToString();
 
                             var killer = killerId != "0" ? playerManager.GetOnlinePlayerById(killerId) : null;
-                            UnturnedPlayerDeathEvent @event =
-                                new UnturnedPlayerDeathEvent(unturnedPlayer, limb, deathCause, killer);
-                            eventManager.Emit(this, @event);
+                            @event = new UnturnedPlayerDeathEvent(unturnedPlayer, limb, deathCause, killer);
                             break;
                         }
                 }
+
+                if (@event != null)
+                    eventManager.Emit(this, @event);
             }
             catch (Exception ex)
             {
@@ -254,7 +275,7 @@ namespace Rocket.Unturned
         public IConsoleCommandCaller GetConsoleCaller()
         {
             if (consoleCaller == null)
-                consoleCaller = new ConsoleCaller();
+                consoleCaller = new UnturnedConsoleCaller();
 
             return consoleCaller;
         }

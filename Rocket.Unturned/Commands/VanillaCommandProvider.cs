@@ -29,11 +29,11 @@ namespace Rocket.Unturned.Commands
 
             CommandWindow.onCommandWindowInputted += (string commandline, ref bool shouldExecuteCommand) =>
             {
-                //PlayerPreCommandEvent @event = new PlayerPreCommandEvent(ConsoleCaller.Instance, );
+                //PlayerPreCommandEvent @event = new PlayerPreCommandEvent(UnturnedConsoleCaller.Instance, );
                 if (commandline.StartsWith("/"))
                     commandline = commandline.Substring(1);
 
-                container.Get<ICommandHandler>().HandleCommand(ConsoleCaller.Instance, commandline, "");
+                container.Get<ICommandHandler>().HandleCommand(UnturnedConsoleCaller.Instance, commandline, "");
 
                 shouldExecuteCommand = false;
             };

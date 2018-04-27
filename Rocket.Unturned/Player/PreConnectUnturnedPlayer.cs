@@ -1,12 +1,12 @@
 ﻿using System;
 using Rocket.API.DependencyInjection;
 using Rocket.API.Permissions;
-using Rocket.API.Player;
 using Rocket.Core.Player;
 using SDG.Unturned;
 using Steamworks;
 
-namespace Rocket.Unturned.Player {
+namespace Rocket.Unturned.Player
+{
     public class PreConnectUnturnedPlayer : BasePlayer
     {
         public SteamPending PendingPlayer { get; }
