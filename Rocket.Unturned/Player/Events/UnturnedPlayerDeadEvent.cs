@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Rocket.Unturned.Player.Events
 {
-    public class UnturnedPlayerDeadEvent : PlayerEvent
+    public class UnturnedPlayerDeadEvent : OnlinePlayerEvent
     {
         public Vector3 Position { get; }
 
