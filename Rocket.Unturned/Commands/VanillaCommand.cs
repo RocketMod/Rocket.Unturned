@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Rocket.API.Commands;
 using Rocket.Unturned.Player;
@@ -26,9 +27,9 @@ namespace Rocket.Unturned.Commands
             Commander.commands.FirstOrDefault(c => c.command == Name)?.check(id, Name, string.Join("/", context.Parameters.ToArray()));
         }
 
-        public bool SupportsCaller(ICommandCaller caller)
+        public bool SupportsCaller(Type commandCaller)
         {
-            return caller is UnturnedPlayer;
+            return typeof(UnturnedPlayer).IsAssignableFrom(commandCaller);
         }
 
         public string Name => NativeCommand.command;

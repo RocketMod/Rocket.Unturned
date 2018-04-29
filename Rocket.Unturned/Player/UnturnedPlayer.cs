@@ -287,11 +287,10 @@ namespace Rocket.Unturned.Player
 
         public bool IsInVehicle => CurrentVehicle != null;
 
-        public override void SendMessage(string message, ConsoleColor? color = null)
+        public override void SendMessage(string message, ConsoleColor? color = null, params object[] bindings)
         {
-            //todo: assign color
             IChatManager chat = container.Get<IChatManager>();
-            chat.SendMessage(this, message);
+            chat.SendMessage(this, message, bindings);
         }
 
         public override DateTime SessionConnectTime => throw new NotImplementedException();

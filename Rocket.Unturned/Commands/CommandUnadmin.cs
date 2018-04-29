@@ -9,7 +9,7 @@ namespace Rocket.Unturned.Commands
 {
     public class CommandUnadmin : ICommand
     {
-        public bool SupportsCaller(ICommandCaller caller)
+        public bool SupportsCaller(Type commandCaller)
         {
             return true; //anyone can use the command
         }

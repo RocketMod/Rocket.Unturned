@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.Design;
 using Rocket.API.Commands;
 using Rocket.API.Player;
 using Rocket.Core.Commands;
@@ -9,7 +8,7 @@ namespace Rocket.Unturned.Commands
 {
     public class CommandAdmin : ICommand
     {
-        public bool SupportsCaller(ICommandCaller caller)
+        public bool SupportsCaller(Type commandCaller)
         {
             return true; //anyone can use the command
         }

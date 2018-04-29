@@ -92,7 +92,7 @@ namespace Rocket.Unturned
             limb = @event.Limb;
             killerId = @event.DamageDealer != null ? new CSteamID(ulong.Parse(@event.DamageDealer.Id)) : CSteamID.Nil;
             direction = @event.Direction;
-            damage = @event.Damage;
+            damage = (float) @event.Damage;
             times = @event.Times;
             canDamage = !@event.IsCancelled;
         }

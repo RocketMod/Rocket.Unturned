@@ -5,15 +5,16 @@ using Rocket.API.Commands;
 using Rocket.API.I18N;
 using Rocket.API.Permissions;
 using Rocket.API.Player;
+using Rocket.Core.I18N;
 using Rocket.Unturned.Player;
 
 namespace Rocket.Unturned.Commands
 {
     public class CommandHeal : ICommand
     {
-        public bool SupportsCaller(ICommandCaller caller)
+        public bool SupportsCaller(Type commandCaller)
         {
-            return caller is IOnlinePlayer;
+            return typeof(IOnlinePlayer).IsAssignableFrom(commandCaller);
         }
 
         public void Execute(ICommandContext context)

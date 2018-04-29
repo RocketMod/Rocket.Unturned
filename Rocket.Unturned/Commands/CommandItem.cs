@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Rocket.API;
 using Rocket.API.Chat;
 using Rocket.API.Commands;
 using Rocket.API.I18N;
 using Rocket.Core.Commands;
+using Rocket.Core.I18N;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 
@@ -12,9 +14,9 @@ namespace Rocket.Unturned.Commands
 {
     public class CommandItem : ICommand
     {
-        public bool SupportsCaller(ICommandCaller caller)
+        public bool SupportsCaller(Type commandCaller)
         {
-            return caller is UnturnedPlayer;
+            return typeof(UnturnedPlayer).IsAssignableFrom(commandCaller);
         }
 
         public void Execute(ICommandContext context)

@@ -40,11 +40,11 @@ namespace Rocket.Unturned.Console
         }
 
         public string Id => "Console";
-        public void SendMessage(string message, ConsoleColor? color)
+        public void SendMessage(string message, ConsoleColor? color = null, params object[] bindings)
         {
             var tmp = System.Console.ForegroundColor;
             System.Console.ForegroundColor = color ?? tmp;
-            System.Console.WriteLine(message);
+            System.Console.WriteLine(message, bindings);
             System.Console.ForegroundColor = tmp;
         }
 

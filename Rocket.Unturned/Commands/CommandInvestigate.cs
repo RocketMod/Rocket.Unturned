@@ -1,4 +1,5 @@
-﻿using Rocket.API;
+﻿using System;
+using Rocket.API;
 using Rocket.API.Commands;
 using Rocket.API.I18N;
 using Rocket.API.Player;
@@ -10,9 +11,9 @@ namespace Rocket.Unturned.Commands
 {
     public class CommandInvestigate : ICommand
     {
-        public bool SupportsCaller(ICommandCaller caller)
+        public bool SupportsCaller(Type commandCaller)
         {
-            return true;
+            return typeof(UnturnedPlayer).IsAssignableFrom(commandCaller);
         }
 
         public void Execute(ICommandContext context)

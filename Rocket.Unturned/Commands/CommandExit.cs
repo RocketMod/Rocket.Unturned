@@ -1,13 +1,14 @@
-﻿using Rocket.API.Commands;
+﻿using System;
+using Rocket.API.Commands;
 using Rocket.API.Player;
 
 namespace Rocket.Unturned.Commands
 {
     public class CommandExit : ICommand
     {
-        public bool SupportsCaller(ICommandCaller caller)
+        public bool SupportsCaller(Type commandCaller)
         {
-            return caller is IOnlinePlayer;
+            return typeof(IOnlinePlayer).IsAssignableFrom(commandCaller);
         }
 
         public void Execute(ICommandContext context)

@@ -7,47 +7,41 @@ using UnityEngine;
 
 namespace Rocket.Unturned.Player.Events
 {
-    public class UnturnedPlayerDamagedEvent : OnlinePlayerEvent, ICancellableEvent //Todo: extend PlayerDamageEvent
+    public class UnturnedPlayerDamagedEvent : PlayerDamageEvent
     {
         public EDeathCause DeathCause { get; set; }
         public ELimb Limb { get; set; }
-        public ICommandCaller DamageDealer { get; }
         public Vector3 Direction { get; set; }
-        public float Damage { get; set; }
         public float Times { get; set; }
 
-        public UnturnedPlayerDamagedEvent(IOnlinePlayer player, EDeathCause deathCause, ELimb limb, ICommandCaller damageDealer, Vector3 direction, float damage, float times) : base(player)
+        public UnturnedPlayerDamagedEvent(IOnlinePlayer player, EDeathCause deathCause, ELimb limb, ICommandCaller damageDealer, Vector3 direction, float damage, float times) : base(player, damage, damageDealer)
         {
             DeathCause = deathCause;
             Limb = limb;
-            DamageDealer = damageDealer;
             Direction = direction;
             Damage = damage;
             Times = times;
         }
-        public UnturnedPlayerDamagedEvent(IOnlinePlayer player, EDeathCause deathCause, ELimb limb, ICommandCaller damageDealer, Vector3 direction, float damage, float times, bool global = true) : base(player, global)
+        public UnturnedPlayerDamagedEvent(IOnlinePlayer player, EDeathCause deathCause, ELimb limb, ICommandCaller damageDealer, Vector3 direction, float damage, float times, bool global = true) : base(player, damage, damageDealer, global)
         {
             DeathCause = deathCause;
             Limb = limb;
-            DamageDealer = damageDealer;
             Direction = direction;
             Damage = damage;
             Times = times;
         }
-        public UnturnedPlayerDamagedEvent(IOnlinePlayer player, EDeathCause deathCause, ELimb limb, ICommandCaller damageDealer, Vector3 direction, float damage, float times, EventExecutionTargetContext executionTarget = EventExecutionTargetContext.Sync, bool global = true) : base(player, executionTarget, global)
+        public UnturnedPlayerDamagedEvent(IOnlinePlayer player, EDeathCause deathCause, ELimb limb, ICommandCaller damageDealer, Vector3 direction, float damage, float times, EventExecutionTargetContext executionTarget = EventExecutionTargetContext.Sync, bool global = true) : base(player, damage, damageDealer, executionTarget, global)
         {
             DeathCause = deathCause;
             Limb = limb;
-            DamageDealer = damageDealer;
             Direction = direction;
             Damage = damage;
             Times = times;
         }
-        public UnturnedPlayerDamagedEvent(IOnlinePlayer player, EDeathCause deathCause, ELimb limb, ICommandCaller damageDealer, Vector3 direction, float damage, float times, string name = null, EventExecutionTargetContext executionTarget = EventExecutionTargetContext.Sync, bool global = true) : base(player, name, executionTarget, global)
+        public UnturnedPlayerDamagedEvent(IOnlinePlayer player, EDeathCause deathCause, ELimb limb, ICommandCaller damageDealer, Vector3 direction, float damage, float times, string name = null, EventExecutionTargetContext executionTarget = EventExecutionTargetContext.Sync, bool global = true) : base(player, damage, damageDealer, name, executionTarget, global)
         {
             DeathCause = deathCause;
             Limb = limb;
-            DamageDealer = damageDealer;
             Direction = direction;
             Damage = damage;
             Times = times;

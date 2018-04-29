@@ -1,7 +1,11 @@
 ﻿using System.Collections.Generic;
+using Rocket.API;
 using Rocket.API.Commands;
 using Rocket.API.DependencyInjection;
+using Rocket.API.Eventing;
 using Rocket.API.Player;
+using Rocket.Core.Commands.Events;
+using Rocket.Core.Eventing;
 using Rocket.Core.Extensions;
 using Rocket.Unturned.Console;
 using SDG.Unturned;
@@ -12,15 +16,20 @@ namespace Rocket.Unturned.Commands
     {
         public VanillaCommandProvider(IDependencyContainer container, IPlayerManager manager)
         {
+            IEventManager eventManager = container.Get<IEventManager>();
+            IImplementation impl = container.Get<IImplementation>();
+            ICommandHandler cmdHandler = container.Get<ICommandHandler>();
+
             ChatManager.onCheckPermissions += (SteamPlayer player, string commandLine, ref bool shouldExecuteCommand, ref bool shouldList) =>
             {
-                //todo: PlayerPreCommandEvent
                 if (commandLine.StartsWith("/"))
                 {
                     commandLine = commandLine.Substring(1);
                     var caller = manager.GetOnlinePlayer(player.playerID.steamID.ToString());
+                    PreCommandExecutionEvent @event = new PreCommandExecutionEvent(caller, commandLine);
+                    eventManager.Emit(impl, @event);
 
-                    container.Get<ICommandHandler>().HandleCommand(caller, commandLine, "/");
+                    cmdHandler.HandleCommand(caller, commandLine, "/");
 
                     shouldList = false;
                 }
@@ -29,11 +38,13 @@ namespace Rocket.Unturned.Commands
 
             CommandWindow.onCommandWindowInputted += (string commandline, ref bool shouldExecuteCommand) =>
             {
-                //PlayerPreCommandEvent @event = new PlayerPreCommandEvent(UnturnedConsoleCaller.Instance, );
                 if (commandline.StartsWith("/"))
                     commandline = commandline.Substring(1);
 
-                container.Get<ICommandHandler>().HandleCommand(UnturnedConsoleCaller.Instance, commandline, "");
+                PreCommandExecutionEvent @event = new PreCommandExecutionEvent(UnturnedConsoleCaller.Instance, commandline);
+                eventManager.Emit(impl, @event);
+
+                cmdHandler.HandleCommand(UnturnedConsoleCaller.Instance, commandline, "");
 
                 shouldExecuteCommand = false;
             };

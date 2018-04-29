@@ -1,4 +1,5 @@
-﻿using Rocket.API.Commands;
+﻿using System;
+using Rocket.API.Commands;
 using Rocket.Core.Commands;
 using Rocket.Unturned.Player;
 
@@ -6,9 +7,9 @@ namespace Rocket.Unturned.Commands
 {
     public class CommandEffect : ICommand
     {
-        public bool SupportsCaller(ICommandCaller caller)
+        public bool SupportsCaller(Type commandCaller)
         {
-            return caller is UnturnedPlayer;
+            return typeof(UnturnedPlayer).IsAssignableFrom(commandCaller);
         }
 
         public void Execute(ICommandContext context)

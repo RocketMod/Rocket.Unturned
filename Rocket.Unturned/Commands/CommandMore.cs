@@ -1,17 +1,19 @@
-﻿using Rocket.API;
+﻿using System;
+using Rocket.API;
 using Rocket.API.Chat;
 using Rocket.API.Commands;
 using Rocket.API.I18N;
 using Rocket.Core.Commands;
+using Rocket.Core.I18N;
 using Rocket.Unturned.Player;
 
 namespace Rocket.Unturned.Commands
 {
     public class CommandMore : ICommand
     {
-        public bool SupportsCaller(ICommandCaller caller)
+        public bool SupportsCaller(Type commandCaller)
         {
-            return caller is UnturnedPlayer;
+            return typeof(UnturnedPlayer).IsAssignableFrom(commandCaller);
         }
 
         public void Execute(ICommandContext context)
