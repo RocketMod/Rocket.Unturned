@@ -71,9 +71,6 @@
     <Reference Include="Rocket.API, Version=5.0.0.354, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Rocket.API.5.0.0.354\lib\net35\Rocket.API.dll</HintPath>
     </Reference>
-    <Reference Include="Rocket.Compability, Version=5.0.0.351, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rocket.Compability.5.0.0.351\lib\net35\Rocket.Compability.dll</HintPath>
-    </Reference>
     <Reference Include="Rocket.Compatibility, Version=5.0.0.354, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Rocket.Compatibility.5.0.0.354\lib\net35\Rocket.Compatibility.dll</HintPath>
     </Reference>
