@@ -18,7 +18,7 @@ namespace Rocket.Unturned.Commands
 
         public void Execute(ICommandContext context)
         {
-            ITranslationLocator translations = ((UnturnedImplementation)context.Container.Get<IImplementation>()).ModuleTranslations;
+            ITranslationLocator translations = ((UnturnedImplementation)context.Container.Resolve<IImplementation>()).ModuleTranslations;
 
             if (context.Parameters.Length != 1)
             {

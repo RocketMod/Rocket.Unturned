@@ -18,8 +18,8 @@ namespace Rocket.Unturned.Commands
         public void Execute(ICommandContext context)
         {
             UnturnedPlayer player = (UnturnedPlayer) context.Caller;
-            var chatManager = context.Container.Get<IChatManager>();
-            var translations = ((UnturnedImplementation)context.Container.Get<IImplementation>()).ModuleTranslations;
+            var chatManager = context.Container.Resolve<IChatManager>();
+            var translations = ((UnturnedImplementation)context.Container.Resolve<IImplementation>()).ModuleTranslations;
 
             float currentDirection = player.Rotation;
 

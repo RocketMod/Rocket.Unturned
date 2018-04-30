@@ -6,15 +6,9 @@ namespace Rocket.Unturned.Console
 {
     public class UnturnedConsoleCaller : IConsoleCommandCaller
     {
-        private static UnturnedConsoleCaller instance;
-        public static UnturnedConsoleCaller Instance
-        {
-            get { return instance ?? (instance = new UnturnedConsoleCaller()); }
-        }
-
         public int CompareTo(object obj)
         {
-            return -((ICommandCaller)obj).CompareTo(instance);
+            return -((ICommandCaller)obj).CompareTo(this);
         }
 
         public int CompareTo(IIdentifiable other)

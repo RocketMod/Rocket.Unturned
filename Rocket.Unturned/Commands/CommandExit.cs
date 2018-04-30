@@ -14,7 +14,7 @@ namespace Rocket.Unturned.Commands
         public void Execute(ICommandContext context)
         {
             IOnlinePlayer player = (IOnlinePlayer)context.Caller;
-            var playerManager = context.Container.Get<IPlayerManager>();
+            var playerManager = context.Container.Resolve<IPlayerManager>();
             playerManager.Kick(player, context.Caller, "Exit");
         }
 

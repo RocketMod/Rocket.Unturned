@@ -19,7 +19,7 @@ namespace Rocket.Unturned.Commands
         public void Execute(ICommandContext context)
         {
             UnturnedPlayer player = (UnturnedPlayer) context.Caller;
-            ITranslationLocator translations = ((UnturnedImplementation)context.Container.Get<IImplementation>()).ModuleTranslations;
+            ITranslationLocator translations = ((UnturnedImplementation)context.Container.Resolve<IImplementation>()).ModuleTranslations;
 
             if (!BarricadeManager.tryGetBed(player.CSteamID, out Vector3 pos, out byte rot))
             {

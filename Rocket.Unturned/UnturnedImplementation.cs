@@ -8,7 +8,7 @@ using Rocket.API.DependencyInjection;
 using Rocket.API.Eventing;
 using Rocket.API.I18N;
 using Rocket.API.Player;
-using Rocket.API.Plugin;
+using Rocket.API.Plugins;
 using Rocket.Core;
 using Rocket.Core.Implementation.Events;
 using Rocket.Core.Player.Events;
@@ -42,16 +42,16 @@ namespace Rocket.Unturned
             Object.DontDestroyOnLoad(rocketGameObject);
 
             container = runtime.Container;
-            eventManager = container.Get<IEventManager>();
-            playerManager = container.Get<IPlayerManager>("unturnedplayermanager");
-            ModuleTranslations = container.Get<ITranslationLocator>();
+            eventManager = container.Resolve<IEventManager>();
+            playerManager = container.Resolve<IPlayerManager>("unturnedplayermanager");
+            ModuleTranslations = container.Resolve<ITranslationLocator>();
 
 
-            logger = container.Get<ILogger>();
+            logger = container.Resolve<ILogger>();
             logger.LogInformation("Loading Rocket Unturned Implementation...");
 
             container.RegisterSingletonType<AutomaticSaveWatchdog, AutomaticSaveWatchdog>();
-            container.Get<AutomaticSaveWatchdog>().Start();
+            container.Resolve<AutomaticSaveWatchdog>().Start();
 
             string rocketDirectory = $"Servers/{Dedicator.serverID}/Rocket/";
             if (!Directory.Exists(rocketDirectory))
@@ -92,7 +92,7 @@ namespace Rocket.Unturned
             limb = @event.Limb;
             killerId = @event.DamageDealer != null ? new CSteamID(ulong.Parse(@event.DamageDealer.Id)) : CSteamID.Nil;
             direction = @event.Direction;
-            damage = (float) @event.Damage;
+            damage = (float)@event.Damage;
             times = @event.Times;
             canDamage = !@event.IsCancelled;
         }
@@ -176,7 +176,7 @@ namespace Rocket.Unturned
         private void OnServerHosted()
         {
             //proxied
-            var pluginManager = container.Get<IPluginManager>();
+            var pluginManager = container.Resolve<IPluginManager>();
             pluginManager.Init();
 
             ImplementationReadyEvent @event = new ImplementationReadyEvent(this);
@@ -272,13 +272,9 @@ namespace Rocket.Unturned
         }
 
         public void Reload() { }
-        public IConsoleCommandCaller GetConsoleCaller()
-        {
-            if (consoleCaller == null)
-                consoleCaller = new UnturnedConsoleCaller();
 
-            return consoleCaller;
-        }
+        public IConsoleCommandCaller ConsoleCommandCaller => consoleCaller ?? (consoleCaller = new UnturnedConsoleCaller());
+
 
         public IEnumerable<string> Capabilities => new List<string>();
         public string InstanceId => Provider.serverID;

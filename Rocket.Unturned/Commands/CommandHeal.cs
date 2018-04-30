@@ -19,9 +19,9 @@ namespace Rocket.Unturned.Commands
 
         public void Execute(ICommandContext context)
         {
-            IPermissionProvider permissions = context.Container.Get<IPermissionProvider>();
-            ITranslationLocator translations = ((UnturnedImplementation)context.Container.Get<IImplementation>()).ModuleTranslations;
-            IChatManager chatManager = context.Container.Get<IChatManager>();
+            IPermissionProvider permissions = context.Container.Resolve<IPermissionProvider>();
+            ITranslationLocator translations = ((UnturnedImplementation)context.Container.Resolve<IImplementation>()).ModuleTranslations;
+            IChatManager chatManager = context.Container.Resolve<IChatManager>();
 
             IOnlinePlayer target;
             if (permissions.CheckPermission(context.Caller, Permission + ".Others") == PermissionResult.Grant 

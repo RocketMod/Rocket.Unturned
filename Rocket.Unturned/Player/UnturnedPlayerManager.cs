@@ -39,13 +39,31 @@ namespace Rocket.Unturned.Player
 
         public bool Ban(IPlayer player, ICommandCaller banner = null, string reason = null, TimeSpan? duration = null)
         {
+            var uPlayer = (UnturnedPlayer) player;
             PlayerBanEvent @event = new PlayerBanEvent(player, banner, reason, duration, true);
             eventManager.Emit(implementation, @event);
             if (@event.IsCancelled)
                 return false;
 
-            Provider.ban(((UnturnedPlayer)player).CSteamID, reason, (uint)(duration?.TotalSeconds ?? uint.MaxValue));
+            if (player.IsOnline)
+            {
+                Provider.ban(uPlayer.CSteamID, reason, (uint)(duration?.TotalSeconds ?? uint.MaxValue));
+                return true;
+            }
+
+            var callerId = (banner is UnturnedPlayer up) ? up.CSteamID : CSteamID.Nil;
+            SteamBlacklist.ban(uPlayer.CSteamID, 0, callerId, reason, (uint) (duration?.TotalSeconds ?? uint.MaxValue));
             return true;
+        }
+
+        public bool Unban(IPlayer player, ICommandCaller caller = null)
+        {
+            PlayerUnbanEvent @event = new PlayerUnbanEvent(player, caller);
+            eventManager.Emit(implementation, @event);
+            if (@event.IsCancelled)
+                return false;
+
+            return SteamBlacklist.unban(((UnturnedPlayer)player).CSteamID);
         }
 
         public IPlayer GetPlayer(string id)
@@ -124,7 +142,7 @@ namespace Rocket.Unturned.Player
         /// <summary>
         /// Online players which succesfully joined the server.
         /// </summary>
-        public IEnumerable<IOnlinePlayer> OnlinePlayers => 
+        public IEnumerable<IOnlinePlayer> OnlinePlayers =>
             Provider.clients.Select(c => (IOnlinePlayer)new UnturnedPlayer(container, c));
 
         /// <summary>

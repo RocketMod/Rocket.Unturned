@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Reflection;
 using Rocket.API;
-using Rocket.API.Plugin;
+using Rocket.API.Plugins;
 using SDG.Framework.Modules;
 
 namespace Rocket.Unturned
@@ -31,10 +31,6 @@ namespace Rocket.Unturned
 
         public void shutdown()
         {
-            //proxied
-            var provider = runtime.Container.Get<IPluginManager>();
-            foreach (var plugin in provider)
-                plugin.Unload();
         }
     }
 }

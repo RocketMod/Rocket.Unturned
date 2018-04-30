@@ -289,7 +289,7 @@ namespace Rocket.Unturned.Player
 
         public override void SendMessage(string message, ConsoleColor? color = null, params object[] bindings)
         {
-            IChatManager chat = container.Get<IChatManager>();
+            IChatManager chat = Container.Resolve<IChatManager>();
             chat.SendMessage(this, message, bindings);
         }
 

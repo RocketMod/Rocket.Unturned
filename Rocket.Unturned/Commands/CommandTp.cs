@@ -22,8 +22,8 @@ namespace Rocket.Unturned.Commands
 
         public void Execute(ICommandContext context)
         {
-            ITranslationLocator translations = ((UnturnedImplementation)context.Container.Get<IImplementation>()).ModuleTranslations;
-            IChatManager chatManager = context.Container.Get<IChatManager>();
+            ITranslationLocator translations = ((UnturnedImplementation)context.Container.Resolve<IImplementation>()).ModuleTranslations;
+            IChatManager chatManager = context.Container.Resolve<IChatManager>();
 
             UnturnedPlayer player = (UnturnedPlayer)context.Caller;
             if (context.Parameters.Length != 1 && context.Parameters.Length != 3)

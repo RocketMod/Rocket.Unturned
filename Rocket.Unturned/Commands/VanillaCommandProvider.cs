@@ -16,9 +16,9 @@ namespace Rocket.Unturned.Commands
     {
         public VanillaCommandProvider(IDependencyContainer container, IPlayerManager manager)
         {
-            IEventManager eventManager = container.Get<IEventManager>();
-            IImplementation impl = container.Get<IImplementation>();
-            ICommandHandler cmdHandler = container.Get<ICommandHandler>();
+            IEventManager eventManager = container.Resolve<IEventManager>();
+            IImplementation impl = container.Resolve<IImplementation>();
+            ICommandHandler cmdHandler = container.Resolve<ICommandHandler>();
 
             ChatManager.onCheckPermissions += (SteamPlayer player, string commandLine, ref bool shouldExecuteCommand, ref bool shouldList) =>
             {
@@ -41,10 +41,10 @@ namespace Rocket.Unturned.Commands
                 if (commandline.StartsWith("/"))
                     commandline = commandline.Substring(1);
 
-                PreCommandExecutionEvent @event = new PreCommandExecutionEvent(UnturnedConsoleCaller.Instance, commandline);
+                PreCommandExecutionEvent @event = new PreCommandExecutionEvent(impl.ConsoleCommandCaller, commandline);
                 eventManager.Emit(impl, @event);
 
-                cmdHandler.HandleCommand(UnturnedConsoleCaller.Instance, commandline, "");
+                cmdHandler.HandleCommand(impl.ConsoleCommandCaller, commandline, "");
 
                 shouldExecuteCommand = false;
             };

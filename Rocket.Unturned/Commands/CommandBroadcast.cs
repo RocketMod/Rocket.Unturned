@@ -16,7 +16,7 @@ namespace Rocket.Unturned.Commands
 
         public void Execute(ICommandContext context)
         {
-            if (!(context.Container.Get<IChatManager>() is UnturnedChatManager chatManager))
+            if (!(context.Container.Resolve<IChatManager>() is UnturnedChatManager chatManager))
                 return;
 
             string colorName = context.Parameters.Get<string>(0);
