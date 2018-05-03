@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Reflection;
 using Rocket.API;
 using Rocket.API.Plugins;
@@ -8,8 +9,6 @@ namespace Rocket.Unturned
 {
     public class RocketUnturnedModule : IModuleNexus
     {
-        private IRuntime runtime;
-
         public void initialize()
         {
             //Force loading Rocket.UnityEngine.dll as just adding reference wont load it (since no code is referenced)
@@ -18,14 +17,14 @@ namespace Rocket.Unturned
             //Thank you Unturned for providing a very old Newtonsoft.Json...we better should load our own one
             LoadAssembly("Newtonsoft.Json.dll");
 
-            System.Console.WriteLine("Initialzing Rocket...");
-            runtime = Runtime.Bootstrap();
+            System.Console.WriteLine("Initialzing RocketMod...");
+            Runtime.Bootstrap();
         }
 
         private void LoadAssembly(string dllName)
         {
             //Load the dll from the same directory as this assembly
-            var currentPath = Path.GetDirectoryName(typeof(RocketUnturnedModule).Assembly.Location);
+            var currentPath = Path.GetDirectoryName(typeof(RocketUnturnedModule).Assembly.Location) ?? "";
             Assembly.LoadFrom(Path.Combine(currentPath, dllName));
         }
 

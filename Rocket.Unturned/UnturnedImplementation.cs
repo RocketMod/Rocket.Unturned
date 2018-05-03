@@ -10,6 +10,7 @@ using Rocket.API.I18N;
 using Rocket.API.Player;
 using Rocket.API.Plugins;
 using Rocket.Core;
+using Rocket.Core.Commands.Events;
 using Rocket.Core.Implementation.Events;
 using Rocket.Core.Player.Events;
 using Rocket.Unturned.Console;
@@ -45,8 +46,7 @@ namespace Rocket.Unturned
             eventManager = container.Resolve<IEventManager>();
             playerManager = container.Resolve<IPlayerManager>("unturnedplayermanager");
             ModuleTranslations = container.Resolve<ITranslationLocator>();
-
-
+            
             logger = container.Resolve<ILogger>();
             logger.LogInformation("Loading Rocket Unturned Implementation...");
 
@@ -65,8 +65,10 @@ namespace Rocket.Unturned
             if (Environment.OSVersion.Platform == PlatformID.Unix
                 || Environment.OSVersion.Platform == PlatformID.MacOSX)
             {
+                rocketGameObject.SetActive(false); // deactivate object so it doesn't run Awake until all properties were set
                 var console = rocketGameObject.AddComponent<UnturnedConsole>();
                 console.Logger = logger;
+                rocketGameObject.SetActive(true); // reactivate object
             }
 
             SteamChannel.onTriggerSend += TriggerSend;
@@ -179,8 +181,39 @@ namespace Rocket.Unturned
             var pluginManager = container.Resolve<IPluginManager>();
             pluginManager.Init();
 
-            ImplementationReadyEvent @event = new ImplementationReadyEvent(this);
+            IEvent @event = new ImplementationReadyEvent(this);
             eventManager.Emit(this, @event);
+
+            ICommandHandler cmdHandler = container.Resolve<ICommandHandler>();
+            
+            ChatManager.onCheckPermissions += (SteamPlayer player, string commandLine, ref bool shouldExecuteCommand,
+                                               ref bool shouldList) =>
+            {
+                if (commandLine.StartsWith("/"))
+                {
+                    commandLine = commandLine.Substring(1);
+                    var caller = playerManager.GetOnlinePlayer(player.playerID.steamID.ToString());
+                    @event = new PreCommandExecutionEvent(caller, commandLine);
+                    eventManager.Emit(this, @event);
+                    cmdHandler.HandleCommand(caller, commandLine, "/");
+
+                    shouldList = false;
+                }
+
+                shouldExecuteCommand = false;
+            };
+
+            CommandWindow.onCommandWindowInputted += (string commandline, ref bool shouldExecuteCommand) =>
+            {
+                if (commandline.StartsWith("/"))
+                    commandline = commandline.Substring(1);
+
+                @event = new PreCommandExecutionEvent(ConsoleCommandCaller, commandline);
+                eventManager.Emit(this, @event);
+                cmdHandler.HandleCommand(ConsoleCommandCaller, commandline, "");
+
+                shouldExecuteCommand = false;
+            };
         }
 
         internal void TriggerSend(SteamPlayer player, string method, ESteamCall steamCall, ESteamPacket steamPacket, params object[] data)
@@ -239,8 +272,7 @@ namespace Rocket.Unturned
                         @event = new UnturnedPlayerUpdateExperienceEvent(unturnedPlayer, (uint)data[0]);
                         break;
                     case "tellRevive":
-                        //todo
-                        //OnPlayerReviveEvent (Vector3)data[0], (byte)data[1]
+                        @event = new PlayerRespawnEvent(unturnedPlayer);
                         break;
                     case "tellDead":
                         @event = new UnturnedPlayerDeadEvent(unturnedPlayer, (Vector3)data[0]);

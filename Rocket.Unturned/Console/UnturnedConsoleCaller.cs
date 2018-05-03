@@ -10,7 +10,7 @@ namespace Rocket.Unturned.Console
         {
             return -((ICommandCaller)obj).CompareTo(this);
         }
-
+    
         public int CompareTo(IIdentifiable other)
         {
             return Id.CompareTo(other.Id);

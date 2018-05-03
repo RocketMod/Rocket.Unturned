@@ -16,7 +16,7 @@ namespace Rocket.Unturned.Properties
             container.RegisterSingletonType<IImplementation, UnturnedImplementation>(null, "unturned");
             container.RegisterSingletonType<IPlayerManager, UnturnedPlayerManager>(null, "unturnedplayermanager");
             container.RegisterSingletonType<IChatManager, UnturnedChatManager>(null, "unturnedchat");
-            container.RegisterSingletonType<ICommandProvider, VanillaCommandProvider>(null, "vanillacommands");
+            container.RegisterSingletonType<ICommandProvider, VanillaCommandProvider>("vanillacommands");
         }
     }
 }

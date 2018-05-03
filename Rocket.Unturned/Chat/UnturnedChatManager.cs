@@ -30,9 +30,9 @@ namespace Rocket.Unturned.Chat
             this.playerManager = playerManager;
 
             ChatManager.onChatted += HandleChat;
-             
-            CommandWindow.onCommandWindowOutputted += (text, color) 
-                => logger.LogInformation(text?.ToString());
+
+            CommandWindow.onCommandWindowOutputted += (text, color)
+                => logger.LogNative(text?.ToString(), null);
         }
 
         public void SendMessage(IOnlinePlayer player, string message, params object[] bindings)
