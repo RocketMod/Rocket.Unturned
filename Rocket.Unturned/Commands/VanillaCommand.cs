@@ -44,9 +44,9 @@ namespace Rocket.Unturned.Commands
         }
 
         public string Name => NativeCommand.command;
-        public string Description => NativeCommand.info;
+        public string Description => NativeCommand.help;
         public string Permission => null; /* default permission */
-        public string Syntax => NativeCommand.help;
+        public string Syntax => NativeCommand.info.Replace(Name, "").Trim();
         public ISubCommand[] ChildCommands => null;
         public string[] Aliases => null;
     }
