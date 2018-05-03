@@ -12,7 +12,7 @@ namespace Rocket.Unturned.Commands
         {
             get
             {
-                if (commands != null)
+                if (commands != null && commands.Count != 0)
                     return commands;
 
                 commands = new List<ICommand>();

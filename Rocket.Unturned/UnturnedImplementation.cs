@@ -44,7 +44,7 @@ namespace Rocket.Unturned
 
             container = runtime.Container;
             eventManager = container.Resolve<IEventManager>();
-            playerManager = container.Resolve<IPlayerManager>("unturnedplayermanager");
+            playerManager = container.Resolve<IPlayerManager>("unturned_playermanager");
             ModuleTranslations = container.Resolve<ITranslationLocator>();
             
             logger = container.Resolve<ILogger>();
@@ -195,8 +195,9 @@ namespace Rocket.Unturned
                     var caller = playerManager.GetOnlinePlayer(player.playerID.steamID.ToString());
                     @event = new PreCommandExecutionEvent(caller, commandLine);
                     eventManager.Emit(this, @event);
-                    cmdHandler.HandleCommand(caller, commandLine, "/");
-
+                    bool success = cmdHandler.HandleCommand(caller, commandLine, "/");
+                    if(!success)
+                        caller.SendMessage("Command not found", ConsoleColor.Red);
                     shouldList = false;
                 }
 
@@ -210,7 +211,9 @@ namespace Rocket.Unturned
 
                 @event = new PreCommandExecutionEvent(ConsoleCommandCaller, commandline);
                 eventManager.Emit(this, @event);
-                cmdHandler.HandleCommand(ConsoleCommandCaller, commandline, "");
+                bool success = cmdHandler.HandleCommand(ConsoleCommandCaller, commandline, "");
+                if (!success)
+                    ConsoleCommandCaller.SendMessage("Command not found", ConsoleColor.Red);
 
                 shouldExecuteCommand = false;
             };

@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using Rocket.API.Commands;
+using Rocket.Core.DependencyInjection;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 using Steamworks;
 
 namespace Rocket.Unturned.Commands
 {
+    [DontAutoRegister]
     public class VanillaCommand : ICommand
     {
         public Command NativeCommand { get; }

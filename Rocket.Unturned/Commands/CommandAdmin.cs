@@ -30,7 +30,7 @@ namespace Rocket.Unturned.Commands
         }
 
         public string Name => "Admin";
-        public string Description => "Admin a player";
+        public string Description => "Gives admin to a player";
         public string Permission => "Rocket.Unturned.Admin";
         public string Syntax => "<target player>";
         public ISubCommand[] ChildCommands => null;
