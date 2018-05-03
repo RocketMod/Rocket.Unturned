@@ -22,16 +22,25 @@ namespace Rocket.Unturned.Commands
         public void Execute(ICommandContext context)
         {
             CSteamID id = CSteamID.Nil;
-            if (context.Caller is UnturnedPlayer player)
-            {
-                id = player.CSteamID;
+            switch (context.Caller) {
+                case UnturnedPlayer player:
+                    id = player.CSteamID;
+                    break;
+                case IConsoleCommandCaller _:
+                    id = CSteamID.Nil;
+                    break;
+
+                default:
+                    throw new NotSupportedException();
             }
+
             Commander.commands.FirstOrDefault(c => c.command == Name)?.check(id, Name, string.Join("/", context.Parameters.ToArray()));
         }
 
         public bool SupportsCaller(Type commandCaller)
         {
-            return typeof(UnturnedPlayer).IsAssignableFrom(commandCaller);
+            //Thanks to unturned we cant know if console is supported before command execution
+            return true;
         }
 
         public string Name => NativeCommand.command;
