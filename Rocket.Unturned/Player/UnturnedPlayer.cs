@@ -10,6 +10,7 @@ using Rocket.API.Entities;
 using Rocket.API.Permissions;
 using Rocket.API.Player;
 using Rocket.Core.Player;
+using Rocket.Unturned.Chat;
 using Node = SDG.Unturned.Node;
 
 namespace Rocket.Unturned.Player
@@ -290,7 +291,69 @@ namespace Rocket.Unturned.Player
         public override void SendMessage(string message, ConsoleColor? color = null, params object[] bindings)
         {
             IChatManager chat = Container.Resolve<IChatManager>();
-            chat.SendMessage(this, message, bindings);
+            if (chat is UnturnedChatManager uChat)
+            {
+                Color uColor = Color.white;
+                if(color != null)
+                    switch (color)
+                    {
+                        case ConsoleColor.Black:
+                            uColor = Color.black;
+                            break;
+                        case ConsoleColor.DarkBlue:
+                            ColorUtility.TryParseHtmlString("#00008B", out uColor);
+                            break;
+                        case ConsoleColor.DarkGreen:
+                            ColorUtility.TryParseHtmlString("#006400", out uColor);
+                            break;
+                        case ConsoleColor.DarkCyan:
+                            ColorUtility.TryParseHtmlString("#008B8B", out uColor);
+                            break;
+                        case ConsoleColor.DarkRed:
+                            ColorUtility.TryParseHtmlString("#8B0000", out uColor);
+                            break;
+                        case ConsoleColor.DarkMagenta:
+                            ColorUtility.TryParseHtmlString("#8B008B", out uColor);
+                            break;
+                        case ConsoleColor.DarkYellow:
+                            ColorUtility.TryParseHtmlString("#808000", out uColor);
+                            break;
+                        case ConsoleColor.Gray:
+                            break;
+                        case ConsoleColor.DarkGray:
+                            ColorUtility.TryParseHtmlString("#A9A9A9", out uColor);
+                            break;
+                        case ConsoleColor.Blue:
+                            uColor = Color.blue;
+                            break;
+                        case ConsoleColor.Green:
+                            uColor = Color.green;
+                            break;
+                        case ConsoleColor.Cyan:
+                            uColor = Color.cyan;
+                            break;
+                        case ConsoleColor.Red:
+                            uColor = Color.red;
+                            break;
+                        case ConsoleColor.Magenta:
+                            uColor = Color.magenta;
+                            break;
+                        case ConsoleColor.Yellow:
+                            uColor = Color.yellow;
+                            break;
+                        case ConsoleColor.White:
+                            uColor = Color.white;
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException(nameof(color), color, null);
+                    }
+
+                uChat.SendMessage(this, message, uColor, bindings);
+            }
+            else
+            {
+                chat.SendMessage(this, message, bindings);
+            }
         }
 
         public override DateTime SessionConnectTime => throw new NotImplementedException();

@@ -42,6 +42,14 @@ namespace Rocket.Unturned.Chat
                 ChatManager.instance.channel.send("tellChat", new CSteamID(ulong.Parse(player.Id)), ESteamPacket.UPDATE_UNRELIABLE_BUFFER, CSteamID.Nil, (byte)EChatMode.GLOBAL, Color.white, line);
         }
 
+
+        public void SendMessage(IOnlinePlayer player, string message, Color color, params object[] bindings)
+        {
+            var wrappedMessage = WrapMessage(message);
+            foreach (var line in wrappedMessage)
+                ChatManager.instance.channel.send("tellChat", new CSteamID(ulong.Parse(player.Id)), ESteamPacket.UPDATE_UNRELIABLE_BUFFER, CSteamID.Nil, (byte)EChatMode.GLOBAL, color, line);
+        }
+
         public void SendLocalizedMessage(ITranslationLocator translations, IOnlinePlayer player, string translationKey, params object[] bindings)
         {
             var translatedMessage = translations.GetLocalizedMessage(translationKey, bindings);
