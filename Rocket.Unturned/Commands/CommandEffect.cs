@@ -23,7 +23,8 @@ namespace Rocket.Unturned.Commands
         }
 
         public string Name => "Effect";
-        public string Description => "Triggers an effect at your position";
+        public string Summary => "Triggers an effect at your position.";
+        public string Description => null;
         public string Permission => "Rocket.Unturned.Effect";
         public string Syntax => "<id>";
         public ISubCommand[] ChildCommands => null;

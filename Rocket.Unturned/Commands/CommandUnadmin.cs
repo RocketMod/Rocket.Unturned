@@ -31,7 +31,8 @@ namespace Rocket.Unturned.Commands
         }
 
         public string Name => "Unadmin";
-        public string Description => "Removes admin from a player";
+        public string Summary => "Removes admin from a player.";
+        public string Description => null;
         public string Permission => "Rocket.Unturned.Unadmin";
         public string Syntax => "<target player>";
         public ISubCommand[] ChildCommands => null;

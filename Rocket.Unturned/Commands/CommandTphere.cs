@@ -44,7 +44,8 @@ namespace Rocket.Unturned.Commands
         }
 
         public string Name => "Tphere";
-        public string Description => "Teleports another player to you";
+        public string Summary => "Teleports another player to you.";
+        public string Description => null;
         public string Permission => "Rocket.Unturned.Tphere";
         public string Syntax => "<player>";
         public ISubCommand[] ChildCommands => null;

@@ -87,7 +87,8 @@ namespace Rocket.Unturned.Commands
         }
 
         public string Name => "Compass";
-        public string Description => "Shows the direction you are facing";
+        public string Summary => "Shows the direction you are facing.";
+        public string Description => null;
         public string Permission => "Rocket.Unturned.Compass";
         public string Syntax => "[direction]";
         public ISubCommand[] ChildCommands => null;

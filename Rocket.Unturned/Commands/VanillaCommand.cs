@@ -22,7 +22,8 @@ namespace Rocket.Unturned.Commands
         public void Execute(ICommandContext context)
         {
             CSteamID id = CSteamID.Nil;
-            switch (context.Caller) {
+            switch (context.Caller)
+            {
                 case UnturnedPlayer player:
                     id = player.CSteamID;
                     break;
@@ -44,8 +45,9 @@ namespace Rocket.Unturned.Commands
         }
 
         public string Name => NativeCommand.command;
-        public string Description => NativeCommand.help;
-        public string Permission => null; /* default permission */
+        public string Summary => NativeCommand.help;
+        public string Description => null;
+        public string Permission => "Unturned." + Name;
         public string Syntax => NativeCommand.info.Replace(Name, "").Trim();
         public ISubCommand[] ChildCommands => null;
         public string[] Aliases => null;

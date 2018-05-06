@@ -40,7 +40,8 @@ namespace Rocket.Unturned.Commands
         }
 
         public string Name => "More";
-        public string Description => "Gives more of an item that you have in your hands.";
+        public string Summary => "Gives more of an item that you have in your hands.";
+        public string Description => null;
         public string Permission => "Rocket.Unturned.More";
         public string Syntax => "<amount>";
         public ISubCommand[] ChildCommands => null;

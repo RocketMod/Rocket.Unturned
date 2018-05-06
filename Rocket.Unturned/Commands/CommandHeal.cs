@@ -54,7 +54,8 @@ namespace Rocket.Unturned.Commands
         }
 
         public string Name => "Heal";
-        public string Description => "Heals yourself or somebody else";
+        public string Summary => "Heals yourself or somebody else.";
+        public string Description => null;
         public string Permission => "Rocket.Unturned.Heal";
         public string Syntax => "[player]";
         public ISubCommand[] ChildCommands => null;

@@ -7,6 +7,7 @@ using Rocket.API.DependencyInjection;
 using Rocket.API.Eventing;
 using Rocket.API.I18N;
 using Rocket.API.Player;
+using Rocket.Core.Logging;
 using Steamworks;
 using UnityEngine;
 using ILogger = Rocket.API.Logging.ILogger;
@@ -32,7 +33,7 @@ namespace Rocket.Unturned.Chat
             ChatManager.onChatted += HandleChat;
 
             CommandWindow.onCommandWindowOutputted += (text, color)
-                => logger.LogNative(text?.ToString(), null);
+                => logger.LogNative(text?.ToString());
         }
 
         public void SendMessage(IOnlinePlayer player, string message, params object[] bindings)

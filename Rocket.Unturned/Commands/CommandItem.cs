@@ -60,7 +60,8 @@ namespace Rocket.Unturned.Commands
         }
 
         public string Name => "Item";
-        public string Description => "Gives yourself an item";
+        public string Summary => "Gives yourself an item.";
+        public string Description => null;
         public string Permission => "Rocket.Unturned.Item";
         public string Syntax => "[item id or name]";
         public ISubCommand[] ChildCommands => null;

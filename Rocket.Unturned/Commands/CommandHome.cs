@@ -35,7 +35,8 @@ namespace Rocket.Unturned.Commands
         }
 
         public string Name => "Home";
-        public string Description => "Teleports you to your last bed";
+        public string Summary => "Teleports you to your last bed.";
+        public string Description => null;
         public string Permission => "Rocket.Unturned.Home";
         public string Syntax => "";
         public ISubCommand[] ChildCommands => null;

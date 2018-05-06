@@ -59,7 +59,8 @@ namespace Rocket.Unturned.Commands
         }
 
         public string Name => "Vehicle";
-        public string Description => "Gives yourself a vehicle";
+        public string Summary => "Gives yourself a vehicle.";
+        public string Description => null;
         public string Permission => "Rocket.Unturned.Vehicle";
         public string Syntax => "<id or name>";
         public ISubCommand[] ChildCommands => null;

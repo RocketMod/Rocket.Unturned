@@ -19,7 +19,8 @@ namespace Rocket.Unturned.Commands
         }
 
         public string Name => "Exit";
-        public string Description => "Exits the game without cooldown";
+        public string Summary => "Exits the game without cooldown.";
+        public string Description => null;
         public string Permission => "Rocket.Unturned.Exit";
         public string Syntax => "";
         public ISubCommand[] ChildCommands => null;

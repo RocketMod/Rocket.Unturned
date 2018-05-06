@@ -71,7 +71,8 @@ namespace Rocket.Unturned.Commands
         }
 
         public string Name => "Tp";
-        public string Description => "Teleports you to another player or location";
+        public string Summary => "Teleports you to another player or location.";
+        public string Description => null;
         public string Permission => "Rocket.Unturned.Tp";
         public string Syntax => "<player | place | x y z>";
         public ISubCommand[] ChildCommands => null;

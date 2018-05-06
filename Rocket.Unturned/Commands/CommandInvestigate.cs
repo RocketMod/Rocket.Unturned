@@ -32,7 +32,8 @@ namespace Rocket.Unturned.Commands
         }
 
         public string Name => "Investigate";
-        public string Description => "Shows you the SteamID64 of a player";
+        public string Summary => "Shows you the SteamID64 of a player.";
+        public string Description => null;
         public string Permission => "Rocket.Unturned.Investigate";
         public string Syntax => "<player>";
         public ISubCommand[] ChildCommands => null;

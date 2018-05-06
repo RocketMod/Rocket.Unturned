@@ -34,7 +34,8 @@ namespace Rocket.Unturned.Commands
         }
 
         public string Name => "Broadcast";
-        public string Description => "Broadcasts a message";
+        public string Summary => "Broadcasts a message.";
+        public string Description => null;
         public string Permission => "Rocket.Unturned.Broadcast";
         public string Syntax => "[color] <message>";
         public ISubCommand[] ChildCommands => null;
