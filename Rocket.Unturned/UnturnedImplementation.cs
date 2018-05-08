@@ -34,13 +34,14 @@ namespace Rocket.Unturned
         private IPlayerManager playerManager;
         private IEventManager eventManager;
         private IDependencyContainer container;
-        public ITranslationLocator ModuleTranslations { get; private set; }
-
+        internal ITranslationLocator ModuleTranslations { get; private set; }
+        private IRuntime runtime;
         public bool IsAlive => true;
         private IConsoleCommandCaller consoleCaller;
 
         public void Init(IRuntime runtime)
         {
+            this.runtime = runtime;
             rocketGameObject = new GameObject();
             Object.DontDestroyOnLoad(rocketGameObject);
 
@@ -78,6 +79,13 @@ namespace Rocket.Unturned
             Provider.onServerConnected += OnPlayerConnected;
             Provider.onServerDisconnected += OnPlayerDisconnected;
             DamageTool.playerDamaged += OnPlayerDamaged;
+
+            Provider.onServerShutdown += OnServerShutdown;
+        }
+
+        private void OnServerShutdown()
+        {
+            runtime.Shutdown();
         }
 
         private void OnPlayerDamaged(SDG.Unturned.Player uPlayer, ref EDeathCause cause, ref ELimb limb, ref CSteamID killerId, ref Vector3 direction, ref float damage, ref float times, ref bool canDamage)
@@ -103,11 +111,10 @@ namespace Rocket.Unturned
 
         private void LoadTranslations()
         {
-            ModuleTranslations.Load(new ConfigurationContext
-            {
-                ConfigurationName = "Rocket.Unturned.ModuleTranslations",
-                WorkingDirectory = WorkingDirectory
-            },
+            var context = new ConfigurationContext(this);
+            context.ConfigurationName += "Translations";
+
+            ModuleTranslations.Load(context,
             new Dictionary<string, string>
             {
                 { "command_compass_facing_private","You are facing {0}"},
@@ -311,12 +318,10 @@ namespace Rocket.Unturned
         public void Reload() { }
 
         public IConsoleCommandCaller ConsoleCommandCaller => consoleCaller ?? (consoleCaller = new UnturnedConsoleCaller());
-
-
-        public IEnumerable<string> Capabilities => new List<string>();
+        
         public string InstanceId => Provider.serverID;
         public string WorkingDirectory => Directory.GetCurrentDirectory();
-        public string ConfigurationName => "Rocket.Unturned";
+        public string ConfigurationName => Name;
         public string Name => "Rocket.Unturned";
     }
 }
