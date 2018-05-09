@@ -4,22 +4,22 @@ using Rocket.Core.Player.Events;
 
 namespace Rocket.Unturned.Player.Events
 {
-    public class UnturnedPlayerUpdateBrokenEvent : OnlinePlayerEvent
+    public class UnturnedPlayerUpdateBrokenEvent : PlayerEvent
     {
         public bool IsBroken { get; }
-        public UnturnedPlayerUpdateBrokenEvent(IOnlinePlayer player, bool isBroken) : base(player)
+        public UnturnedPlayerUpdateBrokenEvent(IPlayer player, bool isBroken) : base(player)
         {
             IsBroken = isBroken;
         }
-        public UnturnedPlayerUpdateBrokenEvent(IOnlinePlayer player, bool isBroken, bool global = true) : base(player, global)
+        public UnturnedPlayerUpdateBrokenEvent(IPlayer player, bool isBroken, bool global = true) : base(player, global)
         {
             IsBroken = isBroken;
         }
-        public UnturnedPlayerUpdateBrokenEvent(IOnlinePlayer player, bool isBroken, EventExecutionTargetContext executionTarget = EventExecutionTargetContext.Sync, bool global = true) : base(player, executionTarget, global)
+        public UnturnedPlayerUpdateBrokenEvent(IPlayer player, bool isBroken, EventExecutionTargetContext executionTarget = EventExecutionTargetContext.Sync, bool global = true) : base(player, executionTarget, global)
         {
             IsBroken = isBroken;
         }
-        public UnturnedPlayerUpdateBrokenEvent(IOnlinePlayer player, bool isBroken, string name = null, EventExecutionTargetContext executionTarget = EventExecutionTargetContext.Sync, bool global = true) : base(player, name, executionTarget, global)
+        public UnturnedPlayerUpdateBrokenEvent(IPlayer player, bool isBroken, string name = null, EventExecutionTargetContext executionTarget = EventExecutionTargetContext.Sync, bool global = true) : base(player, name, executionTarget, global)
         {
             IsBroken = isBroken;
         }

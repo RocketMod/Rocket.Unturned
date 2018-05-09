@@ -5,23 +5,23 @@ using UnityEngine;
 
 namespace Rocket.Unturned.Player.Events
 {
-    public class UnturnedPlayerDeadEvent : OnlinePlayerEvent
+    public class UnturnedPlayerDeadEvent : PlayerEvent
     {
         public Vector3 Position { get; }
 
-        public UnturnedPlayerDeadEvent(IOnlinePlayer player, Vector3 position) : base(player)
+        public UnturnedPlayerDeadEvent(IPlayer player, Vector3 position) : base(player)
         {
             Position = position;
         }
-        public UnturnedPlayerDeadEvent(IOnlinePlayer player, Vector3 position, bool global = true) : base(player, global)
+        public UnturnedPlayerDeadEvent(IPlayer player, Vector3 position, bool global = true) : base(player, global)
         {
             Position = position;
         }
-        public UnturnedPlayerDeadEvent(IOnlinePlayer player, Vector3 position, EventExecutionTargetContext executionTarget = EventExecutionTargetContext.Sync, bool global = true) : base(player, executionTarget, global)
+        public UnturnedPlayerDeadEvent(IPlayer player, Vector3 position, EventExecutionTargetContext executionTarget = EventExecutionTargetContext.Sync, bool global = true) : base(player, executionTarget, global)
         {
             Position = position;
         }
-        public UnturnedPlayerDeadEvent(IOnlinePlayer player, Vector3 position, string name = null, EventExecutionTargetContext executionTarget = EventExecutionTargetContext.Sync, bool global = true) : base(player, name, executionTarget, global)
+        public UnturnedPlayerDeadEvent(IPlayer player, Vector3 position, string name = null, EventExecutionTargetContext executionTarget = EventExecutionTargetContext.Sync, bool global = true) : base(player, name, executionTarget, global)
         {
             Position = position;
         }

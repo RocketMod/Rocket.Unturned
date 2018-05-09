@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Rocket.API;
-using Rocket.API.Chat;
 using Rocket.API.Commands;
 using Rocket.API.I18N;
 using Rocket.Core.Commands;
@@ -14,17 +13,16 @@ namespace Rocket.Unturned.Commands
 {
     public class CommandItem : ICommand
     {
-        public bool SupportsCaller(Type commandCaller)
+        public bool SupportsUser(Type userType)
         {
-            return typeof(UnturnedPlayer).IsAssignableFrom(commandCaller);
+            return typeof(UnturnedUser).IsAssignableFrom(userType);
         }
 
         public void Execute(ICommandContext context)
         {
-            ITranslationLocator translations = ((UnturnedImplementation)context.Container.Resolve<IImplementation>()).ModuleTranslations;
-            IChatManager chatManager = context.Container.Resolve<IChatManager>();
+            ITranslationCollection translations = ((UnturnedImplementation)context.Container.Resolve<IImplementation>()).ModuleTranslations;
 
-            UnturnedPlayer player = (UnturnedPlayer)context.Caller;
+            UnturnedPlayer player = ((UnturnedUser)context.User).UnturnedPlayer;
             if (context.Parameters.Length != 1 && context.Parameters.Length != 2)
                 throw new CommandWrongUsageException();
 
@@ -54,9 +52,8 @@ namespace Rocket.Unturned.Commands
 
             string assetName = ((ItemAsset)a).itemName;
 
-            chatManager.SendLocalizedMessage(translations, player,
-                player.GiveItem(id, amount) ? "command_i_giving_private" : "command_i_giving_failed_private", 
-                amount, assetName, id);
+            context.User.SendLocalizedMessage(translations, player.GiveItem(id, amount) ? "command_i_giving_private" : "command_i_giving_failed_private", 
+                null, amount, assetName, id);
         }
 
         public string Name => "Item";
@@ -64,7 +61,7 @@ namespace Rocket.Unturned.Commands
         public string Description => null;
         public string Permission => "Rocket.Unturned.Item";
         public string Syntax => "[item id or name]";
-        public ISubCommand[] ChildCommands => null;
+        public IChildCommand[] ChildCommands => null;
         public string[] Aliases => new[] { "I" };
     }
 }

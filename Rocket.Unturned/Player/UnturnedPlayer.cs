@@ -3,22 +3,19 @@ using Steamworks;
 using System;
 using UnityEngine;
 using System.Linq;
-using Rocket.API.Chat;
-using Rocket.API.Commands;
 using Rocket.API.DependencyInjection;
 using Rocket.API.Entities;
-using Rocket.API.Permissions;
-using Rocket.API.Player;
+using Rocket.API.User;
 using Rocket.Core.Player;
-using Rocket.Unturned.Chat;
 using Node = SDG.Unturned.Node;
 
 namespace Rocket.Unturned.Player
 {
-    public sealed class UnturnedPlayer : BaseOnlinePlayer, ILivingEntity
+    public sealed class UnturnedPlayer : BasePlayer
     {
-        public SDG.Unturned.Player Player { get; }
-        public SteamPlayer SteamPlayer => Player.channel.owner;
+        public SDG.Unturned.Player Player => PlayerTool.getPlayer(CSteamID);
+
+        public SteamPlayer SteamPlayer => Player?.channel?.owner;
 
         public override string Id => CSteamID.ToString();
 
@@ -26,19 +23,21 @@ namespace Rocket.Unturned.Player
 
         public bool IsAdmin => Player.channel.owner.isAdmin;
 
-        public CSteamID CSteamID => Player.channel.owner.playerID.steamID;
+        public CSteamID CSteamID { get; }
 
         private readonly IDependencyContainer container;
+        private readonly UnturnedPlayerManager manager;
 
-        public UnturnedPlayer(IDependencyContainer container, SteamPlayer player) : base(container)
+        public UnturnedPlayer(IDependencyContainer container, SteamPlayer player, UnturnedPlayerManager manager) : this(container, player.playerID.steamID, manager)
         {
-            this.container = container;
-            Player = player.player;
+
         }
 
-        public UnturnedPlayer(IDependencyContainer container, CSteamID cSteamID) : this(container, PlayerTool.getSteamPlayer(cSteamID))
+        public UnturnedPlayer(IDependencyContainer container, CSteamID cSteamID, UnturnedPlayerManager manager) : base(container)
         {
-
+            this.container = container;
+            this.manager = manager;
+            CSteamID = cSteamID;
         }
 
         public float Ping => Player.channel.owner.ping;
@@ -198,21 +197,6 @@ namespace Rocket.Unturned.Player
             set => throw new NotImplementedException();
         }
 
-        public void Kill()
-        {
-            DamageTool.damage(Player, EDeathCause.KILL, ELimb.SKULL, CSteamID.Nil, Vector3.up * 10f, (float) MaxHealth, 1, out var _);
-        }
-
-        public void Kill(IEntity killer)
-        {
-            Kill();
-        }
-
-        public void Kill(ICommandCaller caller)
-        {
-            Kill();
-        }
-
         public double MaxHealth
         {
             get { return byte.MaxValue; }
@@ -288,82 +272,12 @@ namespace Rocket.Unturned.Player
 
         public bool IsInVehicle => CurrentVehicle != null;
 
-        public override void SendMessage(string message, ConsoleColor? color = null, params object[] bindings)
-        {
-            IChatManager chat = Container.Resolve<IChatManager>();
-            if (chat is UnturnedChatManager uChat)
-            {
-                Color uColor = Color.white;
-                if(color != null)
-                    switch (color)
-                    {
-                        case ConsoleColor.Black:
-                            uColor = Color.black;
-                            break;
-                        case ConsoleColor.DarkBlue:
-                            ColorUtility.TryParseHtmlString("#00008B", out uColor);
-                            break;
-                        case ConsoleColor.DarkGreen:
-                            ColorUtility.TryParseHtmlString("#006400", out uColor);
-                            break;
-                        case ConsoleColor.DarkCyan:
-                            ColorUtility.TryParseHtmlString("#008B8B", out uColor);
-                            break;
-                        case ConsoleColor.DarkRed:
-                            ColorUtility.TryParseHtmlString("#8B0000", out uColor);
-                            break;
-                        case ConsoleColor.DarkMagenta:
-                            ColorUtility.TryParseHtmlString("#8B008B", out uColor);
-                            break;
-                        case ConsoleColor.DarkYellow:
-                            ColorUtility.TryParseHtmlString("#808000", out uColor);
-                            break;
-                        case ConsoleColor.Gray:
-                            break;
-                        case ConsoleColor.DarkGray:
-                            ColorUtility.TryParseHtmlString("#A9A9A9", out uColor);
-                            break;
-                        case ConsoleColor.Blue:
-                            uColor = Color.blue;
-                            break;
-                        case ConsoleColor.Green:
-                            uColor = Color.green;
-                            break;
-                        case ConsoleColor.Cyan:
-                            uColor = Color.cyan;
-                            break;
-                        case ConsoleColor.Red:
-                            uColor = Color.red;
-                            break;
-                        case ConsoleColor.Magenta:
-                            uColor = Color.magenta;
-                            break;
-                        case ConsoleColor.Yellow:
-                            uColor = Color.yellow;
-                            break;
-                        case ConsoleColor.White:
-                            uColor = Color.white;
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException(nameof(color), color, null);
-                    }
-
-                uChat.SendMessage(this, message, uColor, bindings);
-            }
-            else
-            {
-                chat.SendMessage(this, message, bindings);
-            }
-        }
-
-        public override DateTime SessionConnectTime => throw new NotImplementedException();
-        public override DateTime? SessionDisconnectTime => throw new NotImplementedException();
-        public override TimeSpan SessionOnlineTime => SessionConnectTime - (SessionDisconnectTime ?? DateTime.Now);
-
         public override string Name => Player.channel.owner.playerID.playerName;
-        public override Type CallerType => typeof(UnturnedPlayer);
+
+        public override IUser User => Player == null ? null : new UnturnedUser(manager, this);
+
+        public override IEntity Entity => new UnturnedPlayerEntity(this);
         public override bool IsOnline => Provider.clients.Any(c => c.playerID.steamID == CSteamID);
-        public override DateTime? LastSeen => throw new NotImplementedException();
 
         public override string ToString(string format, IFormatProvider formatProvider)
         {
@@ -390,7 +304,7 @@ namespace Rocket.Unturned.Player
                     return SteamPlayer.playerID.characterName.ToString(formatProvider);
                 }
 
-                if (format.Equals("group", StringComparison.OrdinalIgnoreCase) 
+                if (format.Equals("group", StringComparison.OrdinalIgnoreCase)
                     || format.Equals("groupname", StringComparison.OrdinalIgnoreCase))
                 {
                     var gid = SteamPlayer.playerID.@group;

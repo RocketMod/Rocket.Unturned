@@ -1,6 +1,5 @@
 ﻿using System;
 using Rocket.API;
-using Rocket.API.Chat;
 using Rocket.API.Commands;
 using Rocket.API.I18N;
 using Rocket.Core.Commands;
@@ -11,31 +10,30 @@ namespace Rocket.Unturned.Commands
 {
     public class CommandMore : ICommand
     {
-        public bool SupportsCaller(Type commandCaller)
+        public bool SupportsUser(Type userType)
         {
-            return typeof(UnturnedPlayer).IsAssignableFrom(commandCaller);
+            return typeof(UnturnedPlayer).IsAssignableFrom(userType);
         }
 
         public void Execute(ICommandContext context)
         {
-            ITranslationLocator translations = ((UnturnedImplementation)context.Container.Resolve<IImplementation>()).ModuleTranslations;
-            IChatManager chatManager = context.Container.Resolve<IChatManager>();
+            ITranslationCollection translations = ((UnturnedImplementation)context.Container.Resolve<IImplementation>()).ModuleTranslations;
 
             if(context.Parameters.Length != 1)
                 throw new CommandWrongUsageException();
 
             byte amount = context.Parameters.Get<byte>(0);
 
-            UnturnedPlayer player = (UnturnedPlayer)context.Caller;
+            UnturnedPlayer player = ((UnturnedUser)context.User).UnturnedPlayer;
             ushort itemId = player.Player.equipment.itemID;
 
             if (itemId == 0)
             {
-                chatManager.SendLocalizedMessage(translations, player, "command_more_dequipped");
+                context.User.SendLocalizedMessage(translations, "command_more_dequipped");
                 return;
             }
 
-            chatManager.SendLocalizedMessage(translations, player, "command_more_give", amount, itemId);
+            context.User.SendLocalizedMessage(translations, "command_more_give", null, amount, itemId);
             player.GiveItem(itemId, amount);
         }
 
@@ -44,7 +42,7 @@ namespace Rocket.Unturned.Commands
         public string Description => null;
         public string Permission => "Rocket.Unturned.More";
         public string Syntax => "<amount>";
-        public ISubCommand[] ChildCommands => null;
+        public IChildCommand[] ChildCommands => null;
         public string[] Aliases => null;
     }
 }

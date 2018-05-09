@@ -68,17 +68,17 @@
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net35\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Rocket.API, Version=5.0.0.397, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rocket.API.5.0.0.397\lib\net35\Rocket.API.dll</HintPath>
+    <Reference Include="Rocket.API, Version=5.0.0.428, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rocket.API.5.0.0.428\lib\net35\Rocket.API.dll</HintPath>
     </Reference>
-    <Reference Include="Rocket.Compatibility, Version=5.0.0.397, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rocket.Compatibility.5.0.0.397\lib\net35\Rocket.Compatibility.dll</HintPath>
+    <Reference Include="Rocket.Compatibility, Version=5.0.0.428, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rocket.Compatibility.5.0.0.428\lib\net35\Rocket.Compatibility.dll</HintPath>
     </Reference>
-    <Reference Include="Rocket.Core, Version=5.0.0.397, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rocket.Core.5.0.0.397\lib\net35\Rocket.Core.dll</HintPath>
+    <Reference Include="Rocket.Core, Version=5.0.0.428, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rocket.Core.5.0.0.428\lib\net35\Rocket.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Rocket.Runtime, Version=5.0.0.397, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rocket.Runtime.5.0.0.397\lib\net35\Rocket.Runtime.dll</HintPath>
+    <Reference Include="Rocket.Runtime, Version=5.0.0.428, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rocket.Runtime.5.0.0.428\lib\net35\Rocket.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Rocket.UnityEngine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Rocket.UnityEngine.5.0.0.26\lib\net35\Rocket.UnityEngine.dll</HintPath>
@@ -120,7 +120,7 @@
     <Compile Include="Commands\RocketUnturnedCommandProvider.cs" />
     <Compile Include="Commands\VanillaCommand.cs" />
     <Compile Include="Commands\VanillaCommandProvider.cs" />
-    <Compile Include="Console\UnturnedConsoleCaller.cs" />
+    <Compile Include="Console\UnturnedConsole.cs" />
     <Compile Include="Player\Events\UnturnedPlayerDamagedEvent.cs" />
     <Compile Include="Player\Events\UnturnedPlayerUpdateBleedingEvent.cs" />
     <Compile Include="Player\Events\UnturnedPlayerDeadEvent.cs" />
@@ -138,14 +138,15 @@
     <Compile Include="Player\PreConnectUnturnedPlayer.cs" />
     <Compile Include="Player\Events\UnturnedPlayerChatEvent.cs" />
     <Compile Include="Player\Events\UnturnedPlayerPreConnectEvent.cs" />
+    <Compile Include="Player\UnturnedPlayerEntity.cs" />
     <Compile Include="Player\UnturnedPlayerManager.cs" />
+    <Compile Include="Player\UnturnedUser.cs" />
     <Compile Include="Properties\DependencyRegistrator.cs" />
     <Compile Include="Console\UnturnedConsoleWriter.cs" />
     <Compile Include="RocketUnturnedModule.cs" />
     <Compile Include="UnturnedImplementation.cs" />
     <Compile Include="Utils\AutomaticSaveWatchdog.cs" />
-    <Compile Include="Chat\UnturnedChatManager.cs" />
-    <Compile Include="Console\UnturnedConsole.cs" />
+    <Compile Include="Console\UnturnedConsolePipe.cs" />
     <Compile Include="Player\UnturnedPlayer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

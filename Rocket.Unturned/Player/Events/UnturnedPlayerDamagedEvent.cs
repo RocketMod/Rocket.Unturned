@@ -1,6 +1,7 @@
 ﻿using Rocket.API.Commands;
 using Rocket.API.Eventing;
 using Rocket.API.Player;
+using Rocket.API.User;
 using Rocket.Core.Player.Events;
 using SDG.Unturned;
 using UnityEngine;
@@ -14,7 +15,7 @@ namespace Rocket.Unturned.Player.Events
         public Vector3 Direction { get; set; }
         public float Times { get; set; }
 
-        public UnturnedPlayerDamagedEvent(IOnlinePlayer player, EDeathCause deathCause, ELimb limb, ICommandCaller damageDealer, Vector3 direction, float damage, float times) : base(player, damage, damageDealer)
+        public UnturnedPlayerDamagedEvent(IPlayer player, EDeathCause deathCause, ELimb limb, IUser damageDealer, Vector3 direction, float damage, float times) : base(player, damage, damageDealer)
         {
             DeathCause = deathCause;
             Limb = limb;
@@ -22,7 +23,7 @@ namespace Rocket.Unturned.Player.Events
             Damage = damage;
             Times = times;
         }
-        public UnturnedPlayerDamagedEvent(IOnlinePlayer player, EDeathCause deathCause, ELimb limb, ICommandCaller damageDealer, Vector3 direction, float damage, float times, bool global = true) : base(player, damage, damageDealer, global)
+        public UnturnedPlayerDamagedEvent(IPlayer player, EDeathCause deathCause, ELimb limb, IUser damageDealer, Vector3 direction, float damage, float times, bool global = true) : base(player, damage, damageDealer, global)
         {
             DeathCause = deathCause;
             Limb = limb;
@@ -30,7 +31,7 @@ namespace Rocket.Unturned.Player.Events
             Damage = damage;
             Times = times;
         }
-        public UnturnedPlayerDamagedEvent(IOnlinePlayer player, EDeathCause deathCause, ELimb limb, ICommandCaller damageDealer, Vector3 direction, float damage, float times, EventExecutionTargetContext executionTarget = EventExecutionTargetContext.Sync, bool global = true) : base(player, damage, damageDealer, executionTarget, global)
+        public UnturnedPlayerDamagedEvent(IPlayer player, EDeathCause deathCause, ELimb limb, IUser damageDealer, Vector3 direction, float damage, float times, EventExecutionTargetContext executionTarget = EventExecutionTargetContext.Sync, bool global = true) : base(player, damage, damageDealer, executionTarget, global)
         {
             DeathCause = deathCause;
             Limb = limb;
@@ -38,7 +39,7 @@ namespace Rocket.Unturned.Player.Events
             Damage = damage;
             Times = times;
         }
-        public UnturnedPlayerDamagedEvent(IOnlinePlayer player, EDeathCause deathCause, ELimb limb, ICommandCaller damageDealer, Vector3 direction, float damage, float times, string name = null, EventExecutionTargetContext executionTarget = EventExecutionTargetContext.Sync, bool global = true) : base(player, damage, damageDealer, name, executionTarget, global)
+        public UnturnedPlayerDamagedEvent(IPlayer player, EDeathCause deathCause, ELimb limb, IUser damageDealer, Vector3 direction, float damage, float times, string name = null, EventExecutionTargetContext executionTarget = EventExecutionTargetContext.Sync, bool global = true) : base(player, damage, damageDealer, name, executionTarget, global)
         {
             DeathCause = deathCause;
             Limb = limb;

@@ -7,19 +7,19 @@ namespace Rocket.Unturned.Commands
 {
     public class CommandEffect : ICommand
     {
-        public bool SupportsCaller(Type commandCaller)
+        public bool SupportsUser(Type userType)
         {
-            return typeof(UnturnedPlayer).IsAssignableFrom(commandCaller);
+            return typeof(UnturnedUser).IsAssignableFrom(userType);
         }
 
         public void Execute(ICommandContext context)
         {
-            UnturnedPlayer player = (UnturnedPlayer)context.Caller;
+            UnturnedUser player = (UnturnedUser)context.User;
             if(context.Parameters.Length != 1)
                 throw new CommandWrongUsageException();
 
             ushort id = context.Parameters.Get<ushort>(0);
-            player.TriggerEffect(id);
+            player.UnturnedPlayer.TriggerEffect(id);
         }
 
         public string Name => "Effect";
@@ -27,7 +27,7 @@ namespace Rocket.Unturned.Commands
         public string Description => null;
         public string Permission => "Rocket.Unturned.Effect";
         public string Syntax => "<id>";
-        public ISubCommand[] ChildCommands => null;
+        public IChildCommand[] ChildCommands => null;
         public string[] Aliases => null;
     }
 }

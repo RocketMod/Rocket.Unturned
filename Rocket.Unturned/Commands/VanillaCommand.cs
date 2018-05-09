@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Rocket.API.Commands;
+using Rocket.API.User;
 using Rocket.Core.DependencyInjection;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
@@ -22,12 +23,12 @@ namespace Rocket.Unturned.Commands
         public void Execute(ICommandContext context)
         {
             CSteamID id = CSteamID.Nil;
-            switch (context.Caller)
+            switch (context.User)
             {
-                case UnturnedPlayer player:
-                    id = player.CSteamID;
+                case UnturnedUser player:
+                    id = player.UnturnedPlayer.CSteamID;
                     break;
-                case IConsoleCommandCaller _:
+                case IConsole _:
                     id = CSteamID.Nil;
                     break;
 
@@ -38,7 +39,7 @@ namespace Rocket.Unturned.Commands
             Commander.commands.FirstOrDefault(c => c.command == Name)?.check(id, Name, string.Join("/", context.Parameters.ToArray()));
         }
 
-        public bool SupportsCaller(Type commandCaller)
+        public bool SupportsUser(Type userType)
         {
             //Thanks to unturned we cant know if console is supported before command execution
             return true;
@@ -49,7 +50,7 @@ namespace Rocket.Unturned.Commands
         public string Description => null;
         public string Permission => "Unturned." + Name;
         public string Syntax => NativeCommand.info.Replace(Name, "").Trim();
-        public ISubCommand[] ChildCommands => null;
+        public IChildCommand[] ChildCommands => null;
         public string[] Aliases => null;
     }
 }

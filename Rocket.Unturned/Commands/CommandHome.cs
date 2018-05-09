@@ -11,24 +11,25 @@ namespace Rocket.Unturned.Commands
 {
     public class CommandHome : ICommand
     {
-        public bool SupportsCaller(Type commandCaller)
+        public bool SupportsUser(Type userType)
         {
-            return typeof(UnturnedPlayer).IsAssignableFrom(commandCaller);
+            return typeof(UnturnedUser).IsAssignableFrom(userType);
         }
 
         public void Execute(ICommandContext context)
         {
-            UnturnedPlayer player = (UnturnedPlayer) context.Caller;
-            ITranslationLocator translations = ((UnturnedImplementation)context.Container.Resolve<IImplementation>()).ModuleTranslations;
+            UnturnedPlayer player = ((UnturnedUser)context.User).UnturnedPlayer;
+
+            ITranslationCollection translations = ((UnturnedImplementation)context.Container.Resolve<IImplementation>()).ModuleTranslations;
 
             if (!BarricadeManager.tryGetBed(player.CSteamID, out Vector3 pos, out byte rot))
             {
-                throw new CommandWrongUsageException(translations.GetLocalizedMessage("command_bed_no_bed_found_private"));
+                throw new CommandWrongUsageException(translations.Get("command_bed_no_bed_found_private"));
             }
 
             if (player.Stance == EPlayerStance.DRIVING || player.Stance == EPlayerStance.SITTING)
             {
-                throw new CommandWrongUsageException(translations.GetLocalizedMessage("command_generic_teleport_while_driving_error"));
+                throw new CommandWrongUsageException(translations.Get("command_generic_teleport_while_driving_error"));
             }
 
             player.Teleport(pos, rot);
@@ -39,7 +40,7 @@ namespace Rocket.Unturned.Commands
         public string Description => null;
         public string Permission => "Rocket.Unturned.Home";
         public string Syntax => "";
-        public ISubCommand[] ChildCommands => null;
+        public IChildCommand[] ChildCommands => null;
         public string[] Aliases => null;
     }
 }

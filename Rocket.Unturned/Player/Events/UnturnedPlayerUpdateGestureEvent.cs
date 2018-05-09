@@ -5,22 +5,22 @@ using SDG.Unturned;
 
 namespace Rocket.Unturned.Player.Events
 {
-    public class UnturnedPlayerUpdateGestureEvent : OnlinePlayerEvent
+    public class UnturnedPlayerUpdateGestureEvent : PlayerEvent
     {
         public EPlayerGesture Gesture { get; }
-        public UnturnedPlayerUpdateGestureEvent(IOnlinePlayer player, EPlayerGesture gesture) : base(player)
+        public UnturnedPlayerUpdateGestureEvent(IPlayer player, EPlayerGesture gesture) : base(player)
         {
             Gesture = gesture;
         }
-        public UnturnedPlayerUpdateGestureEvent(IOnlinePlayer player, EPlayerGesture gesture, bool global = true) : base(player, global)
+        public UnturnedPlayerUpdateGestureEvent(IPlayer player, EPlayerGesture gesture, bool global = true) : base(player, global)
         {
             Gesture = gesture;
         }
-        public UnturnedPlayerUpdateGestureEvent(IOnlinePlayer player, EPlayerGesture gesture, EventExecutionTargetContext executionTarget = EventExecutionTargetContext.Sync, bool global = true) : base(player, executionTarget, global)
+        public UnturnedPlayerUpdateGestureEvent(IPlayer player, EPlayerGesture gesture, EventExecutionTargetContext executionTarget = EventExecutionTargetContext.Sync, bool global = true) : base(player, executionTarget, global)
         {
             Gesture = gesture;
         }
-        public UnturnedPlayerUpdateGestureEvent(IOnlinePlayer player, EPlayerGesture gesture, string name = null, EventExecutionTargetContext executionTarget = EventExecutionTargetContext.Sync, bool global = true) : base(player, name, executionTarget, global)
+        public UnturnedPlayerUpdateGestureEvent(IPlayer player, EPlayerGesture gesture, string name = null, EventExecutionTargetContext executionTarget = EventExecutionTargetContext.Sync, bool global = true) : base(player, name, executionTarget, global)
         {
             Gesture = gesture;
         }

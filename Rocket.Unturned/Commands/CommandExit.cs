@@ -1,21 +1,22 @@
 ﻿using System;
 using Rocket.API.Commands;
 using Rocket.API.Player;
+using Rocket.API.User;
 
 namespace Rocket.Unturned.Commands
 {
     public class CommandExit : ICommand
     {
-        public bool SupportsCaller(Type commandCaller)
+        public bool SupportsUser(Type userType)
         {
-            return typeof(IOnlinePlayer).IsAssignableFrom(commandCaller);
+            return typeof(IPlayerUser).IsAssignableFrom(userType);
         }
 
         public void Execute(ICommandContext context)
         {
-            IOnlinePlayer player = (IOnlinePlayer)context.Caller;
+            IPlayerUser player = (IPlayerUser)context.User;
             var playerManager = context.Container.Resolve<IPlayerManager>();
-            playerManager.Kick(player, context.Caller, "Exit");
+            playerManager.Kick(player, context.User, "Exit");
         }
 
         public string Name => "Exit";
@@ -23,7 +24,7 @@ namespace Rocket.Unturned.Commands
         public string Description => null;
         public string Permission => "Rocket.Unturned.Exit";
         public string Syntax => "";
-        public ISubCommand[] ChildCommands => null;
+        public IChildCommand[] ChildCommands => null;
         public string[] Aliases => null;
     }
 }

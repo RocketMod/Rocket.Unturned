@@ -11,22 +11,22 @@ namespace Rocket.Unturned.Player.Events
         public ELimb Limb { get; }
         public EDeathCause DeathCause { get; }
 
-        public UnturnedPlayerDeathEvent(IOnlinePlayer player, ELimb limb, EDeathCause deathCause, IEntity killer = null) : base(player, killer)
+        public UnturnedPlayerDeathEvent(IPlayer player, ELimb limb, EDeathCause deathCause, IEntity killer = null) : base(player, killer)
         {
             Limb = limb;
             DeathCause = deathCause;
         }
-        public UnturnedPlayerDeathEvent(IOnlinePlayer player, ELimb limb, EDeathCause deathCause, IEntity killer = null, bool global = true) : base(player, killer, global)
+        public UnturnedPlayerDeathEvent(IPlayer player, ELimb limb, EDeathCause deathCause, IEntity killer = null, bool global = true) : base(player, killer, global)
         {
             Limb = limb;
             DeathCause = deathCause;
         }
-        public UnturnedPlayerDeathEvent(IOnlinePlayer player, ELimb limb, EDeathCause deathCause, IEntity killer = null, EventExecutionTargetContext executionTarget = EventExecutionTargetContext.Sync, bool global = true) : base(player, killer, executionTarget, global)
+        public UnturnedPlayerDeathEvent(IPlayer player, ELimb limb, EDeathCause deathCause, IEntity killer = null, EventExecutionTargetContext executionTarget = EventExecutionTargetContext.Sync, bool global = true) : base(player, killer, executionTarget, global)
         {
             Limb = limb;
             DeathCause = deathCause;
         }
-        public UnturnedPlayerDeathEvent(IOnlinePlayer player, ELimb limb, EDeathCause deathCause, IEntity killer = null, string name = null, EventExecutionTargetContext executionTarget = EventExecutionTargetContext.Sync, bool global = true) : base(player, killer, name, executionTarget, global)
+        public UnturnedPlayerDeathEvent(IPlayer player, ELimb limb, EDeathCause deathCause, IEntity killer = null, string name = null, EventExecutionTargetContext executionTarget = EventExecutionTargetContext.Sync, bool global = true) : base(player, killer, name, executionTarget, global)
         {
             Limb = limb;
             DeathCause = deathCause;

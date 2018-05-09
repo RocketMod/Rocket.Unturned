@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Rocket.API;
-using Rocket.API.Chat;
 using Rocket.API.Commands;
 using Rocket.API.I18N;
 using Rocket.API.Player;
@@ -15,23 +14,22 @@ namespace Rocket.Unturned.Commands
 {
     public class CommandTp : ICommand
     {
-        public bool SupportsCaller(Type commandCaller)
+        public bool SupportsUser(Type userType)
         {
-            return typeof(UnturnedPlayer).IsAssignableFrom(commandCaller);
+            return typeof(UnturnedUser).IsAssignableFrom(userType);
         }
 
         public void Execute(ICommandContext context)
         {
-            ITranslationLocator translations = ((UnturnedImplementation)context.Container.Resolve<IImplementation>()).ModuleTranslations;
-            IChatManager chatManager = context.Container.Resolve<IChatManager>();
+            ITranslationCollection translations = ((UnturnedImplementation)context.Container.Resolve<IImplementation>()).ModuleTranslations;
+            UnturnedPlayer player = ((UnturnedUser)context.User).UnturnedPlayer;
 
-            UnturnedPlayer player = (UnturnedPlayer)context.Caller;
             if (context.Parameters.Length != 1 && context.Parameters.Length != 3)
                 throw new CommandWrongUsageException();
 
             if (player.Stance == EPlayerStance.DRIVING || player.Stance == EPlayerStance.SITTING)
                 throw new CommandWrongUsageException(
-                    translations.GetLocalizedMessage("command_generic_teleport_while_driving_error"));
+                    translations.Get("command_generic_teleport_while_driving_error"));
 
             float? x = null;
             float? y = null;
@@ -47,14 +45,14 @@ namespace Rocket.Unturned.Commands
             if (x != null)
             {
                 player.Teleport(new Vector3((float)x, (float)y, (float)z), MeasurementTool.angleToByte(player.Rotation));
-                chatManager.SendLocalizedMessage(translations, player, "command_tp_teleport_private", (float)x + "," + (float)y + "," + (float)z);
+                context.User.SendLocalizedMessage(translations, "command_tp_teleport_private", null, (float)x + "," + (float)y + "," + (float)z);
                 return;
             }
 
-            if (context.Parameters.Get<IOnlinePlayer>(0) is UnturnedPlayer otherplayer && otherplayer != player)
+            if (context.Parameters.Get<IPlayer>(0) is UnturnedPlayer otherplayer && otherplayer != player)
             {
                 player.Teleport(otherplayer);
-                chatManager.SendLocalizedMessage(translations, player, "command_tp_teleport_private", otherplayer.CharacterName);
+                context.User.SendLocalizedMessage(translations, "command_tp_teleport_private", null, otherplayer.CharacterName);
                 return;
             }
 
@@ -63,11 +61,11 @@ namespace Rocket.Unturned.Commands
             {
                 Vector3 c = item.point + new Vector3(0f, 0.5f, 0f);
                 player.Teleport(c, MeasurementTool.angleToByte(player.Rotation));
-                chatManager.SendLocalizedMessage(translations, player, "command_tp_teleport_private", ((LocationNode)item).name);
+                context.User.SendLocalizedMessage(translations, "command_tp_teleport_private", null, ((LocationNode)item).name);
                 return;
             }
 
-            chatManager.SendLocalizedMessage(translations, player, "command_tp_failed_find_destination");
+            context.User.SendLocalizedMessage(translations, "command_tp_failed_find_destination");
         }
 
         public string Name => "Tp";
@@ -75,7 +73,7 @@ namespace Rocket.Unturned.Commands
         public string Description => null;
         public string Permission => "Rocket.Unturned.Tp";
         public string Syntax => "<player | place | x y z>";
-        public ISubCommand[] ChildCommands => null;
+        public IChildCommand[] ChildCommands => null;
         public string[] Aliases => null;
     }
 }

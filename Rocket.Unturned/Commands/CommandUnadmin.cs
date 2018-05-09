@@ -3,13 +3,14 @@ using System.ComponentModel.Design;
 using Rocket.API.Commands;
 using Rocket.API.Player;
 using Rocket.Core.Commands;
+using Rocket.Core.User;
 using Rocket.Unturned.Player;
 
 namespace Rocket.Unturned.Commands
 {
     public class CommandUnadmin : ICommand
     {
-        public bool SupportsCaller(Type commandCaller)
+        public bool SupportsUser(Type userType)
         {
             return true; //anyone can use the command
         }
@@ -19,7 +20,7 @@ namespace Rocket.Unturned.Commands
             if (context.Parameters.Length != 1)
                 throw new CommandWrongUsageException();
 
-            ICommandCaller targetUser = context.Parameters.Get<IOnlinePlayer>(0);
+            IPlayer targetUser = context.Parameters.Get<IPlayer>(0);
 
             if (targetUser is UnturnedPlayer uPlayer && uPlayer.IsAdmin)
             {
@@ -27,7 +28,7 @@ namespace Rocket.Unturned.Commands
                 return;
             }
 
-            context.Caller.SendMessage($"Could not unadmin {targetUser.Name}", ConsoleColor.Red);
+            context.User.SendMessage($"Could not unadmin {targetUser.Name}", ConsoleColor.Red);
         }
 
         public string Name => "Unadmin";
@@ -35,7 +36,7 @@ namespace Rocket.Unturned.Commands
         public string Description => null;
         public string Permission => "Rocket.Unturned.Unadmin";
         public string Syntax => "<target player>";
-        public ISubCommand[] ChildCommands => null;
+        public IChildCommand[] ChildCommands => null;
         public string[] Aliases => null;
     }
 }

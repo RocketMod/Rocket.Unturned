@@ -15,6 +15,7 @@ using Rocket.Core.Configuration;
 using Rocket.Core.Implementation.Events;
 using Rocket.Core.Logging;
 using Rocket.Core.Player.Events;
+using Rocket.Core.User;
 using Rocket.Unturned.Console;
 using Rocket.Unturned.Player;
 using Rocket.Unturned.Player.Events;
@@ -29,15 +30,20 @@ namespace Rocket.Unturned
 {
     public class UnturnedImplementation : IImplementation
     {
+        public UnturnedImplementation(IDependencyContainer container)
+        {
+            Console = new UnturnedConsole(container);
+        }
+
         private GameObject rocketGameObject;
         private ILogger logger;
         private IPlayerManager playerManager;
         private IEventManager eventManager;
         private IDependencyContainer container;
-        internal ITranslationLocator ModuleTranslations { get; private set; }
+        internal ITranslationCollection ModuleTranslations { get; private set; }
         private IRuntime runtime;
         public bool IsAlive => true;
-        private IConsoleCommandCaller consoleCaller;
+        public IConsole Console { get; set; }
 
         public void Init(IRuntime runtime)
         {
@@ -48,7 +54,7 @@ namespace Rocket.Unturned
             container = runtime.Container;
             eventManager = container.Resolve<IEventManager>();
             playerManager = container.Resolve<IPlayerManager>("unturned_playermanager");
-            ModuleTranslations = container.Resolve<ITranslationLocator>();
+            ModuleTranslations = container.Resolve<ITranslationCollection>();
             
             logger = container.Resolve<ILogger>();
             logger.LogInformation("Loading Rocket Unturned Implementation...");
@@ -69,7 +75,7 @@ namespace Rocket.Unturned
                 || Environment.OSVersion.Platform == PlatformID.MacOSX)
             {
                 rocketGameObject.SetActive(false); // deactivate object so it doesn't run Awake until all properties were set
-                var console = rocketGameObject.AddComponent<UnturnedConsole>();
+                var console = rocketGameObject.AddComponent<UnturnedConsolePipe>();
                 console.Logger = logger;
                 rocketGameObject.SetActive(true); // reactivate object
             }
@@ -79,8 +85,20 @@ namespace Rocket.Unturned
             Provider.onServerConnected += OnPlayerConnected;
             Provider.onServerDisconnected += OnPlayerDisconnected;
             DamageTool.playerDamaged += OnPlayerDamaged;
-
             Provider.onServerShutdown += OnServerShutdown;
+            ChatManager.onChatted += (SteamPlayer player, EChatMode mode, ref Color color, ref bool isRich, string message,
+                                      ref bool isVisible) =>
+            {
+                UnturnedPlayer p = (UnturnedPlayer)playerManager.GetOnlinePlayerById(player.playerID.steamID.m_SteamID.ToString());
+                UnturnedPlayerChatEvent @event = new UnturnedPlayerChatEvent(p, mode, color, isRich, message, !isVisible);
+                eventManager.Emit(this, @event);
+                color = @event.Color;
+                isRich = @event.IsRichText;
+                isVisible = !@event.IsCancelled;
+            };
+
+            CommandWindow.onCommandWindowOutputted += (text, color)
+                => logger.LogNative(text?.ToString());
         }
 
         private void OnServerShutdown()
@@ -94,7 +112,7 @@ namespace Rocket.Unturned
             var killer = playerManager.GetOnlinePlayerById(killerId.m_SteamID.ToString());
 
             UnturnedPlayerDamagedEvent @event =
-                new UnturnedPlayerDamagedEvent(player, cause, limb, killer, direction, damage, times)
+                new UnturnedPlayerDamagedEvent(player, cause, limb, killer.User, direction, damage, times)
                 {
                     IsCancelled = !canDamage
                 };
@@ -147,14 +165,14 @@ namespace Rocket.Unturned
         private void OnPlayerConnected(CSteamID steamid)
         {
             var player = playerManager.GetOnlinePlayerById(steamid.ToString());
-            PlayerConnectedEvent @event = new PlayerConnectedEvent(player);
+            UserConnectedEvent @event = new UserConnectedEvent(player.User);
             eventManager.Emit(this, @event);
         }
 
         private void OnPlayerDisconnected(CSteamID steamid)
         {
             var player = playerManager.GetOnlinePlayerById(steamid.ToString());
-            PlayerDisconnectedEvent @event = new PlayerDisconnectedEvent(player, null);
+            UserDisconnectedEvent @event = new UserDisconnectedEvent(player.User, null);
             eventManager.Emit(this, @event);
         }
 
@@ -202,11 +220,11 @@ namespace Rocket.Unturned
                 {
                     commandLine = commandLine.Substring(1);
                     var caller = playerManager.GetOnlinePlayer(player.playerID.steamID.ToString());
-                    @event = new PreCommandExecutionEvent(caller, commandLine);
+                    @event = new PreCommandExecutionEvent(caller.User, commandLine);
                     eventManager.Emit(this, @event);
-                    bool success = cmdHandler.HandleCommand(caller, commandLine, "/");
+                    bool success = cmdHandler.HandleCommand(caller.User, commandLine, "/");
                     if(!success)
-                        caller.SendMessage("Command not found", ConsoleColor.Red);
+                        caller.User.SendMessage("Command not found", ConsoleColor.Red);
                     shouldList = false;
                 }
 
@@ -218,11 +236,11 @@ namespace Rocket.Unturned
                 if (commandline.StartsWith("/"))
                     commandline = commandline.Substring(1);
 
-                @event = new PreCommandExecutionEvent(ConsoleCommandCaller, commandline);
+                @event = new PreCommandExecutionEvent(Console, commandline);
                 eventManager.Emit(this, @event);
-                bool success = cmdHandler.HandleCommand(ConsoleCommandCaller, commandline, "");
+                bool success = cmdHandler.HandleCommand(Console, commandline, "");
                 if (!success)
-                    ConsoleCommandCaller.SendMessage("Command not found", ConsoleColor.Red);
+                    Console.SendMessage("Command not found", ConsoleColor.Red);
 
                 shouldExecuteCommand = false;
             };
@@ -296,7 +314,7 @@ namespace Rocket.Unturned
                             var killerId = data[2].ToString();
 
                             var killer = killerId != "0" ? playerManager.GetOnlinePlayerById(killerId) : null;
-                            @event = new UnturnedPlayerDeathEvent(unturnedPlayer, limb, deathCause, killer);
+                            @event = new UnturnedPlayerDeathEvent(unturnedPlayer, limb, deathCause, killer?.Entity);
                             break;
                         }
                 }
@@ -317,8 +335,6 @@ namespace Rocket.Unturned
 
         public void Reload() { }
 
-        public IConsoleCommandCaller ConsoleCommandCaller => consoleCaller ?? (consoleCaller = new UnturnedConsoleCaller());
-        
         public string InstanceId => Provider.serverID;
         public string WorkingDirectory => Directory.GetCurrentDirectory();
         public string ConfigurationName => Name;

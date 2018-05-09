@@ -1,46 +1,42 @@
 ﻿using System;
 using Rocket.API;
-using Rocket.API.Chat;
 using Rocket.API.Commands;
 using Rocket.API.I18N;
 using Rocket.API.Player;
 using Rocket.Core.Commands;
 using Rocket.Core.I18N;
 using Rocket.Unturned.Player;
-using UnityEngine;
 
 namespace Rocket.Unturned.Commands
 {
     public class CommandTphere : ICommand
     {
-        public bool SupportsCaller(Type commandCaller)
+        public bool SupportsUser(Type userType)
         {
-            return typeof(UnturnedPlayer).IsAssignableFrom(commandCaller);
+            return typeof(UnturnedUser).IsAssignableFrom(userType);
         }
 
         public void Execute(ICommandContext context)
         {
-            ITranslationLocator translations = ((UnturnedImplementation)context.Container.Resolve<IImplementation>()).ModuleTranslations;
-            IChatManager chatManager = context.Container.Resolve<IChatManager>();
-
-            UnturnedPlayer player = (UnturnedPlayer)context.Caller;
+            ITranslationCollection translations = ((UnturnedImplementation)context.Container.Resolve<IImplementation>()).ModuleTranslations;
+            UnturnedPlayer player = ((UnturnedUser)context.User).UnturnedPlayer;
 
             if (context.Parameters.Length != 1)
             {
                 throw new CommandWrongUsageException();
             }
 
-            UnturnedPlayer otherPlayer = (UnturnedPlayer)context.Parameters.Get<IOnlinePlayer>(0);
+            UnturnedPlayer otherPlayer = (UnturnedPlayer)context.Parameters.Get<IPlayer>(0);
 
             if (otherPlayer.IsInVehicle)
             {
-                chatManager.SendLocalizedMessage(translations, player, "command_tphere_vehicle");
+                context.User.SendLocalizedMessage(translations, "command_tphere_vehicle");
                 return;
             }
 
             otherPlayer.Teleport(player);
-            chatManager.SendLocalizedMessage(translations, player, "command_tphere_teleport_from_private", otherPlayer.CharacterName);
-            chatManager.SendLocalizedMessage(translations, otherPlayer, "command_tphere_teleport_to_private", player.CharacterName);
+            context.User.SendLocalizedMessage(translations, "command_tphere_teleport_from_private", null, otherPlayer.CharacterName);
+            otherPlayer.User.SendLocalizedMessage(translations, "command_tphere_teleport_to_private", null, player.CharacterName);
         }
 
         public string Name => "Tphere";
@@ -48,7 +44,7 @@ namespace Rocket.Unturned.Commands
         public string Description => null;
         public string Permission => "Rocket.Unturned.Tphere";
         public string Syntax => "<player>";
-        public ISubCommand[] ChildCommands => null;
+        public IChildCommand[] ChildCommands => null;
         public string[] Aliases => null;
     }
 }

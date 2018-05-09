@@ -1,6 +1,5 @@
 ﻿using System;
 using Rocket.API;
-using Rocket.API.Chat;
 using Rocket.API.Commands;
 using Rocket.Core.Commands;
 using Rocket.Core.I18N;
@@ -10,15 +9,16 @@ namespace Rocket.Unturned.Commands
 {
     public class CommandCompass : ICommand
     {
-        public bool SupportsCaller(Type commandCaller)
+        public bool SupportsUser(Type userType)
         {
-            return typeof(UnturnedPlayer).IsAssignableFrom(commandCaller);
+            return typeof(UnturnedUser).IsAssignableFrom(userType);
         }
 
         public void Execute(ICommandContext context)
         {
-            UnturnedPlayer player = (UnturnedPlayer) context.Caller;
-            var chatManager = context.Container.Resolve<IChatManager>();
+            UnturnedUser user = (UnturnedUser) context.User;
+            var player = user.UnturnedPlayer;
+
             var translations = ((UnturnedImplementation)context.Container.Resolve<IImplementation>()).ModuleTranslations;
 
             float currentDirection = player.Rotation;
@@ -52,38 +52,38 @@ namespace Rocket.Unturned.Commands
 
             if (currentDirection > 30 && currentDirection < 60)
             {
-                directionName = translations.GetLocalizedMessage("command_compass_northeast");
+                directionName = translations.Get("command_compass_northeast");
             }
             else if (currentDirection > 60 && currentDirection < 120)
             {
-                directionName = translations.GetLocalizedMessage("command_compass_east");
+                directionName = translations.Get("command_compass_east");
             }
             else if (currentDirection > 120 && currentDirection < 150)
             {
-                directionName = translations.GetLocalizedMessage("command_compass_southeast");
+                directionName = translations.Get("command_compass_southeast");
             }
             else if (currentDirection > 150 && currentDirection < 210)
             {
-                directionName = translations.GetLocalizedMessage("command_compass_south");
+                directionName = translations.Get("command_compass_south");
             }
             else if (currentDirection > 210 && currentDirection < 240)
             {
-                directionName = translations.GetLocalizedMessage("command_compass_southwest");
+                directionName = translations.Get("command_compass_southwest");
             }
             else if (currentDirection > 240 && currentDirection < 300)
             {
-                directionName = translations.GetLocalizedMessage("command_compass_west");
+                directionName = translations.Get("command_compass_west");
             }
             else if (currentDirection > 300 && currentDirection < 330)
             {
-                directionName = translations.GetLocalizedMessage("command_compass_northwest");
+                directionName = translations.Get("command_compass_northwest");
             }
             else if (currentDirection > 330 || currentDirection < 30)
             {
-                directionName = translations.GetLocalizedMessage("command_compass_north");
+                directionName = translations.Get("command_compass_north");
             }
 
-            chatManager.SendLocalizedMessage(translations, player, "command_compass_facing_private", directionName);
+            user.SendLocalizedMessage(translations, "command_compass_facing_private", null, directionName);
         }
 
         public string Name => "Compass";
@@ -91,7 +91,7 @@ namespace Rocket.Unturned.Commands
         public string Description => null;
         public string Permission => "Rocket.Unturned.Compass";
         public string Syntax => "[direction]";
-        public ISubCommand[] ChildCommands => null;
+        public IChildCommand[] ChildCommands => null;
         public string[] Aliases => null;
     }
 }

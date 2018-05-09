@@ -1,81 +1,113 @@
 ﻿using System;
-using System.IO;
-using System.Threading;
+using System.Drawing;
+using System.Reflection;
+using Rocket.API.Commands;
+using Rocket.API.DependencyInjection;
+using Rocket.API.Logging;
+using Rocket.API.User;
+using Rocket.Core.Configuration;
+using Rocket.Core.Extensions;
 using Rocket.Core.Logging;
-using SDG.Unturned;
-using UnityEngine;
-using ILogger = Rocket.API.Logging.ILogger;
 
 namespace Rocket.Unturned.Console
 {
-    public class UnturnedConsole : MonoBehaviour
+    public class UnturnedConsole : IConsole, IFormattable
     {
-        private FileStream fileStream;
-        private StreamWriter streamWriter;
-        private UnturnedConsoleWriter writer;
+        private readonly IDependencyContainer container;
 
-        public ILogger Logger { get; set; }
-
-        private void Awake()
+        public UnturnedConsole(IDependencyContainer container)
         {
-            try
-            {
-                fileStream = new FileStream($"{Dedicator.serverID}.console", 
-                    FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
-
-                streamWriter = new StreamWriter(fileStream, System.Text.Encoding.UTF8)
-                {
-                    AutoFlush = true
-                };
-                writer = new UnturnedConsoleWriter(streamWriter);
-
-                readingThread = new Thread(DoRead);
-                readingThread.Start();
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError(null, ex);
-            }
+            SessionConnectTime = DateTime.Now;
+            BaseLogger.SkipTypeFromLogging(GetType());
+            this.container = container;
         }
 
-        private void OnDestroy()
+        public string Id => "Console";
+        public string Name => "Console";
+        public IdentityType Type => IdentityType.Console;
+
+        public IUserManager UserManager => container.Resolve<IUserManager>("game");
+        public bool IsOnline => true;
+        public DateTime SessionConnectTime { get; }
+        public DateTime? SessionDisconnectTime => null;
+        public DateTime? LastSeen => DateTime.Now;
+        public string UserType => "Console";
+
+        public void WriteLine(string format, params object[] bindings)
+            => WriteLine(LogLevel.Information, format, Color.White, bindings);
+
+        public void WriteLine(string format, Color? color = null, params object[] bindings)
+            => WriteLine(LogLevel.Information, format, color, bindings);
+
+        public void WriteLine(LogLevel level, string format, params object[] bindings)
+            => WriteLine(LogLevel.Information, format, Color.White, bindings);
+
+        public void WriteLine(LogLevel level, string format, Color? color = null, params object[] bindings)
         {
-            if (fileStream != null)
+            IRocketSettingsProvider rocketSettings = container.Resolve<IRocketSettingsProvider>();
+            Color orgCol = ConsoleLogger.GetForegroundColor();
+
+            SetForegroundColor(Color.White);
+            System.Console.Write("[");
+
+            SetForegroundColor(BaseLogger.GetLogLevelColor(level));
+            System.Console.Write(BaseLogger.GetLogLevelPrefix(level));
+
+            SetForegroundColor(Color.White);
+            System.Console.Write("] ");
+
+            if (rocketSettings?.Settings.IncludeMethodsInLogs ?? true)
             {
-                fileStream.Close();
-                fileStream.Dispose();
+                SetForegroundColor(Color.White);
+                System.Console.Write("[");
+
+                SetForegroundColor(Color.DarkGray);
+                System.Console.Write(GetLoggerCallingMethod().GetDebugName());
+
+                SetForegroundColor(Color.White);
+                System.Console.Write("] ");
             }
-            if (streamWriter != null)
-            {
-                streamWriter.Close();
-                streamWriter.Dispose();
-            }
-            if (writer != null)
-            {
-                writer.Close();
-                writer.Dispose();
-            }
+
+            SetForegroundColor(color ?? Color.White);
+
+            string line = string.Format(format, bindings);
+            System.Console.WriteLine(line);
+
+            SetForegroundColor(orgCol);
         }
 
-        private static Thread readingThread;
-
-        private void DoRead()
+        public void Write(string format, Color? color = null, params object[] bindings)
         {
-            do
-            {
-                try
-                {
-                    string currentLine = System.Console.ReadLine();
+            ConsoleColor orgColor = System.Console.ForegroundColor;
+            ConsoleLogger.SetForegroundColor(color ?? Color.White);
+            System.Console.Write(format, bindings);
+            System.Console.ForegroundColor = orgColor;
+        }
 
-                    if (currentLine != null && CommandWindow.input != null && CommandWindow.input.onInputText != null && currentLine.Trim().Length != 0)
-                        CommandWindow.input.onInputText(currentLine);
-                }
-                catch (Exception ex)
-                {
-                    Logger.LogError(null, ex);
-                }
-            }
-            while (true);
+        public void Write(string format, params object[] bindings)
+        {
+            Write(format, null, bindings);
+        }
+
+        private MethodBase GetLoggerCallingMethod() => ReflectionExtensions.GetCallingMethod(typeof(UnturnedConsole));
+
+        private void SetForegroundColor(Color color)
+        {
+            ConsoleLogger.SetForegroundColor(color);
+        }
+
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
+            if (format == null)
+                return Name.ToString(formatProvider); ;
+
+            if (format.Equals("id", StringComparison.OrdinalIgnoreCase))
+                return Id.ToString(formatProvider);
+
+            if (format.Equals("name", StringComparison.OrdinalIgnoreCase))
+                return Name.ToString(formatProvider);
+
+            throw new FormatException($"\"{format}\" is not a valid format.");
         }
     }
 }

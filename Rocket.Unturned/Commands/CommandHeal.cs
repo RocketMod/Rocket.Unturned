@@ -1,38 +1,38 @@
 ﻿using System;
 using Rocket.API;
-using Rocket.API.Chat;
 using Rocket.API.Commands;
 using Rocket.API.I18N;
 using Rocket.API.Permissions;
 using Rocket.API.Player;
+using Rocket.API.User;
 using Rocket.Core.I18N;
+using Rocket.Core.User;
 using Rocket.Unturned.Player;
 
 namespace Rocket.Unturned.Commands
 {
     public class CommandHeal : ICommand
     {
-        public bool SupportsCaller(Type commandCaller)
+        public bool SupportsUser(Type userType)
         {
-            return typeof(IOnlinePlayer).IsAssignableFrom(commandCaller);
+            return typeof(IPlayerUser).IsAssignableFrom(userType);
         }
 
         public void Execute(ICommandContext context)
         {
             IPermissionProvider permissions = context.Container.Resolve<IPermissionProvider>();
-            ITranslationLocator translations = ((UnturnedImplementation)context.Container.Resolve<IImplementation>()).ModuleTranslations;
-            IChatManager chatManager = context.Container.Resolve<IChatManager>();
+            ITranslationCollection translations = ((UnturnedImplementation)context.Container.Resolve<IImplementation>()).ModuleTranslations;
 
-            IOnlinePlayer target;
-            if (permissions.CheckPermission(context.Caller, Permission + ".Others") == PermissionResult.Grant 
+            IPlayer target;
+            if (permissions.CheckPermission(context.User, Permission + ".Others") == PermissionResult.Grant 
                 && context.Parameters.Length >= 1)
-                target = context.Parameters.Get<IOnlinePlayer>(0);
+                target = context.Parameters.Get<IPlayer>(0);
             else
-                target = (IOnlinePlayer) context.Caller;
+                target = ((IPlayerUser)context.User).Player;
 
             if (!(target is UnturnedPlayer uPlayer))
             {
-                context.Caller.SendMessage($"Could not heal {((ICommandCaller)target).Name}", ConsoleColor.Red);
+                context.User.SendMessage($"Could not heal {target.Name}", ConsoleColor.Red);
                 return;
             }
 
@@ -43,14 +43,14 @@ namespace Rocket.Unturned.Commands
             uPlayer.Hunger = 0;
             uPlayer.Thirst = 0;
 
-            if (target == context.Caller)
+            if (target == context.User)
             {
-                chatManager.SendLocalizedMessage(translations, (IOnlinePlayer)context.Caller, "command_heal_success");
+                context.User.SendLocalizedMessage(translations, "command_heal_success");
                 return;
             }
 
-            chatManager.SendLocalizedMessage(translations, (IOnlinePlayer)context.Caller, "command_heal_success_me", ((ICommandCaller)target).Name);
-            chatManager.SendLocalizedMessage(translations, target, "command_heal_success_other", context.Caller.Name);
+            context.User.SendLocalizedMessage(translations, "command_heal_success_me", null, target.Name);
+            target.User.SendLocalizedMessage(translations, "command_heal_success_other", null, context.User.Name);
         }
 
         public string Name => "Heal";
@@ -58,7 +58,7 @@ namespace Rocket.Unturned.Commands
         public string Description => null;
         public string Permission => "Rocket.Unturned.Heal";
         public string Syntax => "[player]";
-        public ISubCommand[] ChildCommands => null;
+        public IChildCommand[] ChildCommands => null;
         public string[] Aliases => null;
     }
 }

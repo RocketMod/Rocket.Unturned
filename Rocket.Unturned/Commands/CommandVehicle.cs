@@ -1,6 +1,5 @@
 ﻿using System;
 using Rocket.API;
-using Rocket.API.Chat;
 using Rocket.API.Commands;
 using Rocket.API.I18N;
 using Rocket.Core.Commands;
@@ -13,17 +12,16 @@ namespace Rocket.Unturned.Commands
 {
     public class CommandVehicle : ICommand
     {
-        public bool SupportsCaller(Type commandCaller)
+        public bool SupportsUser(Type userType)
         {
-            return typeof(UnturnedPlayer).IsAssignableFrom(commandCaller);
+            return typeof(UnturnedUser).IsAssignableFrom(userType);
         }
 
         public void Execute(ICommandContext context)
         {
-            ITranslationLocator translations = ((UnturnedImplementation)context.Container.Resolve<IImplementation>()).ModuleTranslations;
-            IChatManager chatManager = context.Container.Resolve<IChatManager>();
+            ITranslationCollection translations = ((UnturnedImplementation)context.Container.Resolve<IImplementation>()).ModuleTranslations;
+            UnturnedPlayer player = ((UnturnedUser)context.User).UnturnedPlayer;
 
-            UnturnedPlayer player = (UnturnedPlayer)context.Caller;
             if (context.Parameters.Length != 1)
             {
                 throw new CommandWrongUsageException();
@@ -52,10 +50,9 @@ namespace Rocket.Unturned.Commands
             Asset a = Assets.find(EAssetType.VEHICLE, id);
             string assetName = ((VehicleAsset)a).vehicleName;
 
-            chatManager.SendLocalizedMessage(translations, player,
-                VehicleTool.giveVehicle(player.Player, id)
+            context.User.SendLocalizedMessage(translations, VehicleTool.giveVehicle(player.Player, id)
                     ? "command_v_giving_private"
-                    : "command_v_giving_failed_private", assetName, id);
+                    : "command_v_giving_failed_private", null, assetName, id);
         }
 
         public string Name => "Vehicle";
@@ -63,7 +60,7 @@ namespace Rocket.Unturned.Commands
         public string Description => null;
         public string Permission => "Rocket.Unturned.Vehicle";
         public string Syntax => "<id or name>";
-        public ISubCommand[] ChildCommands => null;
+        public IChildCommand[] ChildCommands => null;
         public string[] Aliases => new [] { "V" };
     }
 }

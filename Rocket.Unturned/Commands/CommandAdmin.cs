@@ -2,13 +2,14 @@
 using Rocket.API.Commands;
 using Rocket.API.Player;
 using Rocket.Core.Commands;
+using Rocket.Core.User;
 using Rocket.Unturned.Player;
 
 namespace Rocket.Unturned.Commands
 {
     public class CommandAdmin : ICommand
     {
-        public bool SupportsCaller(Type commandCaller)
+        public bool SupportsUser(Type userType)
         {
             return true; //anyone can use the command
         }
@@ -18,15 +19,15 @@ namespace Rocket.Unturned.Commands
             if(context.Parameters.Length != 1)
                 throw new CommandWrongUsageException();
 
-            ICommandCaller targetUser = context.Parameters.Get<IOnlinePlayer>(0);
+            IPlayer target = context.Parameters.Get<IPlayer>(0);
 
-            if (targetUser is UnturnedPlayer uPlayer && !uPlayer.IsAdmin)
+            if (target.IsOnline && target is UnturnedPlayer uPlayer && !uPlayer.IsAdmin)
             {
                 uPlayer.Admin(true);
                 return;
             }
 
-            context.Caller.SendMessage($"Could not admin {targetUser.Name}" , ConsoleColor.Red);
+            context.User.SendMessage($"Could not admin {target.Name}" , ConsoleColor.Red);
         }
 
         public string Name => "Admin";
@@ -34,7 +35,7 @@ namespace Rocket.Unturned.Commands
         public string Description => null;
         public string Permission => "Rocket.Unturned.Admin";
         public string Syntax => "<target player>";
-        public ISubCommand[] ChildCommands => null;
+        public IChildCommand[] ChildCommands => null;
         public string[] Aliases => null;
     }
 }

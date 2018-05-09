@@ -4,6 +4,7 @@ using Rocket.API.Commands;
 using Rocket.API.I18N;
 using Rocket.API.Player;
 using Rocket.Core.Commands;
+using Rocket.Core.User;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 
@@ -11,24 +12,24 @@ namespace Rocket.Unturned.Commands
 {
     public class CommandInvestigate : ICommand
     {
-        public bool SupportsCaller(Type commandCaller)
+        public bool SupportsUser(Type userType)
         {
-            return typeof(UnturnedPlayer).IsAssignableFrom(commandCaller);
+            return typeof(UnturnedUser).IsAssignableFrom(userType);
         }
 
         public void Execute(ICommandContext context)
         {
-            ITranslationLocator translations = ((UnturnedImplementation)context.Container.Resolve<IImplementation>()).ModuleTranslations;
+            ITranslationCollection translations = ((UnturnedImplementation)context.Container.Resolve<IImplementation>()).ModuleTranslations;
 
             if (context.Parameters.Length != 1)
             {
                 throw new CommandWrongUsageException();
             }
 
-            UnturnedPlayer target = (UnturnedPlayer) context.Parameters.Get<IOnlinePlayer>(0);
+            UnturnedPlayer target = (UnturnedPlayer) context.Parameters.Get<IPlayer>(0);
 
             SteamPlayer otherPlayer = target.SteamPlayer;
-            context.Caller.SendMessage(translations.GetLocalizedMessage("command_investigate_private", otherPlayer.playerID.characterName, otherPlayer.playerID.steamID.ToString()));
+            context.User.SendMessage(translations.Get("command_investigate_private", otherPlayer.playerID.characterName, otherPlayer.playerID.steamID.ToString()));
         }
 
         public string Name => "Investigate";
@@ -36,7 +37,7 @@ namespace Rocket.Unturned.Commands
         public string Description => null;
         public string Permission => "Rocket.Unturned.Investigate";
         public string Syntax => "<player>";
-        public ISubCommand[] ChildCommands => null;
+        public IChildCommand[] ChildCommands => null;
         public string[] Aliases => null;
     }
 }
