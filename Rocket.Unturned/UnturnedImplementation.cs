@@ -85,7 +85,8 @@ namespace Rocket.Unturned
 
         private void OnServerShutdown()
         {
-            runtime.Shutdown();
+            //runtime.Shutdown();
+            //Todo: Add Shutdown to IRuntime
         }
 
         private void OnPlayerDamaged(SDG.Unturned.Player uPlayer, ref EDeathCause cause, ref ELimb limb, ref CSteamID killerId, ref Vector3 direction, ref float damage, ref float times, ref bool canDamage)
