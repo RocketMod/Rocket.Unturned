@@ -74,5 +74,18 @@ namespace Rocket.Unturned.Player
 
             return base.ToString(format, formatProvider);
         }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
+
+        public override bool Equals(object o)
+        {
+            if (!(o is PreConnectUnturnedPlayer uPlayer))
+                return false;
+
+            return uPlayer.GetHashCode() == GetHashCode();
+        }
     }
 }
