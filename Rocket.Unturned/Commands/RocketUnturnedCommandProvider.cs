@@ -28,5 +28,6 @@ namespace Rocket.Unturned.Commands
         public ILifecycleObject GetOwner(ICommand command) => rocketUnturned;
 
         public IEnumerable<ICommand> Commands { get; }
+        public string ServiceName => "Rocket.Unturned";
     }
 }

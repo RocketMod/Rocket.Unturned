@@ -263,5 +263,6 @@ namespace Rocket.Unturned.Player
         /// Players which are not authenticated and have not joined yet.
         /// </summary>
         public IEnumerable<PreConnectUnturnedPlayer> PendingPlayers => Provider.pending.Select(c => new PreConnectUnturnedPlayer(container, c));
+        public string ServiceName => "Unturned";
     }
 }

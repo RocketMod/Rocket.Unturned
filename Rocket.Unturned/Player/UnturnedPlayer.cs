@@ -7,6 +7,8 @@ using Rocket.API.DependencyInjection;
 using Rocket.API.Entities;
 using Rocket.API.User;
 using Rocket.Core.Player;
+using Rocket.UnityEngine.Extensions;
+using Rocket.Unturned.Utils;
 using Node = SDG.Unturned.Node;
 
 namespace Rocket.Unturned.Player
@@ -136,7 +138,12 @@ namespace Rocket.Unturned.Player
             /*}*/
         }
 
-        public Vector3 Position => Player.transform.position;
+        public void Teleport(Rocket.API.Math.Vector3 position, float rotation)
+        {
+            Teleport(position.ToUnityVector(), rotation);
+        }
+
+        public API.Math.Vector3 Position => Player?.transform?.position.ToRocketVector();
 
         public EPlayerStance Stance => Player.stance.stance;
 
@@ -264,6 +271,11 @@ namespace Rocket.Unturned.Player
         {
             Player.life.askDamage(amount, direction, cause, limb, damageDealer, out EPlayerKill playerKill);
             return playerKill;
+        }
+
+        public EPlayerKill Damage(byte amount, API.Math.Vector3 direction, EDeathCause cause, ELimb limb, CSteamID damageDealer)
+        {
+            return Damage(amount, direction.ToUnityVector(), cause, limb, damageDealer);
         }
 
         public bool IsPro => Player.channel.owner.isPro;
