@@ -34,5 +34,7 @@ namespace Rocket.Unturned.Commands
                 return commands;
             }
         }
+
+        public string ServiceName => "Unturned";
     }
 }
