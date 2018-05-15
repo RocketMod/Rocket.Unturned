@@ -3,6 +3,7 @@ using Rocket.API;
 using Rocket.API.Commands;
 using Rocket.API.I18N;
 using Rocket.Core.Commands;
+using Rocket.UnityEngine.Extensions;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 using UnityEngine;
@@ -32,7 +33,7 @@ namespace Rocket.Unturned.Commands
                 throw new CommandWrongUsageException(translations.Get("command_generic_teleport_while_driving_error"));
             }
 
-            player.Teleport(pos, rot);
+            player.Teleport(pos.ToRocketVector(), rot);
         }
 
         public string Name => "Home";

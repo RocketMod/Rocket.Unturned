@@ -6,6 +6,7 @@ using Rocket.API.I18N;
 using Rocket.API.Player;
 using Rocket.Core.Commands;
 using Rocket.Core.I18N;
+using Rocket.UnityEngine.Extensions;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 using UnityEngine;
@@ -44,7 +45,7 @@ namespace Rocket.Unturned.Commands
 
             if (x != null)
             {
-                player.Teleport(new Vector3((float)x, (float)y, (float)z), MeasurementTool.angleToByte(player.Rotation));
+                player.Teleport(new API.Math.Vector3((float)x, (float)y, (float)z), MeasurementTool.angleToByte(player.Rotation));
                 context.User.SendLocalizedMessage(translations, "command_tp_teleport_private", null, (float)x + "," + (float)y + "," + (float)z);
                 return;
             }
@@ -60,7 +61,7 @@ namespace Rocket.Unturned.Commands
             if (item != null)
             {
                 Vector3 c = item.point + new Vector3(0f, 0.5f, 0f);
-                player.Teleport(c, MeasurementTool.angleToByte(player.Rotation));
+                player.Teleport(c.ToRocketVector(), MeasurementTool.angleToByte(player.Rotation));
                 context.User.SendLocalizedMessage(translations, "command_tp_teleport_private", null, ((LocationNode)item).name);
                 return;
             }

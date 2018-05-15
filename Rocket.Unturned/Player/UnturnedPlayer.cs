@@ -132,10 +132,10 @@ namespace Rocket.Unturned.Player
         {
             Vector3 d1 = target.Player.transform.position;
             Vector3 vector31 = target.Player.transform.rotation.eulerAngles;
-            Teleport(d1, MeasurementTool.angleToByte(vector31.y));
+            Teleport(d1.ToRocketVector(), MeasurementTool.angleToByte(vector31.y));
         }
 
-        public void Teleport(Vector3 position, float rotation)
+        public void Teleport(API.Math.Vector3 position, float rotation)
         {
             /*
             if (VanishMode)
@@ -147,14 +147,9 @@ namespace Rocket.Unturned.Player
             else
             {
             */
-            Player.channel.send("askTeleport", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER, position,
+            Player.channel.send("askTeleport", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER, position.ToUnityVector(),
                 MeasurementTool.angleToByte(rotation));
             /*}*/
-        }
-
-        public void Teleport(Rocket.API.Math.Vector3 position, float rotation)
-        {
-            Teleport(position.ToUnityVector(), rotation);
         }
 
         public API.Math.Vector3 Position => Player?.transform?.position.ToRocketVector();
