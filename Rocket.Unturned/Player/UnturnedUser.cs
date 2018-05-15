@@ -24,5 +24,19 @@ namespace Rocket.Unturned.Player {
         public string UserType => "User";
         public IPlayer Player => UnturnedPlayer;
         public UnturnedPlayer UnturnedPlayer { get; }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
+
+        public override bool Equals(object o)
+        {
+            if (!(o is UnturnedUser uPlayer))
+                return false;
+
+            return uPlayer.GetHashCode() == GetHashCode();
+        }
+
     }
 }

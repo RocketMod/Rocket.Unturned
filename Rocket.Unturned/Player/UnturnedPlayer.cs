@@ -15,6 +15,20 @@ namespace Rocket.Unturned.Player
 {
     public sealed class UnturnedPlayer : BasePlayer
     {
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
+
+        public override bool Equals(object o)
+        {
+            if (!(o is UnturnedPlayer uPlayer))
+                return false;
+
+            return uPlayer.GetHashCode() == GetHashCode();
+        }
+
+
         public SDG.Unturned.Player Player => PlayerTool.getPlayer(CSteamID);
 
         public SteamPlayer SteamPlayer => Player?.channel?.owner;
