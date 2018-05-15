@@ -7,6 +7,7 @@ using Rocket.API.DependencyInjection;
 using Rocket.API.Entities;
 using Rocket.API.User;
 using Rocket.Core.Player;
+using Rocket.UnityEngine.Extensions;
 using Rocket.Unturned.Utils;
 using Node = SDG.Unturned.Node;
 
