@@ -33,7 +33,7 @@ namespace Rocket.Unturned.Commands
                 throw new CommandWrongUsageException(translations.Get("command_generic_teleport_while_driving_error"));
             }
 
-            player.Teleport(pos.ToRocketVector(), rot);
+            player.Teleport(pos.ToSystemVector(), rot);
         }
 
         public string Name => "Home";

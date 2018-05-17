@@ -68,20 +68,20 @@
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net35\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Rocket.API, Version=5.0.0.452, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rocket.API.5.0.0.452\lib\net35\Rocket.API.dll</HintPath>
+    <Reference Include="Rocket.API, Version=5.0.0.456, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rocket.API.5.0.0.456\lib\net35\Rocket.API.dll</HintPath>
     </Reference>
-    <Reference Include="Rocket.Compatibility, Version=5.0.0.452, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rocket.Compatibility.5.0.0.452\lib\net35\Rocket.Compatibility.dll</HintPath>
+    <Reference Include="Rocket.Compatibility, Version=5.0.0.456, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rocket.Compatibility.5.0.0.456\lib\net35\Rocket.Compatibility.dll</HintPath>
     </Reference>
-    <Reference Include="Rocket.Core, Version=5.0.0.452, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rocket.Core.5.0.0.452\lib\net35\Rocket.Core.dll</HintPath>
+    <Reference Include="Rocket.Core, Version=5.0.0.456, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rocket.Core.5.0.0.456\lib\net35\Rocket.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Rocket.Runtime, Version=5.0.0.452, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rocket.Runtime.5.0.0.452\lib\net35\Rocket.Runtime.dll</HintPath>
+    <Reference Include="Rocket.Runtime, Version=5.0.0.456, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rocket.Runtime.5.0.0.456\lib\net35\Rocket.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Rocket.UnityEngine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rocket.UnityEngine.5.0.0.27\lib\net35\Rocket.UnityEngine.dll</HintPath>
+      <HintPath>..\packages\Rocket.UnityEngine.5.0.0.29\lib\net35\Rocket.UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

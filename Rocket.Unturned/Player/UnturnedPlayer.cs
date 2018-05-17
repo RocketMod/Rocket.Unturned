@@ -5,6 +5,7 @@ using UnityEngine;
 using System.Linq;
 using Rocket.API.DependencyInjection;
 using Rocket.API.Entities;
+using Rocket.API.Player;
 using Rocket.API.User;
 using Rocket.Core.Player;
 using Rocket.UnityEngine.Extensions;
@@ -132,10 +133,10 @@ namespace Rocket.Unturned.Player
         {
             Vector3 d1 = target.Player.transform.position;
             Vector3 vector31 = target.Player.transform.rotation.eulerAngles;
-            Teleport(d1.ToRocketVector(), MeasurementTool.angleToByte(vector31.y));
+            Teleport(d1.ToSystemVector(), MeasurementTool.angleToByte(vector31.y));
         }
 
-        public void Teleport(API.Math.Vector3 position, float rotation)
+        public void Teleport(System.Numerics.Vector3 position, float rotation)
         {
             /*
             if (VanishMode)
@@ -152,7 +153,6 @@ namespace Rocket.Unturned.Player
             /*}*/
         }
 
-        public API.Math.Vector3 Position => Player?.transform?.position.ToRocketVector();
 
         public EPlayerStance Stance => Player.stance.stance;
 
@@ -282,7 +282,7 @@ namespace Rocket.Unturned.Player
             return playerKill;
         }
 
-        public EPlayerKill Damage(byte amount, API.Math.Vector3 direction, EDeathCause cause, ELimb limb, CSteamID damageDealer)
+        public EPlayerKill Damage(byte amount, System.Numerics.Vector3 direction, EDeathCause cause, ELimb limb, CSteamID damageDealer)
         {
             return Damage(amount, direction.ToUnityVector(), cause, limb, damageDealer);
         }

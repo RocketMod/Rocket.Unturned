@@ -45,7 +45,7 @@ namespace Rocket.Unturned.Commands
                         throw new CommandWrongUsageException();
                 }
 
-                player.Teleport(player.Position, currentDirection);
+                player.Teleport(player.Entity.Position, currentDirection);
             }
 
             string directionName = "Unknown";
