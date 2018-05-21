@@ -11,6 +11,7 @@ using Rocket.API.User;
 using Rocket.Core.Logging;
 using Rocket.Core.Player.Events;
 using Rocket.Core.User;
+using Rocket.Core.User.Events;
 using SDG.Unturned;
 using Steamworks;
 using UnityEngine;
@@ -37,7 +38,8 @@ namespace Rocket.Unturned.Player
 
         public bool Kick(IUser target, IUser kicker = null, string reason = null)
         {
-            UserKickEvent @event = new UserKickEvent(target, kicker, reason, true);
+            var player = ((UnturnedUser) target).UnturnedPlayer;
+            PlayerKickEvent @event = new PlayerKickEvent(player, kicker, reason, true);
             eventManager.Emit(implementation, @event);
             if (@event.IsCancelled)
                 return false;
@@ -46,34 +48,37 @@ namespace Rocket.Unturned.Player
             return true;
         }
 
-        public bool Ban(IUserInfo user, IUser bannedBy = null, string reason = null, TimeSpan? duration = null)
+        public bool Ban(IUserInfo target, IUser bannedBy = null, string reason = null, TimeSpan? duration = null)
         {
-            UserBanEvent @event = new UserBanEvent(user, bannedBy, reason, duration, true);
+            var player = ((UnturnedUser)target).UnturnedPlayer;
+            PlayerBanEvent @event = new PlayerBanEvent(player, bannedBy, reason, duration, true);
             eventManager.Emit(implementation, @event);
             if (@event.IsCancelled)
                 return false;
 
-            if (user is IUser u && u.IsOnline)
+            if (target is IUser u && u.IsOnline)
             {
-                var uPlayer = ((UnturnedUser)user).UnturnedPlayer;
+                var uPlayer = ((UnturnedUser)target).UnturnedPlayer;
                 Provider.ban(uPlayer.CSteamID, reason, (uint)(duration?.TotalSeconds ?? uint.MaxValue));
                 return true;
             }
 
-            var steamId = new CSteamID(ulong.Parse(user.Id));
+            var steamId = new CSteamID(ulong.Parse(target.Id));
             var callerId = (bannedBy is UnturnedUser up) ? up.UnturnedPlayer.CSteamID : CSteamID.Nil;
             SteamBlacklist.ban(steamId, 0, callerId, reason, (uint)(duration?.TotalSeconds ?? uint.MaxValue));
             return true;
         }
 
-        public bool Unban(IUserInfo user, IUser bannedBy = null)
+        public bool Unban(IUserInfo target, IUser bannedBy = null)
         {
-            UserUnbanEvent @event = new UserUnbanEvent(user, bannedBy);
+            var player = ((UnturnedUser)target).UnturnedPlayer;
+
+            PlayerUnbanEvent @event = new PlayerUnbanEvent(player, bannedBy);
             eventManager.Emit(implementation, @event);
             if (@event.IsCancelled)
                 return false;
 
-            var steamId = new CSteamID(ulong.Parse(user.Id));
+            var steamId = new CSteamID(ulong.Parse(target.Id));
             return SteamBlacklist.unban(steamId);
         }
 

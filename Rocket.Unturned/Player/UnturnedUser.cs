@@ -15,7 +15,7 @@ namespace Rocket.Unturned.Player {
 
         public string Id => UnturnedPlayer.Id;
         public string Name => UnturnedPlayer.Name;
-        public IdentityType Type => IdentityType.Player;
+        public string IdentityType => IdentityTypes.Player;
         public IUserManager UserManager => manager;
         public bool IsOnline => manager.GetOnlinePlayerById(Id) != null;
         public DateTime SessionConnectTime => throw new NotImplementedException();

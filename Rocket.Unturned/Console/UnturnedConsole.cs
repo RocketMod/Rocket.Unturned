@@ -24,7 +24,7 @@ namespace Rocket.Unturned.Console
 
         public string Id => "Console";
         public string Name => "Console";
-        public IdentityType Type => IdentityType.Console;
+        public string IdentityType => IdentityTypes.Console;
 
         public IUserManager UserManager => container.Resolve<IUserManager>("game");
         public bool IsOnline => true;

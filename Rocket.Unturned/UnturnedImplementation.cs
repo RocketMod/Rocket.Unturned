@@ -165,14 +165,14 @@ namespace Rocket.Unturned
         private void OnPlayerConnected(CSteamID steamid)
         {
             var player = playerManager.GetOnlinePlayerById(steamid.ToString());
-            UserConnectedEvent @event = new UserConnectedEvent(player.User);
+            PlayerConnectedEvent @event = new PlayerConnectedEvent(player);
             eventManager.Emit(this, @event);
         }
 
         private void OnPlayerDisconnected(CSteamID steamid)
         {
             var player = playerManager.GetOnlinePlayerById(steamid.ToString());
-            UserDisconnectedEvent @event = new UserDisconnectedEvent(player.User, null);
+            PlayerDisconnectedEvent @event = new PlayerDisconnectedEvent(player, null);
             eventManager.Emit(this, @event);
         }
 
