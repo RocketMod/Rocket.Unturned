@@ -51,7 +51,7 @@ namespace Rocket.Unturned.Player
         public bool Ban(IUserInfo target, IUser bannedBy = null, string reason = null, TimeSpan? duration = null)
         {
             var player = ((UnturnedUser)target).UnturnedPlayer;
-            PlayerBanEvent @event = new PlayerBanEvent(player, bannedBy, reason, duration, true);
+            PlayerBanEvent @event = new PlayerBanEvent(player.User, bannedBy, reason, duration, true);
             eventManager.Emit(implementation, @event);
             if (@event.IsCancelled)
                 return false;
@@ -73,7 +73,7 @@ namespace Rocket.Unturned.Player
         {
             var player = ((UnturnedUser)target).UnturnedPlayer;
 
-            PlayerUnbanEvent @event = new PlayerUnbanEvent(player, bannedBy);
+            PlayerUnbanEvent @event = new PlayerUnbanEvent(player.User, bannedBy);
             eventManager.Emit(implementation, @event);
             if (@event.IsCancelled)
                 return false;

@@ -34,7 +34,7 @@ namespace Rocket.Unturned.Commands
                 return;
             }
 
-            otherPlayer.Teleport(player);
+            ((UnturnedPlayerEntity)otherPlayer.Entity).Teleport(player);
             context.User.SendLocalizedMessage(translations, "command_tphere_teleport_from_private", null, otherPlayer.CharacterName);
             otherPlayer.User.SendLocalizedMessage(translations, "command_tphere_teleport_to_private", null, player.CharacterName);
         }

@@ -1,16 +1,11 @@
 ﻿using SDG.Unturned;
 using Steamworks;
 using System;
-using UnityEngine;
 using System.Linq;
 using Rocket.API.DependencyInjection;
-using Rocket.API.Entities;
 using Rocket.API.Player;
 using Rocket.API.User;
 using Rocket.Core.Player;
-using Rocket.UnityEngine.Extensions;
-using Rocket.Unturned.Utils;
-using Node = SDG.Unturned.Node;
 
 namespace Rocket.Unturned.Player
 {
@@ -30,15 +25,15 @@ namespace Rocket.Unturned.Player
         }
 
 
-        public SDG.Unturned.Player Player => PlayerTool.getPlayer(CSteamID);
+        public SDG.Unturned.Player NativePlayer => PlayerTool.getPlayer(CSteamID);
 
-        public SteamPlayer SteamPlayer => Player?.channel?.owner;
+        public SteamPlayer SteamPlayer => NativePlayer?.channel?.owner;
 
         public override string Id => CSteamID.ToString();
 
         public string DisplayName => CharacterName;
 
-        public bool IsAdmin => Player.channel.owner.isAdmin;
+        public bool IsAdmin => NativePlayer.channel.owner.isAdmin;
 
         public CSteamID CSteamID { get; }
 
@@ -57,7 +52,7 @@ namespace Rocket.Unturned.Player
             CSteamID = cSteamID;
         }
 
-        public float Ping => Player.channel.owner.ping;
+        public float Ping => NativePlayer.channel.owner.ping;
 
         public bool Equals(UnturnedPlayer p)
         {
@@ -66,15 +61,15 @@ namespace Rocket.Unturned.Player
             return CSteamID.ToString() == p.CSteamID.ToString();
         }
 
-        public T GetComponent<T>() => (T)(object)Player.GetComponent(typeof(T));
+        public T GetComponent<T>() => (T)(object)NativePlayer.GetComponent(typeof(T));
 
         public void TriggerEffect(ushort effectID)
         {
             EffectManager.instance.channel.send("tellEffectPoint", CSteamID, ESteamPacket.UPDATE_UNRELIABLE_BUFFER,
-                effectID, Player.transform.position);
+                effectID, NativePlayer.transform.position);
         }
 
-        public string RemoteIp
+        public string RemoteAddress
         {
             get
             {
@@ -85,36 +80,44 @@ namespace Rocket.Unturned.Player
 
         public void MaxSkills()
         {
-            PlayerSkills skills = Player.skills;
+            PlayerSkills skills = NativePlayer.skills;
 
             foreach (Skill skill in skills.skills.SelectMany(s => s)) skill.level = skill.max;
 
-            skills.askSkills(Player.channel.owner.playerID.steamID);
+            skills.askSkills(NativePlayer.channel.owner.playerID.steamID);
         }
 
-        public string SteamGroupName()
+        public string SteamGroupName
         {
-            FriendsGroupID_t id;
-            id.m_FriendsGroupID = (short)SteamGroupID.m_SteamID;
-            return SteamFriends.GetFriendsGroupName(id);
+            get
+            {
+                {
+                    FriendsGroupID_t id;
+                    id.m_FriendsGroupID = (short)SteamGroupID.m_SteamID;
+                    return SteamFriends.GetFriendsGroupName(id);
+                }
+            }
         }
 
-        public int SteamGroupMembersCount()
+        public int SteamGroupMembersCount
         {
-            FriendsGroupID_t id;
-            id.m_FriendsGroupID = (short)SteamGroupID.m_SteamID;
-            return SteamFriends.GetFriendsGroupMembersCount(id);
+            get
+            {
+                FriendsGroupID_t id;
+                id.m_FriendsGroupID = (short)SteamGroupID.m_SteamID;
+                return SteamFriends.GetFriendsGroupMembersCount(id);
+            }
         }
 
-        public PlayerInventory Inventory => Player.inventory;
+        public PlayerInventory Inventory => NativePlayer.inventory;
 
-        public bool GiveItem(ushort itemId, byte amount) => ItemTool.tryForceGiveItem(Player, itemId, amount);
+        public bool GiveItem(ushort itemId, byte amount) => ItemTool.tryForceGiveItem(NativePlayer, itemId, amount);
 
-        public bool GiveItem(Item item) => Player.inventory.tryAddItem(item, false);
+        public bool GiveItem(Item item) => NativePlayer.inventory.tryAddItem(item, false);
 
-        public bool GiveVehicle(ushort vehicleId) => VehicleTool.giveVehicle(Player, vehicleId);
+        public bool GiveVehicle(ushort vehicleId) => VehicleTool.giveVehicle(NativePlayer, vehicleId);
 
-        public CSteamID SteamGroupID => Player.channel.owner.playerID.group;
+        public CSteamID SteamGroupID => NativePlayer.channel.owner.playerID.group;
 
         public void Admin(bool admin)
         {
@@ -126,178 +129,25 @@ namespace Rocket.Unturned.Player
             if (admin)
                 SteamAdminlist.admin(CSteamID, issuer?.CSteamID ?? new CSteamID(0));
             else
-                SteamAdminlist.unadmin(Player.channel.owner.playerID.steamID);
+                SteamAdminlist.unadmin(NativePlayer.channel.owner.playerID.steamID);
         }
 
-        public void Teleport(UnturnedPlayer target)
-        {
-            Vector3 d1 = target.Player.transform.position;
-            Vector3 vector31 = target.Player.transform.rotation.eulerAngles;
-            Teleport(d1.ToSystemVector(), MeasurementTool.angleToByte(vector31.y));
-        }
+        public string CharacterName => NativePlayer.channel.owner.playerID.characterName;
 
-        public void Teleport(System.Numerics.Vector3 position, float rotation)
-        {
-            /*
-            if (VanishMode)
-            {
-                player.channel.send("askTeleport", ESteamCall.OWNER, ESteamPacket.UPDATE_RELIABLE_BUFFER, position, MeasurementTool.angleToByte(rotation));
-                player.channel.send("askTeleport", ESteamCall.NOT_OWNER, ESteamPacket.UPDATE_RELIABLE_BUFFER, new Vector3(position.y, position.y + 1337, position.z), MeasurementTool.angleToByte(rotation));
-                player.channel.send("askTeleport", ESteamCall.SERVER, ESteamPacket.UPDATE_RELIABLE_BUFFER, position, MeasurementTool.angleToByte(rotation));
-            }
-            else
-            {
-            */
-            Player.channel.send("askTeleport", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER, position.ToUnityVector(),
-                MeasurementTool.angleToByte(rotation));
-            /*}*/
-        }
+        public string SteamName => NativePlayer.channel.owner.playerID.playerName;
 
+        public bool IsPro => NativePlayer.channel.owner.isPro;
 
-        public EPlayerStance Stance => Player.stance.stance;
-
-        public float Rotation => Player.transform.rotation.eulerAngles.y;
-
-        public bool Teleport(string nodeName)
-        {
-            Node node = LevelNodes.nodes.FirstOrDefault(n
-                => n.type == ENodeType.LOCATION
-                    && ((LocationNode)n).name.ToLower().Contains(nodeName));
-            if (node != null)
-            {
-                Vector3 c = node.point + new Vector3(0f, 0.5f, 0f);
-                Player.sendTeleport(c, MeasurementTool.angleToByte(Rotation));
-                return true;
-            }
-
-            return false;
-        }
-
-        public byte Stamina => Player.life.stamina;
-
-        public string CharacterName => Player.channel.owner.playerID.characterName;
-
-        public string SteamName => Player.channel.owner.playerID.playerName;
-
-        public byte Infection
-        {
-            get => Player.life.virus;
-            set
-            {
-                Player.life.askDisinfect(100);
-                Player.life.askInfect(value);
-            }
-        }
-
-        public uint Experience
-        {
-            get => Player.skills.experience;
-            set
-            {
-                Player.skills.channel.send("tellExperience", ESteamCall.SERVER, ESteamPacket.UPDATE_RELIABLE_BUFFER,
-                    value);
-                Player.skills.channel.send("tellExperience", ESteamCall.OWNER, ESteamPacket.UPDATE_RELIABLE_BUFFER,
-                    value);
-            }
-        }
-
-        public int Reputation
-        {
-            get => Player.skills.reputation;
-            set => Player.skills.askRep(value);
-        }
-
-        public double Health
-        {
-            get { return Player.life.health; }
-            set => throw new NotImplementedException();
-        }
-
-        public double MaxHealth
-        {
-            get { return byte.MaxValue; }
-            set => throw new NotSupportedException();
-        }
-
-        public byte Hunger
-        {
-            get => Player.life.food;
-            set
-            {
-                Player.life.askEat(100);
-                Player.life.askStarve(value);
-            }
-        }
-
-        public byte Thirst
-        {
-            get => Player.life.water;
-            set
-            {
-                Player.life.askDrink(100);
-                Player.life.askDehydrate(value);
-            }
-        }
-
-        public bool Broken
-        {
-            get => Player.life.isBroken;
-            set
-            {
-                Player.life.tellBroken(Provider.server, value);
-                Player.life.channel.send("tellBroken", ESteamCall.OWNER, ESteamPacket.UPDATE_RELIABLE_BUFFER, value);
-            }
-        }
-
-        public bool Bleeding
-        {
-            get => Player.life.isBleeding;
-            set
-            {
-                Player.life.tellBleeding(Provider.server, value);
-                Player.life.channel.send("tellBleeding", ESteamCall.OWNER, ESteamPacket.UPDATE_RELIABLE_BUFFER, value);
-            }
-        }
-
-        public bool Dead => Player.life.isDead;
-
-        public void Heal(byte amount)
-        {
-            Heal(amount, null, null);
-        }
-
-        public void Heal(byte amount, bool? bleeding, bool? broken)
-        {
-            Player.life.askHeal(amount, bleeding ?? Player.life.isBleeding, broken ?? Player.life.isBroken);
-        }
-
-        public void Suicide()
-        {
-            Player.life.askSuicide(Player.channel.owner.playerID.steamID);
-        }
-
-        public EPlayerKill Damage(byte amount, Vector3 direction, EDeathCause cause, ELimb limb, CSteamID damageDealer)
-        {
-            Player.life.askDamage(amount, direction, cause, limb, damageDealer, out EPlayerKill playerKill);
-            return playerKill;
-        }
-
-        public EPlayerKill Damage(byte amount, System.Numerics.Vector3 direction, EDeathCause cause, ELimb limb, CSteamID damageDealer)
-        {
-            return Damage(amount, direction.ToUnityVector(), cause, limb, damageDealer);
-        }
-
-        public bool IsPro => Player.channel.owner.isPro;
-
-        public InteractableVehicle CurrentVehicle => Player.movement.getVehicle();
+        public InteractableVehicle CurrentVehicle => NativePlayer.movement.getVehicle();
 
         public bool IsInVehicle => CurrentVehicle != null;
 
-        public override string Name => Player.channel.owner.playerID.playerName;
+        public override string Name => NativePlayer.channel.owner.playerID.playerName;
 
-        public override IUser User => Player == null ? null : new UnturnedUser(manager, this);
+        public override IUser User => NativePlayer == null ? null : new UnturnedUser(manager, this);
 
-        public override IEntity Entity => new UnturnedPlayerEntity(this);
+        public override IPlayerEntity Entity => new UnturnedPlayerEntity(this);
+
         public override bool IsOnline => Provider.clients.Any(c => c.playerID.steamID == CSteamID);
 
         public override string ToString(string format, IFormatProvider formatProvider)

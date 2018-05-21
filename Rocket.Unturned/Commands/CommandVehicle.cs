@@ -50,7 +50,7 @@ namespace Rocket.Unturned.Commands
             Asset a = Assets.find(EAssetType.VEHICLE, id);
             string assetName = ((VehicleAsset)a).vehicleName;
 
-            context.User.SendLocalizedMessage(translations, VehicleTool.giveVehicle(player.Player, id)
+            context.User.SendLocalizedMessage(translations, VehicleTool.giveVehicle(player.NativePlayer, id)
                     ? "command_v_giving_private"
                     : "command_v_giving_failed_private", null, assetName, id);
         }

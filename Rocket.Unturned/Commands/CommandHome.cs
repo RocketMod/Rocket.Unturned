@@ -28,12 +28,12 @@ namespace Rocket.Unturned.Commands
                 throw new CommandWrongUsageException(translations.Get("command_bed_no_bed_found_private"));
             }
 
-            if (player.Stance == EPlayerStance.DRIVING || player.Stance == EPlayerStance.SITTING)
+            if (((UnturnedPlayerEntity)player.Entity).Stance == EPlayerStance.DRIVING || ((UnturnedPlayerEntity)player.Entity).Stance == EPlayerStance.SITTING)
             {
                 throw new CommandWrongUsageException(translations.Get("command_generic_teleport_while_driving_error"));
             }
 
-            player.Teleport(pos.ToSystemVector(), rot);
+            ((UnturnedPlayerEntity)player.Entity).Teleport(pos.ToSystemVector(), rot);
         }
 
         public string Name => "Home";

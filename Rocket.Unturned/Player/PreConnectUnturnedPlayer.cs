@@ -2,6 +2,7 @@
 using Rocket.API.DependencyInjection;
 using Rocket.API.Entities;
 using Rocket.API.Permissions;
+using Rocket.API.Player;
 using Rocket.API.User;
 using Rocket.Core.Player;
 using SDG.Unturned;
@@ -18,8 +19,8 @@ namespace Rocket.Unturned.Player
             PendingPlayer = pendingPlayer;
         }
 
-        public override IUser User { get; }
-        public override IEntity Entity { get; }
+        public override IUser User => null;
+        public override IPlayerEntity Entity => null;
         public override bool IsOnline => false;
 
         public override string Id => PendingPlayer.playerID.steamID.ToString();

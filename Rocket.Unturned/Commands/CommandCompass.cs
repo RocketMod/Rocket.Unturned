@@ -21,7 +21,7 @@ namespace Rocket.Unturned.Commands
 
             var translations = ((UnturnedImplementation)context.Container.Resolve<IImplementation>()).ModuleTranslations;
 
-            float currentDirection = player.Rotation;
+            float currentDirection = ((UnturnedPlayerEntity)player.Entity).Rotation;
 
             string targetDirection = context.Parameters.Length > 0 ? context.Parameters.Get<string>(0) : null;
 
@@ -45,7 +45,7 @@ namespace Rocket.Unturned.Commands
                         throw new CommandWrongUsageException();
                 }
 
-                player.Teleport(player.Entity.Position, currentDirection);
+                ((UnturnedPlayerEntity)player.Entity).Teleport(player.Entity.Position, currentDirection);
             }
 
             string directionName = "Unknown";

@@ -28,7 +28,7 @@ namespace Rocket.Unturned.Commands
             if (context.Parameters.Length != 1 && context.Parameters.Length != 3)
                 throw new CommandWrongUsageException();
 
-            if (player.Stance == EPlayerStance.DRIVING || player.Stance == EPlayerStance.SITTING)
+            if (((UnturnedPlayerEntity)player.Entity).Stance == EPlayerStance.DRIVING || ((UnturnedPlayerEntity)player.Entity).Stance == EPlayerStance.SITTING)
                 throw new CommandWrongUsageException(
                     translations.Get("command_generic_teleport_while_driving_error"));
 
@@ -45,14 +45,14 @@ namespace Rocket.Unturned.Commands
 
             if (x != null)
             {
-                player.Teleport(new System.Numerics.Vector3((float)x, (float)y, (float)z), MeasurementTool.angleToByte(player.Rotation));
+                ((UnturnedPlayerEntity)player.Entity).Teleport(new System.Numerics.Vector3((float)x, (float)y, (float)z));
                 context.User.SendLocalizedMessage(translations, "command_tp_teleport_private", null, (float)x + "," + (float)y + "," + (float)z);
                 return;
             }
 
             if (context.Parameters.Get<IPlayer>(0) is UnturnedPlayer otherplayer && otherplayer != player)
             {
-                player.Teleport(otherplayer);
+                ((UnturnedPlayerEntity)player.Entity).Teleport(otherplayer);
                 context.User.SendLocalizedMessage(translations, "command_tp_teleport_private", null, otherplayer.CharacterName);
                 return;
             }
@@ -61,7 +61,7 @@ namespace Rocket.Unturned.Commands
             if (item != null)
             {
                 Vector3 c = item.point + new Vector3(0f, 0.5f, 0f);
-                player.Teleport(c.ToSystemVector(), MeasurementTool.angleToByte(player.Rotation));
+                ((UnturnedPlayerEntity)player.Entity).Teleport(c.ToSystemVector());
                 context.User.SendLocalizedMessage(translations, "command_tp_teleport_private", null, ((LocationNode)item).name);
                 return;
             }

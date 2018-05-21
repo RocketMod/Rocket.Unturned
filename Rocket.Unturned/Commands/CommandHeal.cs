@@ -36,12 +36,12 @@ namespace Rocket.Unturned.Commands
                 return;
             }
 
-            uPlayer.Heal(100);
-            uPlayer.Bleeding = false;
-            uPlayer.Broken = false;
-            uPlayer.Infection = 0;
-            uPlayer.Hunger = 0;
-            uPlayer.Thirst = 0;
+            ((UnturnedPlayerEntity)uPlayer.Entity).Heal(100);
+            ((UnturnedPlayerEntity)uPlayer.Entity).Bleeding = false;
+            ((UnturnedPlayerEntity)uPlayer.Entity).Broken = false;
+            ((UnturnedPlayerEntity)uPlayer.Entity).Infection = 0;
+            ((UnturnedPlayerEntity)uPlayer.Entity).Hunger = 0;
+            ((UnturnedPlayerEntity)uPlayer.Entity).Thirst = 0;
 
             if (target == context.User)
             {
