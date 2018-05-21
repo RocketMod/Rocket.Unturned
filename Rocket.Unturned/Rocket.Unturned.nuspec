@@ -15,7 +15,7 @@
 		<dependency id="Rocket.API" version="[5.0.0.459, )" />
 		<dependency id="Rocket.Core" version="[5.0.0.459, )" />
         <dependency id="Rocket.Compatibility" version="[5.0.0.459, )" />		
-		<dependency id="Rocket.UnityEngine" version="[5.0.0.25, )" />			
+		<dependency id="Rocket.UnityEngine" version="[5.0.0.29, )" />			
 	  </dependencies>
   </metadata>
   <files>
