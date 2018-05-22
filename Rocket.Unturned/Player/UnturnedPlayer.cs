@@ -9,7 +9,7 @@ using Rocket.Core.Player;
 
 namespace Rocket.Unturned.Player
 {
-    public sealed class UnturnedPlayer : BasePlayer
+    public class UnturnedPlayer : BasePlayer<UnturnedPlayerEntity, UnturnedUser, UnturnedPlayer>
     {
         public override int GetHashCode()
         {
@@ -144,9 +144,9 @@ namespace Rocket.Unturned.Player
 
         public override string Name => NativePlayer.channel.owner.playerID.playerName;
 
-        public override IUser User => NativePlayer == null ? null : new UnturnedUser(manager, this);
+        public override UnturnedUser User => NativePlayer == null ? null : new UnturnedUser(manager, this);
 
-        public override IPlayerEntity Entity => new UnturnedPlayerEntity(this);
+        public override UnturnedPlayerEntity Entity => new UnturnedPlayerEntity(this);
 
         public override bool IsOnline => Provider.clients.Any(c => c.playerID.steamID == CSteamID);
 

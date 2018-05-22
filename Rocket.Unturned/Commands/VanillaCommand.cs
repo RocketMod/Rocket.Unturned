@@ -26,7 +26,7 @@ namespace Rocket.Unturned.Commands
             switch (context.User)
             {
                 case UnturnedUser player:
-                    id = player.UnturnedPlayer.CSteamID;
+                    id = player.Player.CSteamID;
                     break;
                 case IConsole _:
                     id = CSteamID.Nil;

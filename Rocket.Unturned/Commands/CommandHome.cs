@@ -19,7 +19,7 @@ namespace Rocket.Unturned.Commands
 
         public void Execute(ICommandContext context)
         {
-            UnturnedPlayer player = ((UnturnedUser)context.User).UnturnedPlayer;
+            UnturnedPlayer player = ((UnturnedUser)context.User).Player;
 
             ITranslationCollection translations = ((UnturnedImplementation)context.Container.Resolve<IImplementation>()).ModuleTranslations;
 
@@ -28,12 +28,12 @@ namespace Rocket.Unturned.Commands
                 throw new CommandWrongUsageException(translations.Get("command_bed_no_bed_found_private"));
             }
 
-            if (((UnturnedPlayerEntity)player.Entity).Stance == EPlayerStance.DRIVING || ((UnturnedPlayerEntity)player.Entity).Stance == EPlayerStance.SITTING)
+            if (player.Entity.Stance == EPlayerStance.DRIVING || player.Entity.Stance == EPlayerStance.SITTING)
             {
                 throw new CommandWrongUsageException(translations.Get("command_generic_teleport_while_driving_error"));
             }
 
-            ((UnturnedPlayerEntity)player.Entity).Teleport(pos.ToSystemVector(), rot);
+            player.Entity.Teleport(pos.ToSystemVector(), rot);
         }
 
         public string Name => "Home";

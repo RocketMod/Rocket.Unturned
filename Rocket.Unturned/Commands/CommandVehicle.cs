@@ -20,7 +20,7 @@ namespace Rocket.Unturned.Commands
         public void Execute(ICommandContext context)
         {
             ITranslationCollection translations = ((UnturnedImplementation)context.Container.Resolve<IImplementation>()).ModuleTranslations;
-            UnturnedPlayer player = ((UnturnedUser)context.User).UnturnedPlayer;
+            UnturnedPlayer player = ((UnturnedUser)context.User).Player;
 
             if (context.Parameters.Length != 1)
             {

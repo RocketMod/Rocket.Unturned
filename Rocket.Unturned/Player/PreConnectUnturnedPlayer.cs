@@ -1,26 +1,19 @@
 ﻿using System;
 using Rocket.API.DependencyInjection;
-using Rocket.API.Entities;
-using Rocket.API.Permissions;
-using Rocket.API.Player;
-using Rocket.API.User;
-using Rocket.Core.Player;
 using SDG.Unturned;
 using Steamworks;
 
 namespace Rocket.Unturned.Player
 {
-    public class PreConnectUnturnedPlayer : BasePlayer
+    public class PreConnectUnturnedPlayer : UnturnedPlayer
     {
         public SteamPending PendingPlayer { get; }
 
-        public PreConnectUnturnedPlayer(IDependencyContainer container, SteamPending pendingPlayer) : base(container)
+        public PreConnectUnturnedPlayer(IDependencyContainer container, SteamPending pendingPlayer, UnturnedPlayerManager manager) : base(container, pendingPlayer.playerID.steamID, manager)
         {
             PendingPlayer = pendingPlayer;
         }
 
-        public override IUser User => null;
-        public override IPlayerEntity Entity => null;
         public override bool IsOnline => false;
 
         public override string Id => PendingPlayer.playerID.steamID.ToString();
@@ -28,31 +21,32 @@ namespace Rocket.Unturned.Player
 
         public override string ToString(string format, IFormatProvider formatProvider)
         {
-            if (format != null && PendingPlayer != null)
+            string f = format;
+            if (f != null && PendingPlayer != null)
             {
-                string[] subFormats = format.Split(':');
+                string[] subFormats = f.Split(':');
 
-                format = subFormats[0];
+                f = subFormats[0];
                 string subFormat = subFormats.Length > 1 ? subFormats[1] : null;
 
-                if (format.Equals("nick", StringComparison.OrdinalIgnoreCase)
-                    || format.Equals("nickname", StringComparison.OrdinalIgnoreCase))
+                if (f.Equals("nick", StringComparison.OrdinalIgnoreCase)
+                    || f.Equals("nickname", StringComparison.OrdinalIgnoreCase))
                 {
                     return PendingPlayer.playerID.nickName.ToString(formatProvider);
                 }
 
-                if (format.Equals("playername", StringComparison.OrdinalIgnoreCase))
+                if (f.Equals("playername", StringComparison.OrdinalIgnoreCase))
                 {
                     return PendingPlayer.playerID.playerName.ToString(formatProvider);
                 }
 
-                if (format.Equals("charachtername", StringComparison.OrdinalIgnoreCase))
+                if (f.Equals("charachtername", StringComparison.OrdinalIgnoreCase))
                 {
                     return PendingPlayer.playerID.characterName.ToString(formatProvider);
                 }
 
-                if (format.Equals("group", StringComparison.OrdinalIgnoreCase)
-                    || format.Equals("groupname", StringComparison.OrdinalIgnoreCase))
+                if (f.Equals("group", StringComparison.OrdinalIgnoreCase)
+                    || f.Equals("groupname", StringComparison.OrdinalIgnoreCase))
                 {
                     var gid = PendingPlayer.playerID.@group;
                     if (gid == CSteamID.Nil)
@@ -63,7 +57,7 @@ namespace Rocket.Unturned.Player
                 }
 
 
-                if (format.Equals("groupid", StringComparison.OrdinalIgnoreCase))
+                if (f.Equals("groupid", StringComparison.OrdinalIgnoreCase))
                 {
                     var gid = PendingPlayer.playerID.@group;
                     if (gid == CSteamID.Nil)

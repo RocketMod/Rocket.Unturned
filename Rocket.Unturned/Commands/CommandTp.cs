@@ -23,12 +23,12 @@ namespace Rocket.Unturned.Commands
         public void Execute(ICommandContext context)
         {
             ITranslationCollection translations = ((UnturnedImplementation)context.Container.Resolve<IImplementation>()).ModuleTranslations;
-            UnturnedPlayer player = ((UnturnedUser)context.User).UnturnedPlayer;
+            UnturnedPlayer player = ((UnturnedUser)context.User).Player;
 
             if (context.Parameters.Length != 1 && context.Parameters.Length != 3)
                 throw new CommandWrongUsageException();
 
-            if (((UnturnedPlayerEntity)player.Entity).Stance == EPlayerStance.DRIVING || ((UnturnedPlayerEntity)player.Entity).Stance == EPlayerStance.SITTING)
+            if (player.Entity.Stance == EPlayerStance.DRIVING || player.Entity.Stance == EPlayerStance.SITTING)
                 throw new CommandWrongUsageException(
                     translations.Get("command_generic_teleport_while_driving_error"));
 
@@ -45,14 +45,14 @@ namespace Rocket.Unturned.Commands
 
             if (x != null)
             {
-                ((UnturnedPlayerEntity)player.Entity).Teleport(new System.Numerics.Vector3((float)x, (float)y, (float)z));
+                player.Entity.Teleport(new System.Numerics.Vector3((float)x, (float)y, (float)z));
                 context.User.SendLocalizedMessage(translations, "command_tp_teleport_private", null, (float)x + "," + (float)y + "," + (float)z);
                 return;
             }
 
             if (context.Parameters.Get<IPlayer>(0) is UnturnedPlayer otherplayer && otherplayer != player)
             {
-                ((UnturnedPlayerEntity)player.Entity).Teleport(otherplayer);
+                player.Entity.Teleport(otherplayer);
                 context.User.SendLocalizedMessage(translations, "command_tp_teleport_private", null, otherplayer.CharacterName);
                 return;
             }
@@ -61,7 +61,7 @@ namespace Rocket.Unturned.Commands
             if (item != null)
             {
                 Vector3 c = item.point + new Vector3(0f, 0.5f, 0f);
-                ((UnturnedPlayerEntity)player.Entity).Teleport(c.ToSystemVector());
+                player.Entity.Teleport(c.ToSystemVector());
                 context.User.SendLocalizedMessage(translations, "command_tp_teleport_private", null, ((LocationNode)item).name);
                 return;
             }

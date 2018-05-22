@@ -9,33 +9,31 @@ using Steamworks;
 using Vector3 = UnityEngine.Vector3;
 
 namespace Rocket.Unturned.Player {
-    public class UnturnedPlayerEntity : IPlayerEntity//, ILivingEntity
+    public class UnturnedPlayerEntity : IPlayerEntity<UnturnedPlayer>//, ILivingEntity
     {
-        public UnturnedPlayer UnturnedPlayer { get; }
-
         public UnturnedPlayerEntity(UnturnedPlayer unturnedPlayer)
         {
-            this.UnturnedPlayer = unturnedPlayer;
+            Player = unturnedPlayer;
         }
 
-        public System.Numerics.Vector3 Position => UnturnedPlayer.NativePlayer?.transform?.position.ToSystemVector() ?? throw new PlayerNotOnlineException();
+        public System.Numerics.Vector3 Position => Player.NativePlayer?.transform?.position.ToSystemVector() ?? throw new PlayerNotOnlineException();
 
         public string EntityTypeName => "Player";
 
 
-        public EPlayerStance Stance => UnturnedPlayer.NativePlayer.stance.stance;
+        public EPlayerStance Stance => Player.NativePlayer.stance.stance;
 
-        public float Rotation => UnturnedPlayer.NativePlayer.transform.rotation.eulerAngles.y;
+        public float Rotation => Player.NativePlayer.transform.rotation.eulerAngles.y;
 
-        public byte Stamina => UnturnedPlayer.NativePlayer.life.stamina;
+        public byte Stamina => Player.NativePlayer.life.stamina;
 
         public byte Infection
         {
-            get => UnturnedPlayer.NativePlayer.life.virus;
+            get => Player.NativePlayer.life.virus;
             set
             {
-                UnturnedPlayer.NativePlayer.life.askDisinfect(100);
-                UnturnedPlayer.NativePlayer.life.askInfect(value);
+                Player.NativePlayer.life.askDisinfect(100);
+                Player.NativePlayer.life.askInfect(value);
             }
         }
 
@@ -47,7 +45,7 @@ namespace Rocket.Unturned.Player {
             if (node != null)
             {
                 Vector3 c = node.point + new Vector3(0f, 0.5f, 0f);
-                UnturnedPlayer.NativePlayer.sendTeleport(c, MeasurementTool.angleToByte(Rotation));
+                Player.NativePlayer.sendTeleport(c, MeasurementTool.angleToByte(Rotation));
                 return true;
             }
 
@@ -57,70 +55,70 @@ namespace Rocket.Unturned.Player {
 
         public uint Experience
         {
-            get => UnturnedPlayer.NativePlayer.skills.experience;
+            get => Player.NativePlayer.skills.experience;
             set
             {
-                UnturnedPlayer.NativePlayer.skills.channel.send("tellExperience", ESteamCall.SERVER, ESteamPacket.UPDATE_RELIABLE_BUFFER,
+                Player.NativePlayer.skills.channel.send("tellExperience", ESteamCall.SERVER, ESteamPacket.UPDATE_RELIABLE_BUFFER,
                     value);
-                UnturnedPlayer.NativePlayer.skills.channel.send("tellExperience", ESteamCall.OWNER, ESteamPacket.UPDATE_RELIABLE_BUFFER,
+                Player.NativePlayer.skills.channel.send("tellExperience", ESteamCall.OWNER, ESteamPacket.UPDATE_RELIABLE_BUFFER,
                     value);
             }
         }
 
         public int Reputation
         {
-            get => UnturnedPlayer.NativePlayer.skills.reputation;
-            set => UnturnedPlayer.NativePlayer.skills.askRep(value);
+            get => Player.NativePlayer.skills.reputation;
+            set => Player.NativePlayer.skills.askRep(value);
         }
 
         public double Health
         {
-            get { return UnturnedPlayer.NativePlayer.life.health; }
+            get { return Player.NativePlayer.life.health; }
             set => throw new NotImplementedException();
         }
 
 
         public byte Hunger
         {
-            get => UnturnedPlayer.NativePlayer.life.food;
+            get => Player.NativePlayer.life.food;
             set
             {
-                UnturnedPlayer.NativePlayer.life.askEat(100);
-                UnturnedPlayer.NativePlayer.life.askStarve(value);
+                Player.NativePlayer.life.askEat(100);
+                Player.NativePlayer.life.askStarve(value);
             }
         }
 
         public byte Thirst
         {
-            get => UnturnedPlayer.NativePlayer.life.water;
+            get => Player.NativePlayer.life.water;
             set
             {
-                UnturnedPlayer.NativePlayer.life.askDrink(100);
-                UnturnedPlayer.NativePlayer.life.askDehydrate(value);
+                Player.NativePlayer.life.askDrink(100);
+                Player.NativePlayer.life.askDehydrate(value);
             }
         }
 
         public bool Broken
         {
-            get => UnturnedPlayer.NativePlayer.life.isBroken;
+            get => Player.NativePlayer.life.isBroken;
             set
             {
-                UnturnedPlayer.NativePlayer.life.tellBroken(Provider.server, value);
-                UnturnedPlayer.NativePlayer.life.channel.send("tellBroken", ESteamCall.OWNER, ESteamPacket.UPDATE_RELIABLE_BUFFER, value);
+                Player.NativePlayer.life.tellBroken(Provider.server, value);
+                Player.NativePlayer.life.channel.send("tellBroken", ESteamCall.OWNER, ESteamPacket.UPDATE_RELIABLE_BUFFER, value);
             }
         }
 
         public bool Bleeding
         {
-            get => UnturnedPlayer.NativePlayer.life.isBleeding;
+            get => Player.NativePlayer.life.isBleeding;
             set
             {
-                UnturnedPlayer.NativePlayer.life.tellBleeding(Provider.server, value);
-                UnturnedPlayer.NativePlayer.life.channel.send("tellBleeding", ESteamCall.OWNER, ESteamPacket.UPDATE_RELIABLE_BUFFER, value);
+                Player.NativePlayer.life.tellBleeding(Provider.server, value);
+                Player.NativePlayer.life.channel.send("tellBleeding", ESteamCall.OWNER, ESteamPacket.UPDATE_RELIABLE_BUFFER, value);
             }
         }
 
-        public bool Dead => UnturnedPlayer.NativePlayer.life.isDead;
+        public bool Dead => Player.NativePlayer.life.isDead;
 
         public void Heal(byte amount)
         {
@@ -129,17 +127,17 @@ namespace Rocket.Unturned.Player {
 
         public void Heal(byte amount, bool? bleeding, bool? broken)
         {
-            UnturnedPlayer.NativePlayer.life.askHeal(amount, bleeding ?? UnturnedPlayer.NativePlayer.life.isBleeding, broken ?? UnturnedPlayer.NativePlayer.life.isBroken);
+            Player.NativePlayer.life.askHeal(amount, bleeding ?? Player.NativePlayer.life.isBleeding, broken ?? Player.NativePlayer.life.isBroken);
         }
 
         public void Suicide()
         {
-            UnturnedPlayer.NativePlayer.life.askSuicide(UnturnedPlayer.CSteamID);
+            Player.NativePlayer.life.askSuicide(Player.CSteamID);
         }
 
         public EPlayerKill Damage(byte amount, Vector3 direction, EDeathCause cause, ELimb limb, CSteamID damageDealer)
         {
-            UnturnedPlayer.NativePlayer.life.askDamage(amount, direction, cause, limb, damageDealer, out EPlayerKill playerKill);
+            Player.NativePlayer.life.askDamage(amount, direction, cause, limb, damageDealer, out EPlayerKill playerKill);
             return playerKill;
         }
 
@@ -151,7 +149,7 @@ namespace Rocket.Unturned.Player {
         public void Teleport(UnturnedPlayer target)
         {
             var targetPos = target.Entity.Position;
-            var rotation = ((UnturnedPlayerEntity)target.Entity).Rotation;
+            var rotation = target.Entity.Rotation;
 
             Teleport(targetPos, MeasurementTool.angleToByte(rotation));
         }
@@ -160,13 +158,13 @@ namespace Rocket.Unturned.Player {
         {
             if (EnableVanish)
             {
-                UnturnedPlayer.NativePlayer.channel.send("askTeleport", ESteamCall.OWNER, ESteamPacket.UPDATE_RELIABLE_BUFFER, position, MeasurementTool.angleToByte(rotation));
-                UnturnedPlayer.NativePlayer.channel.send("askTeleport", ESteamCall.NOT_OWNER, ESteamPacket.UPDATE_RELIABLE_BUFFER, new Vector3(position.X, position.Y + 1337, position.Z), MeasurementTool.angleToByte(rotation));
-                UnturnedPlayer.NativePlayer.channel.send("askTeleport", ESteamCall.SERVER, ESteamPacket.UPDATE_RELIABLE_BUFFER, position, MeasurementTool.angleToByte(rotation));
+                Player.NativePlayer.channel.send("askTeleport", ESteamCall.OWNER, ESteamPacket.UPDATE_RELIABLE_BUFFER, position, MeasurementTool.angleToByte(rotation));
+                Player.NativePlayer.channel.send("askTeleport", ESteamCall.NOT_OWNER, ESteamPacket.UPDATE_RELIABLE_BUFFER, new Vector3(position.X, position.Y + 1337, position.Z), MeasurementTool.angleToByte(rotation));
+                Player.NativePlayer.channel.send("askTeleport", ESteamCall.SERVER, ESteamPacket.UPDATE_RELIABLE_BUFFER, position, MeasurementTool.angleToByte(rotation));
             }
             else
             {
-                UnturnedPlayer.NativePlayer.channel.send("askTeleport", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER, position.ToUnityVector(), MeasurementTool.angleToByte(Rotation));
+                Player.NativePlayer.channel.send("askTeleport", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER, position.ToUnityVector(), MeasurementTool.angleToByte(Rotation));
             }
             return true;
         }
@@ -178,6 +176,6 @@ namespace Rocket.Unturned.Player {
             return Teleport(position, Rotation);
         }
 
-        public IPlayer Player => UnturnedPlayer;
+        public UnturnedPlayer Player { get; }
     }
 }

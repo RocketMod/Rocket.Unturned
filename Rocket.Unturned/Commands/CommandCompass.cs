@@ -17,11 +17,11 @@ namespace Rocket.Unturned.Commands
         public void Execute(ICommandContext context)
         {
             UnturnedUser user = (UnturnedUser) context.User;
-            var player = user.UnturnedPlayer;
+            var player = user.Player;
 
             var translations = ((UnturnedImplementation)context.Container.Resolve<IImplementation>()).ModuleTranslations;
 
-            float currentDirection = ((UnturnedPlayerEntity)player.Entity).Rotation;
+            float currentDirection = player.Entity.Rotation;
 
             string targetDirection = context.Parameters.Length > 0 ? context.Parameters.Get<string>(0) : null;
 
@@ -45,7 +45,7 @@ namespace Rocket.Unturned.Commands
                         throw new CommandWrongUsageException();
                 }
 
-                ((UnturnedPlayerEntity)player.Entity).Teleport(player.Entity.Position, currentDirection);
+                player.Entity.Teleport(player.Entity.Position, currentDirection);
             }
 
             string directionName = "Unknown";

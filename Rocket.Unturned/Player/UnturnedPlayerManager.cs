@@ -38,19 +38,19 @@ namespace Rocket.Unturned.Player
 
         public bool Kick(IUser target, IUser kicker = null, string reason = null)
         {
-            var player = ((UnturnedUser) target).UnturnedPlayer;
+            var player = ((UnturnedUser) target).Player;
             PlayerKickEvent @event = new PlayerKickEvent(player, kicker, reason, true);
             eventManager.Emit(implementation, @event);
             if (@event.IsCancelled)
                 return false;
 
-            Provider.kick((((UnturnedUser)target).UnturnedPlayer).CSteamID, reason);
+            Provider.kick((((UnturnedUser)target).Player).CSteamID, reason);
             return true;
         }
 
         public bool Ban(IUserInfo target, IUser bannedBy = null, string reason = null, TimeSpan? duration = null)
         {
-            var player = ((UnturnedUser)target).UnturnedPlayer;
+            var player = ((UnturnedUser)target).Player;
             PlayerBanEvent @event = new PlayerBanEvent(player.User, bannedBy, reason, duration, true);
             eventManager.Emit(implementation, @event);
             if (@event.IsCancelled)
@@ -58,20 +58,20 @@ namespace Rocket.Unturned.Player
 
             if (target is IUser u && u.IsOnline)
             {
-                var uPlayer = ((UnturnedUser)target).UnturnedPlayer;
+                var uPlayer = ((UnturnedUser)target).Player;
                 Provider.ban(uPlayer.CSteamID, reason, (uint)(duration?.TotalSeconds ?? uint.MaxValue));
                 return true;
             }
 
             var steamId = new CSteamID(ulong.Parse(target.Id));
-            var callerId = (bannedBy is UnturnedUser up) ? up.UnturnedPlayer.CSteamID : CSteamID.Nil;
+            var callerId = (bannedBy is UnturnedUser up) ? up.Player.CSteamID : CSteamID.Nil;
             SteamBlacklist.ban(steamId, 0, callerId, reason, (uint)(duration?.TotalSeconds ?? uint.MaxValue));
             return true;
         }
 
         public bool Unban(IUserInfo target, IUser bannedBy = null)
         {
-            var player = ((UnturnedUser)target).UnturnedPlayer;
+            var player = ((UnturnedUser)target).Player;
 
             PlayerUnbanEvent @event = new PlayerUnbanEvent(player.User, bannedBy);
             eventManager.Emit(implementation, @event);
@@ -89,7 +89,7 @@ namespace Rocket.Unturned.Player
                 : new Color((1f / 255f) *color.Value.R, (1f / 255f) *color.Value.G, (1f / 255f) *color.Value.B, (1f / 100f) * color.Value.A);
 
             var uuser = (UnturnedUser) receiver;
-            ChatManager.say(uuser.UnturnedPlayer.CSteamID, message, uColor);
+            ChatManager.say(uuser.Player.CSteamID, message, uColor);
         }
 
         public void Broadcast(IUser sender, string message, System.Drawing.Color? color = null, params object[] arguments)
@@ -183,7 +183,7 @@ namespace Rocket.Unturned.Player
             return lines;
         }
 
-        public IEnumerable<IUser> Users => OnlinePlayers.Select(c => c.User);
+        public IEnumerable<IUser> Users => OnlinePlayers.Select(c => (IUser) c.Extend().User);
 
         public IPlayer GetPlayer(string id)
         {
@@ -267,7 +267,7 @@ namespace Rocket.Unturned.Player
         /// <summary>
         /// Players which are not authenticated and have not joined yet.
         /// </summary>
-        public IEnumerable<PreConnectUnturnedPlayer> PendingPlayers => Provider.pending.Select(c => new PreConnectUnturnedPlayer(container, c));
+        public IEnumerable<PreConnectUnturnedPlayer> PendingPlayers => Provider.pending.Select(c => new PreConnectUnturnedPlayer(container, c, this));
         public string ServiceName => "Unturned";
     }
 }

@@ -19,7 +19,7 @@ namespace Rocket.Unturned.Commands
         public void Execute(ICommandContext context)
         {
             ITranslationCollection translations = ((UnturnedImplementation)context.Container.Resolve<IImplementation>()).ModuleTranslations;
-            UnturnedPlayer player = ((UnturnedUser)context.User).UnturnedPlayer;
+            UnturnedPlayer player = ((UnturnedUser)context.User).Player;
 
             if (context.Parameters.Length != 1)
             {
@@ -34,7 +34,7 @@ namespace Rocket.Unturned.Commands
                 return;
             }
 
-            ((UnturnedPlayerEntity)otherPlayer.Entity).Teleport(player);
+            otherPlayer.Entity.Teleport(player);
             context.User.SendLocalizedMessage(translations, "command_tphere_teleport_from_private", null, otherPlayer.CharacterName);
             otherPlayer.User.SendLocalizedMessage(translations, "command_tphere_teleport_to_private", null, player.CharacterName);
         }

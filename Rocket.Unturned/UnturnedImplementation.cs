@@ -37,7 +37,7 @@ namespace Rocket.Unturned
 
         private GameObject rocketGameObject;
         private ILogger logger;
-        private IPlayerManager playerManager;
+        private UnturnedPlayerManager playerManager;
         private IEventManager eventManager;
         private IDependencyContainer container;
         internal ITranslationCollection ModuleTranslations { get; private set; }
@@ -53,7 +53,7 @@ namespace Rocket.Unturned
 
             container = runtime.Container;
             eventManager = container.Resolve<IEventManager>();
-            playerManager = container.Resolve<IPlayerManager>("unturned_playermanager");
+            playerManager = (UnturnedPlayerManager) container.Resolve<IPlayerManager>("unturned_playermanager");
             ModuleTranslations = container.Resolve<ITranslationCollection>();
             
             logger = container.Resolve<ILogger>();
@@ -112,7 +112,7 @@ namespace Rocket.Unturned
             var killer = playerManager.GetOnlinePlayerById(killerId.m_SteamID.ToString());
 
             UnturnedPlayerDamagedEvent @event =
-                new UnturnedPlayerDamagedEvent(player, cause, limb, killer.User, direction, damage, times)
+                new UnturnedPlayerDamagedEvent(player, cause, limb, killer.Extend().User, direction, damage, times)
                 {
                     IsCancelled = !canDamage
                 };
@@ -181,7 +181,7 @@ namespace Rocket.Unturned
             var pendingPlayer = Provider.pending.FirstOrDefault(c => c.playerID.steamID.Equals(callback.m_SteamID));
             if (pendingPlayer == null) return;
 
-            PreConnectUnturnedPlayer player = new PreConnectUnturnedPlayer(container, pendingPlayer);
+            PreConnectUnturnedPlayer player = new PreConnectUnturnedPlayer(container, pendingPlayer, playerManager);
             UnturnedPlayerPreConnectEvent @event = new UnturnedPlayerPreConnectEvent(player, callback);
             eventManager.Emit(this, @event);
 
@@ -220,11 +220,11 @@ namespace Rocket.Unturned
                 {
                     commandLine = commandLine.Substring(1);
                     var caller = playerManager.GetOnlinePlayer(player.playerID.steamID.ToString());
-                    @event = new PreCommandExecutionEvent(caller.User, commandLine);
+                    @event = new PreCommandExecutionEvent(caller.Extend().User, commandLine);
                     eventManager.Emit(this, @event);
-                    bool success = cmdHandler.HandleCommand(caller.User, commandLine, "/");
+                    bool success = cmdHandler.HandleCommand(caller.Extend().User, commandLine, "/");
                     if(!success)
-                        caller.User.SendMessage("Command not found", ConsoleColor.Red);
+                        caller.Extend().User.SendMessage("Command not found", ConsoleColor.Red);
                     shouldList = false;
                 }
 
@@ -314,7 +314,7 @@ namespace Rocket.Unturned
                             var killerId = data[2].ToString();
 
                             var killer = killerId != "0" ? playerManager.GetOnlinePlayerById(killerId) : null;
-                            @event = new UnturnedPlayerDeathEvent(unturnedPlayer, limb, deathCause, killer?.Entity);
+                            @event = new UnturnedPlayerDeathEvent(unturnedPlayer, limb, deathCause, killer?.Extend().Entity);
                             break;
                         }
                 }

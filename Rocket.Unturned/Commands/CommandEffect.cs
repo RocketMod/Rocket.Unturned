@@ -19,7 +19,7 @@ namespace Rocket.Unturned.Commands
                 throw new CommandWrongUsageException();
 
             ushort id = context.Parameters.Get<ushort>(0);
-            player.UnturnedPlayer.TriggerEffect(id);
+            player.Player.TriggerEffect(id);
         }
 
         public string Name => "Effect";
