@@ -9,6 +9,7 @@ using Rocket.API.Eventing;
 using Rocket.API.Player;
 using Rocket.API.User;
 using Rocket.Core.Logging;
+using Rocket.Core.Player;
 using Rocket.Core.Player.Events;
 using Rocket.Core.User;
 using Rocket.Core.User.Events;
@@ -183,7 +184,7 @@ namespace Rocket.Unturned.Player
             return lines;
         }
 
-        public IEnumerable<IUser> Users => OnlinePlayers.Select(c => (IUser) c.Extend().User);
+        public IEnumerable<IUser> Users => OnlinePlayers.Select(c => (IUser) c.GetUser());
 
         public IPlayer GetPlayer(string id)
         {

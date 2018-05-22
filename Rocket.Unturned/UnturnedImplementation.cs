@@ -14,6 +14,7 @@ using Rocket.Core.Commands.Events;
 using Rocket.Core.Configuration;
 using Rocket.Core.Implementation.Events;
 using Rocket.Core.Logging;
+using Rocket.Core.Player;
 using Rocket.Core.Player.Events;
 using Rocket.Core.User;
 using Rocket.Unturned.Console;
@@ -112,7 +113,7 @@ namespace Rocket.Unturned
             var killer = playerManager.GetOnlinePlayerById(killerId.m_SteamID.ToString());
 
             UnturnedPlayerDamagedEvent @event =
-                new UnturnedPlayerDamagedEvent(player, cause, limb, killer.Extend().User, direction, damage, times)
+                new UnturnedPlayerDamagedEvent(player, cause, limb, killer.GetUser(), direction, damage, times)
                 {
                     IsCancelled = !canDamage
                 };
@@ -220,11 +221,11 @@ namespace Rocket.Unturned
                 {
                     commandLine = commandLine.Substring(1);
                     var caller = playerManager.GetOnlinePlayer(player.playerID.steamID.ToString());
-                    @event = new PreCommandExecutionEvent(caller.Extend().User, commandLine);
+                    @event = new PreCommandExecutionEvent(caller.GetUser(), commandLine);
                     eventManager.Emit(this, @event);
-                    bool success = cmdHandler.HandleCommand(caller.Extend().User, commandLine, "/");
+                    bool success = cmdHandler.HandleCommand(caller.GetUser(), commandLine, "/");
                     if(!success)
-                        caller.Extend().User.SendMessage("Command not found", ConsoleColor.Red);
+                        caller.GetUser().SendMessage("Command not found", ConsoleColor.Red);
                     shouldList = false;
                 }
 

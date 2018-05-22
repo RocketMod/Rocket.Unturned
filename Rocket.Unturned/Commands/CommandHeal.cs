@@ -6,6 +6,7 @@ using Rocket.API.Permissions;
 using Rocket.API.Player;
 using Rocket.API.User;
 using Rocket.Core.I18N;
+using Rocket.Core.Player;
 using Rocket.Core.User;
 using Rocket.Unturned.Player;
 
@@ -50,7 +51,7 @@ namespace Rocket.Unturned.Commands
             }
 
             context.User.SendLocalizedMessage(translations, "command_heal_success_me", null, target.Name);
-            target.Extend().User.SendLocalizedMessage(translations, "command_heal_success_other", null, context.User.Name);
+            target.GetUser().SendLocalizedMessage(translations, "command_heal_success_other", null, context.User.Name);
         }
 
         public string Name => "Heal";
