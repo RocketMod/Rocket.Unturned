@@ -126,7 +126,7 @@ namespace Rocket.Unturned.Chat
             Core.Logging.Logger.Log("Broadcast: " + message, ConsoleColor.Gray);
             foreach (string m in wrapMessage(message))
             {
-                ChatManager.instance.channel.send("tellChat", ESteamCall.OTHERS, ESteamPacket.UPDATE_UNRELIABLE_BUFFER, new object[] { CSteamID.Nil, (byte)EChatMode.GLOBAL, color, rich, m });
+                ChatManager.instance.channel.send("tellChat", ESteamCall.OTHERS, ESteamPacket.UPDATE_UNRELIABLE_BUFFER, new object[] { CSteamID.Nil, string.Empty, (byte)EChatMode.GLOBAL, color, rich, m });
             }
         }
         
