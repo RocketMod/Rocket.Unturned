@@ -161,7 +161,7 @@ namespace Rocket.Unturned.Chat
             {
                 foreach (string m in wrapMessage(message))
                 {
-                    ChatManager.instance.channel.send("tellChat", CSteamID, ESteamPacket.UPDATE_UNRELIABLE_BUFFER, new object[] { CSteamID.Nil, (byte)EChatMode.SAY, color, rich, m });
+                    ChatManager.instance.channel.send("tellChat", CSteamID, ESteamPacket.UPDATE_UNRELIABLE_BUFFER, new object[] { CSteamID.Nil, string.Empty, (byte)EChatMode.SAY, color, rich, m });
                 }
             }
         }
