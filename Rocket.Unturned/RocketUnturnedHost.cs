@@ -9,6 +9,7 @@ using Rocket.API.Eventing;
 using Rocket.API.I18N;
 using Rocket.API.Player;
 using Rocket.API.Plugins;
+using Rocket.API.User;
 using Rocket.Core;
 using Rocket.Core.Commands.Events;
 using Rocket.Core.Configuration;
@@ -29,9 +30,9 @@ using Object = UnityEngine.Object;
 
 namespace Rocket.Unturned
 {
-    public class UnturnedImplementation : IHost
+    public class RocketUnturnedHost : IHost
     {
-        public UnturnedImplementation(IDependencyContainer container)
+        public RocketUnturnedHost(IDependencyContainer container)
         {
             Console = new UnturnedConsole(container);
         }
@@ -54,7 +55,7 @@ namespace Rocket.Unturned
 
             container = runtime.Container;
             eventManager = container.Resolve<IEventManager>();
-            playerManager = (UnturnedPlayerManager) container.Resolve<IPlayerManager>("unturned_playermanager");
+            playerManager = (UnturnedPlayerManager) container.Resolve<IUserManager>("unturned");
             ModuleTranslations = container.Resolve<ITranslationCollection>();
             
             logger = container.Resolve<ILogger>();

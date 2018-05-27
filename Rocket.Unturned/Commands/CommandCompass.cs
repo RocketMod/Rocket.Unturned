@@ -19,7 +19,7 @@ namespace Rocket.Unturned.Commands
             UnturnedUser user = (UnturnedUser) context.User;
             var player = user.Player;
 
-            var translations = ((UnturnedImplementation)context.Container.Resolve<IHost>()).ModuleTranslations;
+            var translations = ((RocketUnturnedHost)context.Container.Resolve<IHost>()).ModuleTranslations;
 
             float currentDirection = player.Entity.Rotation;
 

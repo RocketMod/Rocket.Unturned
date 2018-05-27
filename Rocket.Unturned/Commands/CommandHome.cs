@@ -21,7 +21,7 @@ namespace Rocket.Unturned.Commands
         {
             UnturnedPlayer player = ((UnturnedUser)context.User).Player;
 
-            ITranslationCollection translations = ((UnturnedImplementation)context.Container.Resolve<IHost>()).ModuleTranslations;
+            ITranslationCollection translations = ((RocketUnturnedHost)context.Container.Resolve<IHost>()).ModuleTranslations;
 
             if (!BarricadeManager.tryGetBed(player.CSteamID, out Vector3 pos, out byte rot))
             {

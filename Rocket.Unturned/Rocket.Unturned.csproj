@@ -154,7 +154,7 @@
     <Compile Include="Properties\DependencyRegistrator.cs" />
     <Compile Include="Console\UnturnedConsoleWriter.cs" />
     <Compile Include="RocketUnturnedModule.cs" />
-    <Compile Include="UnturnedImplementation.cs" />
+    <Compile Include="RocketUnturnedHost.cs" />
     <Compile Include="Utils\AutomaticSaveWatchdog.cs" />
     <Compile Include="Console\UnturnedConsolePipe.cs" />
     <Compile Include="Player\UnturnedPlayer.cs" />
