@@ -22,7 +22,7 @@ namespace Rocket.Unturned.Commands
         public void Execute(ICommandContext context)
         {
             IPermissionProvider permissions = context.Container.Resolve<IPermissionProvider>();
-            ITranslationCollection translations = ((UnturnedImplementation)context.Container.Resolve<IImplementation>()).ModuleTranslations;
+            ITranslationCollection translations = ((UnturnedImplementation)context.Container.Resolve<IHost>()).ModuleTranslations;
 
             IPlayer target;
             if (permissions.CheckPermission(context.User, Permission + ".Others") == PermissionResult.Grant 

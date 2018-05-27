@@ -29,7 +29,7 @@ using Object = UnityEngine.Object;
 
 namespace Rocket.Unturned
 {
-    public class UnturnedImplementation : IImplementation
+    public class UnturnedImplementation : IHost
     {
         public UnturnedImplementation(IDependencyContainer container)
         {

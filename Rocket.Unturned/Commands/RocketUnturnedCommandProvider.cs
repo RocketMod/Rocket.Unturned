@@ -10,14 +10,19 @@ namespace Rocket.Unturned.Commands
 {
     public class RocketUnturnedCommandProvider : ICommandProvider
     {
-        private readonly IImplementation rocketUnturned;
+        private readonly IHost rocketUnturned;
 
-        public RocketUnturnedCommandProvider(IImplementation rocketUnturned)
+        public RocketUnturnedCommandProvider(IHost rocketUnturned)
         {
             this.rocketUnturned = rocketUnturned;
+        }
+
+        public ILifecycleObject GetOwner(ICommand command) => rocketUnturned;
+        public void Init()
+        {
             var types = (typeof(RocketUnturnedCommandProvider).Assembly.FindTypes<ICommand>())
-                .Where(c => c.GetCustomAttributes(typeof(DontAutoRegisterAttribute), true).Length == 0)
-                .Where(c => !typeof(IChildCommand).IsAssignableFrom(c));
+                        .Where(c => c.GetCustomAttributes(typeof(DontAutoRegisterAttribute), true).Length == 0)
+                        .Where(c => !typeof(IChildCommand).IsAssignableFrom(c));
 
             List<ICommand> list = new List<ICommand>();
             foreach (Type type in types)
@@ -25,9 +30,7 @@ namespace Rocket.Unturned.Commands
             Commands = list;
         }
 
-        public ILifecycleObject GetOwner(ICommand command) => rocketUnturned;
-
-        public IEnumerable<ICommand> Commands { get; }
+        public IEnumerable<ICommand> Commands { get; private set; }
         public string ServiceName => "Rocket.Unturned";
     }
 }

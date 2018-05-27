@@ -11,7 +11,7 @@ namespace Rocket.Unturned.Properties
     {
         public void Register(IDependencyContainer container, IDependencyResolver resolver)
         {
-            container.RegisterSingletonType<IImplementation, UnturnedImplementation>(null, "unturned");
+            container.RegisterSingletonType<IHost, UnturnedImplementation>(null, "unturned");
             container.RegisterSingletonType<IPlayerManager, UnturnedPlayerManager>(null, "unturned");
             container.RegisterSingletonType<ICommandProvider, VanillaCommandProvider>("unturned_commands");
             container.RegisterSingletonType<ICommandProvider, RocketUnturnedCommandProvider>("rocket_unturned_commands");

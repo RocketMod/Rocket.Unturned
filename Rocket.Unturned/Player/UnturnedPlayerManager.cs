@@ -23,15 +23,15 @@ namespace Rocket.Unturned.Player
 {
     public class UnturnedPlayerManager : IPlayerManager
     {
-        private readonly IImplementation implementation;
+        private readonly IHost host;
         private readonly IEventManager eventManager;
         private readonly IDependencyContainer container;
         private readonly ILogger logger;
 
-        public UnturnedPlayerManager(IImplementation implementation, IEventManager @eventManager,
+        public UnturnedPlayerManager(IHost host, IEventManager @eventManager,
                                      IDependencyContainer container, ILogger logger)
         {
-            this.implementation = implementation;
+            this.host = host;
             this.eventManager = eventManager;
             this.container = container;
             this.logger = logger;
@@ -41,7 +41,7 @@ namespace Rocket.Unturned.Player
         {
             var player = ((UnturnedUser) target).Player;
             PlayerKickEvent @event = new PlayerKickEvent(player, kicker, reason, true);
-            eventManager.Emit(implementation, @event);
+            eventManager.Emit(host, @event);
             if (@event.IsCancelled)
                 return false;
 
@@ -53,7 +53,7 @@ namespace Rocket.Unturned.Player
         {
             var player = ((UnturnedUser)target).Player;
             PlayerBanEvent @event = new PlayerBanEvent(player.User, bannedBy, reason, duration, true);
-            eventManager.Emit(implementation, @event);
+            eventManager.Emit(host, @event);
             if (@event.IsCancelled)
                 return false;
 
@@ -75,7 +75,7 @@ namespace Rocket.Unturned.Player
             var player = ((UnturnedUser)target).Player;
 
             PlayerUnbanEvent @event = new PlayerUnbanEvent(player.User, bannedBy);
-            eventManager.Emit(implementation, @event);
+            eventManager.Emit(host, @event);
             if (@event.IsCancelled)
                 return false;
 

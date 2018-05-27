@@ -14,10 +14,10 @@ namespace Rocket.Unturned.Utils
         public static AutomaticSaveWatchdog Instance;
         private int interval = 30;
 
-        public AutomaticSaveWatchdog(IImplementation implementation, ILogger logger, ITaskScheduler scheduler)
+        public AutomaticSaveWatchdog(IHost host, ILogger logger, ITaskScheduler scheduler)
         {
             this.logger = logger;
-            scheduler.ScheduleEveryAsyncFrame(implementation, CheckTimer);
+            scheduler.ScheduleEveryAsyncFrame(host, CheckTimer);
         }
 
         public void Start()

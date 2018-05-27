@@ -57,34 +57,34 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rocket.Core.5.0.0.483\lib\net35\ICSharpCode.SharpZipLib.dll</HintPath>
+      <HintPath>..\packages\Rocket.Core.5.0.0.484\lib\net35\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rocket.Core.5.0.0.483\lib\net35\Microsoft.Practices.ServiceLocation.dll</HintPath>
+      <HintPath>..\packages\Rocket.Core.5.0.0.484\lib\net35\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.Unity, Version=2.1.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rocket.Core.5.0.0.483\lib\net35\Microsoft.Practices.Unity.dll</HintPath>
+      <HintPath>..\packages\Rocket.Core.5.0.0.484\lib\net35\Microsoft.Practices.Unity.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.Unity.Configuration, Version=2.1.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rocket.Core.5.0.0.483\lib\net35\Microsoft.Practices.Unity.Configuration.dll</HintPath>
+      <HintPath>..\packages\Rocket.Core.5.0.0.484\lib\net35\Microsoft.Practices.Unity.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rocket.Core.5.0.0.483\lib\net35\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Rocket.Core.5.0.0.484\lib\net35\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rocket.Core.5.0.0.483\lib\net35\RestSharp.dll</HintPath>
+      <HintPath>..\packages\Rocket.Core.5.0.0.484\lib\net35\RestSharp.dll</HintPath>
     </Reference>
-    <Reference Include="Rocket.API, Version=5.0.0.483, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rocket.API.5.0.0.483\lib\net35\Rocket.API.dll</HintPath>
+    <Reference Include="Rocket.API, Version=5.0.0.484, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rocket.API.5.0.0.484\lib\net35\Rocket.API.dll</HintPath>
     </Reference>
-    <Reference Include="Rocket.Compatibility, Version=5.0.0.483, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rocket.Compatibility.5.0.0.483\lib\net35\Rocket.Compatibility.dll</HintPath>
+    <Reference Include="Rocket.Compatibility, Version=5.0.0.484, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rocket.Compatibility.5.0.0.484\lib\net35\Rocket.Compatibility.dll</HintPath>
     </Reference>
-    <Reference Include="Rocket.Core, Version=5.0.0.483, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rocket.Core.5.0.0.483\lib\net35\Rocket.Core.dll</HintPath>
+    <Reference Include="Rocket.Core, Version=5.0.0.484, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rocket.Core.5.0.0.484\lib\net35\Rocket.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Rocket.Runtime, Version=5.0.0.483, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rocket.Runtime.5.0.0.483\lib\net35\Rocket.Runtime.dll</HintPath>
+    <Reference Include="Rocket.Runtime, Version=5.0.0.484, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rocket.Runtime.5.0.0.484\lib\net35\Rocket.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Rocket.UnityEngine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Rocket.UnityEngine.5.0.0.29\lib\net35\Rocket.UnityEngine.dll</HintPath>
@@ -92,7 +92,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization">
-      <HintPath>..\packages\Rocket.Core.5.0.0.483\lib\net35\System.Runtime.Serialization.dll</HintPath>
+      <HintPath>..\packages\Rocket.Core.5.0.0.484\lib\net35\System.Runtime.Serialization.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Xml.Linq" />
