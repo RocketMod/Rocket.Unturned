@@ -7,10 +7,8 @@ using Rocket.API.Commands;
 using Rocket.API.DependencyInjection;
 using Rocket.API.Eventing;
 using Rocket.API.I18N;
-using Rocket.API.Player;
 using Rocket.API.Plugins;
 using Rocket.API.User;
-using Rocket.Core;
 using Rocket.Core.Commands.Events;
 using Rocket.Core.Configuration;
 using Rocket.Core.Implementation.Events;
@@ -60,7 +58,7 @@ namespace Rocket.Unturned
 
             container = runtime.Container;
             eventManager = container.Resolve<IEventManager>();
-            playerManager = (UnturnedPlayerManager) container.Resolve<IUserManager>("unturned");
+            playerManager = (UnturnedPlayerManager) container.Resolve<IUserManager>("game");
             ModuleTranslations = container.Resolve<ITranslationCollection>();
             
             logger = container.Resolve<ILogger>();

@@ -12,10 +12,10 @@ namespace Rocket.Unturned.Properties
     {
         public void Register(IDependencyContainer container, IDependencyResolver resolver)
         {
-            container.RegisterSingletonType<IHost, RocketUnturnedHost>(null, "unturned");
-            container.RegisterSingletonType<IPlayerManager, UnturnedPlayerManager>(null, "unturned");
+            container.RegisterSingletonType<IHost, RocketUnturnedHost>(null, "unturned", "game");
+            container.RegisterSingletonType<IPlayerManager, UnturnedPlayerManager>(null, "game", "unturned");
             var mgr = container.Resolve<IPlayerManager>("unturned");
-            container.RegisterSingletonInstance<IUserManager>(mgr, null, "unturned");
+            container.RegisterSingletonInstance<IUserManager>(mgr, null, "game", "unturned");
 
             container.RegisterSingletonType<ICommandProvider, VanillaCommandProvider>("unturned_commands");
             container.RegisterSingletonType<ICommandProvider, RocketUnturnedCommandProvider>("rocket_unturned_commands");
