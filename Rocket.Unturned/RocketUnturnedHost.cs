@@ -49,6 +49,13 @@ namespace Rocket.Unturned
 
         public void Init(IRuntime runtime)
         {
+
+            string rocketDirectory = $"Servers/{Dedicator.serverID}/Rocket/";
+            if (!Directory.Exists(rocketDirectory))
+                Directory.CreateDirectory(rocketDirectory);
+
+            Directory.SetCurrentDirectory(rocketDirectory);
+
             this.runtime = runtime;
             rocketGameObject = new GameObject();
             Object.DontDestroyOnLoad(rocketGameObject);
@@ -63,12 +70,6 @@ namespace Rocket.Unturned
 
             container.RegisterSingletonType<AutomaticSaveWatchdog, AutomaticSaveWatchdog>();
             container.Resolve<AutomaticSaveWatchdog>().Start();
-
-            string rocketDirectory = $"Servers/{Dedicator.serverID}/Rocket/";
-            if (!Directory.Exists(rocketDirectory))
-                Directory.CreateDirectory(rocketDirectory);
-
-            Directory.SetCurrentDirectory(rocketDirectory);
             LoadTranslations();
 
             Provider.onServerHosted += OnServerHosted;
