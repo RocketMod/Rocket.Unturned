@@ -34,6 +34,11 @@ namespace Rocket.Unturned
     {
         public RocketUnturnedHost(IDependencyContainer container)
         {
+            string rocketDirectory = $"Servers/{Dedicator.serverID}/Rocket/";
+            if (!Directory.Exists(rocketDirectory))
+                Directory.CreateDirectory(rocketDirectory);
+
+            Directory.SetCurrentDirectory(rocketDirectory);
             Console = new UnturnedConsole(container);
         }
 
@@ -49,13 +54,6 @@ namespace Rocket.Unturned
 
         public void Init(IRuntime runtime)
         {
-
-            string rocketDirectory = $"Servers/{Dedicator.serverID}/Rocket/";
-            if (!Directory.Exists(rocketDirectory))
-                Directory.CreateDirectory(rocketDirectory);
-
-            Directory.SetCurrentDirectory(rocketDirectory);
-
             this.runtime = runtime;
             rocketGameObject = new GameObject();
             Object.DontDestroyOnLoad(rocketGameObject);
