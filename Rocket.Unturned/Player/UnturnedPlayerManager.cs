@@ -90,7 +90,7 @@ namespace Rocket.Unturned.Player
                 : new Color((1f / 255f) *color.Value.R, (1f / 255f) *color.Value.G, (1f / 255f) *color.Value.B, (1f / 100f) * color.Value.A);
 
             var uuser = (UnturnedUser) receiver;
-            ChatManager.say(uuser.Player.CSteamID, message, uColor);a
+            ChatManager.say(uuser.Player.CSteamID, message, uColor);
         }
 
         public void Broadcast(IUser sender, string message, System.Drawing.Color? color = null, params object[] arguments)
