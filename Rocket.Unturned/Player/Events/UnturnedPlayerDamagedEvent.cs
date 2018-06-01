@@ -47,8 +47,5 @@ namespace Rocket.Unturned.Player.Events
             Damage = damage;
             Times = times;
         }
-
-
-        public bool IsCancelled { get; set; }
     }
 }
