@@ -39,7 +39,7 @@ namespace Rocket.Unturned.Player
 
         public bool Kick(IUser target, IUser kicker = null, string reason = null)
         {
-            var player = ((UnturnedUser) target).Player;
+            var player = ((UnturnedUser)target).Player;
             PlayerKickEvent @event = new PlayerKickEvent(player, kicker, reason, true);
             eventManager.Emit(host, @event);
             if (@event.IsCancelled)
@@ -51,7 +51,9 @@ namespace Rocket.Unturned.Player
 
         public bool Ban(IUserInfo target, IUser bannedBy = null, string reason = null, TimeSpan? duration = null)
         {
+            //todo: this is wrong
             var player = ((UnturnedUser)target).Player;
+
             PlayerBanEvent @event = new PlayerBanEvent(player.User, bannedBy, reason, duration, true);
             eventManager.Emit(host, @event);
             if (@event.IsCancelled)
@@ -87,9 +89,11 @@ namespace Rocket.Unturned.Player
         {
             var uColor = color == null
                 ? Color.white
-                : new Color((1f / 255f) *color.Value.R, (1f / 255f) *color.Value.G, (1f / 255f) *color.Value.B, (1f / 100f) * color.Value.A);
+                : new Color((1f / 255f) * color.Value.R, (1f / 255f) * color.Value.G, (1f / 255f) * color.Value.B, (1f / 100f) * color.Value.A);
 
-            var uuser = (UnturnedUser) receiver;
+            if (!(receiver is UnturnedUser uuser))
+                throw new Exception("Could not cast " + receiver.GetType().FullName + " to UnturnedUser!");
+
             ChatManager.say(uuser.Player.CSteamID, message, uColor);
         }
 
@@ -184,7 +188,7 @@ namespace Rocket.Unturned.Player
             return lines;
         }
 
-        public IEnumerable<IUser> Users => OnlinePlayers.Select(c => (IUser) c.GetUser());
+        public IEnumerable<IUser> Users => OnlinePlayers.Select(c => (IUser)c.GetUser());
 
         public IPlayer GetPlayer(string id)
         {
