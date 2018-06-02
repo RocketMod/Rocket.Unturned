@@ -91,6 +91,12 @@ namespace Rocket.Unturned.Player
                 ? Color.white
                 : new Color((1f / 255f) * color.Value.R, (1f / 255f) * color.Value.G, (1f / 255f) * color.Value.B, (1f / 100f) * color.Value.A);
 
+            if (receiver is IConsole console)
+            {
+                console.WriteLine(message, color, arguments);
+                return;
+            }
+
             if (!(receiver is UnturnedUser uuser))
                 throw new Exception("Could not cast " + receiver.GetType().FullName + " to UnturnedUser!");
 
