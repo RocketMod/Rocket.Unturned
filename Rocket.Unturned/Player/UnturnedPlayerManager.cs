@@ -209,7 +209,10 @@ namespace Rocket.Unturned.Player
             if (TryGetOnlinePlayer(id, out var player))
                 return player;
 
-            return new UnturnedPlayer(container, new CSteamID(ulong.Parse(id)), this);
+            if(!ulong.TryParse(id, out ulong cId))
+                throw new PlayerNameNotFoundException(id);
+
+            return new UnturnedPlayer(container, new CSteamID(cId), this);
         }
 
         public IPlayer GetOnlinePlayer(string nameOrId)
