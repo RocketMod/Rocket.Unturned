@@ -17,7 +17,7 @@ namespace Rocket.Unturned.Utils
         public AutomaticSaveWatchdog(IHost host, ILogger logger, ITaskScheduler scheduler)
         {
             this.logger = logger;
-            scheduler.ScheduleEveryAsyncFrame(host, CheckTimer);
+            scheduler.ScheduleEveryAsyncFrame(host, CheckTimer, "Automatic Save");
         }
 
         public void Start()

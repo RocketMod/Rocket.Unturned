@@ -105,8 +105,16 @@ namespace Rocket.Unturned.Player
 
         public void Broadcast(IUser sender, string message, System.Drawing.Color? color = null, params object[] arguments)
         {
-            Broadcast(sender, Users, message, color, arguments);
+            Broadcast(sender, OnlineUsers, message, color, arguments);
             logger.LogInformation("[Broadcast] " + message);
+        }
+
+        public IUserInfo GetUser(string id)
+        {
+            if (TryGetOnlinePlayerById(id, out var player))
+                return player.GetUser();
+
+            return new OfflineUnturnedUserInfo(this, GetPlayer(id));
         }
 
         public void Broadcast(IUser sender, IEnumerable<IUser> receivers, string message,
@@ -194,7 +202,7 @@ namespace Rocket.Unturned.Player
             return lines;
         }
 
-        public IEnumerable<IUser> Users => OnlinePlayers.Select(c => (IUser)c.GetUser());
+        public IEnumerable<IUser> OnlineUsers => OnlinePlayers.Select(c => (IUser)c.GetUser());
 
         public IPlayer GetPlayer(string id)
         {
