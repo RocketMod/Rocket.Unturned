@@ -222,7 +222,7 @@ namespace Rocket.Unturned.Player
             if (ulong.TryParse(nameOrId, out var id))
                 player = PlayerTool.getSteamPlayer(new CSteamID(id));
             else
-                player = PlayerTool.getSteamPlayer(id);
+                player = PlayerTool.getSteamPlayer(nameOrId);
 
             if (player == null)
                 throw new PlayerNotOnlineException(nameOrId);
