@@ -225,7 +225,7 @@ namespace Rocket.Unturned.Player
                 player = PlayerTool.getSteamPlayer(id);
 
             if (player == null)
-                return null;
+                throw new PlayerNotOnlineException(nameOrId);
 
             return new UnturnedPlayer(container, player, this);
         }
