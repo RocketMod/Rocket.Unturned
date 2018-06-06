@@ -111,7 +111,7 @@ namespace Rocket.Unturned.Player
 
         public IUserInfo GetUser(string id)
         {
-            if (TryGetOnlinePlayerById(id, out var player))
+            if (TryGetOnlinePlayer(id, out var player))
                 return player.GetUser();
 
             return new OfflineUnturnedUserInfo(this, GetPlayer(id));
@@ -209,7 +209,7 @@ namespace Rocket.Unturned.Player
             if (TryGetOnlinePlayer(id, out var player))
                 return player;
 
-            if(!ulong.TryParse(id, out ulong cId))
+            if (!ulong.TryParse(id, out ulong cId))
                 throw new PlayerNameNotFoundException(id);
 
             return new UnturnedPlayer(container, new CSteamID(cId), this);
@@ -261,26 +261,44 @@ namespace Rocket.Unturned.Player
 
         public bool TryGetOnlinePlayer(string nameOrId, out IPlayer output)
         {
-            output = GetOnlinePlayer(nameOrId);
-            if (output == null)
+            output = null;
+            try
+            {
+                output = GetOnlinePlayer(nameOrId);
+                return true;
+            }
+            catch (Exception)
+            {
                 return false;
-            return true;
+            }
         }
 
         public bool TryGetOnlinePlayerById(string id, out IPlayer output)
         {
-            output = GetOnlinePlayerById(id);
-            if (output == null)
+            output = null;
+            try
+            {
+                output = GetOnlinePlayerById(id);
+                return true;
+            }
+            catch (Exception)
+            {
                 return false;
-            return true;
+            }
         }
 
         public bool TryGetOnlinePlayerByName(string displayName, out IPlayer output)
         {
-            output = GetOnlinePlayerByName(displayName);
-            if (output == null)
+            output = null;
+            try
+            {
+                output = GetOnlinePlayerByName(displayName);
+                return true;
+            }
+            catch (Exception)
+            {
                 return false;
-            return true;
+            }
         }
 
         /// <summary>
