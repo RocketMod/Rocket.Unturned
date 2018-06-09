@@ -30,10 +30,5 @@ namespace Rocket.Unturned.Player.Events
             SteamworksAuthResponse = steamworksAuthResponse;
             PendingPlayer = player.PendingPlayer;
         }
-        public UnturnedPlayerPreConnectEvent(PreConnectUnturnedPlayer player, ValidateAuthTicketResponse_t steamworksAuthResponse, string name = null, EventExecutionTargetContext executionTarget = EventExecutionTargetContext.Sync, bool global = true) : base(player, name, executionTarget, global)
-        {
-            SteamworksAuthResponse = steamworksAuthResponse;
-            PendingPlayer = player.PendingPlayer;
-        }
     }
 }

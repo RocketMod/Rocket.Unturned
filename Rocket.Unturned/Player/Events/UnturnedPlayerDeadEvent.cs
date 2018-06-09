@@ -19,11 +19,10 @@ namespace Rocket.Unturned.Player.Events
         {
             Position = position.ToSystemVector();
         }
-        public UnturnedPlayerDeadEvent(IPlayer player, Vector3 position, EventExecutionTargetContext executionTarget = EventExecutionTargetContext.Sync, bool global = true) : base(player, executionTarget, global)
-        {
-            Position = position.ToSystemVector();
-        }
-        public UnturnedPlayerDeadEvent(IPlayer player, Vector3 position, string name = null, EventExecutionTargetContext executionTarget = EventExecutionTargetContext.Sync, bool global = true) : base(player, name, executionTarget, global)
+
+        public UnturnedPlayerDeadEvent(IPlayer player, Vector3 position,
+                                       EventExecutionTargetContext executionTarget = EventExecutionTargetContext.Sync,
+                                       bool global = true) : base(player, executionTarget, global)
         {
             Position = position.ToSystemVector();
         }

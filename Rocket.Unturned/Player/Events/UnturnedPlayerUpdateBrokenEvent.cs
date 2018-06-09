@@ -19,9 +19,5 @@ namespace Rocket.Unturned.Player.Events
         {
             IsBroken = isBroken;
         }
-        public UnturnedPlayerUpdateBrokenEvent(IPlayer player, bool isBroken, string name = null, EventExecutionTargetContext executionTarget = EventExecutionTargetContext.Sync, bool global = true) : base(player, name, executionTarget, global)
-        {
-            IsBroken = isBroken;
-        }
     }
 }

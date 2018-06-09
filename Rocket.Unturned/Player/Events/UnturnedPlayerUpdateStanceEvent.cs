@@ -20,9 +20,5 @@ namespace Rocket.Unturned.Player.Events
         {
             Stance = stance;
         }
-        public UnturnedPlayerUpdateStanceEvent(IPlayer player, EPlayerStance stance, string name = null, EventExecutionTargetContext executionTarget = EventExecutionTargetContext.Sync, bool global = true) : base(player, name, executionTarget, global)
-        {
-            Stance = stance;
-        }
     }
 }

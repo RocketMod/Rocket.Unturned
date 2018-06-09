@@ -19,9 +19,5 @@ namespace Rocket.Unturned.Player.Events
         {
             Food = food;
         }
-        public UnturnedPlayerUpdateFoodEvent(IPlayer player, byte food, string name = null, EventExecutionTargetContext executionTarget = EventExecutionTargetContext.Sync, bool global = true) : base(player, name, executionTarget, global)
-        {
-            Food = food;
-        }
     }
 }

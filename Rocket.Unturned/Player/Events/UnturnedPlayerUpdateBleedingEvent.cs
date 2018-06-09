@@ -19,9 +19,5 @@ namespace Rocket.Unturned.Player.Events
         {
             IsBleeding = isBleeding;
         }
-        public UnturnedPlayerUpdateBleedingEvent(IPlayer player, bool isBleeding, string name = null, EventExecutionTargetContext executionTarget = EventExecutionTargetContext.Sync, bool global = true) : base(player, name, executionTarget, global)
-        {
-            IsBleeding = isBleeding;
-        }
     }
 }

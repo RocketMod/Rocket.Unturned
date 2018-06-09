@@ -19,9 +19,5 @@ namespace Rocket.Unturned.Player.Events
         {
             Virus = virus;
         }
-        public UnturnedPlayerUpdateVirusEvent(IPlayer player, byte virus, string name = null, EventExecutionTargetContext executionTarget = EventExecutionTargetContext.Sync, bool global = true) : base(player, name, executionTarget, global)
-        {
-            Virus = virus;
-        }
     }
 }

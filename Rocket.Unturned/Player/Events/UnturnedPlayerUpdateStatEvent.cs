@@ -20,9 +20,5 @@ namespace Rocket.Unturned.Player.Events
         {
             Stat = stat;
         }
-        public UnturnedPlayerUpdateStatEvent(IPlayer player, EPlayerStat stat, string name = null, EventExecutionTargetContext executionTarget = EventExecutionTargetContext.Sync, bool global = true) : base(player, name, executionTarget, global)
-        {
-            Stat = stat;
-        }
     }
 }

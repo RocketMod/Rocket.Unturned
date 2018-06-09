@@ -19,9 +19,5 @@ namespace Rocket.Unturned.Player.Events
         {
             Experience = experience;
         }
-        public UnturnedPlayerUpdateExperienceEvent(IPlayer player, uint experience, string name = null, EventExecutionTargetContext executionTarget = EventExecutionTargetContext.Sync, bool global = true) : base(player, name, executionTarget, global)
-        {
-            Experience = experience;
-        }
     }
 }

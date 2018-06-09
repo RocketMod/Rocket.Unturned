@@ -19,9 +19,5 @@ namespace Rocket.Unturned.Player.Events
         {
             Life = life;
         }
-        public UnturnedPlayerUpdateLifeEvent(IPlayer player, byte life, string name = null, EventExecutionTargetContext executionTarget = EventExecutionTargetContext.Sync, bool global = true) : base(player, name, executionTarget, global)
-        {
-            Life = life;
-        }
     }
 }

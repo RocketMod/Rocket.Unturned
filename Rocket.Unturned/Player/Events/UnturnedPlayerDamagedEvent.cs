@@ -39,13 +39,5 @@ namespace Rocket.Unturned.Player.Events
             Damage = damage;
             Times = times;
         }
-        public UnturnedPlayerDamagedEvent(IPlayer player, EDeathCause deathCause, ELimb limb, IUser damageDealer, Vector3 direction, float damage, float times, string name = null, EventExecutionTargetContext executionTarget = EventExecutionTargetContext.Sync, bool global = true) : base(player, damage, damageDealer, name, executionTarget, global)
-        {
-            DeathCause = deathCause;
-            Limb = limb;
-            Direction = direction;
-            Damage = damage;
-            Times = times;
-        }
     }
 }

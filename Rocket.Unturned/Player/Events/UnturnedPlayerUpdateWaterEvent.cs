@@ -19,9 +19,5 @@ namespace Rocket.Unturned.Player.Events
         {
             Water = water;
         }
-        public UnturnedPlayerUpdateWaterEvent(IPlayer player, byte water, string name = null, EventExecutionTargetContext executionTarget = EventExecutionTargetContext.Sync, bool global = true) : base(player, name, executionTarget, global)
-        {
-            Water = water;
-        }
     }
 }

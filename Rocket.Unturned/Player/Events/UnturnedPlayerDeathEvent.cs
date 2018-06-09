@@ -26,10 +26,5 @@ namespace Rocket.Unturned.Player.Events
             Limb = limb;
             DeathCause = deathCause;
         }
-        public UnturnedPlayerDeathEvent(IPlayer player, ELimb limb, EDeathCause deathCause, IEntity killer = null, string name = null, EventExecutionTargetContext executionTarget = EventExecutionTargetContext.Sync, bool global = true) : base(player, killer, name, executionTarget, global)
-        {
-            Limb = limb;
-            DeathCause = deathCause;
-        }
     }
 }

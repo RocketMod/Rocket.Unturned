@@ -19,9 +19,5 @@ namespace Rocket.Unturned.Player.Events
         {
             Health = health;
         }
-        public UnturnedPlayerUpdateHealthEvent(IPlayer player, byte health, string name = null, EventExecutionTargetContext executionTarget = EventExecutionTargetContext.Sync, bool global = true) : base(player, name, executionTarget, global)
-        {
-            Health = health;
-        }
     }
 }

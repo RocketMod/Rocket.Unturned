@@ -20,9 +20,5 @@ namespace Rocket.Unturned.Player.Events
         {
             Gesture = gesture;
         }
-        public UnturnedPlayerUpdateGestureEvent(IPlayer player, EPlayerGesture gesture, string name = null, EventExecutionTargetContext executionTarget = EventExecutionTargetContext.Sync, bool global = true) : base(player, name, executionTarget, global)
-        {
-            Gesture = gesture;
-        }
     }
 }

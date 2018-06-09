@@ -16,7 +16,7 @@ namespace Rocket.Unturned.Player.Events
         public bool IsRichText { get; set; }
 
         public UnturnedPlayerChatEvent(UnturnedPlayer unturnedPlayer, EChatMode mode, Color color, bool isRichText, string message,
-                                       bool cancelled) : base(unturnedPlayer, null, message, EventExecutionTargetContext.Sync)
+                                       bool cancelled) : base(unturnedPlayer, message, EventExecutionTargetContext.Sync)
         {
             UnturnedPlayer = unturnedPlayer;
             Mode = mode;
