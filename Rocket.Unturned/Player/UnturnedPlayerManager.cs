@@ -100,7 +100,7 @@ namespace Rocket.Unturned.Player
             if (!(receiver is UnturnedUser uuser))
                 throw new Exception("Could not cast " + receiver.GetType().FullName + " to UnturnedUser!");
 
-            ChatManager.say(uuser.Player.CSteamID, message, uColor);
+            ChatManager.say(uuser.Player.CSteamID, message, uColor, true);
         }
 
         public void Broadcast(IUser sender, string message, System.Drawing.Color? color = null, params object[] arguments)
