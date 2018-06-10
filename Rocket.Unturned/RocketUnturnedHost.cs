@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using Rocket.API;
 using Rocket.API.Commands;
 using Rocket.API.DependencyInjection;
@@ -25,6 +27,7 @@ using Steamworks;
 using UnityEngine;
 using ILogger = Rocket.API.Logging.ILogger;
 using Object = UnityEngine.Object;
+using Version = System.Version;
 
 namespace Rocket.Unturned
 {
@@ -48,6 +51,7 @@ namespace Rocket.Unturned
         internal ITranslationCollection ModuleTranslations { get; private set; }
         private IRuntime runtime;
         public bool IsAlive => true;
+        public ushort ServerPort { get; }
         public IConsole Console { get; set; }
 
         public void Init(IRuntime runtime)
@@ -333,6 +337,9 @@ namespace Rocket.Unturned
         }
 
         public void Reload() { }
+        public Version HostVersion => new Version(FileVersionInfo.GetVersionInfo(GetType().Assembly.Location).FileVersion);
+        public string GameVersionName => Provider.APP_VERSION;
+        public string ServerName => Provider.serverName;
 
         public string InstanceId => Provider.serverID;
         public string WorkingDirectory => Directory.GetCurrentDirectory();
