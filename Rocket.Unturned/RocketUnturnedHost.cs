@@ -338,7 +338,7 @@ namespace Rocket.Unturned
 
         public void Reload() { }
         public Version HostVersion => new Version(FileVersionInfo.GetVersionInfo(GetType().Assembly.Location).FileVersion);
-        public string GameVersionName => Provider.APP_VERSION;
+        public Version GameVersion => new Version(Provider.APP_VERSION);
         public string ServerName => Provider.serverName;
 
         public string InstanceId => Provider.serverID;
