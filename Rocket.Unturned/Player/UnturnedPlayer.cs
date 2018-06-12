@@ -3,6 +3,7 @@ using Steamworks;
 using System;
 using System.Linq;
 using Rocket.API.DependencyInjection;
+using Rocket.API.Player;
 using Rocket.Core.Player;
 
 namespace Rocket.Unturned.Player
@@ -27,6 +28,7 @@ namespace Rocket.Unturned.Player
 
         public SteamPlayer SteamPlayer => NativePlayer?.channel?.owner;
 
+        public override IPlayerManager PlayerManager { get; }
         public override string Id => CSteamID.ToString();
 
         public string DisplayName => CharacterName;
@@ -35,17 +37,15 @@ namespace Rocket.Unturned.Player
 
         public CSteamID CSteamID { get; }
 
-        private readonly IDependencyContainer container;
         private readonly UnturnedPlayerManager manager;
 
         public UnturnedPlayer(IDependencyContainer container, SteamPlayer player, UnturnedPlayerManager manager) : this(container, player.playerID.steamID, manager)
         {
-
+            PlayerManager = manager;
         }
 
         public UnturnedPlayer(IDependencyContainer container, CSteamID cSteamID, UnturnedPlayerManager manager) : base(container)
         {
-            this.container = container;
             this.manager = manager;
             CSteamID = cSteamID;
         }

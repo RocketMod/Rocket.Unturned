@@ -62,7 +62,7 @@ namespace Rocket.Unturned
 
             container = runtime.Container;
             eventManager = container.Resolve<IEventManager>();
-            playerManager = (UnturnedPlayerManager) container.Resolve<IUserManager>("game");
+            playerManager = (UnturnedPlayerManager) container.Resolve<IUserManager>("host");
             ModuleTranslations = container.Resolve<ITranslationCollection>();
             
             logger = container.Resolve<ILogger>();

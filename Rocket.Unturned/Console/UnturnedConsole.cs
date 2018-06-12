@@ -13,25 +13,24 @@ namespace Rocket.Unturned.Console
 {
     public class UnturnedConsole : IConsole, IFormattable
     {
-        private readonly IDependencyContainer container;
-
         public UnturnedConsole(IDependencyContainer container)
         {
             SessionConnectTime = DateTime.Now;
             BaseLogger.SkipTypeFromLogging(GetType());
-            this.container = container;
+            Container = container.CreateChildContainer();
         }
 
         public string Id => "Console";
         public string Name => "Console";
         public string IdentityType => IdentityTypes.Console;
 
-        public IUserManager UserManager => container.Resolve<IUserManager>("game");
+        public IUserManager UserManager => Container.Resolve<IUserManager>("host");
         public bool IsOnline => true;
         public DateTime SessionConnectTime { get; }
         public DateTime? SessionDisconnectTime => null;
         public DateTime? LastSeen => DateTime.Now;
         public string UserType => "Console";
+        public IDependencyContainer Container { get; }
 
         public void WriteLine(string format, params object[] bindings)
             => WriteLine(LogLevel.Information, format, Color.White, bindings);
@@ -44,7 +43,8 @@ namespace Rocket.Unturned.Console
 
         public void WriteLine(LogLevel level, string format, Color? color = null, params object[] bindings)
         {
-            IRocketSettingsProvider rocketSettings = container.Resolve<IRocketSettingsProvider>();
+            //Todo: use console logger
+            IRocketSettingsProvider rocketSettings = Container.Resolve<IRocketSettingsProvider>();
             Color orgCol = ConsoleLogger.GetForegroundColor();
 
             SetForegroundColor(Color.White);

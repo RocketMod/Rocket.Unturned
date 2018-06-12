@@ -1,4 +1,5 @@
 ﻿using System;
+using Rocket.API.DependencyInjection;
 using Rocket.API.Player;
 using Rocket.API.User;
 
@@ -22,6 +23,7 @@ namespace Rocket.Unturned.Player {
         public DateTime? SessionDisconnectTime => throw new NotImplementedException();
         public DateTime? LastSeen => throw new NotImplementedException();
         public string UserType => "User";
+        public IDependencyContainer Container => Player.Container;
         public UnturnedPlayer Player { get; }
 
         public override int GetHashCode()
