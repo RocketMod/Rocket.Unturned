@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
+using Rocket.API.Drawing;
 using System.Linq;
 using Rocket.API;
 using Rocket.API.Commands;
@@ -85,7 +85,7 @@ namespace Rocket.Unturned.Player
             return SteamBlacklist.unban(steamId);
         }
 
-        public void SendMessage(IUser sender, IUser receiver, string message, System.Drawing.Color? color = null, params object[] arguments)
+        public void SendMessage(IUser sender, IUser receiver, string message, Rocket.API.Drawing.Color? color = null, params object[] arguments)
         {
             var uColor = color == null
                 ? Color.white
@@ -103,7 +103,7 @@ namespace Rocket.Unturned.Player
             ChatManager.say(uuser.Player.CSteamID, message, uColor, true);
         }
 
-        public void Broadcast(IUser sender, string message, System.Drawing.Color? color = null, params object[] arguments)
+        public void Broadcast(IUser sender, string message, Rocket.API.Drawing.Color? color = null, params object[] arguments)
         {
             Broadcast(sender, OnlineUsers, message, color, arguments);
             logger.LogInformation("[Broadcast] " + message);
@@ -118,7 +118,7 @@ namespace Rocket.Unturned.Player
         }
 
         public void Broadcast(IUser sender, IEnumerable<IUser> receivers, string message,
-                              System.Drawing.Color? color = null, params object[] arguments)
+                              Rocket.API.Drawing.Color? color = null, params object[] arguments)
         {
             var wrappedMessage = WrapMessage(string.Format(message, arguments));
             foreach (IUser player in receivers)
@@ -126,27 +126,27 @@ namespace Rocket.Unturned.Player
                     player.SendMessage(line, color);
         }
 
-        public System.Drawing.Color? GetColorFromName(string colorName)
+        public Rocket.API.Drawing.Color? GetColorFromName(string colorName)
         {
             switch (colorName.Trim().ToLower())
             {
-                case "black": return System.Drawing.Color.Black;
-                case "blue": return System.Drawing.Color.Blue;
-                case "cyan": return System.Drawing.Color.Cyan;
-                case "gray": return System.Drawing.Color.Gray;
-                case "green": return System.Drawing.Color.Green;
-                case "grey": return System.Drawing.Color.Gray;
-                case "magenta": return System.Drawing.Color.Magenta;
-                case "red": return System.Drawing.Color.Red;
-                case "white": return System.Drawing.Color.White;
-                case "yellow": return System.Drawing.Color.Yellow;
+                case "black": return Rocket.API.Drawing.Color.Black;
+                case "blue": return Rocket.API.Drawing.Color.Blue;
+                case "cyan": return Rocket.API.Drawing.Color.Cyan;
+                case "gray": return Rocket.API.Drawing.Color.Gray;
+                case "green": return Rocket.API.Drawing.Color.Green;
+                case "grey": return Rocket.API.Drawing.Color.Gray;
+                case "magenta": return Rocket.API.Drawing.Color.Magenta;
+                case "red": return Rocket.API.Drawing.Color.Red;
+                case "white": return Rocket.API.Drawing.Color.White;
+                case "yellow": return Rocket.API.Drawing.Color.Yellow;
                 case "rocket": return GetColorFromRGB(90, 206, 205);
             }
 
             return GetColorFromHex(colorName);
         }
 
-        public System.Drawing.Color? GetColorFromHex(string hexString)
+        public Rocket.API.Drawing.Color? GetColorFromHex(string hexString)
         {
             hexString = hexString.Replace("#", "");
             if (hexString.Length == 3)
@@ -166,14 +166,14 @@ namespace Rocket.Unturned.Player
             return GetColorFromRGB(r, g, b);
         }
 
-        public System.Drawing.Color GetColorFromRGB(byte R, byte G, byte B)
+        public Rocket.API.Drawing.Color GetColorFromRGB(byte R, byte G, byte B)
         {
             return GetColorFromRGB(R, G, B, 100);
         }
 
-        public System.Drawing.Color GetColorFromRGB(byte R, byte G, byte B, short A)
+        public Rocket.API.Drawing.Color GetColorFromRGB(byte R, byte G, byte B, short A)
         {
-            return System.Drawing.Color.FromArgb(A, R, G, B);
+            return Rocket.API.Drawing.Color.FromArgb(A, R, G, B);
         }
 
         public static List<string> WrapMessage(string text)
