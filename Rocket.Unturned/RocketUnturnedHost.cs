@@ -40,7 +40,7 @@ namespace Rocket.Unturned
                 Directory.CreateDirectory(rocketDirectory);
 
             Directory.SetCurrentDirectory(rocketDirectory);
-            Console = new DefaultConsole(container, container.Resolve<IUserManager>("host"));
+            Console = new DefaultConsole(container, null);
         }
 
         private GameObject rocketGameObject;
