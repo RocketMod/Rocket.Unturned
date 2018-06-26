@@ -12,10 +12,10 @@
     <copyright>fr34kyn01535 © 2015</copyright>
     <tags>Unturned3 Rocket Mod Unity3D</tags>
     <dependencies>
-      <dependency id="Rocket.API" version="[5.0.0.485, )" />
-      <dependency id="Rocket.Core" version="[5.0.0.485, )" />
-      <dependency id="Rocket.Compatibility" version="[5.0.0.485, )" />
-      <dependency id="Rocket.UnityEngine" version="[5.0.0.29, )" />
+      <dependency id="Rocket.API" version="[5.0.0.566, )" />
+      <dependency id="Rocket.Core" version="[5.0.0.566, )" />
+      <dependency id="Rocket.Compatibility" version="[5.0.0.566, )" />
+      <dependency id="Rocket.UnityEngine" version="[5.0.0.37, )" />
     </dependencies>
   </metadata>
   <files>
