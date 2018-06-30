@@ -56,6 +56,7 @@ namespace Rocket.Unturned
         public bool IsAlive => true;
         public ushort ServerPort { get; }
         public IConsole Console { get; set; }
+        public string GameName => "Unturned";
 
         public void Init(IRuntime runtime)
         {
