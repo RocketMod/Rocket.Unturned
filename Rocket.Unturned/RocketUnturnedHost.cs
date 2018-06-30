@@ -54,7 +54,7 @@ namespace Rocket.Unturned
         internal ITranslationCollection ModuleTranslations { get; private set; }
         private IRuntime runtime;
         public bool IsAlive => true;
-        public ushort ServerPort { get; }
+        public ushort ServerPort => Provider.port;
         public IConsole Console { get; set; }
         public string GameName => "Unturned";
 
