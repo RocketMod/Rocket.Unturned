@@ -210,7 +210,7 @@ namespace Rocket.Unturned.Player
                 return player;
 
             if (!ulong.TryParse(id, out ulong cId))
-                throw new PlayerNameNotFoundException(id);
+                throw new FormatException($"Invalid Steam ID: \"{id}\"");
 
             return new UnturnedPlayer(container, new CSteamID(cId), this);
         }
@@ -225,7 +225,7 @@ namespace Rocket.Unturned.Player
                 player = PlayerTool.getSteamPlayer(nameOrId);
 
             if (player == null)
-                throw new PlayerNotOnlineException(nameOrId);
+                throw new PlayerNotFoundException(nameOrId);
 
             return new UnturnedPlayer(container, player, this);
         }
@@ -234,16 +234,16 @@ namespace Rocket.Unturned.Player
         {
             SteamPlayer player = PlayerTool.getSteamPlayer(displayName);
             if (player == null)
-                return null;
+                throw new PlayerNameNotFoundException(displayName);
 
             return new UnturnedPlayer(container, player, this);
         }
 
         public IPlayer GetOnlinePlayerById(string id)
         {
-            var player = PlayerTool.getSteamPlayer(new CSteamID(ulong.Parse(id)));
+            var player = PlayerTool.getSteamPlayer(ulong.Parse(id));
             if (player == null)
-                return null;
+                throw new PlayerIdNotFoundException(id);
 
             return new UnturnedPlayer(container, player, this);
         }
