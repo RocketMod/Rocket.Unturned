@@ -60,6 +60,7 @@ namespace Rocket.Unturned
 
         public void Init(IRuntime runtime)
         {
+            BaseLogger.SkipTypeFromLogging(typeof(UnturnedPlayerManager));
             ApplyTlsWorkaround();
 
             this.runtime = runtime;
