@@ -354,7 +354,7 @@ namespace Rocket.Unturned
                             var limb = (ELimb)(byte)data[1];
                             var killerId = data[2].ToString();
 
-                            var killer = killerId != "0" ? playerManager.GetOnlinePlayerById(killerId) : null;
+                            playerManager.TryGetOnlinePlayerById(killerId, out var killer);
                             @event = new UnturnedPlayerDeathEvent(unturnedPlayer, limb, deathCause, killer?.GetEntity());
                             break;
                         }
