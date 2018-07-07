@@ -150,10 +150,10 @@ namespace Rocket.Unturned
         private void OnPlayerDamaged(SDG.Unturned.Player uPlayer, ref EDeathCause cause, ref ELimb limb, ref CSteamID killerId, ref Vector3 direction, ref float damage, ref float times, ref bool canDamage)
         {
             var player = playerManager.GetOnlinePlayerById(uPlayer.channel.owner.playerID.steamID.m_SteamID.ToString());
-            var killer = playerManager.GetOnlinePlayerById(killerId.m_SteamID.ToString());
+            playerManager.TryGetOnlinePlayerById(killerId.m_SteamID.ToString(), out var killer);
 
             UnturnedPlayerDamagedEvent @event =
-                new UnturnedPlayerDamagedEvent(player, cause, limb, killer.GetUser(), direction, damage, times)
+                new UnturnedPlayerDamagedEvent(player, cause, limb, killer?.GetUser(), direction, damage, times)
                 {
                     IsCancelled = !canDamage
                 };
