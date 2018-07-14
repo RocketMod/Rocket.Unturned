@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Security;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
+using ICSharpCode.SharpZipLib.Zip;
 using Rocket.API;
 using Rocket.API.Commands;
 using Rocket.API.DependencyInjection;
@@ -60,6 +61,12 @@ namespace Rocket.Unturned
 
         public void Init(IRuntime runtime)
         {
+            //Fix CodePage 437 not supported
+            ZipConstants.DefaultCodePage = System.Text.Encoding.UTF8.CodePage;
+
+            // Another possible workaround:
+            // new I18N.West();
+
             BaseLogger.SkipTypeFromLogging(typeof(UnturnedPlayerManager));
             ApplyTlsWorkaround();
 
