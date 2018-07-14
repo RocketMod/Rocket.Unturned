@@ -143,6 +143,7 @@
     <Compile Include="Commands\RocketUnturnedCommandProvider.cs" />
     <Compile Include="Commands\VanillaCommand.cs" />
     <Compile Include="Commands\VanillaCommandProvider.cs" />
+    <Compile Include="Permissions\UnturnedAdminPermissionProvider.cs" />
     <Compile Include="Player\Events\UnturnedPlayerDamagedEvent.cs" />
     <Compile Include="Player\Events\UnturnedPlayerUpdateBleedingEvent.cs" />
     <Compile Include="Player\Events\UnturnedPlayerDeadEvent.cs" />

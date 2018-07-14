@@ -1,10 +1,12 @@
 ﻿using Rocket.API;
 using Rocket.API.Commands;
 using Rocket.API.DependencyInjection;
+using Rocket.API.Permissions;
 using Rocket.API.Player;
 using Rocket.API.User;
 using Rocket.Core.User;
 using Rocket.Unturned.Commands;
+using Rocket.Unturned.Permissions;
 using Rocket.Unturned.Player;
 
 namespace Rocket.Unturned.Properties
@@ -22,6 +24,8 @@ namespace Rocket.Unturned.Properties
 
             container.RegisterSingletonType<ICommandProvider, VanillaCommandProvider>("unturned_commands");
             container.RegisterSingletonType<ICommandProvider, RocketUnturnedCommandProvider>("rocket_unturned_commands");
+
+            container.RegisterSingletonType<IPermissionProvider, UnturnedAdminPermissionProvider>("unturned_admins");
         }
     }
 }
