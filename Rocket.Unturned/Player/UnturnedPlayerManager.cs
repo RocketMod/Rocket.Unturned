@@ -51,7 +51,7 @@ namespace Rocket.Unturned.Player
 
         public bool Ban(IUserInfo target, IUser bannedBy = null, string reason = null, TimeSpan? duration = null)
         {
-            if (!(target is UnturnedUser user)) return;
+            if (!(target is UnturnedUser user)) return false;
             var player = user.Player;
 
             PlayerBanEvent @event = new PlayerBanEvent(player.User, bannedBy, reason, duration, true);
@@ -63,7 +63,7 @@ namespace Rocket.Unturned.Player
 
             if (user.IsOnline)
             {
-                SteamBlacklist.ban(user.CSteamID, 0, callerId, reason, (uint)(duration?.TotalSeconds ?? uint.MaxValue));
+                SteamBlacklist.ban(player.CSteamID, 0, callerId, reason, (uint)(duration?.TotalSeconds ?? uint.MaxValue));
                 return true;
             }
 
