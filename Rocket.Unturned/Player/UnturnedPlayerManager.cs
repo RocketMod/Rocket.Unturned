@@ -51,23 +51,23 @@ namespace Rocket.Unturned.Player
 
         public bool Ban(IUserInfo target, IUser bannedBy = null, string reason = null, TimeSpan? duration = null)
         {
-            //todo: this is wrong
-            var player = ((UnturnedUser)target).Player;
+            if (!(target is UnturnedUser user)) return false;
+            var player = user.Player;
 
             PlayerBanEvent @event = new PlayerBanEvent(player.User, bannedBy, reason, duration, true);
             eventManager.Emit(host, @event);
             if (@event.IsCancelled)
                 return false;
 
-            if (target is IUser u && u.IsOnline)
+            var callerId = (bannedBy is UnturnedUser up) ? up.Player.CSteamID : CSteamID.Nil;
+
+            if (user.IsOnline)
             {
-                var uPlayer = ((UnturnedUser)target).Player;
-                Provider.ban(uPlayer.CSteamID, reason, (uint)(duration?.TotalSeconds ?? uint.MaxValue));
+                SteamBlacklist.ban(player.CSteamID, 0, callerId, reason, (uint)(duration?.TotalSeconds ?? uint.MaxValue));
                 return true;
             }
 
             var steamId = new CSteamID(ulong.Parse(target.Id));
-            var callerId = (bannedBy is UnturnedUser up) ? up.Player.CSteamID : CSteamID.Nil;
             SteamBlacklist.ban(steamId, 0, callerId, reason, (uint)(duration?.TotalSeconds ?? uint.MaxValue));
             return true;
         }
