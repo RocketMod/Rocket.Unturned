@@ -9,10 +9,7 @@ namespace Rocket.Unturned.Commands
 {
     public class CommandBroadcast : ICommand
     {
-        public bool SupportsUser(Type userType)
-        {
-            return true; //anyone can use the command
-        }
+        public bool SupportsUser(API.User.UserType userType) => userType == API.User.UserType.Player;
 
         public void Execute(ICommandContext context)
         {

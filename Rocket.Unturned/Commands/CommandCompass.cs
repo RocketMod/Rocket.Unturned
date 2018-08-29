@@ -9,15 +9,12 @@ namespace Rocket.Unturned.Commands
 {
     public class CommandCompass : ICommand
     {
-        public bool SupportsUser(Type userType)
-        {
-            return typeof(UnturnedUser).IsAssignableFrom(userType);
-        }
+        public bool SupportsUser(API.User.UserType userType) => userType == API.User.UserType.Player;
 
         public void Execute(ICommandContext context)
         {
             UnturnedUser user = (UnturnedUser) context.User;
-            var player = user.Player;
+            UnturnedPlayer player = (UnturnedPlayer) context.Player;
 
             var translations = ((RocketUnturnedHost)context.Container.Resolve<IHost>()).ModuleTranslations;
 

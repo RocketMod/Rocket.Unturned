@@ -10,10 +10,7 @@ namespace Rocket.Unturned.Commands
 {
     public class CommandMore : ICommand
     {
-        public bool SupportsUser(Type userType)
-        {
-            return typeof(UnturnedPlayer).IsAssignableFrom(userType);
-        }
+        public bool SupportsUser(API.User.UserType userType) => userType == API.User.UserType.Player;
 
         public void Execute(ICommandContext context)
         {
@@ -24,7 +21,7 @@ namespace Rocket.Unturned.Commands
 
             byte amount = context.Parameters.Get<byte>(0);
 
-            UnturnedPlayer player = ((UnturnedUser)context.User).Player;
+            UnturnedPlayer player = (UnturnedPlayer)context.Player;
             ushort itemId = player.NativePlayer.equipment.itemID;
 
             if (itemId == 0)

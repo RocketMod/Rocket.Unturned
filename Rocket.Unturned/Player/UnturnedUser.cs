@@ -1,31 +1,57 @@
 ﻿using System;
+using System.Collections.Generic;
 using Rocket.API.DependencyInjection;
 using Rocket.API.Player;
 using Rocket.API.User;
+using SDG.Unturned;
+using Steamworks;
 
-namespace Rocket.Unturned.Player {
-    public class UnturnedUser : IPlayerUser<UnturnedPlayer>
+namespace Rocket.Unturned.Player
+{
+    public class UnturnedUser : IUser
     {
-        private readonly UnturnedPlayerManager manager;
-
-        public UnturnedUser(UnturnedPlayerManager manager, UnturnedPlayer unturnedPlayer)
+        public UnturnedUser(IDependencyContainer container, SteamPlayer player) : this(container)
         {
-            this.manager = manager;
-            Player = unturnedPlayer;
+            UnturnedPlayer = player;
+            Id = player.playerID.steamID.ToString();
+            CSteamID = player.playerID.steamID;
         }
 
-        public string Id => Player.Id;
-        public string Name => Player.Name;
-        public string IdentityType => IdentityTypes.Player;
-        public IUserManager UserManager => manager;
-        public bool IsOnline => manager.GetOnlinePlayerById(Id) != null;
-        public DateTime SessionConnectTime => throw new NotImplementedException();
-        public DateTime? SessionDisconnectTime => throw new NotImplementedException();
-        public DateTime? LastSeen => throw new NotImplementedException();
-        public string UserType => "User";
-        public IDependencyContainer Container => Player.Container;
-        public UnturnedPlayer Player { get; }
+        public UnturnedUser(IDependencyContainer container, SteamPending player) : this(container)
+        {
+            Id = player.playerID.steamID.ToString();
+            CSteamID = player.playerID.steamID;
+        }
 
+        public UnturnedUser(IDependencyContainer container, CSteamID id) : this(container)
+        {
+            Id = id.ToString();
+            CSteamID = id;
+        }
+
+        public UnturnedUser(IDependencyContainer container)
+        {
+            Container = container;
+        }
+
+        public SteamPlayer UnturnedPlayer { get; } = null;
+
+        public DateTime? LastSeen { get; }
+
+        public IUserManager UserManager { get; }
+
+        public UserType Type => UserType.Player;
+
+        public string UserName { get; }
+
+        public string DisplayName { get; }
+
+        public List<IIdentity> Identities { get; } = new List<IIdentity>();
+
+        public IDependencyContainer Container { get; }
+
+        public string Id { get; }
+        public CSteamID CSteamID { get; }
         public override int GetHashCode()
         {
             return Id.GetHashCode();
@@ -38,6 +64,5 @@ namespace Rocket.Unturned.Player {
 
             return uPlayer.GetHashCode() == GetHashCode();
         }
-
     }
 }

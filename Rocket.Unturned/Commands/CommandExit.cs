@@ -7,16 +7,12 @@ namespace Rocket.Unturned.Commands
 {
     public class CommandExit : ICommand
     {
-        public bool SupportsUser(Type userType)
-        {
-            return typeof(IPlayerUser).IsAssignableFrom(userType);
-        }
+        public bool SupportsUser(API.User.UserType userType) => userType == API.User.UserType.Player;
 
         public void Execute(ICommandContext context)
         {
-            IPlayerUser player = (IPlayerUser)context.User;
             var playerManager = context.Container.Resolve<IPlayerManager>();
-            playerManager.Kick(player, context.User, "Exit");
+            playerManager.Kick(context.Player, context.User, "Exit");
         }
 
         public string Name => "Exit";

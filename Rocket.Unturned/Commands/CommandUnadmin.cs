@@ -10,10 +10,7 @@ namespace Rocket.Unturned.Commands
 {
     public class CommandUnadmin : ICommand
     {
-        public bool SupportsUser(Type userType)
-        {
-            return true; //anyone can use the command
-        }
+        public bool SupportsUser(API.User.UserType userType) => userType == API.User.UserType.Player;
 
         public void Execute(ICommandContext context)
         {
@@ -28,7 +25,7 @@ namespace Rocket.Unturned.Commands
                 return;
             }
 
-            context.User.SendMessage($"Could not unadmin {targetUser.Name}", ConsoleColor.Red);
+            context.User.SendMessage($"Could not unadmin {targetUser.User.DisplayName}", ConsoleColor.Red);
         }
 
         public string Name => "Unadmin";

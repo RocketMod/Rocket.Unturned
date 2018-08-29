@@ -16,9 +16,6 @@ namespace Rocket.Unturned.Player
 
         public override bool IsOnline => false;
 
-        public override string Id => PendingPlayer.playerID.steamID.ToString();
-        public override string Name => PendingPlayer.playerID.playerName;
-
         public override string ToString(string format, IFormatProvider formatProvider)
         {
             string f = format;
@@ -72,7 +69,7 @@ namespace Rocket.Unturned.Player
 
         public override int GetHashCode()
         {
-            return Id.GetHashCode();
+            return User.Id.GetHashCode();
         }
 
         public override bool Equals(object o)

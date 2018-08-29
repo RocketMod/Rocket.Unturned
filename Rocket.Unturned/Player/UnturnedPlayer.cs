@@ -5,14 +5,15 @@ using System.Linq;
 using Rocket.API.DependencyInjection;
 using Rocket.API.Player;
 using Rocket.Core.Player;
+using Rocket.API.User;
 
 namespace Rocket.Unturned.Player
 {
-    public class UnturnedPlayer : BasePlayer<UnturnedPlayerEntity, UnturnedUser, UnturnedPlayer>
+    public class UnturnedPlayer : BasePlayer<UnturnedUser, UnturnedPlayerEntity>
     {
         public override int GetHashCode()
         {
-            return Id.GetHashCode();
+            return User.Id.GetHashCode();
         }
 
         public override bool Equals(object o)
@@ -28,9 +29,6 @@ namespace Rocket.Unturned.Player
 
         public SteamPlayer SteamPlayer => NativePlayer?.channel?.owner;
 
-        public override IPlayerManager PlayerManager { get; }
-        public override string Id => CSteamID.ToString();
-
         public string DisplayName => CharacterName;
 
         public bool IsAdmin => NativePlayer.channel.owner.isAdmin;
@@ -38,19 +36,25 @@ namespace Rocket.Unturned.Player
         public CSteamID CSteamID { get; }
 
         private readonly UnturnedPlayerManager manager;
+        
+        private readonly IDependencyContainer container;
 
         public UnturnedPlayer(IDependencyContainer container, SteamPlayer player, UnturnedPlayerManager manager) : this(container, player.playerID.steamID, manager)
         {
-            PlayerManager = manager;
+
         }
 
-        public UnturnedPlayer(IDependencyContainer container, CSteamID cSteamID, UnturnedPlayerManager manager) : base(container)
+        public UnturnedPlayer(IDependencyContainer container, CSteamID cSteamID, UnturnedPlayerManager manager) : base(container, manager)
         {
+            this.container = container;
             this.manager = manager;
             CSteamID = cSteamID;
+            User = (UnturnedUser)container.Resolve<IUserManager>().GetUser(cSteamID.ToString());
         }
 
         public float Ping => NativePlayer.channel.owner.ping;
+
+        public override UnturnedUser User { get; }
 
         public bool Equals(UnturnedPlayer p)
         {
@@ -140,13 +144,13 @@ namespace Rocket.Unturned.Player
 
         public bool IsInVehicle => CurrentVehicle != null;
 
-        public override string Name => NativePlayer.channel.owner.playerID.playerName;
-
-        public override UnturnedUser User => NativePlayer == null ? null : new UnturnedUser(manager, this);
-
         public override UnturnedPlayerEntity Entity => new UnturnedPlayerEntity(this);
 
         public override bool IsOnline => Provider.clients.Any(c => c.playerID.steamID == CSteamID);
+
+        public override DateTime SessionConnectTime => DateTime.Now;
+
+        public override DateTime? SessionDisconnectTime => null;
 
         public override string ToString(string format, IFormatProvider formatProvider)
         {

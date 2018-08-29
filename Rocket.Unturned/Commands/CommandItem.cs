@@ -13,16 +13,13 @@ namespace Rocket.Unturned.Commands
 {
     public class CommandItem : ICommand
     {
-        public bool SupportsUser(Type userType)
-        {
-            return typeof(UnturnedUser).IsAssignableFrom(userType);
-        }
+        public bool SupportsUser(API.User.UserType userType) => userType == API.User.UserType.Player;
 
         public void Execute(ICommandContext context)
         {
             ITranslationCollection translations = ((RocketUnturnedHost)context.Container.Resolve<IHost>()).ModuleTranslations;
 
-            UnturnedPlayer player = ((UnturnedUser)context.User).Player;
+            UnturnedPlayer player = (UnturnedPlayer)context.Player;
             if (context.Parameters.Length != 1 && context.Parameters.Length != 2)
                 throw new CommandWrongUsageException();
 

@@ -9,7 +9,7 @@ using Steamworks;
 using Vector3 = UnityEngine.Vector3;
 
 namespace Rocket.Unturned.Player {
-    public class UnturnedPlayerEntity : IPlayerEntity<UnturnedPlayer>//, ILivingEntity
+    public class UnturnedPlayerEntity : IPlayerEntity//, ILivingEntity
     {
         public UnturnedPlayerEntity(UnturnedPlayer unturnedPlayer)
         {

@@ -14,10 +14,7 @@ namespace Rocket.Unturned.Commands
 {
     public class CommandHeal : ICommand
     {
-        public bool SupportsUser(Type userType)
-        {
-            return typeof(IPlayerUser).IsAssignableFrom(userType);
-        }
+        public bool SupportsUser(API.User.UserType userType) => userType == API.User.UserType.Player;
 
         public void Execute(ICommandContext context)
         {
@@ -25,15 +22,15 @@ namespace Rocket.Unturned.Commands
             ITranslationCollection translations = ((RocketUnturnedHost)context.Container.Resolve<IHost>()).ModuleTranslations;
 
             IPlayer target;
-            if (permissions.CheckPermission(context.User, Permission + ".Others") == PermissionResult.Grant 
+            if (permissions.CheckPermission(context.User, Permission + ".Others") == PermissionResult.Grant
                 && context.Parameters.Length >= 1)
                 target = context.Parameters.Get<IPlayer>(0);
             else
-                target = ((UnturnedUser)context.User).Player;
+                target = context.Player;
 
             if (!(target is UnturnedPlayer uPlayer))
             {
-                context.User.SendMessage($"Could not heal {target.Name}", ConsoleColor.Red);
+                context.User.SendMessage($"Could not heal {target.User.DisplayName}", ConsoleColor.Red);
                 return;
             }
 
@@ -50,8 +47,8 @@ namespace Rocket.Unturned.Commands
                 return;
             }
 
-            context.User.SendLocalizedMessage(translations, "command_heal_success_me", null, target.Name);
-            target.GetUser().SendLocalizedMessage(translations, "command_heal_success_other", null, context.User.Name);
+            context.User.SendLocalizedMessage(translations, "command_heal_success_me", null, target.User.DisplayName);
+            target.User.SendLocalizedMessage(translations, "command_heal_success_other", null, context.User.DisplayName);
         }
 
         public string Name => "Heal";

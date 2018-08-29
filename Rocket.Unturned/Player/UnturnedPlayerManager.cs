@@ -24,11 +24,11 @@ namespace Rocket.Unturned.Player
     public class UnturnedPlayerManager : IPlayerManager
     {
         private readonly IHost host;
-        private readonly IEventManager eventManager;
+        private readonly IEventBus eventManager;
         private readonly IDependencyContainer container;
         private readonly ILogger logger;
 
-        public UnturnedPlayerManager(IHost host, IEventManager @eventManager,
+        public UnturnedPlayerManager(IHost host, IEventBus @eventManager,
                                      IDependencyContainer container, ILogger logger)
         {
             this.host = host;
@@ -37,46 +37,40 @@ namespace Rocket.Unturned.Player
             this.logger = logger;
         }
 
-        public bool Kick(IUser target, IUser kicker = null, string reason = null)
+        public bool Kick(IPlayer target, IUser kicker = null, string reason = null)
         {
-            var player = ((UnturnedUser)target).Player;
-            PlayerKickEvent @event = new PlayerKickEvent(player, kicker, reason, true);
+            PlayerKickEvent @event = new PlayerKickEvent(target, kicker, reason, true);
             eventManager.Emit(host, @event);
             if (@event.IsCancelled)
                 return false;
 
-            Provider.kick((((UnturnedUser)target).Player).CSteamID, reason);
+            Provider.kick(((UnturnedPlayer)target).CSteamID, reason);
             return true;
         }
 
-        public bool Ban(IUserInfo target, IUser bannedBy = null, string reason = null, TimeSpan? duration = null)
+        public bool Ban(IUser target, IUser bannedBy = null, string reason = null, TimeSpan? duration = null)
         {
-            if (!(target is UnturnedUser user)) return false;
-            var player = user.Player;
-
-            PlayerBanEvent @event = new PlayerBanEvent(player.User, bannedBy, reason, duration, true);
+            UserBanEvent @event = new UserBanEvent(target, bannedBy, reason, duration, true);
             eventManager.Emit(host, @event);
             if (@event.IsCancelled)
                 return false;
 
-            var callerId = (bannedBy is UnturnedUser up) ? up.Player.CSteamID : CSteamID.Nil;
+            var callerId = (bannedBy is UnturnedUser up) ? up.CSteamID : CSteamID.Nil;
 
-            if (user.IsOnline)
-            {
-                SteamBlacklist.ban(player.CSteamID, 0, callerId, reason, (uint)(duration?.TotalSeconds ?? uint.MaxValue));
-                return true;
-            }
+            //if (user.IsOnline)
+            //{
+            //    SteamBlacklist.ban(player.CSteamID, 0, callerId, reason, (uint)(duration?.TotalSeconds ?? uint.MaxValue));
+            //    return true;
+            //}
 
             var steamId = new CSteamID(ulong.Parse(target.Id));
             SteamBlacklist.ban(steamId, 0, callerId, reason, (uint)(duration?.TotalSeconds ?? uint.MaxValue));
             return true;
         }
 
-        public bool Unban(IUserInfo target, IUser bannedBy = null)
+        public bool Unban(IUser target, IUser bannedBy = null)
         {
-            var player = ((UnturnedUser)target).Player;
-
-            PlayerUnbanEvent @event = new PlayerUnbanEvent(player.User, bannedBy);
+            UserUnbanEvent @event = new UserUnbanEvent(target, bannedBy);
             eventManager.Emit(host, @event);
             if (@event.IsCancelled)
                 return false;
@@ -85,7 +79,7 @@ namespace Rocket.Unturned.Player
             return SteamBlacklist.unban(steamId);
         }
 
-        public void SendMessage(IUser sender, IUser receiver, string message, Rocket.API.Drawing.Color? color = null, params object[] arguments)
+        public void SendMessage(IUser sender, IPlayer receiver, string message, Rocket.API.Drawing.Color? color = null, params object[] arguments)
         {
             var uColor = color == null
                 ? Color.white
@@ -97,33 +91,30 @@ namespace Rocket.Unturned.Player
                 return;
             }
 
-            if (!(receiver is UnturnedUser uuser))
+            if (!(receiver is UnturnedPlayer player))
                 throw new Exception("Could not cast " + receiver.GetType().FullName + " to UnturnedUser!");
 
-            ChatManager.say(uuser.Player.CSteamID, message, uColor, true);
+            ChatManager.say(player.CSteamID, message, uColor, true);
         }
 
         public void Broadcast(IUser sender, string message, Rocket.API.Drawing.Color? color = null, params object[] arguments)
         {
-            Broadcast(sender, OnlineUsers, message, color, arguments);
+            Broadcast(sender, Players, message, color, arguments);
             logger.LogInformation("[Broadcast] " + message);
         }
 
-        public IUserInfo GetUser(string id)
+        public IUser GetUser(string id, IdentityProvider identityProvider = IdentityProvider.Builtin)
         {
-            if (TryGetOnlinePlayer(id, out var player))
-                return player.GetUser();
-
-            return new OfflineUnturnedUserInfo(this, GetPlayer(id));
+            return GetPlayerById(id).User;
         }
 
-        public void Broadcast(IUser sender, IEnumerable<IUser> receivers, string message,
+        public void Broadcast(IUser sender, IEnumerable<IPlayer> receivers, string message,
                               Rocket.API.Drawing.Color? color = null, params object[] arguments)
         {
             var wrappedMessage = WrapMessage(string.Format(message, arguments));
-            foreach (IUser player in receivers)
+            foreach (IPlayer player in receivers)
                 foreach (var line in wrappedMessage)
-                    player.SendMessage(line, color);
+                    player.PlayerManager.SendMessage(player.User,line, color);
         }
 
         public Rocket.API.Drawing.Color? GetColorFromName(string colorName)
@@ -202,20 +193,10 @@ namespace Rocket.Unturned.Player
             return lines;
         }
 
-        public IEnumerable<IUser> OnlineUsers => OnlinePlayers.Select(c => (IUser)c.GetUser());
+        public IEnumerable<IUser> Users => Players.Select(c => (IUser)c.User);
 
-        public IPlayer GetPlayer(string id)
-        {
-            if (TryGetOnlinePlayer(id, out var player))
-                return player;
 
-            if (!ulong.TryParse(id, out ulong cId))
-                throw new FormatException($"Invalid Steam ID: \"{id}\"");
-
-            return new UnturnedPlayer(container, new CSteamID(cId), this);
-        }
-
-        public IPlayer GetOnlinePlayer(string nameOrId)
+        public IPlayer GetPlayer(string nameOrId)
         {
             SteamPlayer player;
 
@@ -230,7 +211,7 @@ namespace Rocket.Unturned.Player
             return new UnturnedPlayer(container, player, this);
         }
 
-        public IPlayer GetOnlinePlayerByName(string displayName)
+        public IPlayer GetPlayerByName(string displayName)
         {
             SteamPlayer player = PlayerTool.getSteamPlayer(displayName);
             if (player == null)
@@ -239,7 +220,7 @@ namespace Rocket.Unturned.Player
             return new UnturnedPlayer(container, player, this);
         }
 
-        public IPlayer GetOnlinePlayerById(string id)
+        public IPlayer GetPlayerById(string id)
         {
             var player = PlayerTool.getSteamPlayer(ulong.Parse(id));
             if (player == null)
@@ -251,20 +232,20 @@ namespace Rocket.Unturned.Player
 
         public PreConnectUnturnedPlayer GetPendingPlayer(string uniqueID)
         {
-            return PendingPlayers.FirstOrDefault(c => c.Id.Equals(uniqueID));
+            return PendingPlayers.FirstOrDefault(c => c.User.Id.Equals(uniqueID));
         }
 
         public PreConnectUnturnedPlayer GetPendingPlayerByName(string displayName)
         {
-            return PendingPlayers.FirstOrDefault(c => c.Name.Equals(displayName, StringComparison.OrdinalIgnoreCase));
+            return PendingPlayers.FirstOrDefault(c => c.User.DisplayName.Equals(displayName, StringComparison.OrdinalIgnoreCase));
         }
 
-        public bool TryGetOnlinePlayer(string nameOrId, out IPlayer output)
+        public bool TryGetPlayer(string nameOrId, out IPlayer output)
         {
             output = null;
             try
             {
-                output = GetOnlinePlayer(nameOrId);
+                output = GetPlayer(nameOrId);
                 return true;
             }
             catch (Exception)
@@ -273,12 +254,12 @@ namespace Rocket.Unturned.Player
             }
         }
 
-        public bool TryGetOnlinePlayerById(string id, out IPlayer output)
+        public bool TryGetPlayerById(string id, out IPlayer output)
         {
             output = null;
             try
             {
-                output = GetOnlinePlayerById(id);
+                output = GetPlayerById(id);
                 return true;
             }
             catch (Exception)
@@ -287,12 +268,12 @@ namespace Rocket.Unturned.Player
             }
         }
 
-        public bool TryGetOnlinePlayerByName(string displayName, out IPlayer output)
+        public bool TryGetPlayerByName(string displayName, out IPlayer output)
         {
             output = null;
             try
             {
-                output = GetOnlinePlayerByName(displayName);
+                output = GetPlayerByName(displayName);
                 return true;
             }
             catch (Exception)
@@ -304,7 +285,7 @@ namespace Rocket.Unturned.Player
         /// <summary>
         /// Online players which succesfully joined the server.
         /// </summary>
-        public IEnumerable<IPlayer> OnlinePlayers =>
+        public IEnumerable<IPlayer> Players =>
             Provider.clients.Select(c => (IPlayer)new UnturnedPlayer(container, c, this));
 
         /// <summary>

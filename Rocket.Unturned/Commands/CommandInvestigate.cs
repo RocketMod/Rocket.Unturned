@@ -12,10 +12,7 @@ namespace Rocket.Unturned.Commands
 {
     public class CommandInvestigate : ICommand
     {
-        public bool SupportsUser(Type userType)
-        {
-            return typeof(UnturnedUser).IsAssignableFrom(userType);
-        }
+        public bool SupportsUser(API.User.UserType userType) => userType == API.User.UserType.Player;
 
         public void Execute(ICommandContext context)
         {

@@ -26,7 +26,7 @@ namespace Rocket.Unturned.Commands
             switch (context.User)
             {
                 case UnturnedUser player:
-                    id = player.Player.CSteamID;
+                    id = player.UnturnedPlayer.playerID.steamID;
                     break;
                 case IConsole _:
                     id = CSteamID.Nil;
@@ -39,11 +39,7 @@ namespace Rocket.Unturned.Commands
             Commander.commands.FirstOrDefault(c => c.command == Name)?.check(id, Name, string.Join("/", context.Parameters.ToArray()));
         }
 
-        public bool SupportsUser(Type userType)
-        {
-            //Thanks to unturned we cant know if console is supported before command execution
-            return true;
-        }
+        public bool SupportsUser(API.User.UserType userType) => true;
 
         public string Name => NativeCommand.command;
         public string Summary => NativeCommand.help;
