@@ -14,7 +14,7 @@ namespace Rocket.Unturned.Serialisation
         [XmlAttribute]
         public int Interval = 1800;
     }
-
+    /*
     public sealed class RocketModObservatorySettings
     {
         [XmlAttribute]
@@ -29,12 +29,12 @@ namespace Rocket.Unturned.Serialisation
         [XmlAttribute]
         public long MinimumAge = 604800;
     }
-
+    */
     public class UnturnedSettings : IDefaultable
     {
-        [XmlElement("RocketModObservatory")]
+        /*[XmlElement("RocketModObservatory")]
         public RocketModObservatorySettings RocketModObservatory = new RocketModObservatorySettings();
-
+        */
         [XmlElement("AutomaticSave")]
         public AutomaticSaveSettings AutomaticSave = new AutomaticSaveSettings();
 
@@ -58,7 +58,7 @@ namespace Rocket.Unturned.Serialisation
         public void LoadDefaults()
         {
             AutomaticSave = new AutomaticSaveSettings();
-            RocketModObservatory = new RocketModObservatorySettings();
+            //RocketModObservatory = new RocketModObservatorySettings();
             CharacterNameValidation = true;
             CharacterNameValidationRule = @"([\x00-\xAA]|[\w_\ \.\+\-])+";
             LogSuspiciousPlayerMovement = true;
