@@ -1,4 +1,5 @@
-# Rocket.Unturned [![Build status](https://ci.appveyor.com/api/projects/status/ca4jhchbelem3jh5/branch/rework?svg=true)](https://ci.appveyor.com/project/RocketMod/rocket-unturned/branch/rework)
+# Rocket.Unturned [![Build status](https://ci.appveyor.com/api/projects/status/ca4jhchbelem3jh5/branch/rework?svg=true)](https://ci.appveyor.com/project/RocketMod/rocket-unturned/branch/rework)[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FRocketMod%2FRocket.Unturned.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FRocketMod%2FRocket.Unturned?ref=badge_shield)
+
 Rocket.Unturned contains the Unturned implementation for RocketMod Game Server Plugin Framework. 
 
 Latest build (NuGet): [![Rocket.Unturned NuGet](https://img.shields.io/nuget/v/Rocket.Unturned.svg)](https://www.nuget.org/packages/Rocket.Unturned) 
@@ -42,3 +43,7 @@ Visit the Rocket repository at https://github.com/RocketMod/Rocket.Unturned/ to 
          ( 8)  ( _.aP" _a   \( \   *
        +  )/    (8P   (88    )  )
           (      "     `"       `
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FRocketMod%2FRocket.Unturned.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FRocketMod%2FRocket.Unturned?ref=badge_large)
