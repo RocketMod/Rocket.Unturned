@@ -24,7 +24,7 @@ namespace Rocket.Unturned.Permissions
         {
             UnturnedPlayer player = caller.ToUnturnedPlayer();
 
-            Regex r = new Regex("^\\/[a-zA-Z]*");
+            Regex r = new Regex("^\\/\S*");
             string requestedCommand = r.Match(permission.ToLower()).Value.TrimStart('/').ToLower();
 
             IRocketCommand command = R.Commands.GetCommand(requestedCommand);
