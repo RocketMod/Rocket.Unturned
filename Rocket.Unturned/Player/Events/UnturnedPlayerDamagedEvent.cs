@@ -1,10 +1,11 @@
-﻿using Rocket.API.Commands;
+﻿using System.Numerics;
+using Rocket.API.Commands;
 using Rocket.API.Eventing;
 using Rocket.API.Player;
 using Rocket.API.User;
 using Rocket.Core.Player.Events;
 using SDG.Unturned;
-using UnityEngine;
+using Vector3 = System.Numerics.Vector3;
 
 namespace Rocket.Unturned.Player.Events
 {

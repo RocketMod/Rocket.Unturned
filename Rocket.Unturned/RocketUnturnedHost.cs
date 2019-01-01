@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Security;
+using System.Numerics;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using ICSharpCode.SharpZipLib.Zip;
@@ -22,6 +23,7 @@ using Rocket.Core.Logging;
 using Rocket.Core.Player;
 using Rocket.Core.Player.Events;
 using Rocket.Core.User;
+using Rocket.UnityEngine.Extensions;
 using Rocket.Unturned.Console;
 using Rocket.Unturned.Player;
 using Rocket.Unturned.Player.Events;
@@ -154,13 +156,13 @@ namespace Rocket.Unturned
             runtime.Shutdown();
         }
 
-        private void OnPlayerDamaged(SDG.Unturned.Player uPlayer, ref EDeathCause cause, ref ELimb limb, ref CSteamID killerId, ref Vector3 direction, ref float damage, ref float times, ref bool canDamage)
+        private void OnPlayerDamaged(SDG.Unturned.Player uPlayer, ref EDeathCause cause, ref ELimb limb, ref CSteamID killerId, ref global::UnityEngine.Vector3 direction, ref float damage, ref float times, ref bool canDamage)
         {
             var player = playerManager.GetPlayerById(uPlayer.channel.owner.playerID.steamID.m_SteamID.ToString());
             playerManager.TryGetPlayerById(killerId.m_SteamID.ToString(), out var killer);
 
             UnturnedPlayerDamagedEvent @event =
-                new UnturnedPlayerDamagedEvent(player, cause, limb, killer.User, direction, damage, times)
+                new UnturnedPlayerDamagedEvent(player, cause, limb, killer.User, direction.ToSystemVector(), damage, times)
                 {
                     IsCancelled = !canDamage
                 };
@@ -169,7 +171,7 @@ namespace Rocket.Unturned
             cause = @event.DeathCause;
             limb = @event.Limb;
             killerId = @event.DamageDealer != null ? new CSteamID(ulong.Parse(@event.DamageDealer.Id)) : CSteamID.Nil;
-            direction = @event.Direction;
+            direction = @event.Direction.ToUnityVector();
             damage = (float)@event.Damage;
             times = @event.Times;
             canDamage = !@event.IsCancelled;
@@ -353,7 +355,7 @@ namespace Rocket.Unturned
                         @event = new PlayerRespawnEvent(unturnedPlayer);
                         break;
                     case "tellDead":
-                        @event = new UnturnedPlayerDeadEvent(unturnedPlayer, (Vector3)data[0]);
+                        @event = new UnturnedPlayerDeadEvent(unturnedPlayer, ((global::UnityEngine.Vector3)data[0]).ToSystemVector());
                         break;
                     case "tellDeath":
                         {

@@ -1,221 +1,72 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BADB74F6-90C0-40AF-865D-27795B50C469}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Rocket.Unturned</RootNamespace>
+    <TargetFrameworks>net35</TargetFrameworks>
     <AssemblyName>Rocket.Unturned</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProductVersion>12.0.0</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
+    <Description>RocketMod .NET Game Server Plugin Framework Unturned implementation</Description>
+    <RootNamespace>Rocket.Unturned</RootNamespace>
+    <OutputType>Library</OutputType>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Version>0.0.0.0</Version> <!-- Set by CI -->
+    <PackageVersion>0.0.0.0</PackageVersion> <!-- Set by CI -->
+    <AssemblyVersion>0.0.0.0</AssemblyVersion> <!-- Set by CI -->
+    <FileVersion>0.0.0.0</FileVersion> <!-- Set by CI -->
+    <PackageId>$(AssemblyName)</PackageId>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageTags>RocketMod Rocket Unturned Plugin Framework</PackageTags>
+    <PackageLicenseUrl>https://github.com/RocketMod/Rocket.Unturned/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://rocketmod.net/</PackageProjectUrl>
+    <PackageAuthors>Sven Mawby&lt;fr34kyn01535@bam.yt&gt;, Enes Sadık Özbek &lt;esozbek.me&gt;</PackageAuthors>
+    <PackageOwners>Sven Mawby&lt;fr34kyn01535@bam.yt&gt;</PackageOwners>
+    <Authors>Sven Mawby &lt;fr34kyn01535@bam.yt&gt;, Enes Sadık Özbek &lt;esozbek.me&gt;</Authors>
+    <Company>RocketMod</Company>
+    <Copyright>Sven Mawby &lt;fr34kyn01535@bam.yt&gt;</Copyright>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>True</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>False</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>True</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>True</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Local|AnyCPU'">
-    <OutputPath>..\..\..\..\..\Desktop\unturned\Modules\Rocket.Unturned\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <Optimize>True</Optimize>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <WarningLevel>4</WarningLevel>
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
-  <PropertyGroup>
-    <RunPostBuildEvent>Always</RunPostBuildEvent>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="AsyncBridge, Version=0.3.1.0, Culture=neutral, PublicKeyToken=b3b1c0202c0d6a87, processorArchitecture=MSIL">
-      <HintPath>..\packages\AsyncBridge.0.3.1\lib\net35-client\AsyncBridge.dll</HintPath>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net35' ">
+    <PackageReference Include="AsyncBridge" Version="0.3.1" />
+    <!-- Packages where only a specific version is compatible with NET35 -->
+    <PackageReference Include="RestSharp" Version="105.2.3" />
+    <PackageReference Include="SharpZipLib" Version="0.86.0" />
+    <PackageReference Include="Rocket.Compatibility" Version="5.0.0.592" />
+    <PackageReference Include="morelinq">
+      <Version>2.10.0</Version>
+    </PackageReference>
+    <Reference Include="UnityEngine">
+      <HintPath>lib\net35\UnityEngine.dll</HintPath>
     </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Practices.Unity, Version=2.1.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Unity.2.1.505.2\lib\NET35\Microsoft.Practices.Unity.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Practices.Unity.Configuration, Version=2.1.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Unity.2.1.505.2\lib\NET35\Microsoft.Practices.Unity.Configuration.dll</HintPath>
-    </Reference>
-    <Reference Include="MoreLinq, Version=2.10.21623.0, Culture=neutral, PublicKeyToken=384d532d7e88985d, processorArchitecture=MSIL">
-      <HintPath>..\packages\morelinq.2.10.0\lib\net35\MoreLinq.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net35\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RestSharp.105.2.3\lib\net35\RestSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="Rocket.API, Version=5.0.0.592, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rocket.API.5.0.0.592\lib\net35\Rocket.API.dll</HintPath>
-    </Reference>
-    <Reference Include="Rocket.Compatibility, Version=5.0.0.592, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rocket.Compatibility.5.0.0.592\lib\net35\Rocket.Compatibility.dll</HintPath>
-    </Reference>
-    <Reference Include="Rocket.Core, Version=5.0.0.592, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rocket.Core.5.0.0.592\lib\net35\Rocket.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Rocket.Runtime, Version=5.0.0.592, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rocket.Runtime.5.0.0.592\lib\net35\Rocket.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="Rocket.UnityEngine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rocket.UnityEngine.5.0.0.38\lib\net35\Rocket.UnityEngine.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Configuration.Install">
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization">
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Threading, Version=1.0.2856.102, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\TaskParallelLibrary.1.0.2856.0\lib\Net35\System.Threading.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xml.Linq">
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
     <Reference Include="Assembly-CSharp">
-      <HintPath>lib\Assembly-CSharp.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>lib\net35\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>lib\Assembly-CSharp-firstpass.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>lib\net35\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
-    <Reference Include="Theraot.Core, Version=1.0.3.0, Culture=neutral, PublicKeyToken=b1460dff8a28f7a7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Theraot.Core.1.0.5\lib\NET35\Theraot.Core.dll</HintPath>
-    </Reference>
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' Or '$(TargetFramework)' == 'net461' ">
+    <!-- Stuff which isn't compatible with NET35 -->
+    <PackageReference Include="System.Numerics.Vectors">
+      <Version>4.5.0</Version>
+    </PackageReference>
+    <PackageReference Include="RestSharp" Version="106.3.1" />
+    <PackageReference Include="SharpZipLib" Version="1.0.0-alpha2" />
+    <PackageReference Include="morelinq">
+      <Version>3.0.0</Version>
+    </PackageReference>
     <Reference Include="UnityEngine">
-      <HintPath>lib\UnityEngine.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>lib\net461\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>lib\net461\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>lib\net461\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>lib\net461\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\CommandAdmin.cs" />
-    <Compile Include="Commands\CommandBroadcast.cs" />
-    <Compile Include="Commands\CommandCompass.cs" />
-    <Compile Include="Commands\CommandEffect.cs" />
-    <Compile Include="Commands\CommandExit.cs" />
-    <Compile Include="Commands\CommandHeal.cs" />
-    <Compile Include="Commands\CommandHome.cs" />
-    <Compile Include="Commands\CommandItem.cs" />
-    <Compile Include="Commands\CommandInvestigate.cs" />
-    <Compile Include="Commands\CommandMore.cs" />
-    <Compile Include="Commands\CommandTp.cs" />
-    <Compile Include="Commands\CommandTphere.cs" />
-    <Compile Include="Commands\CommandUnadmin.cs" />
-    <Compile Include="Commands\CommandVehicle.cs" />
-    <Compile Include="Commands\RocketUnturnedCommandProvider.cs" />
-    <Compile Include="Commands\VanillaCommand.cs" />
-    <Compile Include="Commands\VanillaCommandProvider.cs" />
-    <Compile Include="Permissions\UnturnedAdminPermissionProvider.cs" />
-    <Compile Include="Player\Events\UnturnedPlayerDamagedEvent.cs" />
-    <Compile Include="Player\Events\UnturnedPlayerUpdateBleedingEvent.cs" />
-    <Compile Include="Player\Events\UnturnedPlayerDeadEvent.cs" />
-    <Compile Include="Player\Events\UnturnedPlayerDeathEvent.cs" />
-    <Compile Include="Player\Events\UnturnedPlayerUpdateBrokenEvent.cs" />
-    <Compile Include="Player\Events\UnturnedPlayerUpdateExperienceEvent.cs" />
-    <Compile Include="Player\Events\UnturnedPlayerUpdateFoodEvent.cs" />
-    <Compile Include="Player\Events\UnturnedPlayerUpdateGestureEvent.cs" />
-    <Compile Include="Player\Events\UnturnedPlayerUpdateHealthEvent.cs" />
-    <Compile Include="Player\Events\UnturnedPlayerUpdateLifeEvent.cs" />
-    <Compile Include="Player\Events\UnturnedPlayerUpdateStanceEvent.cs" />
-    <Compile Include="Player\Events\UnturnedPlayerUpdateStatEvent.cs" />
-    <Compile Include="Player\Events\UnturnedPlayerUpdateVirusEvent.cs" />
-    <Compile Include="Player\Events\UnturnedPlayerUpdateWaterEvent.cs" />
-    <Compile Include="Player\PreConnectUnturnedPlayer.cs" />
-    <Compile Include="Player\Events\UnturnedPlayerChatEvent.cs" />
-    <Compile Include="Player\Events\UnturnedPlayerPreConnectEvent.cs" />
-    <Compile Include="Player\UnturnedPlayerEntity.cs" />
-    <Compile Include="Player\UnturnedPlayerManager.cs" />
-    <Compile Include="Player\UnturnedUser.cs" />
-    <Compile Include="Properties\DependencyRegistrator.cs" />
-    <Compile Include="Console\UnturnedConsoleWriter.cs" />
-    <Compile Include="RocketUnturnedModule.cs" />
-    <Compile Include="RocketUnturnedHost.cs" />
-    <Compile Include="Utils\AutomaticSaveWatchdog.cs" />
-    <Compile Include="Console\UnturnedConsolePipe.cs" />
-    <Compile Include="Player\UnturnedPlayer.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <PackageReference Include="Rocket.API" Version="5.0.0.592" />
+    <PackageReference Include="Rocket.Core" Version="5.0.0.592" />
+    <PackageReference Include="Rocket.Runtime" Version="5.0.0.592" />
+    <PackageReference Include="Rocket.UnityEngine" Version="5.0.0.38" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Rocket.Unturned.nuspec">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Module\English.dat">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Module\Rocket.Unturned.module">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="lib\Assembly-CSharp-firstpass.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib\Assembly-CSharp.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib\UnityEngine.dll" />
-    <Content Include="Module\Icon.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>if $(ConfigurationName) == Local (
-$(SolutionDir)Rocket.Unturned\dev\pdb2mdb.exe $(TargetPath)
-@echo listen 803286173 1 1 &gt; $(TargetDir)..\PlayerConnectionConfigFile
-rem copy $(SolutionDir)Rocket.Unturned\dev\Game.exe $(TargetDir)..\..\Unturned.exe
-)</PostBuildEvent>
-  </PropertyGroup>
-  <Target Name="AfterBuild" Condition="'$(Configuration)' == 'Debug'">
-    <GetAssemblyIdentity AssemblyFiles="$(TargetPath)">
-      <Output TaskParameter="Assemblies" ItemName="AssemblyVersion" />
-    </GetAssemblyIdentity>
-    <!--Exec WorkingDirectory="$(TargetDir)" Command="..\..\nuget\nuget.exe pack Rocket.Unturned.nuspec -Version %(AssemblyVersion.Version)" />
-    <Message Text="..\..\nuget\nuget.exe pack Rocket.Unturned.nuspec -Version %(AssemblyVersion.Version)" Importance="high" /-->
-  </Target>
 </Project>
