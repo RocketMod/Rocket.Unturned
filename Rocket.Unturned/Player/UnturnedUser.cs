@@ -8,11 +8,10 @@ using Steamworks;
 
 namespace Rocket.Unturned.Player
 {
-    public class UnturnedUser : IUser
+    public class UnturnedUser : IPlayerUser<UnturnedPlayer>
     {
         public UnturnedUser(IDependencyContainer container, SteamPlayer player) : this(container)
         {
-            UnturnedPlayer = player;
             Id = player.playerID.steamID.ToString();
             CSteamID = player.playerID.steamID;
         }
@@ -34,19 +33,19 @@ namespace Rocket.Unturned.Player
             Container = container;
         }
 
-        public SteamPlayer UnturnedPlayer { get; } = null;
+        public UnturnedPlayer Player => (UnturnedPlayer) Container.Resolve<IPlayerManager>().GetPlayerByIdAsync(Id).GetAwaiter().GetResult();
 
         public DateTime? LastSeen { get; }
 
         public IUserManager UserManager { get; }
-
-        public UserType Type => UserType.Player;
 
         public string UserName { get; }
 
         public string DisplayName { get; }
 
         public List<IIdentity> Identities { get; } = new List<IIdentity>();
+
+        public string UserType => "Unturned";
 
         public IDependencyContainer Container { get; }
 

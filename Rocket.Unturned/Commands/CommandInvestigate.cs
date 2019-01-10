@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Rocket.API;
 using Rocket.API.Commands;
 using Rocket.API.I18N;
 using Rocket.API.Player;
+using Rocket.API.User;
 using Rocket.Core.Commands;
 using Rocket.Core.User;
 using Rocket.Unturned.Player;
@@ -12,9 +14,9 @@ namespace Rocket.Unturned.Commands
 {
     public class CommandInvestigate : ICommand
     {
-        public bool SupportsUser(API.User.UserType userType) => userType == API.User.UserType.Player;
+        public bool SupportsUser(IUser user) => user is UnturnedUser;
 
-        public void Execute(ICommandContext context)
+        public async Task ExecuteAsync(ICommandContext context)
         {
             ITranslationCollection translations = ((RocketUnturnedHost)context.Container.Resolve<IHost>()).ModuleTranslations;
 
@@ -23,10 +25,10 @@ namespace Rocket.Unturned.Commands
                 throw new CommandWrongUsageException();
             }
 
-            UnturnedPlayer target = (UnturnedPlayer) context.Parameters.Get<IPlayer>(0);
+            UnturnedPlayer target = (UnturnedPlayer) await context.Parameters.GetAsync<IPlayer>(0);
 
             SteamPlayer otherPlayer = target.SteamPlayer;
-            context.User.SendMessage(translations.Get("command_investigate_private", otherPlayer.playerID.characterName, otherPlayer.playerID.steamID.ToString()));
+            await context.User.SendMessageAsync(await translations.GetAsync("command_investigate_private", otherPlayer.playerID.characterName, otherPlayer.playerID.steamID.ToString()));
         }
 
         public string Name => "Investigate";

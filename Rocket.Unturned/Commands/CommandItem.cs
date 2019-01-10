@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Rocket.API;
 using Rocket.API.Commands;
 using Rocket.API.I18N;
+using Rocket.API.User;
 using Rocket.Core.Commands;
 using Rocket.Core.I18N;
 using Rocket.Unturned.Player;
@@ -13,19 +15,19 @@ namespace Rocket.Unturned.Commands
 {
     public class CommandItem : ICommand
     {
-        public bool SupportsUser(API.User.UserType userType) => userType == API.User.UserType.Player;
+        public bool SupportsUser(IUser user) => user is UnturnedUser;
 
-        public void Execute(ICommandContext context)
+        public async Task ExecuteAsync(ICommandContext context)
         {
             ITranslationCollection translations = ((RocketUnturnedHost)context.Container.Resolve<IHost>()).ModuleTranslations;
 
-            UnturnedPlayer player = (UnturnedPlayer)context.Player;
+            UnturnedPlayer player = ((UnturnedUser)context.User).Player;
             if (context.Parameters.Length != 1 && context.Parameters.Length != 2)
                 throw new CommandWrongUsageException();
 
             byte amount = 1;
 
-            string itemString = context.Parameters.Get<string>(0);
+            string itemString = await context.Parameters.GetAsync<string>(0);
 
             if (!ushort.TryParse(itemString, out ushort id))
             {
@@ -45,11 +47,11 @@ namespace Rocket.Unturned.Commands
                 throw new CommandWrongUsageException();
 
             if (context.Parameters.Length == 2)
-                amount = context.Parameters.Get<byte>(1);
+                amount = await context.Parameters.GetAsync<byte>(1);
 
             string assetName = ((ItemAsset)a).itemName;
 
-            context.User.SendLocalizedMessage(translations, player.GiveItem(id, amount) ? "command_i_giving_private" : "command_i_giving_failed_private", 
+            await context.User.SendLocalizedMessage(translations, player.GiveItem(id, amount) ? "command_i_giving_private" : "command_i_giving_failed_private", 
                 null, amount, assetName, id);
         }
 

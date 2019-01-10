@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Rocket.API;
 using Rocket.API.Commands;
 using Rocket.Core.ServiceProxies;
@@ -19,6 +20,12 @@ namespace Rocket.Unturned.Commands
         private List<ICommand> commands;
 
         public ILifecycleObject GetOwner(ICommand command) => rocketUnturned;
+
+        public async Task InitAsync()
+        {
+
+        }
+
         public void Init()
         {
             

@@ -9,7 +9,7 @@ using Rocket.API.User;
 
 namespace Rocket.Unturned.Player
 {
-    public class UnturnedPlayer : BasePlayer<UnturnedUser, UnturnedPlayerEntity>
+    public class UnturnedPlayer : BasePlayer<UnturnedUser, UnturnedPlayerEntity, UnturnedPlayer>
     {
         public override int GetHashCode()
         {
@@ -49,7 +49,7 @@ namespace Rocket.Unturned.Player
             this.container = container;
             this.manager = manager;
             CSteamID = cSteamID;
-            User = (UnturnedUser)container.Resolve<IUserManager>().GetUser(cSteamID.ToString());
+            User = (UnturnedUser)container.Resolve<IUserManager>().GetUserAsync(cSteamID.ToString()).Result;
         }
 
         public float Ping => NativePlayer.channel.owner.ping;

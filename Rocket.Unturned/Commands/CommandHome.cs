@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Rocket.API;
 using Rocket.API.Commands;
 using Rocket.API.I18N;
+using Rocket.API.User;
 using Rocket.Core.Commands;
 using Rocket.UnityEngine.Extensions;
 using Rocket.Unturned.Player;
@@ -12,22 +14,22 @@ namespace Rocket.Unturned.Commands
 {
     public class CommandHome : ICommand
     {
-        public bool SupportsUser(API.User.UserType userType) => userType == API.User.UserType.Player;
+        public bool SupportsUser(IUser user) => user is UnturnedUser;
 
-        public void Execute(ICommandContext context)
+        public async Task ExecuteAsync(ICommandContext context)
         {
-            UnturnedPlayer player = (UnturnedPlayer)context.Player;
+            UnturnedPlayer player = ((UnturnedUser)context.User).Player;
 
             ITranslationCollection translations = ((RocketUnturnedHost)context.Container.Resolve<IHost>()).ModuleTranslations;
 
             if (!BarricadeManager.tryGetBed(player.CSteamID, out Vector3 pos, out byte rot))
             {
-                throw new CommandWrongUsageException(translations.Get("command_bed_no_bed_found_private"));
+                throw new CommandWrongUsageException(await translations.GetAsync("command_bed_no_bed_found_private"));
             }
 
             if (player.Entity.Stance == EPlayerStance.DRIVING || player.Entity.Stance == EPlayerStance.SITTING)
             {
-                throw new CommandWrongUsageException(translations.Get("command_generic_teleport_while_driving_error"));
+                throw new CommandWrongUsageException(await translations.GetAsync("command_generic_teleport_while_driving_error"));
             }
 
             player.Entity.Teleport(pos.ToSystemVector(), rot);

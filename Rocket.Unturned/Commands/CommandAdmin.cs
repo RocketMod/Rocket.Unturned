@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Rocket.API.Commands;
 using Rocket.API.Player;
+using Rocket.API.User;
 using Rocket.Core.Commands;
+using Rocket.Core.Player;
 using Rocket.Core.User;
 using Rocket.Unturned.Player;
 
@@ -9,14 +12,12 @@ namespace Rocket.Unturned.Commands
 {
     public class CommandAdmin : ICommand
     {
-        public bool SupportsUser(API.User.UserType userType) => userType == API.User.UserType.Player;
-
-        public void Execute(ICommandContext context)
+        public async Task ExecuteAsync(ICommandContext context)
         {
             if(context.Parameters.Length != 1)
                 throw new CommandWrongUsageException();
 
-            IPlayer target = context.Parameters.Get<IPlayer>(0);
+            IPlayer target = await context.Parameters.GetAsync<IPlayer>(0);
 
             if (target.IsOnline && target is UnturnedPlayer uPlayer && !uPlayer.IsAdmin)
             {
@@ -24,13 +25,14 @@ namespace Rocket.Unturned.Commands
                 return;
             }
 
-            context.User.SendMessage($"Could not admin {target.User.DisplayName}" , ConsoleColor.Red);
+            await context.User.SendMessageAsync($"Could not admin {target.GetUser().DisplayName}" , ConsoleColor.Red);
         }
+
+        public bool SupportsUser(IUser user) => user is UnturnedUser;
 
         public string Name => "Admin";
         public string Summary => "Gives admin to a player.";
         public string Description => null;
-        public string Permission => "Rocket.Unturned.Admin";
         public string Syntax => "<target player>";
         public IChildCommand[] ChildCommands => null;
         public string[] Aliases => null;

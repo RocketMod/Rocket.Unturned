@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Rocket.API;
 using Rocket.API.Commands;
 using Rocket.API.I18N;
 using Rocket.API.Player;
+using Rocket.API.User;
 using Rocket.Core.Commands;
 using Rocket.Core.I18N;
 using Rocket.Unturned.Player;
@@ -11,30 +13,30 @@ namespace Rocket.Unturned.Commands
 {
     public class CommandTphere : ICommand
     {
-        public bool SupportsUser(API.User.UserType userType) => userType == API.User.UserType.Player;
+        public bool SupportsUser(IUser user) => user is UnturnedUser;
 
-        public void Execute(ICommandContext context)
+        public async Task ExecuteAsync(ICommandContext context)
         {
             ITranslationCollection translations = ((RocketUnturnedHost)context.Container.Resolve<IHost>()).ModuleTranslations;
 
-            UnturnedPlayer player = (UnturnedPlayer)context.Player;
+            UnturnedPlayer player = ((UnturnedUser)context.User).Player;
 
             if (context.Parameters.Length != 1)
             {
                 throw new CommandWrongUsageException();
             }
 
-            UnturnedPlayer otherPlayer = (UnturnedPlayer)context.Parameters.Get<IPlayer>(0);
+            UnturnedPlayer otherPlayer = (UnturnedPlayer) await context.Parameters.GetAsync<IPlayer>(0);
 
             if (otherPlayer.IsInVehicle)
             {
-                context.User.SendLocalizedMessage(translations, "command_tphere_vehicle");
+                await context.User.SendLocalizedMessage(translations, "command_tphere_vehicle");
                 return;
             }
 
             otherPlayer.Entity.Teleport(player);
-            context.User.SendLocalizedMessage(translations, "command_tphere_teleport_from_private", null, otherPlayer.CharacterName);
-            otherPlayer.User.SendLocalizedMessage(translations, "command_tphere_teleport_to_private", null, player.CharacterName);
+            await context.User.SendLocalizedMessage(translations, "command_tphere_teleport_from_private", null, otherPlayer.CharacterName);
+            await otherPlayer.User.SendLocalizedMessage(translations, "command_tphere_teleport_to_private", null, player.CharacterName);
         }
 
         public string Name => "Tphere";

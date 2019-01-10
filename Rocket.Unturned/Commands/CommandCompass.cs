@@ -1,26 +1,28 @@
-﻿using System;
-using Rocket.API;
+﻿using Rocket.API;
 using Rocket.API.Commands;
+using Rocket.API.Player;
+using Rocket.API.User;
 using Rocket.Core.Commands;
 using Rocket.Core.I18N;
 using Rocket.Unturned.Player;
+using System.Threading.Tasks;
 
 namespace Rocket.Unturned.Commands
 {
     public class CommandCompass : ICommand
     {
-        public bool SupportsUser(API.User.UserType userType) => userType == API.User.UserType.Player;
+        public bool SupportsUser(IUser user) => user is UnturnedUser;
 
-        public void Execute(ICommandContext context)
+        public async Task ExecuteAsync(ICommandContext context)
         {
-            UnturnedUser user = (UnturnedUser) context.User;
-            UnturnedPlayer player = (UnturnedPlayer) context.Player;
+            UnturnedUser user = (UnturnedUser)context.User;
 
             var translations = ((RocketUnturnedHost)context.Container.Resolve<IHost>()).ModuleTranslations;
 
+            var player = ((UnturnedUser)context.User).Player;
             float currentDirection = player.Entity.Rotation;
 
-            string targetDirection = context.Parameters.Length > 0 ? context.Parameters.Get<string>(0) : null;
+            string targetDirection = context.Parameters.Length > 0 ? await context.Parameters.GetAsync<string>(0) : null;
 
             if (targetDirection != null)
             {
@@ -49,38 +51,38 @@ namespace Rocket.Unturned.Commands
 
             if (currentDirection > 30 && currentDirection < 60)
             {
-                directionName = translations.Get("command_compass_northeast");
+                directionName = await translations.GetAsync("command_compass_northeast");
             }
             else if (currentDirection > 60 && currentDirection < 120)
             {
-                directionName = translations.Get("command_compass_east");
+                directionName = await translations.GetAsync("command_compass_east");
             }
             else if (currentDirection > 120 && currentDirection < 150)
             {
-                directionName = translations.Get("command_compass_southeast");
+                directionName = await translations.GetAsync("command_compass_southeast");
             }
             else if (currentDirection > 150 && currentDirection < 210)
             {
-                directionName = translations.Get("command_compass_south");
+                directionName = await translations.GetAsync("command_compass_south");
             }
             else if (currentDirection > 210 && currentDirection < 240)
             {
-                directionName = translations.Get("command_compass_southwest");
+                directionName = await translations.GetAsync("command_compass_southwest");
             }
             else if (currentDirection > 240 && currentDirection < 300)
             {
-                directionName = translations.Get("command_compass_west");
+                directionName = await translations.GetAsync("command_compass_west");
             }
             else if (currentDirection > 300 && currentDirection < 330)
             {
-                directionName = translations.Get("command_compass_northwest");
+                directionName = await translations.GetAsync("command_compass_northwest");
             }
             else if (currentDirection > 330 || currentDirection < 30)
             {
-                directionName = translations.Get("command_compass_north");
+                directionName = await translations.GetAsync("command_compass_north");
             }
 
-            user.SendLocalizedMessage(translations, "command_compass_facing_private", null, directionName);
+            await user.SendLocalizedMessage(translations, "command_compass_facing_private", null, directionName);
         }
 
         public string Name => "Compass";

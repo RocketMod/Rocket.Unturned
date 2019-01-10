@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Rocket.API;
 using Rocket.API.Commands;
 using Rocket.Core.DependencyInjection;
@@ -18,7 +19,7 @@ namespace Rocket.Unturned.Commands
         }
 
         public ILifecycleObject GetOwner(ICommand command) => rocketUnturned;
-        public void Init()
+        public async Task InitAsync()
         {
             var types = (typeof(RocketUnturnedCommandProvider).Assembly.FindTypes<ICommand>())
                         .Where(c => c.GetCustomAttributes(typeof(DontAutoRegisterAttribute), true).Length == 0)

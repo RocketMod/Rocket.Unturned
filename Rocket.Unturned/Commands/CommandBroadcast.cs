@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Rocket.API.Drawing;
 using Rocket.API.Commands;
 using Rocket.API.Player;
+using Rocket.API.User;
 using Rocket.Core.Commands;
 using Rocket.Unturned.Player;
 
@@ -9,25 +11,25 @@ namespace Rocket.Unturned.Commands
 {
     public class CommandBroadcast : ICommand
     {
-        public bool SupportsUser(API.User.UserType userType) => userType == API.User.UserType.Player;
+        public bool SupportsUser(IUser user) => user is UnturnedUser;
 
-        public void Execute(ICommandContext context)
+        public async Task ExecuteAsync(ICommandContext context)
         {
             if (!(context.Container.Resolve<IPlayerManager>("unturned") is UnturnedPlayerManager playerManager))
                 return;
 
-            string colorName = context.Parameters.Get<string>(0);
+            string colorName = await context.Parameters.GetAsync<string>(0);
 
             Color? color = playerManager.GetColorFromName(colorName);
 
             int i = 1;
             if (color == null) i = 0;
-            string message = context.Parameters.Get<string>(i);
+            string message = await context.Parameters.GetAsync<string>(i);
 
             if (message == null)
                 throw new CommandWrongUsageException();
 
-            playerManager.Broadcast(null, message, color ?? Color.Green);
+            await playerManager.BroadcastAsync(null, message, color ?? Color.Green);
         }
 
         public string Name => "Broadcast";

@@ -1,21 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using Rocket.API.Drawing;
-using System.Linq;
-using Rocket.API;
+﻿using Rocket.API;
 using Rocket.API.Commands;
 using Rocket.API.DependencyInjection;
 using Rocket.API.Eventing;
 using Rocket.API.Player;
 using Rocket.API.User;
-using Rocket.Core.Logging;
-using Rocket.Core.Player;
 using Rocket.Core.Player.Events;
-using Rocket.Core.User;
 using Rocket.Core.User.Events;
 using SDG.Unturned;
 using Steamworks;
-using UnityEngine;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Rocket.Core.Logging;
+using Rocket.Core.Player;
 using Color = UnityEngine.Color;
 using ILogger = Rocket.API.Logging.ILogger;
 
@@ -37,20 +35,23 @@ namespace Rocket.Unturned.Player
             this.logger = logger;
         }
 
-        public bool Kick(IPlayer target, IUser kicker = null, string reason = null)
+        public async Task<bool> KickAsync(IUser user, IUser kickedBy = null, string reason = null)
         {
-            PlayerKickEvent @event = new PlayerKickEvent(target, kicker, reason, true);
+            var target = ((UnturnedUser)user).Player;
+
+            PlayerKickEvent @event = new PlayerKickEvent(target, kickedBy, reason, true);
             eventManager.Emit(host, @event);
             if (@event.IsCancelled)
                 return false;
 
-            Provider.kick(((UnturnedPlayer)target).CSteamID, reason);
+            if (target.IsOnline)
+                Provider.kick(target.CSteamID, reason);
             return true;
         }
 
-        public bool Ban(IUser target, IUser bannedBy = null, string reason = null, TimeSpan? duration = null)
+        public async Task<bool> BanAsync(IUser user, IUser bannedBy = null, string reason = null, TimeSpan? duration = null)
         {
-            UserBanEvent @event = new UserBanEvent(target, bannedBy, reason, duration, true);
+            UserBanEvent @event = new UserBanEvent(user, bannedBy, reason, duration, true);
             eventManager.Emit(host, @event);
             if (@event.IsCancelled)
                 return false;
@@ -63,12 +64,18 @@ namespace Rocket.Unturned.Player
             //    return true;
             //}
 
-            var steamId = new CSteamID(ulong.Parse(target.Id));
+            var steamId = new CSteamID(ulong.Parse(user.Id));
             SteamBlacklist.ban(steamId, 0, callerId, reason, (uint)(duration?.TotalSeconds ?? uint.MaxValue));
+
+            var target = ((UnturnedUser)user).Player;
+
+            if (target.IsOnline)
+                Provider.kick(steamId, reason);
+
             return true;
         }
 
-        public bool Unban(IUser target, IUser bannedBy = null)
+        public async Task<bool> UnbanAsync(IUser target, IUser bannedBy = null)
         {
             UserUnbanEvent @event = new UserUnbanEvent(target, bannedBy);
             eventManager.Emit(host, @event);
@@ -79,7 +86,8 @@ namespace Rocket.Unturned.Player
             return SteamBlacklist.unban(steamId);
         }
 
-        public void SendMessage(IUser sender, IPlayer receiver, string message, Rocket.API.Drawing.Color? color = null, params object[] arguments)
+        public async Task SendMessageAsync(IUser sender, IUser receiver, string message, API.Drawing.Color? color = null,
+                                     params object[] arguments)
         {
             var uColor = color == null
                 ? Color.white
@@ -97,24 +105,25 @@ namespace Rocket.Unturned.Player
             ChatManager.say(player.CSteamID, message, uColor, true);
         }
 
-        public void Broadcast(IUser sender, string message, Rocket.API.Drawing.Color? color = null, params object[] arguments)
+        public async Task BroadcastAsync(IUser sender, IEnumerable<IUser> receivers, string message, API.Drawing.Color? color = null,
+                                   params object[] arguments)
         {
-            Broadcast(sender, Players, message, color, arguments);
+            var wrappedMessage = WrapMessage(string.Format(message, arguments));
+            foreach (IUser user in receivers)
+                foreach (var line in wrappedMessage)
+                    await user.UserManager.SendMessageAsync(sender, user, line, color);
+        }
+
+        public async Task BroadcastAsync(IUser sender, string message, API.Drawing.Color? color = null,
+                                   params object[] arguments)
+        {
+            await BroadcastAsync(sender, Players.Select(d => d.GetUser()), message, color, arguments);
             logger.LogInformation("[Broadcast] " + message);
         }
 
-        public IUser GetUser(string id, IdentityProvider identityProvider = IdentityProvider.Builtin)
+        public async Task<IUser> GetUserAsync(string id)
         {
-            return GetPlayerById(id).User;
-        }
-
-        public void Broadcast(IUser sender, IEnumerable<IPlayer> receivers, string message,
-                              Rocket.API.Drawing.Color? color = null, params object[] arguments)
-        {
-            var wrappedMessage = WrapMessage(string.Format(message, arguments));
-            foreach (IPlayer player in receivers)
-                foreach (var line in wrappedMessage)
-                    player.PlayerManager.SendMessage(player.User,line, color);
+            return (await GetPlayerByIdAsync(id)).GetUser();
         }
 
         public Rocket.API.Drawing.Color? GetColorFromName(string colorName)
@@ -167,7 +176,125 @@ namespace Rocket.Unturned.Player
             return Rocket.API.Drawing.Color.FromArgb(A, R, G, B);
         }
 
-        public static List<string> WrapMessage(string text)
+        public IPlayer GetPlayer(string nameOrId)
+        {
+            SteamPlayer player;
+
+            if (ulong.TryParse(nameOrId, out var id))
+                player = PlayerTool.getSteamPlayer(new CSteamID(id));
+            else
+                player = PlayerTool.getSteamPlayer(nameOrId);
+
+            if (player == null)
+                throw new PlayerNotFoundException(nameOrId);
+
+            return new UnturnedPlayer(container, player, this);
+        }
+
+
+
+        public PreConnectUnturnedPlayer GetPendingPlayer(string uniqueID)
+        {
+            return PendingPlayers.FirstOrDefault(c => c.User.Id.Equals(uniqueID));
+        }
+
+        public PreConnectUnturnedPlayer GetPendingPlayerByName(string displayName)
+        {
+            return PendingPlayers.FirstOrDefault(c => c.User.DisplayName.Equals(displayName, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public async Task<IEnumerable<IPlayer>> GetPlayersAsync() => Players;
+
+        public async Task<IPlayer> GetPlayerAsync(string nameOrId)
+        {
+            SteamPlayer player;
+
+            if (ulong.TryParse(nameOrId, out var id))
+                player = PlayerTool.getSteamPlayer(new CSteamID(id));
+            else
+                player = PlayerTool.getSteamPlayer(nameOrId);
+
+            if (player == null)
+                throw new PlayerNotFoundException(nameOrId);
+
+            return new UnturnedPlayer(container, player, this);
+        }
+
+        public async Task<IPlayer> GetPlayerByNameAsync(string name)
+        {
+            SteamPlayer player = PlayerTool.getSteamPlayer(name);
+            if (player == null)
+                throw new PlayerNameNotFoundException(name);
+
+            return new UnturnedPlayer(container, player, this);
+        }
+
+        public async Task<IPlayer> GetPlayerByIdAsync(string id)
+        {
+            var player = PlayerTool.getSteamPlayer(ulong.Parse(id));
+            if (player == null)
+                throw new PlayerIdNotFoundException(id);
+
+            return new UnturnedPlayer(container, player, this);
+        }
+
+        public bool TryGetOnlinePlayer(string nameOrId, out IPlayer output)
+        {
+            output = null;
+            try
+            {
+                output = GetPlayerAsync(nameOrId).GetAwaiter().GetResult();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool TryGetOnlinePlayerById(string id, out IPlayer output)
+        {
+            output = null;
+            try
+            {
+                output = GetPlayerByIdAsync(id).GetAwaiter().GetResult();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool TryGetOnlinePlayerByName(string displayName, out IPlayer output)
+        {
+            output = null;
+            try
+            {
+                output = GetPlayerByNameAsync(displayName).GetAwaiter().GetResult();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Online players which succesfully joined the server.
+        /// </summary>
+        public IEnumerable<IPlayer> Players =>
+            Provider.clients.Select(c => (IPlayer)new UnturnedPlayer(container, c, this));
+
+        /// <summary>
+        /// Players which are not authenticated and have not joined yet.
+        /// </summary>
+        public IEnumerable<PreConnectUnturnedPlayer> PendingPlayers => Provider.pending.Select(c => new PreConnectUnturnedPlayer(container, c, this));
+        public string ServiceName => "Unturned";
+
+        public async Task<IIdentity> GetIdentity(string id) => new UnturnedIdentity(ulong.Parse(id));
+
+        protected static List<string> WrapMessage(string text)
         {
             if (text.Length == 0) return new List<string>();
             string[] words = text.Split(' ');
@@ -192,106 +319,5 @@ namespace Rocket.Unturned.Player
                 lines.Add(currentLine);
             return lines;
         }
-
-        public IEnumerable<IUser> Users => Players.Select(c => (IUser)c.User);
-
-
-        public IPlayer GetPlayer(string nameOrId)
-        {
-            SteamPlayer player;
-
-            if (ulong.TryParse(nameOrId, out var id))
-                player = PlayerTool.getSteamPlayer(new CSteamID(id));
-            else
-                player = PlayerTool.getSteamPlayer(nameOrId);
-
-            if (player == null)
-                throw new PlayerNotFoundException(nameOrId);
-
-            return new UnturnedPlayer(container, player, this);
-        }
-
-        public IPlayer GetPlayerByName(string displayName)
-        {
-            SteamPlayer player = PlayerTool.getSteamPlayer(displayName);
-            if (player == null)
-                throw new PlayerNameNotFoundException(displayName);
-
-            return new UnturnedPlayer(container, player, this);
-        }
-
-        public IPlayer GetPlayerById(string id)
-        {
-            var player = PlayerTool.getSteamPlayer(ulong.Parse(id));
-            if (player == null)
-                throw new PlayerIdNotFoundException(id);
-
-            return new UnturnedPlayer(container, player, this);
-        }
-
-
-        public PreConnectUnturnedPlayer GetPendingPlayer(string uniqueID)
-        {
-            return PendingPlayers.FirstOrDefault(c => c.User.Id.Equals(uniqueID));
-        }
-
-        public PreConnectUnturnedPlayer GetPendingPlayerByName(string displayName)
-        {
-            return PendingPlayers.FirstOrDefault(c => c.User.DisplayName.Equals(displayName, StringComparison.OrdinalIgnoreCase));
-        }
-
-        public bool TryGetPlayer(string nameOrId, out IPlayer output)
-        {
-            output = null;
-            try
-            {
-                output = GetPlayer(nameOrId);
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
-        public bool TryGetPlayerById(string id, out IPlayer output)
-        {
-            output = null;
-            try
-            {
-                output = GetPlayerById(id);
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
-        public bool TryGetPlayerByName(string displayName, out IPlayer output)
-        {
-            output = null;
-            try
-            {
-                output = GetPlayerByName(displayName);
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Online players which succesfully joined the server.
-        /// </summary>
-        public IEnumerable<IPlayer> Players =>
-            Provider.clients.Select(c => (IPlayer)new UnturnedPlayer(container, c, this));
-
-        /// <summary>
-        /// Players which are not authenticated and have not joined yet.
-        /// </summary>
-        public IEnumerable<PreConnectUnturnedPlayer> PendingPlayers => Provider.pending.Select(c => new PreConnectUnturnedPlayer(container, c, this));
-        public string ServiceName => "Unturned";
     }
 }

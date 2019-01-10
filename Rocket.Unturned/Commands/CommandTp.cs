@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Rocket.API;
 using Rocket.API.Commands;
 using Rocket.API.I18N;
 using Rocket.API.Player;
+using Rocket.API.User;
 using Rocket.Core.Commands;
 using Rocket.Core.I18N;
 using Rocket.UnityEngine.Extensions;
@@ -15,20 +17,19 @@ namespace Rocket.Unturned.Commands
 {
     public class CommandTp : ICommand
     {
-        public bool SupportsUser(API.User.UserType userType) => userType == API.User.UserType.Player;
-
-        public void Execute(ICommandContext context)
+        public bool SupportsUser(IUser user) => user is UnturnedUser;
+        public async Task ExecuteAsync(ICommandContext context)
         {
             ITranslationCollection translations = ((RocketUnturnedHost)context.Container.Resolve<IHost>()).ModuleTranslations;
 
-            UnturnedPlayer player = (UnturnedPlayer)context.Player;
+            UnturnedPlayer player = ((UnturnedUser)context).Player;
 
             if (context.Parameters.Length != 1 && context.Parameters.Length != 3)
                 throw new CommandWrongUsageException();
 
             if (player.Entity.Stance == EPlayerStance.DRIVING || player.Entity.Stance == EPlayerStance.SITTING)
                 throw new CommandWrongUsageException(
-                    translations.Get("command_generic_teleport_while_driving_error"));
+                    await translations.GetAsync("command_generic_teleport_while_driving_error"));
 
             float? x = null;
             float? y = null;
@@ -36,35 +37,35 @@ namespace Rocket.Unturned.Commands
 
             if (context.Parameters.Length == 3)
             {
-                x = context.Parameters.Get<float>(0);
-                y = context.Parameters.Get<float>(1);
-                z = context.Parameters.Get<float>(2);
+                x = await context.Parameters.GetAsync<float>(0);
+                y = await context.Parameters.GetAsync<float>(1);
+                z = await context.Parameters.GetAsync<float>(2);
             }
 
             if (x != null)
             {
                 player.Entity.Teleport(new System.Numerics.Vector3((float)x, (float)y, (float)z));
-                context.User.SendLocalizedMessage(translations, "command_tp_teleport_private", null, (float)x + "," + (float)y + "," + (float)z);
+                await context.User.SendLocalizedMessage(translations, "command_tp_teleport_private", null, (float)x + "," + (float)y + "," + (float)z);
                 return;
             }
 
-            if (context.Parameters.Get<IPlayer>(0) is UnturnedPlayer otherplayer && otherplayer != player)
+            if (await context.Parameters.GetAsync<IPlayer>(0) is UnturnedPlayer otherplayer && otherplayer != player)
             {
                 player.Entity.Teleport(otherplayer);
-                context.User.SendLocalizedMessage(translations, "command_tp_teleport_private", null, otherplayer.CharacterName);
+                await context.User.SendLocalizedMessage(translations, "command_tp_teleport_private", null, otherplayer.CharacterName);
                 return;
             }
 
-            Node item = LevelNodes.nodes.FirstOrDefault(n => n.type == ENodeType.LOCATION && ((LocationNode)n).name.ToLower().Contains(context.Parameters.Get<string>(0).ToLower()));
+            Node item = LevelNodes.nodes.FirstOrDefault(n => n.type == ENodeType.LOCATION && ((LocationNode)n).name.ToLower().Contains((context.Parameters.GetAsync<string>(0).GetAwaiter().GetResult()).ToLower()));
             if (item != null)
             {
                 Vector3 c = item.point + new Vector3(0f, 0.5f, 0f);
                 player.Entity.Teleport(c.ToSystemVector());
-                context.User.SendLocalizedMessage(translations, "command_tp_teleport_private", null, ((LocationNode)item).name);
+                await context.User.SendLocalizedMessage(translations, "command_tp_teleport_private", null, ((LocationNode)item).name);
                 return;
             }
 
-            context.User.SendLocalizedMessage(translations, "command_tp_failed_find_destination");
+            await context.User.SendLocalizedMessage(translations, "command_tp_failed_find_destination");
         }
 
         public string Name => "Tp";

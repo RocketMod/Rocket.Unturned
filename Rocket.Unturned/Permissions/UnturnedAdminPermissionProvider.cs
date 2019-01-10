@@ -12,7 +12,7 @@ namespace Rocket.Unturned.Permissions
         public override bool SupportsTarget(IPermissionEntity target)
         {
             if (target is UnturnedUser user)
-                return user.UnturnedPlayer.isAdmin;
+                return user.Player.IsAdmin;
 
             if (target is UnturnedPlayer player)
                 return player.IsAdmin;

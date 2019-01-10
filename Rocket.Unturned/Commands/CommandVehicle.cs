@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Rocket.API;
 using Rocket.API.Commands;
 using Rocket.API.I18N;
+using Rocket.API.User;
 using Rocket.Core.Commands;
 using Rocket.Core.I18N;
 using Rocket.Unturned.Player;
@@ -12,20 +14,20 @@ namespace Rocket.Unturned.Commands
 {
     public class CommandVehicle : ICommand
     {
-        public bool SupportsUser(API.User.UserType userType) => userType == API.User.UserType.Player;
+        public bool SupportsUser(IUser user) => user is UnturnedUser;
 
-        public void Execute(ICommandContext context)
+        public async Task ExecuteAsync(ICommandContext context)
         {
             ITranslationCollection translations = ((RocketUnturnedHost)context.Container.Resolve<IHost>()).ModuleTranslations;
 
-            UnturnedPlayer player = (UnturnedPlayer)context.Player;
+            UnturnedPlayer player = ((UnturnedUser)context.User).Player;
 
             if (context.Parameters.Length != 1)
             {
                 throw new CommandWrongUsageException();
             }
 
-            string param = context.Parameters.Get<string>(0);
+            string param = await context.Parameters.GetAsync<string>(0);
 
             if (!ushort.TryParse(param, out ushort id))
             {    
@@ -48,7 +50,7 @@ namespace Rocket.Unturned.Commands
             Asset a = Assets.find(EAssetType.VEHICLE, id);
             string assetName = ((VehicleAsset)a).vehicleName;
 
-            context.User.SendLocalizedMessage(translations, VehicleTool.giveVehicle(player.NativePlayer, id)
+            await context.User.SendLocalizedMessage(translations, VehicleTool.giveVehicle(player.NativePlayer, id)
                     ? "command_v_giving_private"
                     : "command_v_giving_failed_private", null, assetName, id);
         }

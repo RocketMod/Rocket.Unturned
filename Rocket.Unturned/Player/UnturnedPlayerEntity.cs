@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Numerics;
+using System.Threading.Tasks;
 using Rocket.API.Entities;
 using Rocket.API.Player;
 using Rocket.UnityEngine.Extensions;
@@ -9,7 +10,7 @@ using Steamworks;
 using Vector3 = UnityEngine.Vector3;
 
 namespace Rocket.Unturned.Player {
-    public class UnturnedPlayerEntity : IPlayerEntity//, ILivingEntity
+    public class UnturnedPlayerEntity : IPlayerEntity<UnturnedPlayer>//, ILivingEntity
     {
         public UnturnedPlayerEntity(UnturnedPlayer unturnedPlayer)
         {
@@ -17,6 +18,11 @@ namespace Rocket.Unturned.Player {
         }
 
         public System.Numerics.Vector3 Position => Player.NativePlayer?.transform?.position.ToSystemVector() ?? throw new PlayerNotOnlineException();
+
+        public async Task<bool> TeleportAsync(System.Numerics.Vector3 position, float rotation)
+        {
+            return Teleport(position, rotation);
+        }
 
         public string EntityTypeName => "Player";
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Rocket.API;
 using Rocket.API.Commands;
 using Rocket.API.I18N;
@@ -14,23 +15,23 @@ namespace Rocket.Unturned.Commands
 {
     public class CommandHeal : ICommand
     {
-        public bool SupportsUser(API.User.UserType userType) => userType == API.User.UserType.Player;
+        public bool SupportsUser(IUser user) => user is UnturnedUser;
 
-        public void Execute(ICommandContext context)
+        public async Task ExecuteAsync(ICommandContext context)
         {
             IPermissionProvider permissions = context.Container.Resolve<IPermissionProvider>();
             ITranslationCollection translations = ((RocketUnturnedHost)context.Container.Resolve<IHost>()).ModuleTranslations;
 
             IPlayer target;
-            if (permissions.CheckPermission(context.User, Permission + ".Others") == PermissionResult.Grant
+            if (await permissions.CheckPermissionAsync(context.User, Permission + ".Others") == PermissionResult.Grant
                 && context.Parameters.Length >= 1)
-                target = context.Parameters.Get<IPlayer>(0);
+                target = await context.Parameters.GetAsync<IPlayer>(0);
             else
-                target = context.Player;
+                target = ((UnturnedUser)context.User).Player;
 
             if (!(target is UnturnedPlayer uPlayer))
             {
-                context.User.SendMessage($"Could not heal {target.User.DisplayName}", ConsoleColor.Red);
+                await context.User.SendMessageAsync($"Could not heal {target.GetUser().DisplayName}", ConsoleColor.Red);
                 return;
             }
 
@@ -43,12 +44,12 @@ namespace Rocket.Unturned.Commands
 
             if (target == context.User)
             {
-                context.User.SendLocalizedMessage(translations, "command_heal_success");
+                await context.User.SendLocalizedMessage(translations, "command_heal_success");
                 return;
             }
 
-            context.User.SendLocalizedMessage(translations, "command_heal_success_me", null, target.User.DisplayName);
-            target.User.SendLocalizedMessage(translations, "command_heal_success_other", null, context.User.DisplayName);
+            await context.User.SendLocalizedMessage(translations, "command_heal_success_me", null, target.GetUser().DisplayName);
+            await target.GetUser().SendLocalizedMessage(translations, "command_heal_success_other", null, context.User.DisplayName);
         }
 
         public string Name => "Heal";

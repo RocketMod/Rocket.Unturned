@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Rocket.API.Commands;
 using Rocket.API.User;
 using Rocket.Core.DependencyInjection;
@@ -20,13 +21,15 @@ namespace Rocket.Unturned.Commands
             NativeCommand = nativeCommand;
         }
 
-        public void Execute(ICommandContext context)
+        public bool SupportsUser(IUser user) => true;
+
+        public async Task ExecuteAsync(ICommandContext context)
         {
             CSteamID id = CSteamID.Nil;
             switch (context.User)
             {
-                case UnturnedUser player:
-                    id = player.UnturnedPlayer.playerID.steamID;
+                case UnturnedUser user:
+                    id = user.Player.NativePlayer.channel.owner.playerID.steamID;
                     break;
                 case IConsole _:
                     id = CSteamID.Nil;
@@ -38,8 +41,6 @@ namespace Rocket.Unturned.Commands
 
             Commander.commands.FirstOrDefault(c => c.command == Name)?.check(id, Name, string.Join("/", context.Parameters.ToArray()));
         }
-
-        public bool SupportsUser(API.User.UserType userType) => true;
 
         public string Name => NativeCommand.command;
         public string Summary => NativeCommand.help;

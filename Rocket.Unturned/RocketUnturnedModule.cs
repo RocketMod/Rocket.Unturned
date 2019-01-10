@@ -18,7 +18,9 @@ namespace Rocket.Unturned
             LoadAssembly("Newtonsoft.Json.dll");
 
             System.Console.WriteLine("Initialzing RocketMod...");
-            Runtime.Bootstrap();
+
+            var runtime = new Runtime();
+            runtime.BootstrapAsync().GetAwaiter().GetResult();
         }
 
         private void LoadAssembly(string dllName)

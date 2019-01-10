@@ -1,8 +1,11 @@
 ﻿using System;
 using System.ComponentModel.Design;
+using System.Threading.Tasks;
 using Rocket.API.Commands;
 using Rocket.API.Player;
+using Rocket.API.User;
 using Rocket.Core.Commands;
+using Rocket.Core.Player;
 using Rocket.Core.User;
 using Rocket.Unturned.Player;
 
@@ -10,14 +13,14 @@ namespace Rocket.Unturned.Commands
 {
     public class CommandUnadmin : ICommand
     {
-        public bool SupportsUser(API.User.UserType userType) => userType == API.User.UserType.Player;
+        public bool SupportsUser(IUser user) => user is UnturnedUser;
 
-        public void Execute(ICommandContext context)
+        public async Task ExecuteAsync(ICommandContext context)
         {
             if (context.Parameters.Length != 1)
                 throw new CommandWrongUsageException();
 
-            IPlayer targetUser = context.Parameters.Get<IPlayer>(0);
+            IPlayer targetUser = await context.Parameters.GetAsync<IPlayer>(0);
 
             if (targetUser is UnturnedPlayer uPlayer && uPlayer.IsAdmin)
             {
@@ -25,7 +28,7 @@ namespace Rocket.Unturned.Commands
                 return;
             }
 
-            context.User.SendMessage($"Could not unadmin {targetUser.User.DisplayName}", ConsoleColor.Red);
+            await context.User.SendMessageAsync($"Could not unadmin {targetUser.GetUser().DisplayName}", ConsoleColor.Red);
         }
 
         public string Name => "Unadmin";

@@ -8,6 +8,7 @@ using System.Net.Security;
 using System.Numerics;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
 using ICSharpCode.SharpZipLib.Zip;
 using Rocket.API;
 using Rocket.API.Commands;
@@ -61,7 +62,7 @@ namespace Rocket.Unturned
         public IConsole Console { get; set; }
         public string GameName => "Unturned";
 
-        public void Init(IRuntime runtime)
+        public async Task InitAsync(IRuntime runtime)
         {
             //Fix CodePage 437 not supported
             ZipConstants.DefaultCodePage = System.Text.Encoding.UTF8.CodePage;
@@ -108,7 +109,7 @@ namespace Rocket.Unturned
             ChatManager.onChatted += (SteamPlayer player, EChatMode mode, ref Color color, ref bool isRich, string message,
                                       ref bool isVisible) =>
             {
-                UnturnedPlayer p = (UnturnedPlayer)playerManager.GetPlayerById(player.playerID.steamID.m_SteamID.ToString());
+                UnturnedPlayer p = (UnturnedPlayer) playerManager.GetPlayerByIdAsync(player.playerID.steamID.m_SteamID.ToString()).GetAwaiter().GetResult();
                 UnturnedPlayerChatEvent @event = new UnturnedPlayerChatEvent(p, mode, color, isRich, message, !isVisible);
                 eventManager.Emit(this, @event);
                 color = @event.Color;
@@ -153,16 +154,16 @@ namespace Rocket.Unturned
 
         private void OnServerShutdown()
         {
-            runtime.Shutdown();
+            runtime.ShutdownAsync().GetAwaiter().GetResult();
         }
 
         private void OnPlayerDamaged(SDG.Unturned.Player uPlayer, ref EDeathCause cause, ref ELimb limb, ref CSteamID killerId, ref global::UnityEngine.Vector3 direction, ref float damage, ref float times, ref bool canDamage)
         {
-            var player = playerManager.GetPlayerById(uPlayer.channel.owner.playerID.steamID.m_SteamID.ToString());
-            playerManager.TryGetPlayerById(killerId.m_SteamID.ToString(), out var killer);
+            var player = playerManager.GetPlayerByIdAsync(uPlayer.channel.owner.playerID.steamID.m_SteamID.ToString()).GetAwaiter().GetResult();
+            playerManager.TryGetOnlinePlayerById(killerId.m_SteamID.ToString(), out var killer);
 
             UnturnedPlayerDamagedEvent @event =
-                new UnturnedPlayerDamagedEvent(player, cause, limb, killer.User, direction.ToSystemVector(), damage, times)
+                new UnturnedPlayerDamagedEvent(player, cause, limb, killer.GetUser(), direction.ToSystemVector(), damage, times)
                 {
                     IsCancelled = !canDamage
                 };
@@ -177,12 +178,12 @@ namespace Rocket.Unturned
             canDamage = !@event.IsCancelled;
         }
 
-        private void LoadTranslations()
+        private async Task  LoadTranslations()
         {
             var context = new ConfigurationContext(this);
             context.ConfigurationName += "Translations";
 
-            ModuleTranslations.Load(context,
+            await ModuleTranslations.LoadAsync(context,
             new Dictionary<string, string>
             {
                 { "command_compass_facing_private","You are facing {0}"},
@@ -214,14 +215,14 @@ namespace Rocket.Unturned
 
         private void OnPlayerConnected(CSteamID steamid)
         {
-            var player = playerManager.GetPlayerById(steamid.ToString());
+            var player = playerManager.GetPlayerByIdAsync(steamid.ToString()).GetAwaiter().GetResult();
             PlayerConnectedEvent @event = new PlayerConnectedEvent(player);
             eventManager.Emit(this, @event);
         }
 
         private void OnPlayerDisconnected(CSteamID steamid)
         {
-            var player = playerManager.GetPlayerById(steamid.ToString());
+            var player = playerManager.GetPlayerByIdAsync(steamid.ToString()).GetAwaiter().GetResult();
             PlayerDisconnectedEvent @event = new PlayerDisconnectedEvent(player, null);
             eventManager.Emit(this, @event);
         }
@@ -256,7 +257,7 @@ namespace Rocket.Unturned
         {
             //proxied
             var pluginManager = container.Resolve<IPluginLoader>();
-            pluginManager.Init();
+            pluginManager.InitAsync().GetAwaiter().GetResult();
 
             IEvent @event = new ImplementationReadyEvent(this);
             eventManager.Emit(this, @event);
@@ -270,11 +271,11 @@ namespace Rocket.Unturned
                 {
                     commandLine = commandLine.Substring(1);
                     var caller = playerManager.GetPlayer(player.playerID.steamID.ToString());
-                    @event = new PreCommandExecutionEvent(caller.User, commandLine);
+                    @event = new PreCommandExecutionEvent(caller.GetUser(), commandLine);
                     eventManager.Emit(this, @event);
-                    bool success = cmdHandler.HandleCommand(caller.User, commandLine, "/");
+                    bool success = cmdHandler.HandleCommandAsync(caller.GetUser(), commandLine, "/").GetAwaiter().GetResult();
                     if(!success)
-                        caller.User.SendMessage("Command not found", ConsoleColor.Red);
+                        caller.GetUser().SendMessageAsync("Command not found", ConsoleColor.Red).GetAwaiter().GetResult();
                     shouldList = false;
                 }
 
@@ -288,9 +289,9 @@ namespace Rocket.Unturned
 
                 @event = new PreCommandExecutionEvent(Console, commandline);
                 eventManager.Emit(this, @event);
-                bool success = cmdHandler.HandleCommand(Console, commandline, "");
+                bool success = cmdHandler.HandleCommandAsync(Console, commandline, "").GetAwaiter().GetResult();
                 if (!success)
-                    Console.SendMessage("Command not found", ConsoleColor.Red);
+                    Console.SendMessageAsync("Command not found", ConsoleColor.Red).GetAwaiter().GetResult();
 
                 shouldExecuteCommand = false;
             };
@@ -363,8 +364,9 @@ namespace Rocket.Unturned
                             var limb = (ELimb)(byte)data[1];
                             var killerId = data[2].ToString();
 
-                            playerManager.TryGetPlayerById(killerId, out var killer);
-                            @event = new UnturnedPlayerDeathEvent(unturnedPlayer, limb, deathCause, killer?.Entity);
+                            playerManager.TryGetOnlinePlayerById(killerId, out var killer);
+                            
+                            @event = new UnturnedPlayerDeathEvent(unturnedPlayer, limb, deathCause, (killer as UnturnedPlayer)?.Entity);
                             break;
                         }
                 }
@@ -378,12 +380,12 @@ namespace Rocket.Unturned
             }
         }
 
-        public void Shutdown()
+        public async Task ShutdownAsync()
         {
             Provider.shutdown();
         }
 
-        public void Reload() { }
+        public async Task ReloadAsync() { }
         public Version HostVersion => new Version(FileVersionInfo.GetVersionInfo(GetType().Assembly.Location).FileVersion);
         public Version GameVersion => new Version(Provider.APP_VERSION);
         public string ServerName => Provider.serverName;

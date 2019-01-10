@@ -1,18 +1,20 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Rocket.API.Commands;
 using Rocket.API.Player;
 using Rocket.API.User;
+using Rocket.Unturned.Player;
 
 namespace Rocket.Unturned.Commands
 {
     public class CommandExit : ICommand
     {
-        public bool SupportsUser(API.User.UserType userType) => userType == API.User.UserType.Player;
+        public bool SupportsUser(IUser user) => user is UnturnedUser;
 
-        public void Execute(ICommandContext context)
+        public async Task ExecuteAsync(ICommandContext context)
         {
             var playerManager = context.Container.Resolve<IPlayerManager>();
-            playerManager.Kick(context.Player, context.User, "Exit");
+            await playerManager.KickAsync(context.User, context.User, "Exit");
         }
 
         public string Name => "Exit";

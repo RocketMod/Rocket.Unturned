@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Rocket.API.Commands;
+using Rocket.API.Player;
+using Rocket.API.User;
 using Rocket.Core.Commands;
 using Rocket.Unturned.Player;
 
@@ -7,15 +10,17 @@ namespace Rocket.Unturned.Commands
 {
     public class CommandEffect : ICommand
     {
-        public bool SupportsUser(API.User.UserType userType) => userType == API.User.UserType.Player;
+        public bool SupportsUser(IUser user) => user is UnturnedUser;
 
-        public void Execute(ICommandContext context)
+        public async Task ExecuteAsync(ICommandContext context)
         {
             if(context.Parameters.Length != 1)
                 throw new CommandWrongUsageException();
 
-            ushort id = context.Parameters.Get<ushort>(0);
-            ((UnturnedPlayer)context.Player).TriggerEffect(id);
+            ushort id = await context.Parameters.GetAsync<ushort>(0);
+
+            var player = ((UnturnedUser)context.User).Player;
+            player.TriggerEffect(id);
         }
 
         public string Name => "Effect";
