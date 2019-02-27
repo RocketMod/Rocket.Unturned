@@ -117,13 +117,13 @@ namespace Rocket.Unturned.Player
         public async Task BroadcastAsync(IUser sender, string message, API.Drawing.Color? color = null,
                                    params object[] arguments)
         {
-            await BroadcastAsync(sender, Players.Select(d => d.GetUser()), message, color, arguments);
+            await BroadcastAsync(sender, Players.Select(d => d.User), message, color, arguments);
             logger.LogInformation("[Broadcast] " + message);
         }
 
         public async Task<IUser> GetUserAsync(string id)
         {
-            return (await GetPlayerByIdAsync(id)).GetUser();
+            return (await GetPlayerByIdAsync(id)).User;
         }
 
         public Rocket.API.Drawing.Color? GetColorFromName(string colorName)

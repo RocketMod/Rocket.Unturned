@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net35</TargetFrameworks>
+    <TargetFrameworks>net461</TargetFrameworks>
     <AssemblyName>Rocket.Unturned</AssemblyName>
     <Description>RocketMod .NET Game Server Plugin Framework Unturned implementation</Description>
     <RootNamespace>Rocket.Unturned</RootNamespace>
@@ -21,52 +21,29 @@
     <Company>RocketMod</Company>
     <Copyright>Sven Mawby &lt;fr34kyn01535@bam.yt&gt;</Copyright>
   </PropertyGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net35' ">
-    <PackageReference Include="AsyncBridge" Version="0.3.1" />
-    <!-- Packages where only a specific version is compatible with NET35 -->
-    <PackageReference Include="RestSharp" Version="105.2.3" />
-    <PackageReference Include="SharpZipLib" Version="0.86.0" />
-    <PackageReference Include="Rocket.Compatibility" Version="5.0.0.602" />
-    <PackageReference Include="morelinq">
-      <Version>2.10.0</Version>
-    </PackageReference>
-    <Reference Include="UnityEngine">
-      <HintPath>lib\net35\UnityEngine.dll</HintPath>
-    </Reference>
-    <Reference Include="Assembly-CSharp">
-      <HintPath>lib\net35\Assembly-CSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>lib\net35\Assembly-CSharp-firstpass.dll</HintPath>
-    </Reference>
+  <ItemGroup>
+    <PackageReference Include="Rocket.API" Version="5.0.0.605" />
+    <PackageReference Include="Rocket.Core" Version="5.0.0.605" />
+    <PackageReference Include="Rocket.Runtime" Version="5.0.0.605" />
+    <PackageReference Include="Rocket.UnityEngine" Version="5.0.0.38" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' Or '$(TargetFramework)' == 'net461' ">
-    <!-- Stuff which isn't compatible with NET35 -->
-    <PackageReference Include="System.Numerics.Vectors">
-      <Version>4.5.0</Version>
-    </PackageReference>
-    <PackageReference Include="RestSharp" Version="106.3.1" />
-    <PackageReference Include="SharpZipLib" Version="1.0.0-alpha2" />
-    <PackageReference Include="morelinq">
-      <Version>3.0.0</Version>
-    </PackageReference>
-    <Reference Include="UnityEngine">
-      <HintPath>lib\net461\UnityEngine.dll</HintPath>
-    </Reference>
+  <ItemGroup>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>lib\net461\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>lib\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>lib\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>lib\net461\Assembly-CSharp.dll</HintPath>
+      <HintPath>lib\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>lib\net461\Assembly-CSharp-firstpass.dll</HintPath>
+      <HintPath>lib\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Rocket.API" Version="5.0.0.602" />
-    <PackageReference Include="Rocket.Core" Version="5.0.0.602" />
-    <PackageReference Include="Rocket.Runtime" Version="5.0.0.602" />
-    <PackageReference Include="Rocket.UnityEngine" Version="5.0.0.38" />
+    <None Update="Rocket.Unturned.nuspec">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

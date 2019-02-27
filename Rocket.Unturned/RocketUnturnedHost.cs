@@ -163,7 +163,7 @@ namespace Rocket.Unturned
             playerManager.TryGetOnlinePlayerById(killerId.m_SteamID.ToString(), out var killer);
 
             UnturnedPlayerDamagedEvent @event =
-                new UnturnedPlayerDamagedEvent(player, cause, limb, killer.GetUser(), direction.ToSystemVector(), damage, times)
+                new UnturnedPlayerDamagedEvent(player, cause, limb, killer.User, direction.ToSystemVector(), damage, times)
                 {
                     IsCancelled = !canDamage
                 };
@@ -271,11 +271,11 @@ namespace Rocket.Unturned
                 {
                     commandLine = commandLine.Substring(1);
                     var caller = playerManager.GetPlayer(player.playerID.steamID.ToString());
-                    @event = new PreCommandExecutionEvent(caller.GetUser(), commandLine);
+                    @event = new PreCommandExecutionEvent(caller.User, commandLine);
                     eventManager.Emit(this, @event);
-                    bool success = cmdHandler.HandleCommandAsync(caller.GetUser(), commandLine, "/").GetAwaiter().GetResult();
+                    bool success = cmdHandler.HandleCommandAsync(caller.User, commandLine, "/").GetAwaiter().GetResult();
                     if(!success)
-                        caller.GetUser().SendMessageAsync("Command not found", ConsoleColor.Red).GetAwaiter().GetResult();
+                        caller.User.SendMessageAsync("Command not found", ConsoleColor.Red).GetAwaiter().GetResult();
                     shouldList = false;
                 }
 

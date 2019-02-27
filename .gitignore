@@ -18,6 +18,7 @@ bld/
 .vs/
 
 UnityEngine.dll
+UnityEngine.CoreModule.dll
 
 # Roslyn cache directories
 *.ide/

@@ -18,7 +18,7 @@ namespace Rocket.Unturned.Player.Events
             Position = position;
         }
 
-        public UnturnedPlayerDeadEvent(IPlayer player, Vector3 position,
+        public UnturnedPlayerDeadEvent(IPlayer player, System.Numerics.Vector3 position,
                                        EventExecutionTargetContext executionTarget = EventExecutionTargetContext.Sync,
                                        bool global = true) : base(player, executionTarget, global)
         {
