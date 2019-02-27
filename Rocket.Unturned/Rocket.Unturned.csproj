@@ -20,6 +20,7 @@
     <Authors>Sven Mawby &lt;fr34kyn01535@bam.yt&gt;, Enes Sadık Özbek &lt;esozbek.me&gt;</Authors>
     <Company>RocketMod</Company>
     <Copyright>Sven Mawby &lt;fr34kyn01535@bam.yt&gt;</Copyright>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Rocket.API" Version="5.0.0.607" />
@@ -40,11 +41,6 @@
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>lib\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="Rocket.Unturned.nuspec">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
   <Target Name="CopyModuleFiles" AfterTargets="AfterBuild">
