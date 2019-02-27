@@ -50,4 +50,12 @@
 
     <Copy SourceFiles="@(ModuleFiles)" DestinationFolder="$(OutDir)" Condition="@(ModuleFiles-&gt;Count()) != 0" />
   </Target>
+
+  <Target Name="CopyRuntimeLibraries" AfterTargets="AfterBuild">
+    <ItemGroup>
+      <DependencyFiles Include="$(MSBuildThisFileDirectory)runtimelibs\*.dll" />
+    </ItemGroup>
+
+    <Copy SourceFiles="@(DependencyFiles)" DestinationFolder="$(OutDir)" Condition="@(DependencyFiles-&gt;Count()) != 0" />
+  </Target>
 </Project>
