@@ -46,4 +46,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
+  <Target Name="CopyModuleFiles" AfterTargets="AfterBuild">
+    <ItemGroup>
+      <ModuleFiles Include="$(MSBuildThisFileDirectory)Module\*.*" />
+    </ItemGroup>
+
+    <Copy SourceFiles="@(ModuleFiles)" DestinationFolder="$(OutDir)" Condition="@(ModuleFiles-&gt;Count()) != 0" />
+  </Target>
 </Project>
