@@ -87,7 +87,7 @@ namespace Rocket.Unturned
 
             container.RegisterSingletonType<AutomaticSaveWatchdog, AutomaticSaveWatchdog>();
             container.Resolve<AutomaticSaveWatchdog>().Start();
-            LoadTranslations();
+            await LoadTranslations();
 
             Provider.onServerHosted += OnServerHosted;
 
