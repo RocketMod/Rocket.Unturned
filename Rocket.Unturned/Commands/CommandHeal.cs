@@ -31,7 +31,7 @@ namespace Rocket.Unturned.Commands
 
             if (!(target is UnturnedPlayer uPlayer))
             {
-                await context.User.SendMessageAsync($"Could not heal {target.GetUser().DisplayName}", ConsoleColor.Red);
+                await context.User.SendMessageAsync($"Could not heal {target.User.DisplayName}", ConsoleColor.Red);
                 return;
             }
 
@@ -48,8 +48,8 @@ namespace Rocket.Unturned.Commands
                 return;
             }
 
-            await context.User.SendLocalizedMessage(translations, "command_heal_success_me", null, target.GetUser().DisplayName);
-            await target.GetUser().SendLocalizedMessage(translations, "command_heal_success_other", null, context.User.DisplayName);
+            await context.User.SendLocalizedMessage(translations, "command_heal_success_me", null, target.User.DisplayName);
+            await target.User.SendLocalizedMessage(translations, "command_heal_success_other", null, context.User.DisplayName);
         }
 
         public string Name => "Heal";

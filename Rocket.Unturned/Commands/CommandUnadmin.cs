@@ -28,7 +28,7 @@ namespace Rocket.Unturned.Commands
                 return;
             }
 
-            await context.User.SendMessageAsync($"Could not unadmin {targetUser.GetUser().DisplayName}", ConsoleColor.Red);
+            await context.User.SendMessageAsync($"Could not unadmin {targetUser.User.DisplayName}", ConsoleColor.Red);
         }
 
         public string Name => "Unadmin";

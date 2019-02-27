@@ -25,7 +25,7 @@ namespace Rocket.Unturned.Commands
                 return;
             }
 
-            await context.User.SendMessageAsync($"Could not admin {target.GetUser().DisplayName}" , ConsoleColor.Red);
+            await context.User.SendMessageAsync($"Could not admin {target.User.DisplayName}" , ConsoleColor.Red);
         }
 
         public bool SupportsUser(IUser user) => user is UnturnedUser;

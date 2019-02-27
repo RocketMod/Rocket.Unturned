@@ -22,10 +22,10 @@
     <Copyright>Sven Mawby &lt;fr34kyn01535@bam.yt&gt;</Copyright>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Rocket.API" Version="5.0.0.605" />
-    <PackageReference Include="Rocket.Core" Version="5.0.0.605" />
-    <PackageReference Include="Rocket.Runtime" Version="5.0.0.605" />
-    <PackageReference Include="Rocket.UnityEngine" Version="5.0.0.38" />
+    <PackageReference Include="Rocket.API" Version="5.0.0.607" />
+    <PackageReference Include="Rocket.Core" Version="5.0.0.607" />
+    <PackageReference Include="Rocket.Runtime" Version="5.0.0.607" />
+    <PackageReference Include="Rocket.UnityEngine" Version="5.0.0.42" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine.CoreModule">
