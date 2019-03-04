@@ -9,9 +9,6 @@ namespace Rocket.Unturned.Module
     {
         public void initialize()
         {
-            //Force loading Rocket.UnityEngine.dll as just adding file reference wont load it (since no code is referenced)
-            LoadAssembly("Rocket.UnityEngine.dll");
-
             //Thank you Unturned for providing a very old Newtonsoft.Json...we better should load our own one
             LoadAssembly("Newtonsoft.Json.dll");
 
@@ -26,6 +23,7 @@ namespace Rocket.Unturned.Module
             var bootTask = bootrapper.BootstrapAsync(rocketDirectory, "Rocket.Unturned");
 #else
             LoadAssembly("Rocket.Unturned.dll");           
+            LoadAssembly("Rocket.UnityEngine.dll");
  
             var runtime = new Runtime();
             var bootTask = runtime.InitAsync();
