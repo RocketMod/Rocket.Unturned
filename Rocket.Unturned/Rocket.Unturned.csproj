@@ -23,43 +23,27 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Rocket.API" Version="5.0.0.609" />
-    <PackageReference Include="Rocket.Core" Version="5.0.0.609" />
-    <PackageReference Include="Rocket.Runtime" Version="5.0.0.609" />
+    <PackageReference Include="Rocket.API" Version="5.0.0.629" />
+    <PackageReference Include="Rocket.Core" Version="5.0.0.629" />
+    <PackageReference Include="Rocket.Runtime" Version="5.0.0.629" />
     <PackageReference Include="Rocket.UnityEngine" Version="5.0.0.42" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>lib\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>..\lib\UnityEngine.CoreModule.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>lib\UnityEngine.dll</HintPath>
+      <HintPath>..\lib\UnityEngine.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>lib\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\lib\Assembly-CSharp.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>lib\Assembly-CSharp-firstpass.dll</HintPath>
+      <HintPath>..\lib\Assembly-CSharp-firstpass.dll</HintPath>
       <Private>false</Private>
     </Reference>
   </ItemGroup>
-
-  <Target Name="CopyModuleFiles" AfterTargets="AfterBuild">
-    <ItemGroup>
-      <ModuleFiles Include="$(MSBuildThisFileDirectory)Module\*.*" />
-    </ItemGroup>
-
-    <Copy SourceFiles="@(ModuleFiles)" DestinationFolder="$(OutDir)" Condition="@(ModuleFiles-&gt;Count()) != 0" />
-  </Target>
-
-  <Target Name="CopyRuntimeLibraries" AfterTargets="AfterBuild">
-    <ItemGroup>
-      <DependencyFiles Include="$(MSBuildThisFileDirectory)runtimelibs\*.dll" />
-    </ItemGroup>
-
-    <Copy SourceFiles="@(DependencyFiles)" DestinationFolder="$(OutDir)" Condition="@(DependencyFiles-&gt;Count()) != 0" />
-  </Target>
 </Project>

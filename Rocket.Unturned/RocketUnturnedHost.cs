@@ -5,11 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Security;
-using System.Numerics;
-using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
-using ICSharpCode.SharpZipLib.Zip;
 using Rocket.API;
 using Rocket.API.Commands;
 using Rocket.API.DependencyInjection;
@@ -21,7 +18,6 @@ using Rocket.Core.Commands.Events;
 using Rocket.Core.Configuration;
 using Rocket.Core.Implementation.Events;
 using Rocket.Core.Logging;
-using Rocket.Core.Player;
 using Rocket.Core.Player.Events;
 using Rocket.Core.User;
 using Rocket.UnityEngine.Extensions;
@@ -64,12 +60,6 @@ namespace Rocket.Unturned
 
         public async Task InitAsync(IRuntime runtime)
         {
-            //Fix CodePage 437 not supported
-            ZipConstants.DefaultCodePage = System.Text.Encoding.UTF8.CodePage;
-
-            // Another possible workaround:
-            // new I18N.West();
-
             BaseLogger.SkipTypeFromLogging(typeof(UnturnedPlayerManager));
             ApplyTlsWorkaround();
 

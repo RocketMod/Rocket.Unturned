@@ -4,7 +4,7 @@
 	"Assemblies":
 	[
 		{
-			"Path": "/Rocket.Unturned.dll",
+			"Path": "/Rocket.Unturned.Module.dll",
 			"Role": "Server"
 		}
 	],
