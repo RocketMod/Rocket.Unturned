@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rocket.Unturned", "Rocket.U
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rocket.Unturned.Launcher", "Rocket.Unturned.Launcher\Rocket.Unturned.Launcher.csproj", "{0F68CF17-C7C9-41BF-8F76-4DAF1D5146B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rocket.Unturned.Module", "Rocket.Unturned.Module\Rocket.Unturned.Module.csproj", "{B0A590B8-539B-4B5F-80CF-33E51823E845}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rocket.Unturned.Module", "Rocket.Unturned.Module\Rocket.Unturned.Module.csproj", "{B0A590B8-539B-4B5F-80CF-33E51823E845}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,7 +81,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {0FCCF378-BF24-4185-8167-E38D22C58912}
 		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.2\lib\NET35
+		SolutionGuid = {0FCCF378-BF24-4185-8167-E38D22C58912}
 	EndGlobalSection
 EndGlobal
