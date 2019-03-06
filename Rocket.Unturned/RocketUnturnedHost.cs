@@ -253,8 +253,6 @@ namespace Rocket.Unturned
             var pluginManager = container.Resolve<IPluginLoader>();
             var task = Task.Run(async () =>
             {
-                InstallTlsWorkaround();
-
                 await Task.Yield();
                 await pluginManager.InitAsync();
             });
@@ -274,7 +272,6 @@ namespace Rocket.Unturned
                     var caller = playerManager.GetPlayer(player.playerID.steamID.ToString());
                     @event = new PreCommandExecutionEvent(caller.User, commandLine);
                     eventManager.Emit(this, @event);
-                    InstallTlsWorkaround();
 
                     var commandTask = Task.Run(async () =>
                     {
@@ -303,7 +300,6 @@ namespace Rocket.Unturned
                 var commandTask = Task.Run(async () =>
                 {
                     await Task.Yield();
-                    InstallTlsWorkaround();
 
                     bool success = await cmdHandler.HandleCommandAsync(Console, commandline, "");
                     if (!success)
