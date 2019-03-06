@@ -23,8 +23,8 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Rocket.API" Version="5.0.0.637" />
-    <PackageReference Include="Rocket.Core" Version="5.0.0.637" />
+    <PackageReference Include="Rocket.API" Version="5.0.0.638" />
+    <PackageReference Include="Rocket.Core" Version="5.0.0.638" />
     <PackageReference Include="Rocket.UnityEngine" Version="5.0.0.48" />
   </ItemGroup>
   <ItemGroup>

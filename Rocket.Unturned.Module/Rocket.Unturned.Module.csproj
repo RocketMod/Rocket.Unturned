@@ -14,7 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Rocket.Runtime" Version="5.0.0.637" />
+    <PackageReference Include="Rocket.Runtime" Version="5.0.0.638" />
   </ItemGroup>
 
   <PropertyGroup Condition="$(Configuration) == 'Debug'">
