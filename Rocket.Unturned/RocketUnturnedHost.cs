@@ -253,6 +253,8 @@ namespace Rocket.Unturned
             var pluginManager = container.Resolve<IPluginLoader>();
             var task = Task.Run(async () =>
             {
+                InstallTlsWorkaround();
+
                 await Task.Yield();
                 await pluginManager.InitAsync();
             });
@@ -264,8 +266,7 @@ namespace Rocket.Unturned
 
             ICommandHandler cmdHandler = container.Resolve<ICommandHandler>();
 
-            ChatManager.onCheckPermissions += (SteamPlayer player, string commandLine, ref bool shouldExecuteCommand,
-                                               ref bool shouldList) =>
+            ChatManager.onCheckPermissions += (SteamPlayer player, string commandLine, ref bool shouldExecuteCommand, ref bool shouldList) =>
             {
                 if (commandLine.StartsWith("/"))
                 {
@@ -273,9 +274,18 @@ namespace Rocket.Unturned
                     var caller = playerManager.GetPlayer(player.playerID.steamID.ToString());
                     @event = new PreCommandExecutionEvent(caller.User, commandLine);
                     eventManager.Emit(this, @event);
-                    bool success = cmdHandler.HandleCommandAsync(caller.User, commandLine, "/").GetAwaiter().GetResult();
-                    if (!success)
-                        caller.User.SendMessageAsync("Command not found", ConsoleColor.Red).GetAwaiter().GetResult();
+                    InstallTlsWorkaround();
+
+                    var commandTask = Task.Run(async () =>
+                    {
+                        await Task.Yield();
+
+                        bool success = await cmdHandler.HandleCommandAsync(caller.User, commandLine, "/");
+                        if (!success)
+                            await caller.User.SendMessageAsync("Command not found", ConsoleColor.Red);
+                    });
+                    commandTask.GetAwaiter().GetResult();
+
                     shouldList = false;
                 }
 
@@ -293,6 +303,7 @@ namespace Rocket.Unturned
                 var commandTask = Task.Run(async () =>
                 {
                     await Task.Yield();
+                    InstallTlsWorkaround();
 
                     bool success = await cmdHandler.HandleCommandAsync(Console, commandline, "");
                     if (!success)
