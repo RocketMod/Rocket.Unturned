@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Security;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
-using Rocket.API;
+﻿using Rocket.API;
 using Rocket.API.Commands;
 using Rocket.API.DependencyInjection;
 using Rocket.API.Eventing;
@@ -27,6 +18,12 @@ using Rocket.Unturned.Player.Events;
 using Rocket.Unturned.Utils;
 using SDG.Unturned;
 using Steamworks;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using ILogger = Rocket.API.Logging.ILogger;
 using Object = UnityEngine.Object;
@@ -68,9 +65,9 @@ namespace Rocket.Unturned
 
             container = runtime.Container;
             eventManager = container.Resolve<IEventBus>();
-            playerManager = (UnturnedPlayerManager) container.Resolve<IUserManager>("host");
+            playerManager = (UnturnedPlayerManager)container.Resolve<IUserManager>("host");
             ModuleTranslations = container.Resolve<ITranslationCollection>();
-            
+
             logger = container.Resolve<ILogger>();
             logger.LogInformation("Loading Rocket Unturned Implementation...");
 
@@ -98,7 +95,7 @@ namespace Rocket.Unturned
             ChatManager.onChatted += (SteamPlayer player, EChatMode mode, ref Color color, ref bool isRich, string message,
                                       ref bool isVisible) =>
             {
-                UnturnedPlayer p = (UnturnedPlayer) playerManager.GetPlayerByIdAsync(player.playerID.steamID.m_SteamID.ToString()).GetAwaiter().GetResult();
+                UnturnedPlayer p = (UnturnedPlayer)playerManager.GetPlayerByIdAsync(player.playerID.steamID.m_SteamID.ToString()).GetAwaiter().GetResult();
                 UnturnedPlayerChatEvent @event = new UnturnedPlayerChatEvent(p, mode, color, isRich, message, !isVisible);
                 eventManager.Emit(this, @event);
                 color = @event.Color;
@@ -106,11 +103,8 @@ namespace Rocket.Unturned
                 isVisible = !@event.IsCancelled;
             };
 
-            CommandWindow.onCommandWindowOutputted += (text, color)
-                => logger.LogNative(text?.ToString());
+            CommandWindow.onCommandWindowOutputted += (text, color) => logger.LogNative(text?.ToString());
         }
-
-   
 
         private void OnServerShutdown()
         {
@@ -138,7 +132,7 @@ namespace Rocket.Unturned
             canDamage = !@event.IsCancelled;
         }
 
-        private async Task  LoadTranslations()
+        private async Task LoadTranslations()
         {
             var context = new ConfigurationContext(this);
             context.ConfigurationName += "Translations";
@@ -215,15 +209,20 @@ namespace Rocket.Unturned
 
         private void OnServerHosted()
         {
-            //proxied
             var pluginManager = container.Resolve<IPluginLoader>();
-            pluginManager.InitAsync().GetAwaiter().GetResult();
+            var task = Task.Run(async () =>
+            {
+                await Task.Yield();
+                await pluginManager.InitAsync();
+            });
+
+            task.GetAwaiter().GetResult();
 
             IEvent @event = new ImplementationReadyEvent(this);
             eventManager.Emit(this, @event);
 
             ICommandHandler cmdHandler = container.Resolve<ICommandHandler>();
-            
+
             ChatManager.onCheckPermissions += (SteamPlayer player, string commandLine, ref bool shouldExecuteCommand,
                                                ref bool shouldList) =>
             {
@@ -234,7 +233,7 @@ namespace Rocket.Unturned
                     @event = new PreCommandExecutionEvent(caller.User, commandLine);
                     eventManager.Emit(this, @event);
                     bool success = cmdHandler.HandleCommandAsync(caller.User, commandLine, "/").GetAwaiter().GetResult();
-                    if(!success)
+                    if (!success)
                         caller.User.SendMessageAsync("Command not found", ConsoleColor.Red).GetAwaiter().GetResult();
                     shouldList = false;
                 }
@@ -249,10 +248,17 @@ namespace Rocket.Unturned
 
                 @event = new PreCommandExecutionEvent(Console, commandline);
                 eventManager.Emit(this, @event);
-                bool success = cmdHandler.HandleCommandAsync(Console, commandline, "").GetAwaiter().GetResult();
-                if (!success)
-                    Console.SendMessageAsync("Command not found", ConsoleColor.Red).GetAwaiter().GetResult();
 
+                var commandTask = Task.Run(async () =>
+                {
+                    await Task.Yield();
+
+                    bool success = await cmdHandler.HandleCommandAsync(Console, commandline, "");
+                    if (!success)
+                        await Console.SendMessageAsync("Command not found", ConsoleColor.Red);
+                });
+
+                commandTask.GetAwaiter().GetResult();
                 shouldExecuteCommand = false;
             };
         }
@@ -325,7 +331,7 @@ namespace Rocket.Unturned
                             var killerId = data[2].ToString();
 
                             playerManager.TryGetOnlinePlayerById(killerId, out var killer);
-                            
+
                             @event = new UnturnedPlayerDeathEvent(unturnedPlayer, limb, deathCause, (killer as UnturnedPlayer)?.Entity);
                             break;
                         }
