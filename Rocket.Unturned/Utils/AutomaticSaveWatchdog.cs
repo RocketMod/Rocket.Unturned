@@ -42,7 +42,9 @@ namespace Rocket.Unturned.Utils
                 saveInterval = i;
 
             logger.LogInformation("This server will automatically save every {0} seconds", saveInterval);
-            scheduler.SchedulePeriodically(host, RunSave, "Automatic Save", TimeSpan.FromSeconds(saveInterval));
+
+            var period = TimeSpan.FromSeconds(saveInterval);
+            scheduler.SchedulePeriodically(host, RunSave, "Automatic Save", period, period);
         }
 
         private void RunSave()
