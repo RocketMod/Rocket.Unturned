@@ -250,18 +250,6 @@ namespace Rocket.Unturned
 
         private void OnServerHosted()
         {
-            var pluginManager = container.Resolve<IPluginLoader>();
-            var task = Task.Run(async () =>
-            {
-                await Task.Yield();
-                await pluginManager.InitAsync();
-            });
-
-            task.GetAwaiter().GetResult();
-
-            IEvent @event = new ImplementationReadyEvent(this);
-            eventManager.Emit(this, @event);
-
             ICommandHandler cmdHandler = container.Resolve<ICommandHandler>();
 
             ChatManager.onCheckPermissions += (SteamPlayer player, string commandLine, ref bool shouldExecuteCommand, ref bool shouldList) =>
@@ -270,8 +258,8 @@ namespace Rocket.Unturned
                 {
                     commandLine = commandLine.Substring(1);
                     var caller = playerManager.GetPlayer(player.playerID.steamID.ToString());
-                    @event = new PreCommandExecutionEvent(caller.User, commandLine);
-                    eventManager.Emit(this, @event);
+                    var playerExecutionEvent = new PreCommandExecutionEvent(caller.User, commandLine);
+                    eventManager.Emit(this, playerExecutionEvent);
 
                     var commandTask = Task.Run(async () =>
                     {
@@ -291,11 +279,13 @@ namespace Rocket.Unturned
 
             CommandWindow.onCommandWindowInputted += (string commandline, ref bool shouldExecuteCommand) =>
             {
+                shouldExecuteCommand = false;
+
                 if (commandline.StartsWith("/"))
                     commandline = commandline.Substring(1);
 
-                @event = new PreCommandExecutionEvent(Console, commandline);
-                eventManager.Emit(this, @event);
+                var consoleExecutionEvent = new PreCommandExecutionEvent(Console, commandline);
+                eventManager.Emit(this, consoleExecutionEvent);
 
                 var commandTask = Task.Run(async () =>
                 {
@@ -307,8 +297,19 @@ namespace Rocket.Unturned
                 });
 
                 commandTask.GetAwaiter().GetResult();
-                shouldExecuteCommand = false;
             };
+
+            eventManager.Emit(this, new ImplementationReadyEvent(this));
+
+            var pluginManager = container.Resolve<IPluginLoader>();
+            var task = Task.Run(async () =>
+            {
+                await Task.Yield();
+                await pluginManager.InitAsync();
+            });
+
+            task.GetAwaiter().GetResult();
+
         }
 
         internal void TriggerSend(SteamPlayer player, string method, ESteamCall steamCall, ESteamPacket steamPacket, params object[] data)
