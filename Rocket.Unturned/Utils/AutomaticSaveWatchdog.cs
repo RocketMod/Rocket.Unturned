@@ -4,21 +4,23 @@ using Rocket.API;
 using Rocket.API.Logging;
 using Rocket.Core.Logging;
 using Rocket.API.Scheduling;
-using Rocket.Core.Scheduling;
 
 namespace Rocket.Unturned.Utils
 {
     public class AutomaticSaveWatchdog
     {
+        private readonly IHost host;
         private readonly ILogger logger;
+        private readonly ITaskScheduler scheduler;
         private DateTime? nextSaveTime;
         public static AutomaticSaveWatchdog Instance;
-        private int interval = 30;
+        private int saveInterval = 30;
 
         public AutomaticSaveWatchdog(IHost host, ILogger logger, ITaskScheduler scheduler)
         {
+            this.host = host;
             this.logger = logger;
-            scheduler.ScheduleEveryAsyncFrame(host, CheckTimer, "Automatic Save");
+            this.scheduler = scheduler;
         }
 
         public void Start()
@@ -34,36 +36,26 @@ namespace Rocket.Unturned.Utils
 
             int i = 300; //;U.Settings.Instance.AutomaticSave.Interval;
 
-            if (i < interval)
-                logger.LogError("AutomaticSave interval must be atleast 30 seconds, changed to 30 seconds");
+            if (i < saveInterval)
+                logger.LogError("AutomaticSave interval must be at least 30 seconds, changed to 30 seconds");
             else
-                interval = i;
+                saveInterval = i;
 
-            logger.LogInformation("This server will automatically save every {0} seconds", interval);
-            RestartTimer();
+            logger.LogInformation("This server will automatically save every {0} seconds", saveInterval);
+            scheduler.SchedulePeriodically(host, RunSave, "Automatic Save", TimeSpan.FromSeconds(saveInterval));
         }
 
-        private void RestartTimer()
+        private void RunSave()
         {
-            nextSaveTime = DateTime.Now.AddSeconds(interval);
-        }
-
-        private void CheckTimer()
-        {
-            if (nextSaveTime == null)
-                return;
-            if (nextSaveTime.Value >= DateTime.Now)
-                return;
-
             logger.LogInformation("Saving server");
-            RestartTimer();
+
             try
             {
                 SaveManager.save();
             }
             catch (Exception er)
             {
-                logger.LogError("Error occured while trying to save: ", er);
+                logger.LogError("Failed to auto-save: ", er);
             }
         }
     }
