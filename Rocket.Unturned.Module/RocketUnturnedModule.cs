@@ -136,9 +136,6 @@ namespace Rocket.Unturned.Module
             var currentPath = Path.GetDirectoryName(selfLocation) ?? "";
             var dllFullPath = Path.GetFullPath(Path.Combine(currentPath, dllName));
 
-            Debug.Log(selfLocation);
-            Debug.Log(dllFullPath);
-
             if (string.Equals(selfLocation, dllFullPath, StringComparison.OrdinalIgnoreCase))
             {
                 return;
