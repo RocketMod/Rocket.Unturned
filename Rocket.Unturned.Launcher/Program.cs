@@ -22,7 +22,7 @@ namespace Rocket.Unturned.Launcher
 
             if (string.IsNullOrEmpty(executableName))
                 throw new FileNotFoundException("Could not locate Unturned executable");
-            string arguments = "-nographics -batchmode -logfile -silent-crashes 'Servers/"
+            string arguments = "-nographics -batchmode -silent-crashes -logfile 'Servers/"
                 + instanceName
                 + "/unturned.log' +secureserver/"
                 + instanceName;
