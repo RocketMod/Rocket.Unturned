@@ -1,31 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Security;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
 using NuGet.Common;
-using NuGet.Protocol.Core.Types;
 using SDG.Framework.Modules;
-using SDG.Unturned;
 using Debug = UnityEngine.Debug;
 
 namespace Rocket.Unturned.Module
 {
     public class RocketUnturnedModule : IModuleNexus
     {
-        private Dictionary<string, Assembly> loadedAssemblies = new Dictionary<string, Assembly>();
+        private readonly Dictionary<string, Assembly> loadedAssemblies = new Dictionary<string, Assembly>();
         public void initialize()
         {
             InstallTlsWorkaround();
             InstallAssemblyResolver();
 
-#if NUGET_BOOTSTRAP
             var assemblyLocation = typeof(RocketUnturnedModule).Assembly.Location;
             var assemblyDirectory = Path.GetDirectoryName(assemblyLocation);
 
@@ -37,35 +32,7 @@ namespace Rocket.Unturned.Module
                 }
             }
 
-            string rocketDirectory = Path.GetFullPath($"Servers/{Dedicator.serverID}/Rocket/");
-            if (!Directory.Exists(rocketDirectory))
-            {
-                Directory.CreateDirectory(rocketDirectory);
-            }
-
-            Debug.Log("Bootstrapping RocketMod for Unturned...");
-
-            var logger = new UnityLoggerAdapter();
-            var bootrapper = new RocketDynamicBootstrapper();
-
-            var task = Task.Run(async () =>
-            {
-                await Task.Yield();
-                await bootrapper.BootstrapAsync(rocketDirectory, "Rocket.Unturned", false,
-                        RocketDynamicBootstrapper.DefaultNugetRepository, logger);
-            });
-            task.GetAwaiter().GetResult();
-
-#else
-            //Thank you Unturned for providing a very old Newtonsoft.Json...we better should load our own one
-            LoadAssembly("Newtonsoft.Json.dll");
-
-            LoadAssembly("Rocket.Unturned.dll");           
-            LoadAssembly("Rocket.UnityEngine.dll");
- 
-            var runtime = new Runtime();
-            runtime.InitAsync().GetAwaiter().GetResult();
-#endif
+            RocketInitializer.Initialize();
         }
 
         private void InstallAssemblyResolver()
@@ -94,7 +61,7 @@ namespace Rocket.Unturned.Module
             ServicePointManager.ServerCertificateValidationCallback = CertificateValidationWorkaroundCallback;
         }
 
-        public bool CertificateValidationWorkaroundCallback(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+        private bool CertificateValidationWorkaroundCallback(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
         {
             bool isOk = true;
             // If there are errors in the certificate chain, look at each error to determine the cause.
@@ -128,10 +95,9 @@ namespace Rocket.Unturned.Module
             return versionRegex.Replace(fullAssemblyName, "");
         }
 
-        private void LoadAssembly(string dllName)
+        public void LoadAssembly(string dllName)
         {
             //Load the dll from the same directory as this assembly
-
             var selfLocation = typeof(RocketUnturnedModule).Assembly.Location;
             var currentPath = Path.GetDirectoryName(selfLocation) ?? "";
             var dllFullPath = Path.GetFullPath(Path.Combine(currentPath, dllName));
@@ -144,7 +110,14 @@ namespace Rocket.Unturned.Module
             var data = File.ReadAllBytes(dllFullPath);
             var asm = Assembly.Load(data);
 
-            loadedAssemblies.Add(GetVersionIndependentName(asm.FullName, out _), asm);
+            var name = GetVersionIndependentName(asm.FullName, out _);
+
+            if (loadedAssemblies.ContainsKey(name))
+            {
+                return;
+            }
+
+            loadedAssemblies.Add(name, asm);
         }
     }
 
