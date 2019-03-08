@@ -1,9 +1,9 @@
-﻿using SDG.Unturned;
-using System;
-using Rocket.API;
+﻿using Rocket.API;
 using Rocket.API.Logging;
-using Rocket.Core.Logging;
 using Rocket.API.Scheduling;
+using Rocket.Core.Logging;
+using SDG.Unturned;
+using System;
 
 namespace Rocket.Unturned.Utils
 {
@@ -34,7 +34,7 @@ namespace Rocket.Unturned.Utils
             if (!autoSaveEnabled)
                 return;
 
-            int i = 300; //;U.Settings.Instance.AutomaticSave.Interval;
+            int i = 30; //;U.Settings.Instance.AutomaticSave.Interval;
 
             if (i < saveInterval)
                 logger.LogError("AutomaticSave interval must be at least 30 seconds, changed to 30 seconds");
@@ -49,6 +49,21 @@ namespace Rocket.Unturned.Utils
 
         private void RunSave()
         {
+            if (!Level.isInitialized)
+            {
+                return;
+            }
+
+            if (Level.isLoading)
+            {
+                return;
+            }
+
+            if (Level.info == null)
+            {
+                return;
+            }
+
             logger.LogInformation("Saving server");
 
             try
