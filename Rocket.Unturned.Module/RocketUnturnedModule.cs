@@ -1,4 +1,6 @@
-﻿using System;
+﻿using NuGet.Common;
+using SDG.Framework.Modules;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -7,8 +9,6 @@ using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using NuGet.Common;
-using SDG.Framework.Modules;
 using Debug = UnityEngine.Debug;
 
 namespace Rocket.Unturned.Module
@@ -18,6 +18,7 @@ namespace Rocket.Unturned.Module
         private readonly Dictionary<string, Assembly> loadedAssemblies = new Dictionary<string, Assembly>();
         public void initialize()
         {
+            InstallNewtonsoftJson();
             InstallTlsWorkaround();
             InstallAssemblyResolver();
 
@@ -33,6 +34,50 @@ namespace Rocket.Unturned.Module
             }
 
             RocketInitializer.Initialize();
+        }
+
+        private void InstallNewtonsoftJson()
+        {
+            string managedDir = Path.GetFullPath(Path.Combine("Unturned_Data", "Managed"));
+            string rocketDir = Path.GetFullPath(Path.Combine("Modules", "Rocket.Unturned"));
+
+            string unturnedNewtonsoftFile = Path.GetFullPath(Path.Combine(managedDir, "Newtonsoft.Json.dll"));
+            string newtonsoftBackupFile = unturnedNewtonsoftFile + ".bak";
+            string rocketNewtonsoftFile = Path.GetFullPath(Path.Combine(rocketDir, "Newtonsoft.Json.dll"));
+
+            const string runtimeSerialization = "System.Runtime.Serialization.dll";
+            var unturnedRuntimeSerialization = Path.GetFullPath(Path.Combine(managedDir, runtimeSerialization));
+            var rocketRuntimeSerialization = Path.GetFullPath(Path.Combine(rocketDir, runtimeSerialization));
+
+            const string xmlLinq = "System.Xml.Linq.dll";
+            var unturnedXmlLinq = Path.GetFullPath(Path.Combine(managedDir, xmlLinq));
+            var rocketXmlLinq = Path.GetFullPath(Path.Combine(rocketDir, xmlLinq));
+
+            // Copy Libraries of Newtonsoft.Json
+
+            if (!File.Exists(unturnedRuntimeSerialization))
+            {
+                File.Copy(rocketRuntimeSerialization, unturnedRuntimeSerialization);
+            }
+
+            if (!File.Exists(unturnedXmlLinq))
+            {
+                File.Copy(rocketXmlLinq, unturnedXmlLinq);
+            }
+
+            // Copy Newtonsoft.Json
+            AssemblyName asm = AssemblyName.GetAssemblyName(unturnedNewtonsoftFile);
+            GetVersionIndependentName(asm.FullName, out var version);
+            if (version.StartsWith("7.", StringComparison.OrdinalIgnoreCase))
+            {
+                if (File.Exists(newtonsoftBackupFile))
+                {
+                    File.Delete(newtonsoftBackupFile);
+                }
+
+                File.Move(unturnedNewtonsoftFile, newtonsoftBackupFile);
+                File.Copy(rocketNewtonsoftFile, unturnedNewtonsoftFile);
+            }
         }
 
         private void InstallAssemblyResolver()
