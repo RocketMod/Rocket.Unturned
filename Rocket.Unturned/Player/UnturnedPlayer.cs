@@ -49,12 +49,17 @@ namespace Rocket.Unturned.Player
             this.container = container;
             this.manager = manager;
             CSteamID = cSteamID;
-            User = (UnturnedUser)container.Resolve<IUserManager>().GetUserAsync(cSteamID.ToString()).Result;
         }
 
         public float Ping => NativePlayer.channel.owner.ping;
 
-        public override UnturnedUser User { get; }
+        public override UnturnedUser User
+        {
+            get
+            {
+                return (UnturnedUser)container.Resolve<IUserManager>().GetUserAsync(CSteamID.ToString()).Result;
+            }
+        }
 
         public bool Equals(UnturnedPlayer p)
         {
