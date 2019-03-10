@@ -10,50 +10,47 @@ namespace Rocket.Unturned.Player
 {
     public class UnturnedUser : IPlayerUser<UnturnedPlayer>
     {
-        public UnturnedUser(IDependencyContainer container, SteamPlayer player) : this(container)
+        public IDependencyContainer Container { get; }
+
+        public string Id { get; }
+        public CSteamID CSteamID { get; }
+
+        private IPlayerManager playerManager;
+
+        public UnturnedUser(IDependencyContainer container, SteamPlayer player) : this(container, player.playerID.steamID)
         {
-            Id = player.playerID.steamID.ToString();
-            CSteamID = player.playerID.steamID;
         }
 
-        public UnturnedUser(IDependencyContainer container, SteamPending player) : this(container)
+        public UnturnedUser(IDependencyContainer container, SteamPending player) : this(container, player.playerID.steamID)
         {
-            Id = player.playerID.steamID.ToString();
-            CSteamID = player.playerID.steamID;
         }
 
-        public UnturnedUser(IDependencyContainer container, CSteamID id) : this(container)
+        public UnturnedUser(IDependencyContainer container, CSteamID id) 
         {
             Id = id.ToString();
             CSteamID = id;
-        }
-
-        public UnturnedUser(IDependencyContainer container)
-        {
             Container = container;
+            UserManager = playerManager = container.Resolve<IPlayerManager>();
         }
 
-        public UnturnedPlayer Player => (UnturnedPlayer) Container.Resolve<IPlayerManager>().GetPlayerByIdAsync(Id).GetAwaiter().GetResult();
+        public UnturnedPlayer Player => (UnturnedPlayer)playerManager.GetPlayerByIdAsync(Id).GetAwaiter().GetResult();
 
         public DateTime? LastSeen { get; }
 
         public IUserManager UserManager { get; }
 
-        public string UserName { get; }
+        public string UserName => Player.SteamName;
 
-        public string DisplayName { get; }
+        public string DisplayName => Player.DisplayName;
 
         public List<IIdentity> Identities { get; } = new List<IIdentity>();
 
         public string UserType => "Unturned";
 
-        public IDependencyContainer Container { get; }
 
-        public string Id { get; }
-        public CSteamID CSteamID { get; }
         public override int GetHashCode()
         {
-            return Id.GetHashCode();
+            return CSteamID.GetHashCode();
         }
 
         public override bool Equals(object o)

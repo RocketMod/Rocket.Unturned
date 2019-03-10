@@ -99,10 +99,10 @@ namespace Rocket.Unturned.Player
                 return;
             }
 
-            if (!(receiver is UnturnedPlayer player))
+            if (!(receiver is UnturnedUser unturnedUser))
                 throw new Exception("Could not cast " + receiver.GetType().FullName + " to UnturnedUser!");
 
-            ChatManager.say(player.CSteamID, message, uColor, true);
+            ChatManager.say(unturnedUser.CSteamID, message, uColor, true);
         }
 
         public async Task BroadcastAsync(IUser sender, IEnumerable<IUser> receivers, string message, System.Drawing.Color? color = null,
@@ -121,9 +121,16 @@ namespace Rocket.Unturned.Player
             logger.LogInformation("[Broadcast] " + message);
         }
 
-        public async Task<IUser> GetUserAsync(string id)
+        public async Task<IUser> GetUserAsync(string idOrName)
         {
-            return (await GetPlayerByIdAsync(id)).User;
+            var player = (UnturnedPlayer) await GetPlayerAsync(idOrName);
+
+            if(player == null)
+            {
+                throw new PlayerNotFoundException(idOrName);
+            }
+
+            return new UnturnedUser(player.Container, player.SteamPlayer);
         }
 
         public System.Drawing.Color? GetColorFromName(string colorName)
@@ -207,11 +214,12 @@ namespace Rocket.Unturned.Player
 
         public async Task<IPlayer> GetPlayerAsync(string nameOrId)
         {
-            SteamPlayer player;
+            SteamPlayer player = null;
 
             if (ulong.TryParse(nameOrId, out var id))
                 player = PlayerTool.getSteamPlayer(new CSteamID(id));
-            else
+            
+            if(player == null)
                 player = PlayerTool.getSteamPlayer(nameOrId);
 
             if (player == null)
