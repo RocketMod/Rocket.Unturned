@@ -24,7 +24,7 @@ namespace Rocket.Unturned.Commands
 
             if (targetUser is UnturnedPlayer uPlayer && uPlayer.IsAdmin)
             {
-                uPlayer.Admin(false);
+                uPlayer.SetAdmin(false);
                 return;
             }
 

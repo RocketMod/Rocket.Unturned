@@ -3,7 +3,6 @@ using Steamworks;
 using System;
 using System.Linq;
 using Rocket.API.DependencyInjection;
-using Rocket.API.Player;
 using Rocket.Core.Player;
 using Rocket.API.User;
 
@@ -85,7 +84,7 @@ namespace Rocket.Unturned.Player
             }
         }
 
-        public void MaxSkills()
+        public void MaximizeSkills()
         {
             PlayerSkills skills = NativePlayer.skills;
 
@@ -126,14 +125,14 @@ namespace Rocket.Unturned.Player
 
         public CSteamID SteamGroupID => NativePlayer.channel.owner.playerID.group;
 
-        public void Admin(bool admin)
+        public void SetAdmin(bool isAdmin)
         {
-            Admin(admin, null);
+            SetAdmin(isAdmin, null);
         }
 
-        public void Admin(bool admin, UnturnedPlayer issuer)
+        public void SetAdmin(bool isAdmin, UnturnedPlayer issuer)
         {
-            if (admin)
+            if (isAdmin)
                 SteamAdminlist.admin(CSteamID, issuer?.CSteamID ?? new CSteamID(0));
             else
                 SteamAdminlist.unadmin(NativePlayer.channel.owner.playerID.steamID);

@@ -21,7 +21,7 @@ namespace Rocket.Unturned.Commands
 
             if (target.IsOnline && target is UnturnedPlayer uPlayer && !uPlayer.IsAdmin)
             {
-                uPlayer.Admin(true);
+                uPlayer.SetAdmin(true);
                 return;
             }
 

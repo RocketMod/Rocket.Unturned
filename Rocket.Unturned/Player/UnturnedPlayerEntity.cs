@@ -4,13 +4,14 @@ using System.Numerics;
 using System.Threading.Tasks;
 using Rocket.API.Entities;
 using Rocket.API.Player;
+using Rocket.API.User;
 using Rocket.UnityEngine.Extensions;
 using SDG.Unturned;
 using Steamworks;
 using Vector3 = UnityEngine.Vector3;
 
 namespace Rocket.Unturned.Player {
-    public class UnturnedPlayerEntity : IPlayerEntity<UnturnedPlayer>//, ILivingEntity
+    public class UnturnedPlayerEntity : IPlayerEntity<UnturnedPlayer>, ILivingEntity
     {
         public UnturnedPlayerEntity(UnturnedPlayer unturnedPlayer)
         {
@@ -77,10 +78,29 @@ namespace Rocket.Unturned.Player {
             set => Player.NativePlayer.skills.askRep(value);
         }
 
+        public Task KillAsync() => throw new NotImplementedException();
+
+        public Task KillAsync(IEntity killer) => throw new NotImplementedException();
+
+        public Task KillAsync(IUser killer) => throw new NotImplementedException();
+
+        public double MaxHealth { get; } = 100;
+
         public double Health
         {
             get { return Player.NativePlayer.life.health; }
-            set => throw new NotImplementedException();
+            set
+            {
+                if (value > 255)
+                {
+                    value = 255;
+                }
+
+                byte healthToSet = (byte) value;
+                byte amountToHeal = (byte)(Player.NativePlayer.life.health - healthToSet);
+
+                Player.NativePlayer.life.askHeal(amountToHeal, false, false);
+            }
         }
 
 

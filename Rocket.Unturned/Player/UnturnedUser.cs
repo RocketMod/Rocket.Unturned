@@ -60,5 +60,7 @@ namespace Rocket.Unturned.Player
 
             return uPlayer.GetHashCode() == GetHashCode();
         }
+
+        IPlayer IPlayerUser.Player => Player;
     }
 }
