@@ -9,20 +9,29 @@ using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Harmony;
 using Debug = UnityEngine.Debug;
 
 namespace Rocket.Unturned.Module
 {
     public class RocketUnturnedModule : IModuleNexus
     {
+        private const string HarmonyInstanceId = "net.rocketmod.unturned.module";
         private readonly Dictionary<string, Assembly> loadedAssemblies = new Dictionary<string, Assembly>();
+        private HarmonyInstance harmonyInstance;
+
         public void initialize()
         {
+            var selfAssembly = typeof(RocketUnturnedModule).Assembly;
+
+            harmonyInstance = HarmonyInstance.Create(HarmonyInstanceId);
+            harmonyInstance.PatchAll(selfAssembly);
+
             InstallNewtonsoftJson();
             InstallTlsWorkaround();
             InstallAssemblyResolver();
 
-            var assemblyLocation = typeof(RocketUnturnedModule).Assembly.Location;
+            var assemblyLocation = selfAssembly.Location;
             var assemblyDirectory = Path.GetDirectoryName(assemblyLocation);
 
             foreach (var file in Directory.GetFiles(assemblyDirectory))
@@ -97,8 +106,8 @@ namespace Rocket.Unturned.Module
 
         public void shutdown()
         {
+            harmonyInstance.UnpatchAll(HarmonyInstanceId);
         }
-
 
         private void InstallTlsWorkaround()
         {
@@ -133,6 +142,7 @@ namespace Rocket.Unturned.Module
 
 
         private static readonly Regex versionRegex = new Regex("Version=(?<version>.+?), ", RegexOptions.Compiled);
+
         protected static string GetVersionIndependentName(string fullAssemblyName, out string extractedVersion)
         {
             var match = versionRegex.Match(fullAssemblyName);
