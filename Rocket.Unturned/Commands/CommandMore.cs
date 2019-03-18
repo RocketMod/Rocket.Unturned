@@ -23,7 +23,7 @@ namespace Rocket.Unturned.Commands
 
             byte amount = await context.Parameters.GetAsync<byte>(0);
 
-            UnturnedPlayer player = ((UnturnedUser)context).Player;
+            UnturnedPlayer player = ((UnturnedUser)context.User).Player;
             ushort itemId = player.NativePlayer.equipment.itemID;
 
             if (itemId == 0)

@@ -22,7 +22,7 @@ namespace Rocket.Unturned.Commands
         {
             ITranslationCollection translations = ((RocketUnturnedHost)context.Container.Resolve<IHost>()).ModuleTranslations;
 
-            UnturnedPlayer player = ((UnturnedUser)context).Player;
+            UnturnedPlayer player = ((UnturnedUser)context.User).Player;
 
             if (context.Parameters.Length != 1 && context.Parameters.Length != 3)
                 throw new CommandWrongUsageException();
