@@ -13,7 +13,7 @@ namespace Rocket.Unturned.Commands
 {
     public class CommandUnadmin : ICommand
     {
-        public bool SupportsUser(IUser user) => user is UnturnedUser;
+        public bool SupportsUser(IUser user) => true;
 
         public async Task ExecuteAsync(ICommandContext context)
         {
@@ -28,7 +28,7 @@ namespace Rocket.Unturned.Commands
                 return;
             }
 
-            await context.User.SendMessageAsync($"Could not unadmin {targetUser.User.DisplayName}", ConsoleColor.Red);
+            await context.User.SendMessageAsync($"Could not unadmin {targetUser.User.DisplayName}.", ConsoleColor.Red);
         }
 
         public string Name => "Unadmin";
