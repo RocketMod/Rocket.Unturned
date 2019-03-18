@@ -51,7 +51,7 @@ namespace Rocket.Unturned.Commands
 
             string assetName = ((ItemAsset)a).itemName;
 
-            await context.User.SendLocalizedMessage(translations, player.GiveItem(id, amount) ? "command_i_giving_private" : "command_i_giving_failed_private", 
+            await context.User.SendLocalizedMessageAsync(translations, player.GiveItem(id, amount) ? "command_i_giving_private" : "command_i_giving_failed_private", 
                 null, amount, assetName, id);
         }
 

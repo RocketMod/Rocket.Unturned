@@ -45,14 +45,14 @@ namespace Rocket.Unturned.Commands
             if (x != null)
             {
                 player.Entity.Teleport(new System.Numerics.Vector3((float)x, (float)y, (float)z));
-                await context.User.SendLocalizedMessage(translations, "command_tp_teleport_private", null, (float)x + "," + (float)y + "," + (float)z);
+                await context.User.SendLocalizedMessageAsync(translations, "command_tp_teleport_private", null, (float)x + "," + (float)y + "," + (float)z);
                 return;
             }
 
             if (await context.Parameters.GetAsync<IPlayer>(0) is UnturnedPlayer otherplayer && otherplayer != player)
             {
                 player.Entity.Teleport(otherplayer);
-                await context.User.SendLocalizedMessage(translations, "command_tp_teleport_private", null, otherplayer.CharacterName);
+                await context.User.SendLocalizedMessageAsync(translations, "command_tp_teleport_private", null, otherplayer.CharacterName);
                 return;
             }
 
@@ -61,11 +61,11 @@ namespace Rocket.Unturned.Commands
             {
                 Vector3 c = item.point + new Vector3(0f, 0.5f, 0f);
                 player.Entity.Teleport(c.ToSystemVector());
-                await context.User.SendLocalizedMessage(translations, "command_tp_teleport_private", null, ((LocationNode)item).name);
+                await context.User.SendLocalizedMessageAsync(translations, "command_tp_teleport_private", null, ((LocationNode)item).name);
                 return;
             }
 
-            await context.User.SendLocalizedMessage(translations, "command_tp_failed_find_destination");
+            await context.User.SendLocalizedMessageAsync(translations, "command_tp_failed_find_destination");
         }
 
         public string Name => "Tp";

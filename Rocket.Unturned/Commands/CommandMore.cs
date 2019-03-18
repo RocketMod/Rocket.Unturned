@@ -28,11 +28,11 @@ namespace Rocket.Unturned.Commands
 
             if (itemId == 0)
             {
-                await context.User.SendLocalizedMessage(translations, "command_more_dequipped");
+                await context.User.SendLocalizedMessageAsync(translations, "command_more_dequipped");
                 return;
             }
 
-            await context.User.SendLocalizedMessage(translations, "command_more_give", null, amount, itemId);
+            await context.User.SendLocalizedMessageAsync(translations, "command_more_give", null, amount, itemId);
             player.GiveItem(itemId, amount);
         }
 

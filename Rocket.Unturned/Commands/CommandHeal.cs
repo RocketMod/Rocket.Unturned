@@ -44,12 +44,12 @@ namespace Rocket.Unturned.Commands
 
             if (target == context.User)
             {
-                await context.User.SendLocalizedMessage(translations, "command_heal_success");
+                await context.User.SendLocalizedMessageAsync(translations, "command_heal_success");
                 return;
             }
 
-            await context.User.SendLocalizedMessage(translations, "command_heal_success_me", null, target.User.DisplayName);
-            await target.User.SendLocalizedMessage(translations, "command_heal_success_other", null, context.User.DisplayName);
+            await context.User.SendLocalizedMessageAsync(translations, "command_heal_success_me", null, target.User.DisplayName);
+            await target.User.SendLocalizedMessageAsync(translations, "command_heal_success_other", null, context.User.DisplayName);
         }
 
         public string Name => "Heal";

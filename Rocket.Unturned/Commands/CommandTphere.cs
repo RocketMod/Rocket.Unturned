@@ -30,13 +30,13 @@ namespace Rocket.Unturned.Commands
 
             if (otherPlayer.IsInVehicle)
             {
-                await context.User.SendLocalizedMessage(translations, "command_tphere_vehicle");
+                await context.User.SendLocalizedMessageAsync(translations, "command_tphere_vehicle");
                 return;
             }
 
             otherPlayer.Entity.Teleport(player);
-            await context.User.SendLocalizedMessage(translations, "command_tphere_teleport_from_private", null, otherPlayer.CharacterName);
-            await otherPlayer.User.SendLocalizedMessage(translations, "command_tphere_teleport_to_private", null, player.CharacterName);
+            await context.User.SendLocalizedMessageAsync(translations, "command_tphere_teleport_from_private", null, otherPlayer.CharacterName);
+            await otherPlayer.User.SendLocalizedMessageAsync(translations, "command_tphere_teleport_to_private", null, player.CharacterName);
         }
 
         public string Name => "Tphere";

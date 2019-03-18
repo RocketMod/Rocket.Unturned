@@ -82,7 +82,7 @@ namespace Rocket.Unturned.Commands
                 directionName = await translations.GetAsync("command_compass_north");
             }
 
-            await user.SendLocalizedMessage(translations, "command_compass_facing_private", null, directionName);
+            await user.SendLocalizedMessageAsync(translations, "command_compass_facing_private", null, directionName);
         }
 
         public string Name => "Compass";
