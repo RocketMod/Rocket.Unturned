@@ -154,23 +154,28 @@ namespace Rocket.Unturned
 
         private void OnPlayerDamaged(SDG.Unturned.Player uPlayer, ref EDeathCause cause, ref ELimb limb, ref CSteamID killerId, ref global::UnityEngine.Vector3 direction, ref float damage, ref float times, ref bool canDamage)
         {
-            var player = playerManager.GetPlayerByIdAsync(uPlayer.channel.owner.playerID.steamID.m_SteamID.ToString()).GetAwaiter().GetResult();
+            if (uPlayer == null)
+            {
+                return;
+            }
+
+            playerManager.TryGetOnlinePlayerById(uPlayer.channel.owner.playerID.steamID.ToString(), out var player);
             playerManager.TryGetOnlinePlayerById(killerId.m_SteamID.ToString(), out var killer);
 
-            UnturnedPlayerDamagedEvent @event =
-                new UnturnedPlayerDamagedEvent(player, cause, limb, killer.User, direction.ToSystemVector(), damage, times)
+            UnturnedPlayerDamagedEvent damageEvent =
+                new UnturnedPlayerDamagedEvent(player, cause, limb, killer?.User, direction.ToSystemVector(), damage, times)
                 {
                     IsCancelled = !canDamage
                 };
 
-            eventManager.Emit(this, @event);
-            cause = @event.DeathCause;
-            limb = @event.Limb;
-            killerId = @event.DamageDealer != null ? new CSteamID(ulong.Parse(@event.DamageDealer.Id)) : CSteamID.Nil;
-            direction = @event.Direction.ToUnityVector();
-            damage = (float)@event.Damage;
-            times = @event.Times;
-            canDamage = !@event.IsCancelled;
+            eventManager.Emit(this, damageEvent);
+            cause = damageEvent.DeathCause;
+            limb = damageEvent.Limb;
+            killerId = damageEvent.DamageDealer != null ? new CSteamID(ulong.Parse(damageEvent.DamageDealer.Id)) : CSteamID.Nil;
+            direction = damageEvent.Direction.ToUnityVector();
+            damage = (float)damageEvent.Damage;
+            times = damageEvent.Times;
+            canDamage = !damageEvent.IsCancelled;
         }
 
         private async Task LoadTranslations()
