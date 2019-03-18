@@ -25,7 +25,7 @@ namespace Rocket.Unturned.Properties
             container.RegisterSingletonType<ICommandProvider, VanillaCommandProvider>("unturned_commands");
             container.RegisterSingletonType<ICommandProvider, RocketUnturnedCommandProvider>("rocket_unturned_commands");
 
-            container.RegisterSingletonType<IPermissionProvider, UnturnedAdminPermissionProvider>("unturned_admins");
+            container.RegisterSingletonType<IPermissionChecker, UnturnedAdminPermissionChecker>("unturned_admins");
         }
     }
 }

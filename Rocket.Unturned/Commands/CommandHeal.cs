@@ -19,7 +19,7 @@ namespace Rocket.Unturned.Commands
 
         public async Task ExecuteAsync(ICommandContext context)
         {
-            IPermissionProvider permissions = context.Container.Resolve<IPermissionProvider>();
+            IPermissionChecker permissions = context.Container.Resolve<IPermissionChecker>();
             ITranslationCollection translations = ((RocketUnturnedHost)context.Container.Resolve<IHost>()).ModuleTranslations;
 
             IPlayer target;
