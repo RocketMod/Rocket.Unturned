@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <PackageReference Include="Lib.Harmony" Version="1.2.0.1" />
-    <PackageReference Include="Rocket.Runtime" Version="5.0.0.662" />
+    <PackageReference Include="Rocket.Runtime" Version="5.0.0.663" />
   </ItemGroup>
 
   <PropertyGroup Condition="$(Configuration) == 'Debug'">
