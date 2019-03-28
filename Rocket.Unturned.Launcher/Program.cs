@@ -13,7 +13,7 @@ namespace Rocket.Unturned.Launcher
             string instanceName = args.Length > 0 ? args[0] : "Rocket";
 
             string executableName = "";
-            foreach (string s in new[] { "Unturned_Headless.x86", "Unturned.x86", "Unturned.exe" })
+            foreach (string s in new[] { "Unturned_Headless.x86", "Unturned.x86", "Unturned.exe",  "Unturned_Headless.x86_64",  "Unturned.x86_64" })
                 if (File.Exists(s))
                 {
                     executableName = s;
