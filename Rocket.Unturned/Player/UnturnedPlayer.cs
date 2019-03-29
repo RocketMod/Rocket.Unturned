@@ -176,7 +176,7 @@ namespace Rocket.Unturned.Player
                     return SteamPlayer.playerID.playerName.ToString(formatProvider);
                 }
 
-                if (format.Equals("charachtername", StringComparison.OrdinalIgnoreCase))
+                if (format.Equals("charactername", StringComparison.OrdinalIgnoreCase))
                 {
                     return SteamPlayer.playerID.characterName.ToString(formatProvider);
                 }
