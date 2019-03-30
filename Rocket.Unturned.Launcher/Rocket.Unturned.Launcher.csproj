@@ -9,5 +9,6 @@
     <AssemblyVersion>0.0.0.0</AssemblyVersion>
     <!-- Set by CI -->
     <FileVersion>0.0.0.0</FileVersion>
+    <OutputType>Exe</OutputType>
   </PropertyGroup>
 </Project>
