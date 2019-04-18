@@ -45,7 +45,7 @@ namespace Rocket.Unturned.Player
                 return false;
 
             if (target.IsOnline)
-                Provider.kick(target.CSteamID, reason);
+                Provider.kick(target.CSteamID, reason ?? string.Empty);
             return true;
         }
 
@@ -65,12 +65,12 @@ namespace Rocket.Unturned.Player
             //}
 
             var steamId = new CSteamID(ulong.Parse(user.Id));
-            SteamBlacklist.ban(steamId, 0, callerId, reason, (uint)(duration?.TotalSeconds ?? uint.MaxValue));
+            SteamBlacklist.ban(steamId, 0, callerId, reason ?? string.Empty, (uint)(duration?.TotalSeconds ?? uint.MaxValue));
 
             var target = ((UnturnedUser)user).Player;
 
             if (target.IsOnline)
-                Provider.kick(steamId, reason);
+                Provider.kick(steamId, reason ?? string.Empty);
 
             return true;
         }
