@@ -34,10 +34,10 @@ namespace Rocket.Unturned
 
         private void OnGUI()
         {
-            if (Dedicator.isDedicated) return;
-            GUI.Label(new Rect(20, 110, 130, 20), "HUD enabled");
-            if (visible)
-                GUI.Label(new Rect(20, 210, 130, 20), "HUD visible");
+            //if (Dedicator.isDedicated) return;
+            //GUI.Label(new Rect(20, 110, 130, 20), "HUD enabled");
+            //if (visible)
+            //    GUI.Label(new Rect(20, 210, 130, 20), "HUD visible");
 
         }
     }

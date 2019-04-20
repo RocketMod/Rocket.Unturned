@@ -44,7 +44,7 @@ namespace Rocket.Unturned.Serialisation
         [XmlElement("CharacterNameValidationRule")]
         public string CharacterNameValidationRule = @"([\x00-\xAA]|[\w_\ \.\+\-])+";
 
-        public bool LogSuspiciousPlayerMovement = true;
+       // public bool LogSuspiciousPlayerMovement = true;
 
         public bool EnableItemBlacklist;
 
@@ -61,7 +61,7 @@ namespace Rocket.Unturned.Serialisation
             //RocketModObservatory = new RocketModObservatorySettings();
             CharacterNameValidation = true;
             CharacterNameValidationRule = @"([\x00-\xAA]|[\w_\ \.\+\-])+";
-            LogSuspiciousPlayerMovement = true;
+           // LogSuspiciousPlayerMovement = true;
             EnableItemBlacklist = false;
             EnableItemSpawnLimit = false;
             MaxSpawnAmount = 10;
