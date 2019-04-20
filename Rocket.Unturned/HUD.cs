@@ -13,8 +13,8 @@ namespace Rocket.Unturned
 
         private void Start()
         {
-            //base.channel.build();
-            //askToggleHud(true);
+            base.channel.build();
+            askToggleHud(true);
         }
 
         public void askToggleHud(bool visible)
@@ -22,7 +22,7 @@ namespace Rocket.Unturned
             base.channel.send("tellToggleHud", ESteamCall.OWNER, ESteamPacket.UPDATE_RELIABLE_BUFFER, true);
         }
 
-        //[SteamCall]
+        [SteamCall(ESteamCallValidation.NONE)]
         public void tellToggleHud(CSteamID steamID, bool visible)
         {
             if (base.channel.checkServer(steamID))
@@ -34,10 +34,10 @@ namespace Rocket.Unturned
 
         private void OnGUI()
         {
-            //if (Dedicator.isDedicated) return;
-            //GUI.Label(new Rect(20, 110, 130, 20), "HUD enabled");
-            //if (visible)
-            //    GUI.Label(new Rect(20, 210, 130, 20), "HUD visible");
+            if (Dedicator.isDedicated) return;
+            GUI.Label(new Rect(20, 110, 130, 20), "HUD enabled");
+            if (visible)
+                GUI.Label(new Rect(20, 210, 130, 20), "HUD visible");
 
         }
     }

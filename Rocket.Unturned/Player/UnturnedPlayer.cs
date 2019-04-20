@@ -308,31 +308,31 @@ namespace Rocket.Unturned.Player
 
         public void Teleport(Vector3 position, float rotation)
         {
-        //    if (VanishMode)
-        //    {
-        //        player.channel.send("askTeleport", ESteamCall.OWNER, ESteamPacket.UPDATE_RELIABLE_BUFFER, position, MeasurementTool.angleToByte(rotation));
-        //        player.channel.send("askTeleport", ESteamCall.NOT_OWNER, ESteamPacket.UPDATE_RELIABLE_BUFFER, new Vector3(position.y, position.y + 1337, position.z), MeasurementTool.angleToByte(rotation));
-        //        player.channel.send("askTeleport", ESteamCall.SERVER, ESteamPacket.UPDATE_RELIABLE_BUFFER, position, MeasurementTool.angleToByte(rotation));
-        //    }
-        //    else
-        //    {
+            if (VanishMode)
+            {
+                player.channel.send("askTeleport", ESteamCall.OWNER, ESteamPacket.UPDATE_RELIABLE_BUFFER, position, MeasurementTool.angleToByte(rotation));
+                player.channel.send("askTeleport", ESteamCall.NOT_OWNER, ESteamPacket.UPDATE_RELIABLE_BUFFER, new Vector3(position.y, position.y + 1337, position.z), MeasurementTool.angleToByte(rotation));
+                player.channel.send("askTeleport", ESteamCall.SERVER, ESteamPacket.UPDATE_RELIABLE_BUFFER, position, MeasurementTool.angleToByte(rotation));
+            }
+            else
+            {
                 player.channel.send("askTeleport", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER, position, MeasurementTool.angleToByte(rotation));
-            //}
+            }
         }
 
-        //public bool VanishMode
-        //{
-        //    get
-        //    {
-        //        UnturnedPlayerFeatures features = player.GetComponent<UnturnedPlayerFeatures>();
-        //        return features.VanishMode;
-        //    }
-        //    set
-        //    {
-        //        UnturnedPlayerFeatures features = player.GetComponent<UnturnedPlayerFeatures>();
-        //        features.VanishMode = value;
-        //    }
-        //}
+        public bool VanishMode
+        {
+            get
+            {
+                UnturnedPlayerFeatures features = player.GetComponent<UnturnedPlayerFeatures>();
+                return features.VanishMode;
+            }
+            set
+            {
+                UnturnedPlayerFeatures features = player.GetComponent<UnturnedPlayerFeatures>();
+                features.VanishMode = value;
+            }
+        }
 
         public bool GodMode
         {
