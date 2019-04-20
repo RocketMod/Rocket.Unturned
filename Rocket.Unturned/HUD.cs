@@ -22,7 +22,7 @@ namespace Rocket.Unturned
             base.channel.send("tellToggleHud", ESteamCall.OWNER, ESteamPacket.UPDATE_RELIABLE_BUFFER, true);
         }
 
-        [SteamCall(ESteamCallValidation.NONE)]
+        //[SteamCall]
         public void tellToggleHud(CSteamID steamID, bool visible)
         {
             if (base.channel.checkServer(steamID))
