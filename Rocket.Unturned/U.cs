@@ -135,11 +135,6 @@ namespace Rocket.Unturned
 
         public void initialize()
         {
-            SDG.Unturned.Player.onPlayerCreated += (SDG.Unturned.Player player) =>
-            {
-                player.transform.gameObject.TryAddComponent<HUD>();
-            };
-
             if (Dedicator.isDedicated)
             {
                 rocketGameObject = new GameObject("Rocket");
