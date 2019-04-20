@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using SDG.Unturned;
@@ -23,16 +24,11 @@ namespace Rocket.Unturned.Module
             var logger = new UnityLoggerAdapter();
             var bootrapper = new RocketDynamicBootstrapper();
 
-            var task = Task.Run(async () =>
-            {
-                await Task.Yield();
-                await bootrapper.BootstrapAsync(rocketDirectory, 
-                    "Rocket.Unturned", 
-                    false,
-                    RocketDynamicBootstrapper.DefaultNugetRepository, 
-                    logger);
-            });
-            task.GetAwaiter().GetResult();
+            bootrapper.Bootstrap(rocketDirectory,
+                new List<string> { "Rocket.Unturned" },
+                false,
+                RocketDynamicBootstrapper.DefaultNugetRepository,
+                logger);
 
 #else
             var runtime = new Runtime();

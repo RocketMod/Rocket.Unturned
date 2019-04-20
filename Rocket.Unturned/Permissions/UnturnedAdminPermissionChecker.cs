@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Rocket.API.Permissions;
-using Rocket.Core.Permissions;
 using Rocket.Core.ServiceProxies;
 using Rocket.Unturned.Player;
 
@@ -9,7 +8,7 @@ namespace Rocket.Unturned.Permissions
     [ServicePriority(Priority = ServicePriority.Lowest)]
     public class UnturnedAdminPermissionChecker : IPermissionChecker
     {
-        public bool SupportsTarget(IPermissionEntity target)
+        public bool SupportsTarget(IPermissionActor target)
         {
             if (target is UnturnedUser user)
                 return user.Player.IsAdmin;
@@ -17,7 +16,7 @@ namespace Rocket.Unturned.Permissions
             return false;
         }
 
-        public Task<PermissionResult> CheckPermissionAsync(IPermissionEntity target, string permission) => Task.FromResult(PermissionResult.Grant);
+        public Task<PermissionResult> CheckPermissionAsync(IPermissionActor target, string permission) => Task.FromResult(PermissionResult.Grant);
 
         public string ServiceName { get; } = "Unturned Admin Checker";
     }

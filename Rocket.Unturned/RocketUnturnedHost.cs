@@ -75,7 +75,7 @@ namespace Rocket.Unturned
             logger = container.Resolve<ILogger>();
             logger.LogInformation("Loading Rocket Unturned Implementation...");
 
-            container.RegisterSingletonType<AutomaticSaveWatchdog, AutomaticSaveWatchdog>();
+            container.AddSingleton<AutomaticSaveWatchdog, AutomaticSaveWatchdog>();
             container.Resolve<AutomaticSaveWatchdog>().Start();
             await LoadTranslations();
 
