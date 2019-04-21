@@ -93,11 +93,6 @@
       <HintPath>lib\UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEngine.IMGUIModule">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>lib\UnityEngine.IMGUIModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="UnityEngine.PhysicsModule">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\UnityEngine.PhysicsModule.dll</HintPath>
