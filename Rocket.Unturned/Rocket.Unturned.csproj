@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net461</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <AssemblyName>Rocket.Unturned</AssemblyName>
     <Description>RocketMod .NET Game Server Plugin Framework Unturned implementation</Description>
     <RootNamespace>Rocket.Unturned</RootNamespace>
@@ -25,7 +25,7 @@
   <ItemGroup>
     <PackageReference Include="Rocket.API" Version="5.0.0.669" />
     <PackageReference Include="Rocket.Core" Version="5.0.0.669" />
-    <PackageReference Include="Rocket.UnityEngine" Version="5.0.0.53" />
+    <PackageReference Include="Rocket.UnityEngine" Version="5.0.0.55" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine.CoreModule">
