@@ -27,6 +27,7 @@ IF NOT EXIST %STEAMCMDHOME% (
 CD %UNTURNEDHOME%
 
 :unturned
+if not exist "Servers\%INSTANCENAME%\Rocket\" mkdir "Servers\%INSTANCENAME%\Rocket\"
 ECHO [%time%] Unturned started.
 Unturned.exe -logFile "Servers\%INSTANCENAME%\Rocket\Unturned.log" -nographics -batchmode -silent-crashes +secureserver/%INSTANCENAME%
 ECHO [%time%] WARNING: Unturned closed or crashed, restarting.
