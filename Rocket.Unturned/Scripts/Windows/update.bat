@@ -17,7 +17,7 @@ IF NOT EXIST %STEAMCMDHOME% (
 	MOVE steamcmd.exe %STEAMCMDHOME%
 )
 
-%STEAMCMDHOME%steamcmd.exe +login unturnedrocksupdate force_update +force_install_dir ..\Unturned +app_update 304930 validate +exit
+%STEAMCMDHOME%steamcmd.exe +login anonymous +force_install_dir ..\Unturned +app_update 1110390 validate +exit
 
 bitsadmin.exe /transfer "Downloading Rocket.Unturned" "https://ci.rocketmod.net/job/Rocket.Unturned/lastSuccessfulBuild/artifact/Rocket.Unturned/bin/Release/Rocket.zip" "%~dp0Rocket.zip"
 CALL :unzip "%~dp0" "%~dp0Rocket.zip"
