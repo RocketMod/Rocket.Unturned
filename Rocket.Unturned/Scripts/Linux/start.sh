@@ -18,8 +18,8 @@ YELLLOW='\033[0;33m'
 NC='\033[0m'
 
 #Steam checks
-STEAMCMD_API=$STEAMCMD_HOME/linux32/steamclient.so
-UNTURNED_API=$UNTURNED_HOME/Unturned_Data/Plugins/x86/steamclient.so
+STEAMCMD_API=$STEAMCMD_HOME/linux64/steamclient.so
+UNTURNED_API=$UNTURNED_HOME/lib
 printf "Steam: "
 if [ -f $STEAMCMD_API ]; then
 	if diff $STEAMCMD_API $UNTURNED_API >/dev/null ; then
