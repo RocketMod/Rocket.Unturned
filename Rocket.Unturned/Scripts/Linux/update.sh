@@ -17,4 +17,3 @@ if [ ! -f "steamcmd.sh" ]; then
 fi
 
 ./steamcmd.sh +login anonymous +force_install_dir $UNTURNED_HOME +app_update 1110390 validate +exit
-# +@sSteamCmdForcePlatformBitness 32 to use the 32bit version
