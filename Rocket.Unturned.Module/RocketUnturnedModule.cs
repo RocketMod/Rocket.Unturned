@@ -48,7 +48,7 @@ namespace Rocket.Unturned.Module
         private void InstallNewtonsoftJson()
         {
             string managedDir = Path.GetDirectoryName(typeof(IModuleNexus).Assembly.Location);
-            string rocketDir = Path.GetFullPath(Path.Combine("Modules", "Rocket.Unturned"));
+            string rocketDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
             string unturnedNewtonsoftFile = Path.GetFullPath(Path.Combine(managedDir, "Newtonsoft.Json.dll"));
             string newtonsoftBackupFile = unturnedNewtonsoftFile + ".bak";
