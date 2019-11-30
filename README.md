@@ -154,3 +154,5 @@ GreenCoords | This plugin makes possible to show real position(xyz) of player to
 DynamicMaxPlayers | Extend and shrink server max players automatically | https://github.com/Tortellio/DynamicMaxPlayers
 SkinRestriction | Prevent player from using certain skins | https://github.com/Tortellio/SkinRestriction
 WreckingBall | RocketMod plugin to manage wreck in Unturned | https://github.com/handra78/WreckingBall.git
+BuilderMode | Gives player ability to enter builder mode | https://github.com/Tortellio/BuilderMode
+LobbyEdit | Edit Your Unturned Server Lobby | https://github.com/Tortellio/LobbyEdit
