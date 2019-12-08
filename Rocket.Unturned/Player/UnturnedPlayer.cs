@@ -161,12 +161,12 @@ namespace Rocket.Unturned.Player
 
         public static UnturnedPlayer FromPlayer(SDG.Unturned.Player player)
         {
-            return new UnturnedPlayer(player.channel.owner.playerID.steamID);
+            return new UnturnedPlayer(player.channel.owner);
         }
 
         public static UnturnedPlayer FromSteamPlayer(SteamPlayer player)
         {
-            return new UnturnedPlayer(player.playerID.steamID);
+            return new UnturnedPlayer(player);
         }
 
         public UnturnedPlayerFeatures Features
